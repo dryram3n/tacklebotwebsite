@@ -99,10 +99,11 @@ body {
   pointer-events: none;
   opacity: 0;
   transform: translate(-50%, -50%) rotate(45deg);
-  transition: opacity 0.2s ease-out;
+  transition: transform 0.3s ease;
   z-index: 9999;
   box-shadow: 0 0 10px var(--water-shadow);
   filter: blur(1px); /* Soft blur for water effect */
+  will-change: transform, left, top; /* Performance optimization */
 }
 
 body:hover #mouse-trail {
@@ -668,7 +669,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-.social-links a {
+social-links a {
   font-size: 1.8rem;
   /* Larger social icons */
   margin: 0 0.8rem;
@@ -676,7 +677,7 @@ footer a:hover {
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.social-links a:hover {
+social-links a:hover {
   color: var(--heading-color);
   transform: scale(1.2) rotate(5deg);
   /* Rotate social icons */

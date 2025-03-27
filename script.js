@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttons = document.querySelectorAll('.button');
 
   buttons.forEach(button => {
-    button.addEventListener('click', function (e) {
+    // Using mousedown instead of click to capture both left and right clicks
+    button.addEventListener('mousedown', function (e) {
       // Get click coordinates relative to the button
       const rect = button.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -38,48 +39,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove any text content from the trail element
     trail.textContent = '';
     
-    // Previous positions for smooth motion
-    let prevX = 0;
-    let prevY = 0;
+    // Initialize cursor position (using clientX/Y directly for immediate response)
+    let mouseX = 0;
+    let mouseY = 0;
+    let trailX = 0;
+    let trailY = 0;
     let trailDroplets = [];
     
-    // Track mouse position for water trail
+    // Track mouse position directly
     document.addEventListener('mousemove', (e) => {
-      // Smooth follow effect
-      prevX = prevX + (e.clientX - prevX) * 0.3;
-      prevY = prevY + (e.clientY - prevY) * 0.3;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    
+    // Use requestAnimationFrame for smooth animation
+    function animateTrail() {
+      // Smoother following with easing
+      trailX += (mouseX - trailX) * 0.3;
+      trailY += (mouseY - trailY) * 0.3;
       
-      requestAnimationFrame(() => {
-        // Position the main water droplet
-        trail.style.left = `${prevX}px`;
-        trail.style.top = `${prevY}px`;
+      if (trail) {
+        trail.style.left = `${trailX}px`;
+        trail.style.top = `${trailY}px`;
         trail.style.opacity = '0.8';
         
         // Create occasional smaller droplets for trail effect
         if (Math.random() > 0.85) {
-          createTrailDroplet(prevX, prevY);
+          createTrailDroplet(trailX, trailY);
         }
-      });
-    });
+      }
+      
+      requestAnimationFrame(animateTrail);
+    }
+    
+    // Start the animation loop
+    animateTrail();
 
     // Fade out when mouse stops
-    let timeoutId;
+    let isMoving = false;
+    let fadeTimeout;
+    
     document.addEventListener('mousemove', () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      isMoving = true;
+      if (trail) {
+        trail.style.opacity = '0.8';
+      }
+      
+      clearTimeout(fadeTimeout);
+      fadeTimeout = setTimeout(() => {
+        isMoving = false;
         if (trail) {
           trail.style.opacity = '0';
         }
       }, 150);
     });
 
-    // Water splash effect on click
+    // Water splash effect on any mouse button click
     document.addEventListener('mousedown', (e) => {
       if (trail) {
         // Squish the water droplet
         trail.style.transform = 'translate(-50%, -50%) scale(0.6) rotate(45deg)';
         
-        // Create water splash
+        // Create water splash at exact mouse position (not trail position)
         createWaterSplash(e.clientX, e.clientY);
       }
     });
@@ -152,6 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 600);
     }
+    
+    // Make sure cursor is visible initially by setting it at current mouse position
+    document.dispatchEvent(new MouseEvent('mousemove', {
+      clientX: window.innerWidth / 2,
+      clientY: window.innerHeight / 2
+    }));
   }
 
   // --- Fade-in Sections on Scroll ---
