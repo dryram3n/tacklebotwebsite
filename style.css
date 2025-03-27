@@ -1063,7 +1063,7 @@ footer a:hover {
   top: 50%; /* Start centered vertically for calculation */
   left: 50%; /* Start centered horizontally */
   transform: translate(-50%, -50%); /* Center origin */
-  transition: transform 1s linear, opacity 1.5s ease-in-out; /* Smooth movement and fade */
+  transition: transform 1s linear, opacity 0.8s ease-in-out; /* Adjusted opacity transition */
   opacity: 0; /* Start hidden */
   will-change: transform, opacity;
 }

@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const timeInMinutes = currentHour * 60 + currentMinute;
-      const sunriseStart = 5 * 60, sunriseEnd = 7 * 60;
-      const sunsetStart = 18 * 60, sunsetEnd = 20 * 60;
+      const sunriseStart = 5 * 60, sunriseEnd = 7 * 60; // 5:00 AM - 7:00 AM
+      const sunsetStart = 18 * 60, sunsetEnd = 20 * 60; // 6:00 PM - 8:00 PM
       const dayDuration = sunsetStart - sunriseEnd;
       const nightDuration = (24 * 60 - sunsetEnd) + sunriseStart;
 
@@ -120,29 +120,62 @@ document.addEventListener('DOMContentLoaded', () => {
       let sunOpacity = 0, moonOpacity = 0;
       let sunX = 50, sunY = 90, moonX = 50, moonY = 90;
 
-      // --- Calculations (Keep as is, they are not the main bottleneck) ---
-      if (timeInMinutes >= sunriseStart && timeInMinutes < sunriseEnd) {
+      // --- Calculations ---
+      if (timeInMinutes >= sunriseStart && timeInMinutes < sunriseEnd) { // Sunrise Transition
           const progress = (timeInMinutes - sunriseStart) / (sunriseEnd - sunriseStart);
           skyGradient = `linear-gradient(to bottom, ${interpolateColor('#000030', '#87CEEB', progress)} 10%, ${interpolateColor('#191970', '#ADD8E6', progress)} 50%, ${interpolateColor('#2c3e50', '#B0E0E6', progress)} 100%)`;
-          sunOpacity = progress; moonOpacity = 1 - progress;
-          sunX = progress * 50; sunY = 85 - Math.sin(progress * Math.PI) * 60;
-          moonX = 50 + (1 - progress) * 50; moonY = 85 - Math.sin((1 - progress) * Math.PI) * 60;
-      } else if (timeInMinutes >= sunriseEnd && timeInMinutes < sunsetStart) {
+
+          // *** MODIFICATION START: Ensure only one is visible during transition ***
+          if (progress < 0.5) { // First half: Moon fades out
+              moonOpacity = 1 - (progress * 2);
+              sunOpacity = 0;
+              // Moon position during fade out
+              moonX = 50 + (1 - progress) * 50;
+              moonY = 85 - Math.sin((1 - progress) * Math.PI) * 60;
+              sunY = 95; // Keep sun below horizon
+          } else { // Second half: Sun fades in
+              sunOpacity = (progress - 0.5) * 2;
+              moonOpacity = 0;
+              // Sun position during fade in
+              sunX = progress * 50;
+              sunY = 85 - Math.sin(progress * Math.PI) * 60;
+              moonY = 95; // Keep moon below horizon
+          }
+          // *** MODIFICATION END ***
+
+      } else if (timeInMinutes >= sunriseEnd && timeInMinutes < sunsetStart) { // Daytime
           const progress = (timeInMinutes - sunriseEnd) / dayDuration;
           skyGradient = 'var(--sky-day)'; sunOpacity = 1; moonOpacity = 0;
           sunX = progress * 100; sunY = 25 + Math.sin(progress * Math.PI) * 60;
-          moonY = 95;
-      } else if (timeInMinutes >= sunsetStart && timeInMinutes < sunsetEnd) {
+          moonY = 95; // Keep moon below horizon
+
+      } else if (timeInMinutes >= sunsetStart && timeInMinutes < sunsetEnd) { // Sunset Transition
           const progress = (timeInMinutes - sunsetStart) / (sunsetEnd - sunsetStart);
           skyGradient = `linear-gradient(to bottom, ${interpolateColor('#87CEEB', '#FFB6C1', progress)} 0%, ${interpolateColor('#ADD8E6', '#FFA07A', progress)} 40%, ${interpolateColor('#B0E0E6', '#4682B4', progress)} 100%)`;
-          sunOpacity = 1 - progress; moonOpacity = progress;
-          sunX = 50 + (1 - progress) * 50; sunY = 85 - Math.sin((1 - progress) * Math.PI) * 60;
-          moonX = progress * 50; moonY = 85 - Math.sin(progress * Math.PI) * 60;
-      } else {
+
+          // *** MODIFICATION START: Ensure only one is visible during transition ***
+          if (progress < 0.5) { // First half: Sun fades out
+              sunOpacity = 1 - (progress * 2);
+              moonOpacity = 0;
+              // Sun position during fade out
+              sunX = 50 + (1 - progress) * 50;
+              sunY = 85 - Math.sin((1 - progress) * Math.PI) * 60;
+              moonY = 95; // Keep moon below horizon
+          } else { // Second half: Moon fades in
+              moonOpacity = (progress - 0.5) * 2;
+              sunOpacity = 0;
+              // Moon position during fade in
+              moonX = progress * 50;
+              moonY = 85 - Math.sin(progress * Math.PI) * 60;
+              sunY = 95; // Keep sun below horizon
+          }
+          // *** MODIFICATION END ***
+
+      } else { // Nighttime
           let progress = (timeInMinutes < sunriseStart ? (timeInMinutes + (24*60 - sunsetEnd)) : (timeInMinutes - sunsetEnd)) / nightDuration;
           skyGradient = 'var(--sky-night)'; sunOpacity = 0; moonOpacity = 1;
           moonX = progress * 100; moonY = 25 + Math.sin(progress * Math.PI) * 60;
-          sunY = 95;
+          sunY = 95; // Keep sun below horizon
       }
 
       // --- Apply Styles ---
