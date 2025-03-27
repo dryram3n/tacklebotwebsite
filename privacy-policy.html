@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/privacy-policy.html">
+  <meta property="og:title" content="Privacy Policy - TackleBot Discord Bot">
+  <meta property="og:description" content="Privacy policy for TackleBot, outlining how we collect and use data.">
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+  
+  <!-- Theme color for browser UI -->
+  <meta name="theme-color" content="#89f7fe">
+  
+  <title>Privacy Policy - TackleBot Discord Bot</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Discord Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Mouse Trail Effect Container -->
+  <div id="mouse-trail"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html">🎣 TackleBot</a>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="index.html#support">Support</a></li>
+        <li><a href="terms-of-service.html">Terms</a></li>
+        <li><a href="privacy-policy.html" class="active">Privacy</a></li>
+        <li><a href="#" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Privacy Policy Section -->
+  <section class="legal-section animated-section">
+    <h2>Privacy Policy <span class="emoji">🔒</span></h2>
+    <div class="legal-container">
+      <div class="legal-card">
+        <h3>Introduction</h3>
+        <p>This Privacy Policy outlines how TackleBot Discord Bot ("the Bot", "we", "us", "our") collects, uses, stores, and protects user data when you interact with our service. By using the Bot, you consent to the data practices described in this policy.</p>
+      </div>
+
+      <div class="legal-card">
+        <h3>Data Collection</h3>
+        <h4>Information We Collect</h4>
+        <p>The Bot collects and processes the following data to provide its services:</p>
+
+        <h5>Message Content</h5>
+        <ul>
+          <li>Content of messages for the /summary command functionality</li>
+          <li>Channel message analysis for the /summary command (temporary, not stored)</li>
+          <li>Content of messages in channels where the /summary command is used</li>
+        </ul>
+
+        <h5>User Information</h5>
+        <ul>
+          <li>Discord User IDs for game features and user-specific settings</li>
+          <li>Discord Server (Guild) IDs for server-specific settings and moderation features</li>
+          <li>Command interaction history for feature functionality</li>
+        </ul>
+
+        <h5>Game and Feature Data</h5>
+        <ul>
+          <li>Player statistics for fishing game features</li>
+          <li>Fish inventory and related game data</li>
+          <li>User-created channels and permissions data</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>Message Analysis and Summaries</h3>
+        <p>The Bot may analyze recent messages in a channel when:</p>
+        <ul>
+          <li>A user explicitly requests a chat summary using the /summary command</li>
+          <li>This analysis is temporary and only used to generate the requested summary</li>
+          <li>Message content, along with usernames, is processed by Google Generative AI (Gemini)</li>
+          <li>The Bot does not permanently store the message content used for summaries</li>
+          <li>Only public messages visible to the Bot are included in summaries</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>How We Use Your Data</h3>
+        <p>Your data is used solely to:</p>
+        <ul>
+          <li>Create channel summaries via the /summary command using Google's Generative AI (Gemini)</li>
+          <li>Store game progress and statistics for features like fishing</li>
+          <li>Enable moderation features for server administrators</li>
+          <li>Improve Bot functionality and performance</li>
+          <li>Create and manage user-created channels</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>Data Storage and Security</h3>
+        <div class="expandable">
+          <button class="expand-btn">View Data Storage, Backup & Security Information</button>
+          <div class="expanded-content">
+            <h4>Duration of Storage</h4>
+            <ul>
+              <li>Game data is stored until explicitly cleared by the user or server administrator</li>
+              <li>Channel creator information is stored until the channel is deleted or manually removed</li>
+              <li>Summary data is temporary and not permanently stored</li>
+            </ul>
+
+            <h4>Backup System</h4>
+            <ul>
+              <li>The Bot maintains automated backups of game data</li>
+              <li>Backups are created regularly (approximately every 30 minutes)</li>
+              <li>A limited number of previous backups are retained</li>
+            </ul>
+
+            <h4>Data Security</h4>
+            <p>We implement reasonable security measures to protect your data from unauthorized access, alteration, or disclosure.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="legal-card">
+        <h3>Third-Party Services</h3>
+        <p>The Bot utilizes several third-party services that may process your data:</p>
+
+        <h4>Discord API</h4>
+        <ul>
+          <li>Used for all Bot interactions within Discord</li>
+          <li>Subject to Discord's Privacy Policy</li>
+        </ul>
+
+        <h4>Google Generative AI (Gemini)</h4>
+        <ul>
+          <li>Model: gemini-2.0-flash</li>
+          <li>Used solely for the /summary command functionality</li>
+          <li>Subject to Google's AI Principles and Privacy Policy</li>
+        </ul>
+
+        <h4>Other APIs</h4>
+        <ul>
+          <li>Popcat API: Used for meme generation, facts, jokes, and entertainment features</li>
+          <li>French Noodles API (Noodles Wrapper): Used for image manipulation and meme creation</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>Your Rights & Additional Information</h3>
+        <div class="expandable">
+          <button class="expand-btn">View Rights, Deletion Options & Legal Basis</button>
+          <div class="expanded-content">
+            <h4>Your Rights</h4>
+            <p>You have the right to:</p>
+            <ul>
+              <li>Request deletion of your game data</li>
+              <li>Opt out of data collection by discontinuing use of the Bot</li>
+              <li>Contact us with questions about your data</li>
+            </ul>
+
+            <h4>Data Deletion</h4>
+            <p>The Bot provides several mechanisms to clear your data:</p>
+            <ul>
+              <li>Game data can be cleared using specific commands</li>
+              <li>Server administrators can use moderation commands to manage data</li>
+              <li>Channel creators can delete their own channels</li>
+            </ul>
+
+            <h4>Changes to This Policy</h4>
+            <p>We may update this Privacy Policy from time to time. We will notify users of any significant changes by updating the "Last Updated" date of this policy.</p>
+
+            <h4>Contact Information</h4>
+            <p>For questions about this Privacy Policy or data practices, please contact the development team through:</p>
+            <ul>
+              <li>The official Bot support server</li>
+              <li>Our website: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank">https://dryram3n.github.io/tacklebotwebsite/</a></li>
+            </ul>
+
+            <h4>Legal Basis for Processing</h4>
+            <p>We process your data based on:</p>
+            <ul>
+              <li>Consent provided when adding the Bot to your server</li>
+              <li>Legitimate interest in providing the Bot's functionality</li>
+              <li>The necessity to process data to provide the service you request</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="legal-footer">
+        <p>Last Updated: March 25, 2025</p>
+        <p>By using the Bot, you acknowledge that you have read and understand this Privacy Policy and agree to its terms.</p>
+        <a href="index.html" class="back-to-top">Back to Home Page</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> | 
+      <a href="terms-of-service.html">Terms of Service</a> | 
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="social-links">
+      <a href="#" aria-label="Discord Support Server"><i class="fab fa-discord"></i></a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
