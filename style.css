@@ -1171,21 +1171,23 @@ header, section, footer {
   height: 100%;
   bottom: 0;
   left: 0;
-  z-index: 1; /* changed from -5 to 1 to display fish above water layers */
+  /* z-index: 1; */ /* Old value */
+  z-index: 3;      /* <<<< CHANGED: Higher than waves */
   overflow: hidden;
   pointer-events: none;
 }
 
 .swimming-fish {
   position: absolute;
-  z-index: 1;
+  /* z-index: 1; */ /* Old value */
+  z-index: 4;      /* <<<< CHANGED: Higher than container & waves */
   transform-origin: center;
   will-change: transform;
   transition: transform 1s ease-out, opacity 2s ease-out;
   opacity: 0.8;
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
   /* Make sure the fish has appropriate size */
-  max-width: 100px; 
+  max-width: 100px;
   display: block;
 }
 
