@@ -33,10 +33,23 @@
   --water-splash: rgba(137, 247, 254, 0.5);
 
   /* Water Background Variables */
-  --water-surface: rgba(137, 247, 254, 0.5);
-  --water-deep: rgba(102, 166, 255, 0.7);
+  --water-surface: rgba(137, 247, 254, 0.5); /* Used for gradient and wave path 1 */
+  --water-deep: rgba(102, 166, 255, 0.7); /* Used for gradient */
   --bubble-color: rgba(255, 255, 255, 0.7);
-  --wave-speed: 15s;
+  /* --wave-speed: 15s; REMOVED - Now dynamic */
+
+  /* Sky Colors */
+  --sky-day: linear-gradient(to bottom, #87CEEB 30%, #ADD8E6 70%, #B0E0E6 100%); /* Light Sky Blue to Paler Blue */
+  --sky-sunset: linear-gradient(to bottom, #FFB6C1 0%, #FFA07A 40%, #FF7F50 70%, #4682B4 100%); /* Pink/Orange to Dusky Blue */
+  --sky-night: linear-gradient(to bottom, #000030 10%, #191970 50%, #2c3e50 100%); /* Deep Navy to Dark Slate Blue */
+  --sun-color: #FFD700; /* Gold */
+  --moon-color: #F5F5F5; /* White Smoke */
+  --cloud-color: rgba(255, 255, 255, 0.85);
+
+  /* Wave Animation Variables */
+  --wave-amplitude: 15; /* Base amplitude */
+  --wave-frequency: 0.01; /* Base frequency */
+  --wave-speed-factor: 1; /* Base speed */
 }
 
 * {
@@ -106,10 +119,10 @@ body {
   opacity: 0;
   transform: translate(-50%, -50%) rotate(45deg);
   transition: transform 0.3s ease;
-  z-index: 9999;
+  z-index: 9999; /* Keep mouse trail on top */
   box-shadow: 0 0 10px var(--water-shadow);
   filter: blur(1px); /* Soft blur for water effect */
-  will-change: transform, left, top; /* Performance optimization */
+  will-change: transform, left, top, opacity; /* Performance optimization */
 }
 
 body:hover #mouse-trail {
@@ -445,6 +458,8 @@ section {
   padding: 5rem 5%;
   max-width: 1200px;
   margin: 4rem auto;
+  position: relative; /* Ensure sections are above background */
+  z-index: 10; /* Higher than sky and water */
 }
 
 section h2 {
@@ -658,6 +673,8 @@ footer {
   margin-top: 4rem;
   border-top: 5px solid transparent;
   border-image: var(--gradient-accent) 1;
+  position: relative; /* Ensure footer is above background */
+  z-index: 10; /* Higher than sky and water */
 }
 
 footer p {
@@ -678,7 +695,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-social-links a {
+.social-links a { /* Corrected selector */
   font-size: 1.8rem;
   /* Larger social icons */
   margin: 0 0.8rem;
@@ -686,7 +703,7 @@ social-links a {
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
-social-links a:hover {
+.social-links a:hover { /* Corrected selector */
   color: var(--heading-color);
   transform: scale(1.2) rotate(5deg);
   /* Rotate social icons */
@@ -1023,6 +1040,118 @@ social-links a:hover {
   }
 }
 
+/* --- Sky, Sun, Moon, Clouds --- */
+#sky-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -11; /* Behind water background */
+  overflow: hidden;
+  transition: background 2s ease-in-out; /* Smooth transition for sky color */
+  background: var(--sky-day); /* Default to day */
+  contain: strict;
+  will-change: background;
+}
+
+#sun, #moon {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  top: 50%; /* Start centered vertically for calculation */
+  left: 50%; /* Start centered horizontally */
+  transform: translate(-50%, -50%); /* Center origin */
+  transition: transform 1s linear, opacity 1.5s ease-in-out; /* Smooth movement and fade */
+  opacity: 0; /* Start hidden */
+  will-change: transform, opacity;
+}
+
+#sun {
+  background-color: var(--sun-color);
+  box-shadow: 0 0 30px 10px rgba(255, 223, 0, 0.6); /* Sun glow */
+  z-index: 2;
+}
+
+#moon {
+  background-color: var(--moon-color);
+  box-shadow: 0 0 25px 5px rgba(245, 245, 245, 0.5); /* Moon glow */
+  z-index: 1;
+  /* Optional: Crescent Moon Effect
+  overflow: hidden; */
+}
+/* Optional: Crescent Moon Effect using pseudo-element
+#moon::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--sky-night); // Match night sky
+    top: 5px;
+    left: 15px; // Adjust for crescent shape
+    box-shadow: inset -5px 0 10px rgba(0,0,0,0.2);
+    transition: background-color 2s ease-in-out;
+} */
+
+
+#clouds-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%; /* Clouds mostly in the upper part */
+  z-index: 3; /* Above sun/moon */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cloud {
+  position: absolute;
+  background: var(--cloud-color);
+  border-radius: 50%;
+  box-shadow:
+    /* Main body shadow */
+    0 0 15px 5px rgba(255, 255, 255, 0.5),
+    /* Puffs */
+    inset -10px -5px 10px rgba(0, 0, 0, 0.05);
+  opacity: 0.7; /* Start slightly transparent */
+  animation: cloud-drift linear infinite;
+  will-change: transform, opacity;
+  /* Create puffiness using pseudo-elements */
+  filter: blur(1px); /* Soft edges */
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+  box-shadow: inherit;
+}
+
+/* Different cloud shapes/sizes */
+.cloud.type-1 { width: 120px; height: 40px; }
+.cloud.type-1::before { width: 60px; height: 60px; top: -25px; left: 15px; }
+.cloud.type-1::after { width: 70px; height: 50px; top: -15px; right: 10px; }
+
+.cloud.type-2 { width: 180px; height: 60px; }
+.cloud.type-2::before { width: 90px; height: 80px; top: -40px; left: 30px; }
+.cloud.type-2::after { width: 80px; height: 60px; top: -20px; right: 25px; }
+
+.cloud.type-3 { width: 90px; height: 30px; }
+.cloud.type-3::before { width: 40px; height: 40px; top: -15px; left: 10px; }
+.cloud.type-3::after { width: 50px; height: 35px; top: -10px; right: 8px; }
+
+
+@keyframes cloud-drift {
+  from { transform: translateX(-200px) scale(var(--cloud-scale, 1)); } /* Start off-screen left */
+  to { transform: translateX(calc(100vw + 200px)) scale(var(--cloud-scale, 1)); } /* Move across and off-screen right */
+}
+
+
 /* --- Water Background Effect --- */
 #water-background {
   position: fixed;
@@ -1030,11 +1159,11 @@ social-links a:hover {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -10;
+  z-index: -10; /* Above sky */
   overflow: hidden;
   pointer-events: none;
-  contain: strict; /* Optimize rendering performance */
-  will-change: opacity; /* Hint for compositing */
+  contain: strict;
+  will-change: opacity;
 }
 
 .water-body {
@@ -1044,53 +1173,43 @@ social-links a:hover {
   bottom: 0;
   left: 0;
   transition: height 0.2s ease-out;
-  height: 50vh;
+  height: 50vh; /* Keep initial height */
   will-change: height;
-  transform: translateZ(0); /* Force GPU acceleration */
+  transform: translateZ(0);
 }
 
 .water-surface {
   position: absolute;
   width: 100%;
-  height: 30px;
-  bottom: 50vh;
+  /* Height is determined by SVG viewBox height */
+  bottom: 50vh; /* Match water-body height */
+  left: 0;
   transition: bottom 0.2s ease-out;
   will-change: bottom;
   transform: translateZ(0);
+  overflow: visible; /* Allow wave peaks to go slightly above */
 }
 
-/* Even simpler wave pattern with minimal SVG points */
-.wave {
-  position: absolute;
-  width: 200%;
-  height: 30px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0V30c50,15,100,-10,150,5s100,10,150,-5V0Z' fill='%2389f7fe' opacity='.3'%3E%3C/path%3E%3C/svg%3E");
-  background-size: 300px 100%;
-  left: 0;
-  transform: translateZ(0);
+#wave-svg {
+    position: absolute;
+    bottom: 0; /* Align bottom of SVG with the water surface line */
+    left: 0;
+    width: 100%;
+    height: 60px; /* Match viewBox height */
+    display: block;
 }
 
-.wave1 {
-  animation: wave-animation var(--wave-speed) linear infinite;
-  opacity: 0.5;
-  z-index: 1;
+#wave-path-1, #wave-path-2 {
+    transition: d 0.5s ease-out; /* Smooth transition for path changes */
+    will-change: d;
 }
 
-.wave2 {
-  animation: wave-animation calc(var(--wave-speed) * 0.8) linear infinite reverse;
-  opacity: 0.3;
-  z-index: 2;
-  top: 10px;
-}
+/* REMOVED old static wave styles */
+/* .wave { ... } */
+/* .wave1 { ... } */
+/* .wave2 { ... } */
+/* @keyframes wave-animation { ... } */
 
-@keyframes wave-animation {
-  0% {
-    transform: translateX(0) translateZ(0);
-  }
-  100% {
-    transform: translateX(-50%) translateZ(0);
-  }
-}
 
 .bubble {
   position: absolute;
@@ -1116,40 +1235,6 @@ social-links a:hover {
   }
 }
 
-/* Stronger performance optimizations */
-.reduced-motion .wave {
-  animation-duration: calc(var(--wave-speed) * 3);
-}
-
-.reduced-motion .bubble {
-  box-shadow: none;
-}
-
-.reduced-motion #water-background {
-  opacity: 0.7;
-}
-
-/* Disable animations completely for users who explicitly request reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .wave {
-    animation: none;
-  }
-
-  .bubble {
-    animation-duration: 0.5s !important;
-  }
-
-  #water-background {
-    opacity: 0.5;
-  }
-}
-
-/* Make sure content sits above the water */
-header, section, footer {
-  position: relative;
-  z-index: 1;
-}
-
 /* --- Fish Animation Styles --- */
 #fish-container {
   position: absolute;
@@ -1157,22 +1242,19 @@ header, section, footer {
   height: 100%;
   bottom: 0;
   left: 0;
-  /* z-index: 1; */ /* Old value */
-  z-index: 3;      /* <<<< CHANGED: Higher than waves */
+  z-index: 3;      /* Higher than waves */
   overflow: hidden;
   pointer-events: none;
 }
 
 .swimming-fish {
   position: absolute;
-  /* z-index: 1; */ /* Old value */
-  z-index: 4;      /* <<<< CHANGED: Higher than container & waves */
+  z-index: 4;      /* Higher than container & waves */
   transform-origin: center;
   will-change: transform;
   transition: transform 1s ease-out, opacity 2s ease-out;
   opacity: 0.8;
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
-  /* Make sure the fish has appropriate size */
   max-width: 100px;
   display: block;
 }
@@ -1196,13 +1278,49 @@ header, section, footer {
   opacity: 1;
 }
 
-/* Reduced animations for performance optimization */
+/* --- Performance Optimizations --- */
+.reduced-motion #sun,
+.reduced-motion #moon {
+    transition-duration: 5s; /* Slower movement */
+}
+.reduced-motion .cloud {
+    animation-duration: calc(var(--drift-speed, 30s) * 3); /* Much slower clouds */
+    opacity: 0.5;
+}
+.reduced-motion #wave-path-1,
+.reduced-motion #wave-path-2 {
+    transition-duration: 2s; /* Slower wave transitions */
+}
+.reduced-motion .bubble {
+  box-shadow: none;
+}
+.reduced-motion #water-background {
+  opacity: 0.7;
+}
 .reduced-motion .swimming-fish {
   transition-duration: 2s;
 }
 
+
+/* Disable animations completely for users who explicitly request reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .swimming-fish {
+  #sun, #moon {
+    transition: opacity 1.5s ease-in-out; /* Only fade, no movement transition */
+  }
+  .cloud {
+    animation: none; /* Disable cloud movement */
+    opacity: 0.4;
+  }
+   #wave-path-1, #wave-path-2 {
+    transition: none; /* No wave transitions */
+  }
+  .bubble {
+    animation-duration: 0.5s !important;
+  }
+  #water-background {
+    opacity: 0.5;
+  }
+   .swimming-fish {
     transition-duration: 3s !important;
   }
 }
