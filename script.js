@@ -219,7 +219,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const fishContainer = document.getElementById('fish-container');
     const waterBody = document.querySelector('.water-body');
     
-    if (!fishContainer || !waterBody || typeof FISH_IMAGES === 'undefined') return;
+    if (!fishContainer || !waterBody || typeof FISH_IMAGES === 'undefined') {
+      console.error('Missing elements for fish animation or fish images not loaded');
+      return;
+    }
     
     // Performance detection
     const isLowPerfDevice = window.matchMedia('(prefers-reduced-motion: reduce)').matches || 
@@ -228,12 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
                            navigator.userAgent.match(/mobile|android/i);
     
     // Determine number of fish based on device performance
-    const fishCount = isLowPerfDevice ? 3 : 
-                     (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
+    const fishCount = isLowPerfDevice ? 2 : 
+                     (window.navigator.hardwareConcurrency >= 8 ? 6 : 4);
     
     // Get available fish images
     const fishImageKeys = Object.keys(FISH_IMAGES);
-    const fishImages = shuffleArray(fishImageKeys).slice(0, Math.min(fishCount * 2, fishImageKeys.length));
+    const fishImages = shuffleArray(fishImageKeys).slice(0, Math.min(fishCount * 3, fishImageKeys.length));
     
     // Current water height
     let currentWaterHeight = parseFloat(waterBody.style.height) || 50;
@@ -243,7 +246,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Create initial fish
     for (let i = 0; i < fishCount; i++) {
-      createFish();
+      // Stagger fish creation for performance
+      setTimeout(() => createFish(), i * 500);
     }
     
     // Create a fish with random properties
@@ -256,11 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Select random fish image
       const randomFishKey = fishImages[Math.floor(Math.random() * fishImages.length)];
-      const fishImage = FISH_IMAGES[randomFishKey];
+      const fishImageUrl = FISH_IMAGES[randomFishKey];
       
       // Create image element
       const img = document.createElement('img');
-      img.src = fishImage;
+      img.src = fishImageUrl;
       img.alt = randomFishKey;
       img.loading = 'lazy'; // Optimize loading
       fish.appendChild(img);
@@ -294,16 +298,18 @@ document.addEventListener('DOMContentLoaded', () => {
         fish.classList.add('flip-horizontal');
       }
       
-      // Set swimming speed (larger fish are slower)
-      const speedFactor = isLowPerfDevice ? 0.3 : 1;
-      const baseSpeed = (50 - size * 0.5) * speedFactor; // Smaller fish move faster
-      const speed = Math.max(10, Math.min(30, baseSpeed));
+      // Set swimming speed (larger fish are much slower) - GREATLY REDUCED SPEEDS
+      const speedFactor = isLowPerfDevice ? 0.1 : 0.2; // 5x slower than before
+      const baseSpeed = (40 - size * 0.3) * speedFactor; // Smaller fish move faster but still slow
+      const speed = Math.max(1, Math.min(10, baseSpeed)); // Much lower speed range
       
       fish.dataset.speed = speed;
       fish.dataset.direction = direction;
       fish.dataset.verticalDirection = Math.random() > 0.5 ? 'up' : 'down';
-      fish.dataset.verticalAmount = Math.random() * 10 + 5; // max vertical movement in vh
+      fish.dataset.verticalAmount = Math.random() * 6 + 2; // Reduced vertical movement
       fish.dataset.originalY = startY;
+      fish.dataset.wiggleAmount = Math.random() * 0.5 + 0.5; // Random wiggle amount
+      fish.dataset.wigglePhase = Math.random() * Math.PI * 2; // Random wiggle phase
       
       // Add to container and tracking array
       fishContainer.appendChild(fish);
@@ -333,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let verticalDirection = fish.dataset.verticalDirection;
       const verticalAmount = parseFloat(fish.dataset.verticalAmount);
       const originalY = parseFloat(fish.dataset.originalY);
+      const wiggleAmount = parseFloat(fish.dataset.wiggleAmount || 0.5);
+      let wigglePhase = parseFloat(fish.dataset.wigglePhase || 0);
       
       // Current position in viewport units
       const currentX = (fishX / viewportWidth) * 100;
@@ -345,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (direction === 'left' && currentX < 0) {
         direction = 'right';
         fish.classList.remove('flip-horizontal');
-      } else if (Math.random() < 0.01) { // Small chance to randomly change direction
+      } else if (Math.random() < 0.001) { // Much lower chance to randomly change direction
         direction = direction === 'right' ? 'left' : 'right';
         if (direction === 'left') {
           fish.classList.add('flip-horizontal');
@@ -359,19 +367,26 @@ document.addEventListener('DOMContentLoaded', () => {
         verticalDirection = 'down';
       } else if (verticalDirection === 'down' && (currentBottomVh < (originalY - verticalAmount))) {
         verticalDirection = 'up';
-      } else if (Math.random() < 0.02) { // Small chance to randomly change vertical direction
+      } else if (Math.random() < 0.005) { // Much lower chance to randomly change vertical direction
         verticalDirection = verticalDirection === 'up' ? 'down' : 'up';
       }
       
-      // Calculate new position
-      const swimSpeed = (speed / (isLowPerfDevice ? 2 : 1)) * (Math.random() * 0.4 + 0.8); // Add slight randomness
-      const newX = direction === 'right' ? currentX + swimSpeed * 0.1 : currentX - swimSpeed * 0.1;
+      // Update wiggle phase
+      wigglePhase += 0.05; // Slow phase change
+      fish.dataset.wigglePhase = wigglePhase;
       
-      // Vertical movement (slower)
-      const verticalSpeed = swimSpeed * 0.03;
-      const newBottom = verticalDirection === 'up' ? 
-                        currentBottomVh + verticalSpeed : 
-                        currentBottomVh - verticalSpeed;
+      // Add wiggle effect to vertical movement (sine wave)
+      const wiggle = Math.sin(wigglePhase) * wiggleAmount;
+      
+      // Calculate new position (MUCH SLOWER MOVEMENT)
+      const swimSpeed = speed * (0.7 + Math.random() * 0.3) * 0.02; // 50x slower + slight randomness
+      const newX = direction === 'right' ? currentX + swimSpeed : currentX - swimSpeed;
+      
+      // Very slow vertical movement
+      const verticalSpeed = swimSpeed * 0.3;
+      const verticalOffset = verticalDirection === 'up' ? 
+                        verticalSpeed : -verticalSpeed;
+      const newBottom = currentBottomVh + verticalOffset + wiggle * 0.01;
       
       // Update position
       fish.style.left = `${newX}vw`;
@@ -381,12 +396,14 @@ document.addEventListener('DOMContentLoaded', () => {
       fish.dataset.direction = direction;
       fish.dataset.verticalDirection = verticalDirection;
       
-      // Schedule next animation with throttled frame rate
+      // Schedule next animation with much longer delays (much slower animation)
+      const animationDelay = isLowPerfDevice ? 250 : 100; // 3-7.5x slower than before
+      
       setTimeout(() => {
         if (fish.isConnected) {
           animateFish(fish);
         }
-      }, isLowPerfDevice ? 100 : 33.33); // 30fps or 10fps for low-perf devices
+      }, animationDelay);
     }
     
     // Watch for water level changes and adjust fish
@@ -405,7 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!fish.isConnected) return;
           
           const bottomVh = parseFloat(fish.style.bottom);
-          const originalY = parseFloat(fish.dataset.originalY);
           
           // If fish would be out of water, update its original Y position
           if (100 - bottomVh > waterHeight * 0.9) {
@@ -415,21 +431,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       }
-    }, 1000); // Check every second
+    }, 2000); // Check less frequently
     
-    // Periodically replace fish
+    // Periodically replace fish (much less frequently)
     const fishRefreshInterval = setInterval(() => {
       if (!isDocumentVisible()) return;
       
       // Remove a random fish and create a new one
-      if (activeFish.length > 0 && Math.random() < 0.3) {
+      if (activeFish.length > 0 && Math.random() < 0.2) { // Lower chance
         const index = Math.floor(Math.random() * activeFish.length);
         const fishToRemove = activeFish[index];
         
         if (fishToRemove && fishToRemove.isConnected) {
           // Fade out
           fishToRemove.style.opacity = '0';
-          fishToRemove.style.transition = 'opacity 1s ease-out';
+          fishToRemove.style.transition = 'opacity 2s ease-out'; // Slower fade
           
           // Remove after fade
           setTimeout(() => {
@@ -447,10 +463,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDocumentVisible()) {
               createFish();
             }
-          }, 1000);
+          }, 2000); // Longer fade time
         }
       }
-    }, isLowPerfDevice ? 15000 : 8000); // Refresh fish less often on low-perf devices
+    }, isLowPerfDevice ? 30000 : 20000); // Much less frequent replacements
     
     // Clean up resources
     window.addEventListener('beforeunload', () => {
