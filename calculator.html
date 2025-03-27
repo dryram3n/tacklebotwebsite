@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/calculator.html"> <!-- Updated URL -->
+  <meta property="og:title" content="TackleBot 🎣 - Stat Calculator"> <!-- Updated Title -->
+  <meta property="og:description" content="Calculate your TackleBot fishing stats based on your upgrades, level, and location."> <!-- Updated Description -->
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/calculator.html"> <!-- Updated URL -->
+  <meta property="twitter:title" content="TackleBot 🎣 - Stat Calculator"> <!-- Updated Title -->
+  <meta property="twitter:description" content="Calculate your TackleBot fishing stats based on your upgrades, level, and location."> <!-- Updated Description -->
+  <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Theme color for browser UI -->
+  <meta name="theme-color" content="#89f7fe">
+
+  <title>TackleBot 🎣 - Stat Calculator</title> <!-- Updated Title -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Discord Icon (Optional, can replace with emoji too) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- Water Background Effect -->
+  <div id="water-background">
+    <div class="water-body"></div>
+    <div class="water-surface">
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+    </div>
+    <div id="bubbles-container"></div>
+    <!-- Fish Container -->
+    <div id="fish-container"></div>
+  </div>
+
+  <!-- Mouse Trail Effect Container (now empty to use CSS styling) -->
+  <div id="mouse-trail"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html" style="text-decoration: none; color: inherit;">🎣 TackleBot</a> <!-- Link logo back to home -->
+      </div>
+      <ul>
+        <li><a href="index.html#hero">Home</a></li> <!-- Link back to index sections -->
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="calculator.html" class="active">Calculator</a></li> <!-- Added Calculator Link -->
+        <li><a href="index.html#support">Support</a></li>
+        <li><a href="fish-catalog.html">Fish Catalog</a></li>
+        <li><a href="terms-of-service.html">Terms</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+        <li><a href="#" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Calculator Section -->
+  <section id="calculator" class="animated-section">
+    <h2>Stat Calculator <span class="emoji">🧮</span></h2>
+    <p>Enter your upgrade levels and other factors to see your calculated fishing stats!</p>
+
+    <div class="calculator-container">
+      <div class="calc-inputs">
+
+        <!-- Shop Upgrades -->
+        <div class="calc-group">
+          <h3>Shop Upgrades</h3>
+          <div class="calc-input-grid">
+            <div class="calc-input-item">
+              <label for="calc-luck" class="calc-label">Lucky Lure (Luck):</label>
+              <input type="number" id="calc-luck" class="calc-input" min="0" max="100" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-speed" class="calc-label">Quick Cast (Speed):</label>
+              <input type="number" id="calc-speed" class="calc-input" min="0" max="100" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-multiCatch" class="calc-label">Wide Net (Multi-Catch):</label>
+              <input type="number" id="calc-multiCatch" class="calc-input" min="0" max="100" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-inventory" class="calc-label">Tackle Box (Inventory):</label>
+              <input type="number" id="calc-inventory" class="calc-input" min="0" max="20" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-value" class="calc-label">Market Contacts (Value):</label>
+              <input type="number" id="calc-value" class="calc-input" min="0" max="100" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-explorer" class="calc-label">Explorer's Map:</label>
+              <input type="number" id="calc-explorer" class="calc-input" min="0" max="10" value="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Research Upgrades -->
+        <div class="calc-group">
+          <h3>Research Upgrades</h3>
+          <div class="calc-input-grid">
+            <div class="calc-input-item">
+              <label for="calc-advancedLuck" class="calc-label">Advanced Lure Tech:</label>
+              <input type="number" id="calc-advancedLuck" class="calc-input" min="0" max="10" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-efficiency" class="calc-label">Fishing Efficiency:</label>
+              <input type="number" id="calc-efficiency" class="calc-input" min="0" max="10" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-masterNet" class="calc-label">Master Fishing Net:</label>
+              <input type="number" id="calc-masterNet" class="calc-input" min="0" max="10" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-treasureHunter" class="calc-label">Treasure Hunter:</label>
+              <input type="number" id="calc-treasureHunter" class="calc-input" min="0" max="5" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-specialLure" class="calc-label">Special Fish Attractor:</label>
+              <input type="number" id="calc-specialLure" class="calc-input" min="0" max="5" value="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Other Factors -->
+        <div class="calc-group">
+          <h3>Other Factors</h3>
+          <div class="calc-input-grid calc-input-grid-small">
+            <div class="calc-input-item">
+              <label for="calc-level" class="calc-label">Your Fishing Level:</label>
+              <input type="number" id="calc-level" class="calc-input" min="0" value="0">
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-location" class="calc-label">Fishing Location:</label>
+              <select id="calc-location" class="calc-select">
+                <!-- Options will be populated by JS -->
+              </select>
+            </div>
+            <div class="calc-input-item">
+              <label for="calc-season" class="calc-label">Current Season:</label>
+              <select id="calc-season" class="calc-select">
+                <!-- Options will be populated by JS -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="calc-outputs">
+        <h3>Calculated Stats</h3>
+        <div class="calc-output-area">
+          <div class="calc-output-line"><strong>🎣 Cast Speed Reduction:</strong> <span id="calc-output-speed">0.0%</span></div>
+          <div class="calc-output-line"><strong>💰 Sell Value Bonus:</strong> <span id="calc-output-value">0.0%</span></div>
+          <div class="calc-output-line"><strong>📦 Max Inventory:</strong> <span id="calc-output-inventory">25</span></div>
+          <div class="calc-output-line"><strong>🎣 Multi-Catch Chance:</strong> <span id="calc-output-multiCatch">0.0%</span></div>
+          <div class="calc-output-line"><strong>✨ Special Fish Bonus Chance:</strong> <span id="calc-output-specialChance">0.5%</span></div>
+          <div class="calc-output-line"><strong>💎 Treasure Chest Bonus:</strong> <span id="calc-output-treasure">0%</span></div>
+          <div class="calc-output-line"><strong>🗺️ Unlocked Locations:</strong> <span id="calc-output-locations">Pond</span></div>
+
+          <div class="calc-output-line calc-rarity-header">
+            <strong>🎲 Rarity Chances (Approximate):</strong>
+            <div class="calc-luck-info">
+              Total Luck Influence: <span id="calc-output-luck">0</span>
+              <small>(Shop + Research + Level)</small>
+            </div>
+          </div>
+          <div class="calc-rarity-grid">
+            <div class="calc-output-line rarity-common">Common: <span id="calc-output-rarity-common">~60.8%</span></div>
+            <div class="calc-output-line rarity-uncommon">Uncommon: <span id="calc-output-rarity-uncommon">~21.8%</span></div>
+            <div class="calc-output-line rarity-rare">Rare: <span id="calc-output-rarity-rare">~9.9%</span></div>
+            <div class="calc-output-line rarity-legendary">Legendary: <span id="calc-output-rarity-legendary">~3.0%</span></div>
+            <div class="calc-output-line rarity-mythic">Mythic: <span id="calc-output-rarity-mythic">~2.5%</span></div>
+            <div class="calc-output-line rarity-chimerical">Chimerical: <span id="calc-output-rarity-chimerical">~2.0%</span></div>
+            <!-- Junk chance is complex, depends on luck reducing it, maybe add later -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Calculator Section -->
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+      <a href="terms-of-service.html">Terms of Service</a> |
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="social-links">
+      <!-- Add links to your bot's social media or website if applicable -->
+      <a href="#" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
+      <!-- <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a> -->
+    </div>
+  </footer>
+
+  <!-- Load fish images data before main script -->
+  <script src="fishImages.js"></script>
+  <!-- Load general scripts -->
+  <script src="script.js"></script>
+  <!-- Load calculator-specific scripts -->
+  <script src="calculator.js"></script>
+</body>
+
+</html>
