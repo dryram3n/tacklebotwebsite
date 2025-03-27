@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initCatalog() {
         // Check if FISH_DATA is loaded
         if (typeof FISH_DATA === 'undefined') {
-            console.error('Fish data not loaded. Make sure fish-data.js is properly loaded before fish-catalog.js');
+            console.error('Fish data not loaded. Make sure fish-info.js is properly loaded before fish-catalog.js');
             return;
         }
         
@@ -120,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const term = searchTerm.toLowerCase();
             fishList = fishList.filter(fish => 
                 fish.name.toLowerCase().includes(term) || 
-                (fish.description && fish.description.toLowerCase().includes(term))
+                (fish.description && fish.description.toLowerCase().includes(term)) ||
+                (fish.lore && fish.lore.toLowerCase().includes(term))
             );
         }
         
@@ -162,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = `fish-card ${category}`;
         
         // Get fish image URL from the fishImages.js file if available
-        let imageUrl = 'placeholder-fish.png'; // Default placeholder
+        let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
         if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
             imageUrl = FISH_IMAGES[fish.name];
         }
@@ -170,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
             <img src="${imageUrl}" alt="${fish.name}" class="fish-image" onerror="this.src='images/placeholder-fish.png'">
             <h3 class="fish-name">${fish.name}</h3>
-            <p class="fish-rarity">${capitalizeFirst(fish.rarity)}</p>
+            <p class="fish-rarity">${capitalizeFirst(fish.rarity || 'unknown')}</p>
             <p class="fish-value">Value: 🪙 ${fish.baseValue || '?'}</p>
         `;
         
@@ -185,10 +186,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('modal-open'); // Add class to prevent background scrolling
         
         // Get fish image
-        let imageUrl = 'placeholder-fish.png'; // Default placeholder
+        let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
         if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
             imageUrl = FISH_IMAGES[fish.name];
         }
+        
+        // Get fish lore if available
+        const getLore = () => {
+            // Try to fetch from fish-info lore property
+            if (fish.lore) return fish.lore;
+            
+            // Try to fetch from the custom getFishLore function if available
+            if (typeof getFishLore === 'function') {
+                const lore = getFishLore(fish.name);
+                if (lore) return lore;
+            }
+            
+            return 'Lore for this fish has yet to be discovered. Continue fishing to unlock more information!';
+        };
         
         // Format locations if available
         let locationsHtml = '';
@@ -223,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     onerror="this.src='images/placeholder-fish.png'">
                 <h2 class="fish-detail-title">${fish.name}</h2>
                 <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity]}; color: #fff;">
-                    ${capitalizeFirst(fish.rarity)}
+                    ${capitalizeFirst(fish.rarity || 'unknown')}
                 </span>
                 ${seasonalHtml}
             </div>
@@ -262,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             <div class="fish-detail-lore">
                 <h3 class="lore-title">📜 Lore</h3>
-                <p class="lore-text">${fish.lore || 'Lore for this fish has yet to be discovered. Continue fishing to unlock more information!'}</p>
+                <p class="lore-text">${getLore()}</p>
             </div>
         `;
         
