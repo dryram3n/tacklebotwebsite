@@ -1171,7 +1171,7 @@ header, section, footer {
   height: 100%;
   bottom: 0;
   left: 0;
-  z-index: -5; /* Above water background but below content */
+  z-index: 1; /* changed from -5 to 1 to display fish above water layers */
   overflow: hidden;
   pointer-events: none;
 }
