@@ -267,6 +267,20 @@ document.addEventListener('DOMContentLoaded', () => {
       img.src = fishImageUrl;
       img.alt = randomFishKey;
       img.loading = 'lazy'; // Optimize loading
+      
+      // Ensure image is loaded before adding to DOM
+      img.onload = function() {
+        // Image loaded successfully
+        console.log("Fish image loaded: " + randomFishKey);
+      };
+      
+      img.onerror = function() {
+        // Handle image loading error
+        console.error("Failed to load fish image: " + randomFishKey);
+        // Fallback to a default image or try another fish
+        img.src = "https://cdn.discordapp.com/attachments/1349726808488153168/1349728486880710666/Carp.png?ex=67d4281c&is=67d2d69c&hm=a080decf34c81199424c78c1af8ad50db2e9b6d26e76d5c5bfe27fbdeca7f48e&";
+      };
+      
       fish.appendChild(img);
       
       // Random fish size based on rarity (assumed from the structure in fishImages.js)
