@@ -438,22 +438,25 @@
     
     <div class="catalog-container">
       <!-- Search and Filter Section -->
-      <div class="catalog-controls">
+      <div class="search-section">
+        <!-- Search input and button -->
         <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search fish...">
+          <input type="text" class="search-input" placeholder="Search by name or description...">
           <button class="search-button">🔍 Search</button>
         </div>
         
-        <div class="filter-container">
-          <span>Filter by Location: </span>
+        <!-- Location filters -->
+        <div class="filter-section">
+          <h3>Filter by Location:</h3>
           <div class="filter-tags">
-            <button class="filter-tag active" data-filter="all">All</button>
+            <button class="filter-tag active" data-filter="all">All Locations</button>
             <button class="filter-tag" data-filter="pond">Pond</button>
             <button class="filter-tag" data-filter="river">River</button>
             <button class="filter-tag" data-filter="lake">Lake</button>
             <button class="filter-tag" data-filter="ocean">Ocean</button>
             <button class="filter-tag" data-filter="coral_reef">Coral Reef</button>
             <button class="filter-tag" data-filter="abyss">Abyss</button>
+            <button class="filter-tag" data-filter="sunken_city">Sunken City</button>
             <button class="filter-tag" data-filter="vortex">Vortex</button>
             <button class="filter-tag" data-filter="cosmic_sea">Cosmic Sea</button>
             <button class="filter-tag" data-filter="temporal_tide">Temporal Tide</button>
@@ -462,15 +465,34 @@
       </div>
       
       <!-- Category Tabs -->
-      <div class="catalog-tabs">
-        <button class="catalog-tab active" data-category="common">Common</button>
-        <button class="catalog-tab" data-category="uncommon">Uncommon</button>
-        <button class="catalog-tab" data-category="rare">Rare</button>
-        <button class="catalog-tab" data-category="legendary">Legendary</button>
-        <button class="catalog-tab" data-category="mythic">Mythic</button>
-        <button class="catalog-tab" data-category="chimerical">Chimerical</button>
-        <button class="catalog-tab" data-category="seasonal">Seasonal</button>
-        <button class="catalog-tab" data-category="junk">Junk</button>
+      <div class="catalog-tabs-container">
+        <h3>Filter by Rarity:</h3>
+        <div class="catalog-tabs">
+          <button class="catalog-tab tab-common active" data-category="common">
+            <span>🟤</span> Common
+          </button>
+          <button class="catalog-tab tab-uncommon" data-category="uncommon">
+            <span>🟢</span> Uncommon
+          </button>
+          <button class="catalog-tab tab-rare" data-category="rare">
+            <span>🔵</span> Rare
+          </button>
+          <button class="catalog-tab tab-legendary" data-category="legendary">
+            <span>🟡</span> Legendary
+          </button>
+          <button class="catalog-tab tab-mythic" data-category="mythic">
+            <span>🟣</span> Mythic
+          </button>
+          <button class="catalog-tab tab-chimerical" data-category="chimerical">
+            <span>🌟</span> Chimerical
+          </button>
+          <button class="catalog-tab tab-seasonal" data-category="seasonal">
+            <span>🍂</span> Seasonal
+          </button>
+          <button class="catalog-tab tab-junk" data-category="junk">
+            <span>🗑️</span> Junk
+          </button>
+        </div>
       </div>
       
       <!-- Loading Indicator -->
@@ -479,18 +501,21 @@
         <p>Loading fish data...</p>
       </div>
       
+      <!-- Fish Results Count -->
+      <div class="results-count" id="resultsCount"></div>
+      
       <!-- Fish Cards Container -->
       <div class="catalog-content"></div>
     </div>
-    
-    <!-- Fish Detail Modal -->
-    <div id="fishModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div id="fishDetailContent"></div>
-      </div>
-    </div>
   </section>
+
+  <!-- Fish Detail Modal -->
+  <div id="fishModal" class="fish-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div id="fishDetailContent"></div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>

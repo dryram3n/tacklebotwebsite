@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal.addEventListener('click', () => {
             fishModal.style.display = 'none';
             document.body.style.overflow = 'auto'; // Re-enable scrolling
+            document.body.classList.remove('modal-open');
         });
         
         // Close modal on click outside
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === fishModal) {
                 fishModal.style.display = 'none';
                 document.body.style.overflow = 'auto'; // Re-enable scrolling
+                document.body.classList.remove('modal-open');
             }
         });
         
@@ -78,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Escape' && fishModal.style.display === 'block') {
                 fishModal.style.display = 'none';
                 document.body.style.overflow = 'auto'; // Re-enable scrolling
+                document.body.classList.remove('modal-open');
             }
         });
     }
@@ -119,6 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 fish.name.toLowerCase().includes(term) || 
                 (fish.description && fish.description.toLowerCase().includes(term))
             );
+        }
+        
+        // Update results count
+        const resultsCount = document.getElementById('resultsCount');
+        if (resultsCount) {
+            resultsCount.textContent = fishList.length > 0 
+                ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish` 
+                : 'No results found';
         }
         
         // Display message if no fish found
@@ -171,6 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Display detailed fish information in modal
     function displayFishDetail(fish) {
+        document.body.classList.add('modal-open'); // Add class to prevent background scrolling
+        
         // Get fish image
         let imageUrl = 'placeholder-fish.png'; // Default placeholder
         if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
@@ -206,7 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build modal content
         fishDetailContent.innerHTML = `
             <div class="fish-detail-header">
-                <img src="${imageUrl}" alt="${fish.name}" class="fish-detail-image">
+                <img src="${imageUrl}" alt="${fish.name}" class="fish-detail-image" 
+                    onerror="this.src='images/placeholder-fish.png'">
                 <h2 class="fish-detail-title">${fish.name}</h2>
                 <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity]}; color: #fff;">
                     ${capitalizeFirst(fish.rarity)}
@@ -252,8 +266,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         
-        // Display the modal
+        // Position modal at the top of the viewport and display it
         fishModal.style.display = 'block';
+        window.scrollTo(0, 0); // Scroll to top when modal opens
         document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
     }
     
