@@ -876,7 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const RARITY_WEIGHTS = { common: 0.608, uncommon: 0.218, rare: 0.099, legendary: 0.03, mythic: 0.025, chimerical: 0.02 };
     const SPECIAL_FISH_CHANCE = 0.005; // 0.5% base chance
-    const BASE_INVENTORY = 25; // Assuming a base inventory size
+    const BASE_INVENTORY = 20; // Assuming a base inventory size
 
     // --- Get DOM Elements ---
     const inputs = {
