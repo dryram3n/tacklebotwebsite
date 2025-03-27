@@ -88,4 +88,5 @@ const FISH_IMAGES = {
 
 // Ensure it's globally accessible
 window.FISH_IMAGES = FISH_IMAGES;
-console.log('FISH_IMAGES loaded with local paths:', window.FISH_IMAGES);
+// Only log once during initial load and use a more concise message
+console.log('FISH_IMAGES loaded successfully');

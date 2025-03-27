@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = document.querySelector('.close-modal');
     const loadingIndicator = document.querySelector('.loading-indicator');
     
+    // Add initialization guard to prevent multiple initializations
+    let isInitialized = false;
+    
     // Current state tracking
     let currentCategory = 'common';
     let currentLocationFilter = 'all';
@@ -17,11 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize the catalog
     function initCatalog() {
+        // Prevent multiple initializations
+        if (isInitialized) {
+            return;
+        }
+        
         // Check if FISH_DATA is loaded
         if (typeof FISH_DATA === 'undefined') {
             console.error('Fish data not loaded. Make sure fish-info.js is properly loaded before fish-catalog.js');
+            // Try again after a short delay, but only once
+            setTimeout(() => {
+                if (!isInitialized && typeof FISH_DATA !== 'undefined') {
+                    initCatalog();
+                } else {
+                    if (loadingIndicator) loadingIndicator.style.display = 'none';
+                    catalogContent.innerHTML = '<div class="error-message">Failed to load fish data. Please refresh the page.</div>';
+                }
+            }, 2000);
             return;
         }
+        
+        // Set flag to prevent re-initialization
+        isInitialized = true;
         
         // Set up event listeners
         setupEventListeners();
@@ -98,6 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Display fish by category with optional filtering
     function displayFishByCategory(category) {
+        // Prevent operation if not initialized
+        if (!isInitialized) return;
+        
         // Clear previous content
         catalogContent.innerHTML = '';
         
@@ -105,56 +128,68 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingIndicator.style.display = 'block';
         }
         
-        // Get fish for the selected category
-        let fishList = FISH_DATA[category] || [];
-        
-        // Apply location filter if not 'all'
-        if (currentLocationFilter !== 'all') {
-            fishList = fishList.filter(fish => 
-                fish.locations && fish.locations.includes(currentLocationFilter)
-            );
-        }
-        
-        // Apply search term if any
-        if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            fishList = fishList.filter(fish => 
-                fish.name.toLowerCase().includes(term) || 
-                (fish.description && fish.description.toLowerCase().includes(term)) ||
-                (fish.lore && fish.lore.toLowerCase().includes(term))
-            );
-        }
-        
-        // Update results count
-        const resultsCount = document.getElementById('resultsCount');
-        if (resultsCount) {
-            resultsCount.textContent = fishList.length > 0 
-                ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish` 
-                : 'No results found';
-        }
-        
-        // Display message if no fish found
-        if (fishList.length === 0) {
-            catalogContent.innerHTML = `
-                <div class="no-results">
-                    <p>No fish found matching your criteria. Try changing your filters or search term.</p>
-                </div>
-            `;
-            if (loadingIndicator) {
-                loadingIndicator.style.display = 'none';
+        // Add a short delay to avoid UI freezing and ensure loading indicator shows
+        setTimeout(() => {
+            try {
+                // Get fish for the selected category
+                let fishList = FISH_DATA[category] || [];
+                
+                // Apply location filter if not 'all'
+                if (currentLocationFilter !== 'all') {
+                    fishList = fishList.filter(fish => 
+                        fish.locations && fish.locations.includes(currentLocationFilter)
+                    );
+                }
+                
+                // Apply search term if any
+                if (searchTerm) {
+                    const term = searchTerm.toLowerCase();
+                    fishList = fishList.filter(fish => 
+                        fish.name.toLowerCase().includes(term) || 
+                        (fish.description && fish.description.toLowerCase().includes(term)) ||
+                        (fish.lore && fish.lore.toLowerCase().includes(term))
+                    );
+                }
+                
+                // Update results count
+                const resultsCount = document.getElementById('resultsCount');
+                if (resultsCount) {
+                    resultsCount.textContent = fishList.length > 0 
+                        ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish` 
+                        : 'No results found';
+                }
+                
+                // Display message if no fish found
+                if (fishList.length === 0) {
+                    catalogContent.innerHTML = `
+                        <div class="no-results">
+                            <p>No fish found matching your criteria. Try changing your filters or search term.</p>
+                        </div>
+                    `;
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                    return;
+                }
+                
+                // Create fish cards
+                fishList.forEach(fish => {
+                    const fishCard = createFishCard(fish, category);
+                    catalogContent.appendChild(fishCard);
+                });
+            } catch (error) {
+                console.error('Error displaying fish:', error);
+                catalogContent.innerHTML = `
+                    <div class="error-message">
+                        <p>There was an error loading the fish data. Please try refreshing the page.</p>
+                    </div>
+                `;
+            } finally {
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
             }
-            return;
-        }
-        
-        // Create fish cards
-        fishList.forEach(fish => {
-            const fishCard = createFishCard(fish, category);
-            catalogContent.appendChild(fishCard);
-        });
-        
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
+        }, 10); // Small delay for UI responsiveness
     }
     
     // Create a fish card element
@@ -298,6 +333,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
     
-    // Initialize the catalog when DOM is loaded
-    initCatalog();
+    // Initialize the catalog when DOM is loaded - with error handling
+    try {
+        initCatalog();
+    } catch (error) {
+        console.error('Error initializing fish catalog:', error);
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+        if (catalogContent) {
+            catalogContent.innerHTML = '<div class="error-message">Failed to initialize fish catalog. Please refresh the page.</div>';
+        }
+    }
 });

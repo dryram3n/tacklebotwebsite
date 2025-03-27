@@ -1083,5 +1083,5 @@ function getAllFish() {
 window.FISH_DATA = FISH_DATA;
 window.getAllFish = getAllFish;
 
-console.log('FISH_DATA loaded:', window.FISH_DATA); // Add console log for debugging
-console.log('Total fish loaded:', getAllFish().length);
+// Simplify console logging to avoid potential performance issues
+console.log('FISH_DATA loaded successfully');
