@@ -459,20 +459,6 @@ section h2 {
   font-weight: 800;
 }
 
-section h2::after {
-  content: '🐠';
-  /* Fish emoji underline */
-  position: absolute;
-  bottom: 0;
-  /* CORRECTED: Position at the bottom of the h2's padding area */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.5em;
-  /* Adjust emoji size if needed */
-  line-height: 1;
-  /* Helps stabilize vertical position */
-}
-
 /* --- Features Section --- */
 #features {
   background-color: var(--white);
