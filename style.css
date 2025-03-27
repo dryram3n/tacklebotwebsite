@@ -1004,15 +1004,15 @@ social-links a:hover {
   .legal-card {
     padding: 1.5rem;
   }
-  
+
   .legal-card h3 {
     font-size: 1.5rem;
   }
-  
+
   .legal-card h4 {
     font-size: 1.3rem;
   }
-  
+
   .expand-btn {
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
@@ -1023,15 +1023,15 @@ social-links a:hover {
   .legal-card {
     padding: 1.2rem;
   }
-  
+
   .legal-card h3 {
     font-size: 1.3rem;
   }
-  
+
   .legal-card h4 {
     font-size: 1.1rem;
   }
-  
+
   .legal-card ul {
     padding-left: 1.2rem;
   }
@@ -1148,11 +1148,11 @@ social-links a:hover {
   .wave {
     animation: none;
   }
-  
+
   .bubble {
     animation-duration: 0.5s !important;
   }
-  
+
   #water-background {
     opacity: 0.5;
   }
@@ -1687,11 +1687,11 @@ header, section, footer {
   .fish-catalog-section {
     padding: 2rem;
   }
-  
+
   .catalog-content {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  
+
   .fish-detail-stats {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
@@ -1706,29 +1706,29 @@ header, section, footer {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .search-section {
     flex-direction: column;
   }
-  
+
   .search-container {
     max-width: 100%;
   }
-  
+
   .fish-detail-stats {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-content {
     padding: 2rem 1.5rem;
     width: 95%;
   }
-  
+
   .fish-detail-image {
     width: 180px;
     height: 180px;
   }
-  
+
   .fish-detail-title {
     font-size: 1.8rem;
   }
@@ -1738,58 +1738,251 @@ header, section, footer {
   .fish-catalog-section {
     padding: 1rem;
   }
-  
+
   .catalog-content {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 1rem;
   }
-  
+
   .search-input, .search-button {
     font-size: 0.9rem;
     padding: 0.7rem 1rem;
   }
-  
+
   .catalog-tabs {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     flex-wrap: nowrap;
   }
-  
+
   .catalog-tab {
     flex-shrink: 0;
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
   }
-  
+
   .modal-content {
     padding: 1.5rem 1rem;
     width: 95%;
   }
-  
+
   .close-modal {
     top: 1rem;
     right: 1rem;
   }
-  
+
   .fish-detail-title {
     font-size: 1.5rem;
   }
-  
+
   .fish-detail-image {
     width: 150px;
     height: 150px;
   }
-  
+
   .fish-detail-stats {
     gap: 1rem;
   }
-  
+
   .stat-item {
     padding: 1rem;
   }
-  
+
   .fish-detail-lore {
     padding: 1.5rem;
+  }
+}
+
+/* --- Calculator Section --- */
+#calculator {
+  background-color: var(--white);
+  border-radius: 30px;
+  box-shadow: 0 10px 30px var(--shadow-light);
+  padding: 3rem 4%; /* Adjusted padding */
+}
+
+#calculator p {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 1.15rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.calculator-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column */
+  gap: 3rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+/* Use grid for larger screens */
+@media (min-width: 992px) {
+  .calculator-container {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+    gap: 4rem;
+  }
+}
+
+.calc-inputs, .calc-outputs {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.calc-group {
+  background-color: var(--primary-bg);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.calc-group h3 {
+  color: var(--heading-color);
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+.calc-input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+}
+
+.calc-input-grid-small {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.calc-input-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.calc-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.calc-input, .calc-select {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  background-color: var(--white);
+  transition: border-color 0.3s ease;
+}
+
+.calc-input:focus, .calc-select:focus {
+  border-color: var(--heading-color);
+  outline: none;
+  box-shadow: 0 0 5px rgba(102, 166, 255, 0.3);
+}
+
+.calc-input[type="number"] {
+  appearance: textfield; /* Standard property */
+  -moz-appearance: textfield; /* Firefox */
+}
+.calc-input::-webkit-outer-spin-button,
+.calc-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.calc-outputs h3 {
+  color: var(--heading-color);
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.calc-output-area {
+  background-color: var(--primary-bg);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.calc-output-line {
+  font-size: 1.05rem;
+  color: var(--text-color);
+  padding-bottom: 0.8rem;
+  border-bottom: 1px dashed #eee;
+}
+.calc-output-line:last-child {
+  border-bottom: none;
+}
+
+.calc-output-line strong {
+  color: var(--heading-color);
+  margin-right: 0.5em;
+}
+
+.calc-output-line span {
+  font-weight: 600;
+  color: #66a6ff; /* Highlight color */
+}
+
+.calc-rarity-header {
+  margin-top: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.calc-luck-info {
+  font-size: 0.9rem;
+  text-align: right;
+}
+.calc-luck-info small {
+  display: block;
+  color: #777;
+}
+
+.calc-rarity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.calc-output-line.rarity-common span { color: #6b5b4b; }
+.calc-output-line.rarity-uncommon span { color: #2d5744; }
+.calc-output-line.rarity-rare span { color: #2d4e74; }
+.calc-output-line.rarity-legendary span { color: #b58900; } /* Adjusted for better contrast */
+.calc-output-line.rarity-mythic span { color: #633f79; }
+.calc-output-line.rarity-chimerical span { color: #a04db2; } /* Adjusted for better contrast */
+
+@media (max-width: 576px) {
+  .calc-input-grid {
+    grid-template-columns: 1fr; /* Stack inputs on small screens */
+  }
+  .calc-rarity-grid {
+    grid-template-columns: 1fr;
+  }
+  .calc-rarity-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .calc-luck-info {
+    text-align: left;
   }
 }
