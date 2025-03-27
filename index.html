@@ -213,9 +213,15 @@
         </div>
     </footer>
 
-    <!-- Load fish images data before main script -->
-    <script src="fishImages.js"></script>
-    <script src="script.js"></script>
+    <!--
+      Load fish images data and main script using defer.
+      'defer' ensures scripts are executed in order after the HTML is parsed,
+      without blocking rendering. It also allows the browser to cache these files
+      more effectively based on standard HTTP caching headers (Cache-Control, ETag)
+      set by the web server.
+    -->
+    <script src="fishImages.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
