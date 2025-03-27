@@ -1,5 +1,136 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Water Background Effect ---
+  function initWaterBackground() {
+    const waterBody = document.querySelector('.water-body');
+    const waterSurface = document.querySelector('.water-surface');
+    const bubblesContainer = document.getElementById('bubbles-container');
+    
+    if (!waterBody || !waterSurface || !bubblesContainer) return;
+    
+    // Initial water level (50% of screen height)
+    waterBody.style.height = '50vh';
+    waterSurface.style.bottom = '50vh';
+    
+    // Update water level on scroll with physics-based easing
+    let targetWaterHeight = 50; // Initial target (50vh)
+    let currentWaterHeight = 50; // Current height
+    let velocity = 0; // For physics
+    const springStrength = 0.05; // How quickly water catches up
+    const damping = 0.8; // Damping to prevent overshooting
+    
+    // Scroll handler
+    window.addEventListener('scroll', () => {
+      // Calculate scroll percentage (0 to 1)
+      const scrollPercentage = Math.min(1, window.scrollY / (document.body.scrollHeight - window.innerHeight));
+      // Map to water height (40vh to 85vh) - deeper as you scroll
+      targetWaterHeight = 40 + (scrollPercentage * 45);
+    });
+    
+    // Animation loop for smooth physics-based movement
+    function updateWater() {
+      // Apply spring physics to water height
+      const distanceToTarget = targetWaterHeight - currentWaterHeight;
+      const spring = distanceToTarget * springStrength;
+      
+      velocity += spring;
+      velocity *= damping;
+      currentWaterHeight += velocity;
+      
+      // Update water level
+      waterBody.style.height = `${currentWaterHeight}vh`;
+      waterSurface.style.bottom = `${currentWaterHeight}vh`;
+      
+      requestAnimationFrame(updateWater);
+    }
+    
+    // Start the animation loop
+    updateWater();
+    
+    // Create bubbles periodically with randomness
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      
+      // Random bubble properties
+      const size = 4 + Math.random() * 18;
+      const xPos = Math.random() * 100; // Random horizontal position (%)
+      const driftX = -50 + Math.random() * 100; // Random horizontal drift
+      const riseDuration = 5 + Math.random() * 12; // Random rise duration
+      const bubbleOpacity = 0.3 + Math.random() * 0.6; // Random opacity
+      
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${xPos}%`;
+      bubble.style.bottom = '0';
+      bubble.style.setProperty('--drift-x', `${driftX}px`);
+      bubble.style.setProperty('--rise-duration', `${riseDuration}s`);
+      bubble.style.setProperty('--bubble-opacity', bubbleOpacity);
+      
+      bubblesContainer.appendChild(bubble);
+      
+      // Remove bubble after animation completes
+      setTimeout(() => {
+        if (bubble && bubble.parentNode) {
+          bubble.parentNode.removeChild(bubble);
+        }
+      }, riseDuration * 1000);
+      
+      // Schedule next bubble with random interval
+      const nextBubbleTime = 100 + Math.random() * 500;
+      setTimeout(createBubble, nextBubbleTime);
+    }
+    
+    // Start creating bubbles
+    createBubble();
+    
+    // Add additional bubbles on click for interactivity
+    document.addEventListener('click', (e) => {
+      // Don't create bubbles for clicks on buttons or links
+      if (e.target.closest('a, button, .button')) return;
+      
+      // Create 5-8 bubbles at click location
+      const numBubbles = 5 + Math.floor(Math.random() * 4);
+      
+      for (let i = 0; i < numBubbles; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        
+        // Size and position relative to click
+        const size = 3 + Math.random() * 10;
+        const xOffset = -20 + Math.random() * 40;
+        const yOffset = -20 + Math.random() * 40;
+        
+        // Position relative to viewport
+        const xPercent = (e.clientX + xOffset) / window.innerWidth * 100;
+        
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${xPercent}%`;
+        bubble.style.bottom = `${currentWaterHeight}vh`;
+        
+        // Random drift and duration
+        const driftX = -30 + Math.random() * 60;
+        const riseDuration = 3 + Math.random() * 8;
+        
+        bubble.style.setProperty('--drift-x', `${driftX}px`);
+        bubble.style.setProperty('--rise-duration', `${riseDuration}s`);
+        
+        bubblesContainer.appendChild(bubble);
+        
+        // Remove bubble after animation
+        setTimeout(() => {
+          if (bubble && bubble.parentNode) {
+            bubble.parentNode.removeChild(bubble);
+          }
+        }, riseDuration * 1000);
+      }
+    });
+  }
+  
+  // Initialize water background
+  initWaterBackground();
+
   // --- Button Ripple Effect ---
   const buttons = document.querySelectorAll('.button');
 
