@@ -1,0 +1,558 @@
+/* --- Global Styles & Variables --- */
+:root {
+    --primary-bg: #F0F8FF; /* Alice Blue - Very light blue */
+    --secondary-bg: #E6F7FF; /* Lighter blue */
+    --accent-blue: #A0D2DB; /* Soft cyan-blue */
+    --medium-blue: #77C3D6; /* Slightly darker soft blue */
+    --dark-blue: #4682B4; /* Steel Blue - For text and contrast */
+    --text-color: #333;
+    --white: #FFFFFF;
+    --shadow: rgba(70, 130, 180, 0.15); /* Shadow based on dark blue */
+
+    --font-primary: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* --- Mouse Trail Effect --- */
+#mouse-trail {
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    background-color: var(--medium-blue);
+    border-radius: 50%;
+    pointer-events: none; /* Ignore mouse events */
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease-out, transform 0.1s ease-out, width 0.3s ease-out, height 0.3s ease-out;
+    z-index: 9999;
+    mix-blend-mode: multiply; /* Nice effect on light backgrounds */
+}
+
+body:hover #mouse-trail {
+    opacity: 0.5;
+}
+
+/* --- Header & Navigation --- */
+header {
+    background-color: var(--white);
+    box-shadow: 0 2px 10px var(--shadow);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease;
+}
+.logo:hover {
+    transform: scale(1.05);
+}
+.logo i {
+    color: var(--medium-blue);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--dark-blue);
+    font-weight: 600;
+    padding-bottom: 5px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--medium-blue);
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: var(--medium-blue);
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+/* --- Buttons --- */
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden; /* For ripple effect */
+    z-index: 1;
+}
+
+.button.nav-button {
+    background-color: var(--medium-blue);
+    color: var(--white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.button.nav-button:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button.hero-button {
+    background-color: var(--medium-blue);
+    color: var(--white);
+    margin-right: 1rem;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+.button.hero-button:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--shadow);
+}
+
+.button.secondary-button {
+    background-color: transparent;
+    color: var(--medium-blue);
+    border: 2px solid var(--medium-blue);
+}
+.button.secondary-button:hover {
+    background-color: var(--accent-blue);
+    color: var(--white);
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+}
+
+.button i {
+    margin-right: 8px;
+}
+.button.secondary-button i {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    pointer-events: none; /* Prevent ripple from interfering */
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* --- Hero Section --- */
+#hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 5%;
+    background: linear-gradient(135deg, var(--secondary-bg), var(--primary-bg));
+    max-width: 1200px;
+    margin: 2rem auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow);
+    gap: 2rem;
+}
+
+.hero-content {
+    flex-basis: 55%;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: var(--dark-blue);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.hero-image {
+    flex-basis: 40%;
+    text-align: center;
+}
+
+.hero-icon {
+    color: var(--accent-blue);
+    opacity: 0.7;
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* --- Sections General Styling --- */
+section {
+    padding: 4rem 5%;
+    max-width: 1200px;
+    margin: 3rem auto;
+}
+
+section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--dark-blue);
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--medium-blue);
+    border-radius: 2px;
+}
+
+/* --- Features Section --- */
+#features {
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px var(--shadow);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature-item {
+    background-color: var(--secondary-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px var(--shadow);
+    border-color: var(--accent-blue);
+}
+
+.feature-item i {
+    font-size: 3rem;
+    color: var(--medium-blue);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+.feature-item:hover i {
+    transform: scale(1.1);
+}
+
+.feature-item h3 {
+    font-size: 1.4rem;
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.feature-item p {
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+/* --- Commands Section --- */
+#commands {
+    text-align: center;
+}
+
+#commands p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.commands-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.command-item {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow);
+    flex-basis: calc(33% - 2rem); /* Adjust basis for responsiveness */
+    min-width: 250px;
+    transition: transform 0.3s ease;
+}
+.command-item:hover {
+    transform: scale(1.03);
+}
+
+.command-item code {
+    background-color: var(--secondary-bg);
+    color: var(--dark-blue);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.8rem;
+    font-family: monospace;
+}
+
+.command-item p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    color: var(--text-color);
+}
+
+/* --- CTA Section --- */
+.cta {
+    background: linear-gradient(135deg, var(--medium-blue), var(--accent-blue));
+    border-radius: 15px;
+    text-align: center;
+    padding: 4rem 2rem;
+    box-shadow: 0 8px 25px rgba(128, 188, 214, 0.3);
+}
+
+.cta h2 {
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+.cta h2::after {
+    background-color: var(--white); /* White underline on blue background */
+}
+
+.cta p {
+    color: var(--primary-bg);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta .button {
+    margin: 0.5rem;
+}
+
+.cta .cta-button {
+    background-color: var(--white);
+    color: var(--medium-blue);
+}
+.cta .cta-button:hover {
+    background-color: var(--secondary-bg);
+    color: var(--dark-blue);
+    transform: translateY(-3px);
+}
+.cta .cta-button .ripple {
+     background-color: rgba(70, 130, 180, 0.4); /* Blue ripple on white button */
+}
+
+.cta .secondary-button {
+    border-color: var(--white);
+    color: var(--white);
+}
+.cta .secondary-button:hover {
+    background-color: var(--white);
+    color: var(--medium-blue);
+    border-color: var(--white);
+}
+.cta .secondary-button .ripple {
+     background-color: rgba(70, 130, 180, 0.4); /* Blue ripple on white button */
+}
+
+
+/* --- Footer --- */
+footer {
+    background-color: var(--secondary-bg);
+    color: var(--dark-blue);
+    text-align: center;
+    padding: 2rem 5%;
+    margin-top: 3rem;
+    border-top: 3px solid var(--accent-blue);
+}
+
+footer p {
+    margin-bottom: 1rem;
+}
+
+footer a {
+    color: var(--medium-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--dark-blue);
+    text-decoration: underline;
+}
+
+.social-links a {
+    font-size: 1.5rem;
+    margin: 0 0.5rem;
+    color: var(--medium-blue);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--dark-blue);
+    transform: scale(1.2);
+}
+
+/* --- Animation on Scroll --- */
+.animated-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animated-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* --- Responsiveness --- */
+@media (max-width: 992px) {
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    section h2 {
+        font-size: 2.2rem;
+    }
+    .command-item {
+       flex-basis: calc(50% - 1.5rem);
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+    #hero {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+        padding: 3rem 5%;
+    }
+    .hero-content {
+        flex-basis: auto;
+    }
+    .hero-image {
+        margin-top: 2rem;
+        flex-basis: auto;
+    }
+    .hero-icon {
+        font-size: 8em; /* Smaller icon on mobile */
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+     .hero-content p {
+        font-size: 1.1rem;
+    }
+    .button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    .command-item {
+       flex-basis: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+     nav ul {
+        gap: 0.5rem 1rem; /* Smaller gap */
+    }
+    nav ul li a {
+        font-size: 0.9rem;
+    }
+    .logo {
+        font-size: 1.5rem;
+    }
+    section h2 {
+        font-size: 1.8rem;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+     .hero-content p {
+        font-size: 1rem;
+    }
+    .button {
+        width: 80%; /* Make buttons wider */
+        margin-bottom: 0.5rem;
+    }
+    .button.hero-button {
+        margin-right: 0;
+    }
+}
