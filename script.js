@@ -32,42 +32,127 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Mouse Trail Effect ---
+  // --- Enhanced Water Trail Effect ---
   const trail = document.getElementById('mouse-trail');
-  if (trail) { // Check if the element exists
+  if (trail) {
+    // Remove any text content from the trail element
+    trail.textContent = '';
+    
+    // Previous positions for smooth motion
+    let prevX = 0;
+    let prevY = 0;
+    let trailDroplets = [];
+    
+    // Track mouse position for water trail
     document.addEventListener('mousemove', (e) => {
-      // Use requestAnimationFrame for smoother performance
+      // Smooth follow effect
+      prevX = prevX + (e.clientX - prevX) * 0.3;
+      prevY = prevY + (e.clientY - prevY) * 0.3;
+      
       requestAnimationFrame(() => {
-        trail.style.left = `${e.clientX}px`;
-        trail.style.top = `${e.clientY}px`;
-        trail.style.opacity = '0.8'; // Make visible when moving (matches CSS)
+        // Position the main water droplet
+        trail.style.left = `${prevX}px`;
+        trail.style.top = `${prevY}px`;
+        trail.style.opacity = '0.8';
+        
+        // Create occasional smaller droplets for trail effect
+        if (Math.random() > 0.85) {
+          createTrailDroplet(prevX, prevY);
+        }
       });
     });
 
-    // Optional: Fade out when mouse stops
+    // Fade out when mouse stops
     let timeoutId;
     document.addEventListener('mousemove', () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (trail) { // Check again in case element removed dynamically
+        if (trail) {
           trail.style.opacity = '0';
         }
-      }, 150); // Faster fade-out
+      }, 150);
     });
 
-    // Optional: Effect on click (e.g., slightly larger/smaller emoji)
-    document.addEventListener('mousedown', () => {
+    // Water splash effect on click
+    document.addEventListener('mousedown', (e) => {
       if (trail) {
-        trail.style.transform = 'translate(-50%, -50%) scale(1.2)'; // Grow slightly
+        // Squish the water droplet
+        trail.style.transform = 'translate(-50%, -50%) scale(0.6) rotate(45deg)';
+        
+        // Create water splash
+        createWaterSplash(e.clientX, e.clientY);
       }
     });
+    
     document.addEventListener('mouseup', () => {
       if (trail) {
-        trail.style.transform = 'translate(-50%, -50%) scale(1)'; // Back to normal
+        // Return to normal size with slight bounce
+        trail.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(45deg)';
+        setTimeout(() => {
+          trail.style.transform = 'translate(-50%, -50%) scale(1) rotate(45deg)';
+        }, 150);
       }
     });
+    
+    // Create smaller droplets that follow the cursor path
+    function createTrailDroplet(x, y) {
+      const droplet = document.createElement('div');
+      droplet.className = 'trail-droplet';
+      droplet.style.left = `${x + (Math.random() * 10 - 5)}px`;
+      droplet.style.top = `${y + (Math.random() * 10 - 5)}px`;
+      droplet.style.width = `${4 + Math.random() * 6}px`;
+      droplet.style.height = droplet.style.width;
+      
+      document.body.appendChild(droplet);
+      
+      // Remove droplet after animation completes
+      setTimeout(() => {
+        if (droplet && droplet.parentNode) {
+          droplet.parentNode.removeChild(droplet);
+        }
+      }, 800);
+    }
+    
+    // Create water splash effect on click
+    function createWaterSplash(x, y) {
+      const splash = document.createElement('div');
+      splash.className = 'water-splash';
+      splash.style.left = `${x}px`;
+      splash.style.top = `${y}px`;
+      document.body.appendChild(splash);
+      
+      // Create multiple droplets in different directions
+      const dropletCount = 12; // Increased number of droplets
+      for (let i = 0; i < dropletCount; i++) {
+        const droplet = document.createElement('div');
+        droplet.className = 'splash-droplet';
+        
+        // Randomize sizes for more natural look
+        const size = 5 + Math.random() * 10;
+        droplet.style.width = `${size}px`;
+        droplet.style.height = `${size}px`;
+        
+        // Calculate random distance and angle for splashing
+        const angle = (Math.PI * 2 / dropletCount) * i + (Math.random() * 0.5);
+        const distance = 20 + Math.random() * 40;
+        const splashX = Math.cos(angle) * distance;
+        const splashY = Math.sin(angle) * distance;
+        
+        // Set custom properties for the animation
+        droplet.style.setProperty('--splash-x', `${splashX}px`);
+        droplet.style.setProperty('--splash-y', `${splashY}px`);
+        
+        splash.appendChild(droplet);
+      }
+      
+      // Remove splash element after animation completes
+      setTimeout(() => {
+        if (splash && splash.parentNode) {
+          splash.parentNode.removeChild(splash);
+        }
+      }, 600);
+    }
   }
-
 
   // --- Fade-in Sections on Scroll ---
   const animatedSections = document.querySelectorAll('.animated-section');
