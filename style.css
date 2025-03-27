@@ -1048,6 +1048,7 @@ social-links a:hover {
   overflow: hidden;
   pointer-events: none;
   contain: strict; /* Optimize rendering performance */
+  will-change: opacity; /* Hint for compositing */
 }
 
 .water-body {
@@ -1056,9 +1057,9 @@ social-links a:hover {
   background: linear-gradient(to bottom, var(--water-surface) 0%, var(--water-deep) 100%);
   bottom: 0;
   left: 0;
-  transition: height 0.3s ease-out;
+  transition: height 0.2s ease-out;
   height: 50vh;
-  will-change: height; /* Hint for browser optimization */
+  will-change: height;
   transform: translateZ(0); /* Force GPU acceleration */
 }
 
@@ -1067,18 +1068,18 @@ social-links a:hover {
   width: 100%;
   height: 30px;
   bottom: 50vh;
-  transition: bottom 0.3s ease-out;
+  transition: bottom 0.2s ease-out;
   will-change: bottom;
   transform: translateZ(0);
 }
 
-/* Simplified wave pattern with fewer points */
+/* Even simpler wave pattern with minimal SVG points */
 .wave {
   position: absolute;
   width: 200%;
   height: 30px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0V30c40,10,80,15,120,10C180,30,240,10,300,15c60,5,120,20,180,15c20-2,40-5,60-10c20-5,40-10,60-5V0Z' fill='%2389f7fe' opacity='.3'%3E%3C/path%3E%3C/svg%3E");
-  background-size: 600px 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0V30c50,15,100,-10,150,5s100,10,150,-5V0Z' fill='%2389f7fe' opacity='.3'%3E%3C/path%3E%3C/svg%3E");
+  background-size: 300px 100%;
   left: 0;
   transform: translateZ(0);
 }
@@ -1109,30 +1110,29 @@ social-links a:hover {
   position: absolute;
   border-radius: 50%;
   background: var(--bubble-color);
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
   will-change: transform, opacity;
   transform: translateZ(0);
-  /* Animation defined in the activateBubble function */
 }
 
 @keyframes bubble-rise {
   0% {
-    transform: translate(0, 0) scale(0.5) translateZ(0);
+    transform: translate(0, 0) scale(0.5);
     opacity: 0;
   }
   10% {
-    opacity: var(--bubble-opacity, 0.7);
-    transform: translate(0, -20px) scale(1) translateZ(0);
+    opacity: 0.6;
+    transform: translate(0, -20px) scale(1);
   }
   100% {
-    transform: translate(var(--drift-x, 20px), calc(-100vh - 100px)) scale(0.8) translateZ(0);
+    transform: translate(var(--drift-x, 0px), calc(-100vh - 50px)) scale(0.8);
     opacity: 0;
   }
 }
 
-/* Reduced motion for low-performance devices */
+/* Stronger performance optimizations */
 .reduced-motion .wave {
-  animation-duration: calc(var(--wave-speed) * 2);
+  animation-duration: calc(var(--wave-speed) * 3);
 }
 
 .reduced-motion .bubble {
@@ -1140,7 +1140,22 @@ social-links a:hover {
 }
 
 .reduced-motion #water-background {
-  opacity: 0.8;
+  opacity: 0.7;
+}
+
+/* Disable animations completely for users who explicitly request reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wave {
+    animation: none;
+  }
+  
+  .bubble {
+    animation-duration: 0.5s !important;
+  }
+  
+  #water-background {
+    opacity: 0.5;
+  }
 }
 
 /* Make sure content sits above the water */

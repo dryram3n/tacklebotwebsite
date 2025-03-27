@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Water Background Effect (Optimized) ---
+  // --- Water Background Effect (Further Optimized) ---
   function initWaterBackground() {
     const waterBody = document.querySelector('.water-body');
     const waterSurface = document.querySelector('.water-surface');
@@ -8,24 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (!waterBody || !waterSurface || !bubblesContainer) return;
     
-    // Performance detection - check if device is likely low-powered
+    // Enhanced performance detection
     const isLowPerfDevice = window.matchMedia('(prefers-reduced-motion: reduce)').matches || 
                            !window.requestAnimationFrame ||
-                           window.navigator.hardwareConcurrency < 4;
+                           window.navigator.hardwareConcurrency < 4 ||
+                           navigator.userAgent.match(/mobile|android/i); // Also detect mobile
     
-    // Apply performance mode classes if needed
+    // Apply performance classes
     if (isLowPerfDevice) {
       document.body.classList.add('reduced-motion');
     }
     
-    // Initial water level (50% of screen height)
+    // Initial water level 
     waterBody.style.height = '50vh';
     waterSurface.style.bottom = '50vh';
     
-    // Bubble pool for reusing elements instead of creating new ones
+    // Bubble pool optimization
     const bubblePool = [];
-    const POOL_SIZE = isLowPerfDevice ? 10 : 20;
-    const BUBBLE_INTERVAL = isLowPerfDevice ? 800 : 400;
+    const POOL_SIZE = isLowPerfDevice ? 5 : 10; // Further reduced pool size
+    const BUBBLE_INTERVAL = isLowPerfDevice ? 1200 : 600; // Slower bubble creation
     
     // Create bubble pool
     for (let i = 0; i < POOL_SIZE; i++) {
@@ -36,47 +37,59 @@ document.addEventListener('DOMContentLoaded', () => {
       bubblePool.push(bubble);
     }
     
-    // Throttle water height updates
+    // Throttle scroll updates even more aggressively
     let lastScrollTime = 0;
-    let targetWaterHeight = 50; // Initial target (50vh)
-    let currentWaterHeight = 50; // Current height
+    let targetWaterHeight = 50; 
+    let currentWaterHeight = 50;
     
-    // Simplified physics - less intensive calculations
-    const scrollThrottle = isLowPerfDevice ? 150 : 50; // ms between updates
+    // More aggressive scroll throttling
+    const scrollThrottle = isLowPerfDevice ? 250 : 150; // ms between updates
     
-    // Less frequent scroll handler
+    // Debounced scroll handler
+    let scrollTimeout;
     window.addEventListener('scroll', () => {
-      const now = Date.now();
-      if (now - lastScrollTime < scrollThrottle) return;
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       
-      lastScrollTime = now;
-      const scrollPercentage = Math.min(1, window.scrollY / (document.body.scrollHeight - window.innerHeight));
-      targetWaterHeight = 40 + (scrollPercentage * 45);
+      scrollTimeout = setTimeout(() => {
+        const now = Date.now();
+        if (now - lastScrollTime < scrollThrottle) return;
+        
+        lastScrollTime = now;
+        const scrollPercentage = Math.min(1, window.scrollY / (document.body.scrollHeight - window.innerHeight));
+        targetWaterHeight = 40 + (scrollPercentage * 45);
+      }, 10);
     });
     
-    // Simplified animation with less frequent updates
+    // Capped at 30fps (33.33ms)
     let animationFrame;
     let lastAnimationTime = 0;
-    const ANIMATION_INTERVAL = isLowPerfDevice ? 50 : 16.67; // ~60fps or ~20fps
+    const FRAME_DURATION = 33.33; // Explicit 30fps cap
     
     function updateWater(timestamp) {
       if (!lastAnimationTime) lastAnimationTime = timestamp;
       const elapsed = timestamp - lastAnimationTime;
       
-      if (elapsed > ANIMATION_INTERVAL) {
+      if (elapsed >= FRAME_DURATION) { // Only update at 30fps
         lastAnimationTime = timestamp;
         
-        // Simple easing without complex physics
-        currentWaterHeight += (targetWaterHeight - currentWaterHeight) * 0.1;
+        // Simple easing with minimal calculations
+        currentWaterHeight += (targetWaterHeight - currentWaterHeight) * 0.08; // Slower easing
         
-        // Reduce DOM updates by checking if value changed significantly
-        if (Math.abs(parseFloat(waterBody.style.height) - currentWaterHeight) > 0.1) {
-          waterBody.style.height = `${currentWaterHeight}vh`;
-          waterSurface.style.bottom = `${currentWaterHeight}vh`;
+        // Only update DOM when change is significant (0.5vh)
+        if (Math.abs(parseFloat(waterBody.style.height) - currentWaterHeight) > 0.5) {
+          // Round to 1 decimal place to reduce precision calculations
+          const heightValue = Math.round(currentWaterHeight * 10) / 10;
+          waterBody.style.height = `${heightValue}vh`;
+          waterSurface.style.bottom = `${heightValue}vh`;
         }
       }
       
       animationFrame = requestAnimationFrame(updateWater);
+    }
+    
+    // Function to check if document is visible
+    function isDocumentVisible() {
+      return !document.hidden;
     }
     
     // Start animation if visible
@@ -84,65 +97,56 @@ document.addEventListener('DOMContentLoaded', () => {
       animationFrame = requestAnimationFrame(updateWater);
     }
     
-    // Find available bubble from pool
+    // Get bubble from pool
     function getAvailableBubble() {
       for (const bubble of bubblePool) {
         if (bubble.style.display === 'none') {
           return bubble;
         }
       }
-      // If all bubbles are in use, return the first one (oldest)
-      return bubblePool[0];
+      return bubblePool[Math.floor(Math.random() * bubblePool.length)];
     }
     
-    // Activate a bubble with properties
+    // Activate bubble with minimal calculations
     function activateBubble() {
       if (!isDocumentVisible()) return;
       
       const bubble = getAvailableBubble();
       
-      // Random bubble properties
-      const size = 4 + Math.random() * 12;
-      const xPos = Math.random() * 100;
-      const driftX = -30 + Math.random() * 60;
-      const riseDuration = 5 + Math.random() * 8;
-      const bubbleOpacity = 0.3 + Math.random() * 0.5;
+      // Simpler random properties
+      const size = 5 + Math.floor(Math.random() * 10); // Integer sizes
+      const xPos = Math.floor(Math.random() * 100); // Integer positions
+      const driftX = Math.floor(-20 + Math.random() * 40); // Integer drift
+      const riseDuration = 5 + Math.floor(Math.random() * 6); // Integer durations
       
-      // Optimize by setting all styles at once
+      // Set all styles at once with minimal property changes
       bubble.style.cssText = `
         display: block;
         width: ${size}px;
         height: ${size}px;
         left: ${xPos}%;
         bottom: 0;
-        opacity: 0;
-        transform: translate(0, 0) scale(0.5);
-        animation: bubble-rise ${riseDuration}s ease-in-out forwards;
+        animation: bubble-rise ${riseDuration}s ease-out forwards;
       `;
       
       bubble.style.setProperty('--drift-x', `${driftX}px`);
-      bubble.style.setProperty('--bubble-opacity', bubbleOpacity);
       
-      // Reset bubble after animation completes
+      // Reset bubble
       setTimeout(() => {
         bubble.style.display = 'none';
       }, riseDuration * 1000);
     }
     
-    // Start bubble creation at intervals
+    // Interval for bubble creation
     let bubbleInterval;
     
     function startBubbles() {
+      if (bubbleInterval) clearInterval(bubbleInterval);
       bubbleInterval = setInterval(activateBubble, BUBBLE_INTERVAL);
-      activateBubble(); // Create one immediately
+      activateBubble();
     }
     
-    // Only run animations when document is visible
-    function isDocumentVisible() {
-      return !document.hidden;
-    }
-    
-    // Handle visibility changes to save resources
+    // Handle visibility changes
     document.addEventListener('visibilitychange', () => {
       if (isDocumentVisible()) {
         if (!animationFrame) {
@@ -164,29 +168,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // Start bubbles if document is visible
+    // Start bubbles
     if (isDocumentVisible()) {
       startBubbles();
     }
     
-    // Add limited bubbles on click (much fewer than before)
-    document.addEventListener('click', (e) => {
-      // Don't create bubbles for clicks on buttons or links or if low performance
-      if (e.target.closest('a, button, .button') || isLowPerfDevice) return;
-      
-      // Create just 2-3 bubbles at click location
-      const numBubbles = 2 + Math.floor(Math.random() * 2);
-      
-      for (let i = 0; i < numBubbles; i++) {
+    // Very limited click bubbles (only on desktops)
+    if (!isLowPerfDevice && !navigator.userAgent.match(/mobile|android/i)) {
+      document.addEventListener('click', (e) => {
+        // Don't create bubbles for clicks on interactive elements
+        if (e.target.closest('a, button, .button, input, select, textarea')) return;
+        
+        // Just one bubble per click
         const bubble = getAvailableBubble();
-        if (!bubble) return; // No available bubbles
+        if (!bubble) return;
         
-        // Size and position relative to click
-        const size = 3 + Math.random() * 8;
-        const xOffset = -10 + Math.random() * 20;
-        
-        // Position relative to viewport
-        const xPercent = (e.clientX + xOffset) / window.innerWidth * 100;
+        const size = 5 + Math.floor(Math.random() * 5);
+        const xPercent = Math.floor(e.clientX / window.innerWidth * 100);
         
         bubble.style.cssText = `
           display: block;
@@ -194,33 +192,26 @@ document.addEventListener('DOMContentLoaded', () => {
           height: ${size}px;
           left: ${xPercent}%;
           bottom: ${currentWaterHeight}vh;
-          opacity: 0;
-          transform: translate(0, 0) scale(0.5);
-          animation: bubble-rise ${3 + Math.random() * 4}s ease-in-out forwards;
+          animation: bubble-rise ${4}s ease-out forwards;
         `;
         
-        bubble.style.setProperty('--drift-x', `${-15 + Math.random() * 30}px`);
-        bubble.style.setProperty('--bubble-opacity', '0.6');
+        bubble.style.setProperty('--drift-x', '0px');
         
-        // Reset bubble after animation
         setTimeout(() => {
           bubble.style.display = 'none';
-        }, 7000);
-      }
-    });
+        }, 4000);
+      });
+    }
     
-    // Clean up resources when leaving the page
+    // Clean up resources
     window.addEventListener('beforeunload', () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-      if (bubbleInterval) {
-        clearInterval(bubbleInterval);
-      }
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (bubbleInterval) clearInterval(bubbleInterval);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
     });
   }
   
-  // Initialize water background
+  // Initialize water background - ensure it runs on all pages
   initWaterBackground();
 
   // --- Button Ripple Effect ---
