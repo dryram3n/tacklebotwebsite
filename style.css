@@ -1163,3 +1163,46 @@ header, section, footer {
   position: relative;
   z-index: 1;
 }
+
+/* --- Fish Animation Styles --- */
+#fish-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: -5; /* Above water background but below content */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.swimming-fish {
+  position: absolute;
+  z-index: 1;
+  transform-origin: center;
+  will-change: transform, left, top;
+  transition: transform 0.5s ease-out;
+}
+
+.swimming-fish img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+}
+
+.swimming-fish.flip-horizontal {
+  transform: scaleX(-1);
+}
+
+/* Reduced animations for performance optimization */
+.reduced-motion .swimming-fish {
+  transition-duration: 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swimming-fish {
+    animation-duration: 30s !important;
+    transition-duration: 1s !important;
+  }
+}

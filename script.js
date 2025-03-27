@@ -214,6 +214,272 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize water background - ensure it runs on all pages
   initWaterBackground();
 
+  // --- Swimming Fish Animation ---
+  function initSwimmingFish() {
+    const fishContainer = document.getElementById('fish-container');
+    const waterBody = document.querySelector('.water-body');
+    
+    if (!fishContainer || !waterBody || typeof FISH_IMAGES === 'undefined') return;
+    
+    // Performance detection
+    const isLowPerfDevice = window.matchMedia('(prefers-reduced-motion: reduce)').matches || 
+                           !window.requestAnimationFrame ||
+                           window.navigator.hardwareConcurrency < 4 ||
+                           navigator.userAgent.match(/mobile|android/i);
+    
+    // Determine number of fish based on device performance
+    const fishCount = isLowPerfDevice ? 3 : 
+                     (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
+    
+    // Get available fish images
+    const fishImageKeys = Object.keys(FISH_IMAGES);
+    const fishImages = shuffleArray(fishImageKeys).slice(0, Math.min(fishCount * 2, fishImageKeys.length));
+    
+    // Current water height
+    let currentWaterHeight = parseFloat(waterBody.style.height) || 50;
+    
+    // Tracking active fish for cleanup
+    const activeFish = [];
+    
+    // Create initial fish
+    for (let i = 0; i < fishCount; i++) {
+      createFish();
+    }
+    
+    // Create a fish with random properties
+    function createFish() {
+      if (!isDocumentVisible()) return;
+      
+      // Create fish element
+      const fish = document.createElement('div');
+      fish.className = 'swimming-fish';
+      
+      // Select random fish image
+      const randomFishKey = fishImages[Math.floor(Math.random() * fishImages.length)];
+      const fishImage = FISH_IMAGES[randomFishKey];
+      
+      // Create image element
+      const img = document.createElement('img');
+      img.src = fishImage;
+      img.alt = randomFishKey;
+      img.loading = 'lazy'; // Optimize loading
+      fish.appendChild(img);
+      
+      // Random fish size based on rarity (assumed from the structure in fishImages.js)
+      let size;
+      if (randomFishKey.includes("Mythic") || randomFishKey.includes("Chimerical") || 
+          randomFishKey.includes("Legendary") || fishImageKeys.indexOf(randomFishKey) > fishImageKeys.length * 0.7) {
+        // Larger size for rare fish, but less common
+        size = 45 + Math.floor(Math.random() * 30);
+      } else {
+        // Smaller size for common fish
+        size = 20 + Math.floor(Math.random() * 25);
+      }
+      
+      // Apply size with slight random variation
+      fish.style.width = `${size}px`;
+      fish.style.height = 'auto';
+      
+      // Random starting position (always in water)
+      const startX = Math.random() * 100; // percent
+      const waterHeightPercent = currentWaterHeight; // vh
+      const startY = 100 - (Math.random() * (waterHeightPercent * 0.8)); // Keep fish in water
+      
+      fish.style.left = `${startX}vw`;
+      fish.style.bottom = `${startY}vh`;
+      
+      // Initial swimming direction
+      const direction = Math.random() > 0.5 ? 'right' : 'left';
+      if (direction === 'left') {
+        fish.classList.add('flip-horizontal');
+      }
+      
+      // Set swimming speed (larger fish are slower)
+      const speedFactor = isLowPerfDevice ? 0.3 : 1;
+      const baseSpeed = (50 - size * 0.5) * speedFactor; // Smaller fish move faster
+      const speed = Math.max(10, Math.min(30, baseSpeed));
+      
+      fish.dataset.speed = speed;
+      fish.dataset.direction = direction;
+      fish.dataset.verticalDirection = Math.random() > 0.5 ? 'up' : 'down';
+      fish.dataset.verticalAmount = Math.random() * 10 + 5; // max vertical movement in vh
+      fish.dataset.originalY = startY;
+      
+      // Add to container and tracking array
+      fishContainer.appendChild(fish);
+      activeFish.push(fish);
+      
+      // Start animation in the next frame (prevents layout thrashing)
+      requestAnimationFrame(() => {
+        animateFish(fish);
+      });
+      
+      return fish;
+    }
+    
+    // Fish animation logic - uses setTimeout for performance instead of RAF
+    function animateFish(fish) {
+      if (!isDocumentVisible() || !fish.isConnected) return;
+      
+      // Get current position
+      const rect = fish.getBoundingClientRect();
+      const fishX = rect.left;
+      const fishWidth = rect.width;
+      const viewportWidth = window.innerWidth;
+      
+      // Current direction and speed
+      let direction = fish.dataset.direction;
+      const speed = parseFloat(fish.dataset.speed);
+      let verticalDirection = fish.dataset.verticalDirection;
+      const verticalAmount = parseFloat(fish.dataset.verticalAmount);
+      const originalY = parseFloat(fish.dataset.originalY);
+      
+      // Current position in viewport units
+      const currentX = (fishX / viewportWidth) * 100;
+      const currentBottomVh = parseFloat(fish.style.bottom);
+      
+      // Determine if fish needs to change horizontal direction
+      if (direction === 'right' && currentX > 95) {
+        direction = 'left';
+        fish.classList.add('flip-horizontal');
+      } else if (direction === 'left' && currentX < 0) {
+        direction = 'right';
+        fish.classList.remove('flip-horizontal');
+      } else if (Math.random() < 0.01) { // Small chance to randomly change direction
+        direction = direction === 'right' ? 'left' : 'right';
+        if (direction === 'left') {
+          fish.classList.add('flip-horizontal');
+        } else {
+          fish.classList.remove('flip-horizontal');
+        }
+      }
+      
+      // Determine if fish needs to change vertical direction
+      if (verticalDirection === 'up' && (currentBottomVh > (originalY + verticalAmount))) {
+        verticalDirection = 'down';
+      } else if (verticalDirection === 'down' && (currentBottomVh < (originalY - verticalAmount))) {
+        verticalDirection = 'up';
+      } else if (Math.random() < 0.02) { // Small chance to randomly change vertical direction
+        verticalDirection = verticalDirection === 'up' ? 'down' : 'up';
+      }
+      
+      // Calculate new position
+      const swimSpeed = (speed / (isLowPerfDevice ? 2 : 1)) * (Math.random() * 0.4 + 0.8); // Add slight randomness
+      const newX = direction === 'right' ? currentX + swimSpeed * 0.1 : currentX - swimSpeed * 0.1;
+      
+      // Vertical movement (slower)
+      const verticalSpeed = swimSpeed * 0.03;
+      const newBottom = verticalDirection === 'up' ? 
+                        currentBottomVh + verticalSpeed : 
+                        currentBottomVh - verticalSpeed;
+      
+      // Update position
+      fish.style.left = `${newX}vw`;
+      fish.style.bottom = `${newBottom}vh`;
+      
+      // Save direction for next animation
+      fish.dataset.direction = direction;
+      fish.dataset.verticalDirection = verticalDirection;
+      
+      // Schedule next animation with throttled frame rate
+      setTimeout(() => {
+        if (fish.isConnected) {
+          animateFish(fish);
+        }
+      }, isLowPerfDevice ? 100 : 33.33); // 30fps or 10fps for low-perf devices
+    }
+    
+    // Watch for water level changes and adjust fish
+    const adjustFishToWaterInterval = setInterval(() => {
+      if (!waterBody || !isDocumentVisible()) return;
+      
+      // Get current water height
+      const waterHeight = parseFloat(waterBody.style.height) || 50;
+      
+      // Only update if water height changed significantly
+      if (Math.abs(waterHeight - currentWaterHeight) > 2) {
+        currentWaterHeight = waterHeight;
+        
+        // Adjust existing fish positions if water level changed
+        activeFish.forEach(fish => {
+          if (!fish.isConnected) return;
+          
+          const bottomVh = parseFloat(fish.style.bottom);
+          const originalY = parseFloat(fish.dataset.originalY);
+          
+          // If fish would be out of water, update its original Y position
+          if (100 - bottomVh > waterHeight * 0.9) {
+            const newY = 100 - (Math.random() * (waterHeight * 0.8));
+            fish.style.bottom = `${newY}vh`;
+            fish.dataset.originalY = newY;
+          }
+        });
+      }
+    }, 1000); // Check every second
+    
+    // Periodically replace fish
+    const fishRefreshInterval = setInterval(() => {
+      if (!isDocumentVisible()) return;
+      
+      // Remove a random fish and create a new one
+      if (activeFish.length > 0 && Math.random() < 0.3) {
+        const index = Math.floor(Math.random() * activeFish.length);
+        const fishToRemove = activeFish[index];
+        
+        if (fishToRemove && fishToRemove.isConnected) {
+          // Fade out
+          fishToRemove.style.opacity = '0';
+          fishToRemove.style.transition = 'opacity 1s ease-out';
+          
+          // Remove after fade
+          setTimeout(() => {
+            if (fishToRemove.isConnected) {
+              fishToRemove.remove();
+            }
+            
+            // Remove from active fish array
+            const arrayIndex = activeFish.indexOf(fishToRemove);
+            if (arrayIndex > -1) {
+              activeFish.splice(arrayIndex, 1);
+            }
+            
+            // Add a new fish if document is visible
+            if (isDocumentVisible()) {
+              createFish();
+            }
+          }, 1000);
+        }
+      }
+    }, isLowPerfDevice ? 15000 : 8000); // Refresh fish less often on low-perf devices
+    
+    // Clean up resources
+    window.addEventListener('beforeunload', () => {
+      clearInterval(adjustFishToWaterInterval);
+      clearInterval(fishRefreshInterval);
+      activeFish.length = 0; // Clear array
+    });
+    
+    // Helper function to shuffle array
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+    
+    // Check document visibility
+    function isDocumentVisible() {
+      return !document.hidden;
+    }
+  }
+  
+  // Initialize swimming fish (after water background)
+  setTimeout(() => {
+    initSwimmingFish();
+  }, 1000); // Delay to ensure water background is initialized first
+
   // --- Button Ripple Effect ---
   const buttons = document.querySelectorAll('.button');
 
