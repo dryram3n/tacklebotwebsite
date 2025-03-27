@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/fish-catalog.html">
+  <meta property="og:title" content="Fish Catalog - TackleBot Discord Bot">
+  <meta property="og:description" content="Explore all fish species available in TackleBot, the Discord fishing bot. Learn about fish stats, rarity, and lore.">
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+  
+  <!-- Theme color for browser UI -->
+  <meta name="theme-color" content="#89f7fe">
+  
+  <title>Fish Catalog - TackleBot Discord Bot</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Discord Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Additional catalog-specific styles */
+    .catalog-container {
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .catalog-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
+    }
+    
+    .catalog-tab {
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .tab-common {
+      background-color: #ddbea9;
+      color: #6b5b4b;
+    }
+    
+    .tab-uncommon {
+      background-color: #98d4bb;
+      color: #2d5744;
+    }
+    
+    .tab-rare {
+      background-color: #98bcd4;
+      color: #2d4e74;
+    }
+    
+    .tab-legendary {
+      background-color: #f4cc71;
+      color: #7d6334;
+    }
+    
+    .tab-mythic {
+      background-color: #c79de0;
+      color: #633f79;
+    }
+    
+    .tab-chimerical {
+      background-color: #cd7ae2;
+      color: #f5f5f5;
+    }
+    
+    .tab-special {
+      background-color: #ffdb58;
+      color: #856800;
+    }
+    
+    .tab-seasonal {
+      background-color: #f08080;
+      color: #8b3a3a;
+    }
+    
+    .tab-junk {
+      background-color: #a9a9a9;
+      color: #4b4b4b;
+    }
+    
+    .catalog-tab.active {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .catalog-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .fish-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    
+    .fish-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .fish-card.common { border-color: #ddbea9; }
+    .fish-card.uncommon { border-color: #98d4bb; }
+    .fish-card.rare { border-color: #98bcd4; }
+    .fish-card.legendary { border-color: #f4cc71; }
+    .fish-card.mythic { border-color: #c79de0; }
+    .fish-card.chimerical { border-color: #cd7ae2; }
+    .fish-card.special { border-color: #ffdb58; }
+    .fish-card.seasonal { border-color: #f08080; }
+    .fish-card.junk { border-color: #a9a9a9; }
+    
+    .fish-image {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 0.5rem;
+    }
+    
+    .fish-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+      color: #333;
+    }
+    
+    .fish-rarity {
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+    
+    .fish-value {
+      font-weight: 600;
+      color: #4caf50;
+    }
+    
+    /* Modal for detailed fish view */
+    .fish-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, #ffffff, #f5f9fa);
+      margin: 5% auto;
+      padding: 2rem;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 1rem;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: modalFadeIn 0.4s ease-out;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 1.8rem;
+      color: #555;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    
+    .close-modal:hover {
+      color: #f44336;
+    }
+    
+    .fish-detail-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .fish-detail-image {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .fish-detail-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    
+    .fish-detail-rarity {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .fish-detail-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-item {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-label {
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 0.2rem;
+      font-size: 0.9rem;
+    }
+    
+    .stat-value {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .fish-detail-lore {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+    
+    .lore-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .lore-text {
+      font-style: italic;
+      line-height: 1.6;
+      color: #444;
+    }
+    
+    .fish-detail-description {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #555;
+    }
+    
+    .fish-locations {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .location-tag {
+      background-color: #e1f5fe;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      color: #0277bd;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .seasonal-badge {
+      background-color: #ffecb3;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      color: #ff6f00;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* Search and filter section */
+    .search-section {
+      margin-bottom: 2rem;
+    }
+    
+    .search-bar {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 0.8rem 0 0 0.8rem;
+      font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    .search-button {
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      border: none;
+      border-radius: 0 0.8rem 0.8rem 0;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .search-button:hover {
+      background: linear-gradient(135deg, #66a6ff, #89f7fe);
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .filter-tag {
+      padding: 0.4rem 0.8rem;
+      background-color: #f0f0f0;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .filter-tag:hover, .filter-tag.active {
+      background-color: #66a6ff;
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .catalog-tabs {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+      }
+      
+      .fish-detail-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 2% auto;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Water Background Effect -->
+  <div id="water-background">
+    <div class="water-body"></div>
+    <div class="water-surface">
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+    </div>
+    <div id="bubbles-container"></div>
+    <!-- Fish Container -->
+    <div id="fish-container"></div>
+  </div>
+
+  <!-- Mouse Trail Effect Container -->
+  <div id="mouse-trail"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html">🎣 TackleBot</a>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="index.html#support">Support</a></li>
+        <li><a href="fish-catalog.html" class="active">Fish Catalog</a></li>
+        <li><a href="terms-of-service.html">Terms</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+        <li><a href="#" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Fish Catalog Section -->
+  <section class="fish-catalog-section animated-section">
+    <h2>Fish Catalog <span class="emoji">🐟</span></h2>
+    
+    <div class="catalog-container">
+      <!-- Search and Filter Section -->
+      <div class="catalog-controls">
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search fish...">
+          <button class="search-button">🔍 Search</button>
+        </div>
+        
+        <div class="filter-container">
+          <span>Filter by Location: </span>
+          <div class="filter-tags">
+            <button class="filter-tag active" data-filter="all">All</button>
+            <button class="filter-tag" data-filter="pond">Pond</button>
+            <button class="filter-tag" data-filter="river">River</button>
+            <button class="filter-tag" data-filter="lake">Lake</button>
+            <button class="filter-tag" data-filter="ocean">Ocean</button>
+            <button class="filter-tag" data-filter="coral_reef">Coral Reef</button>
+            <button class="filter-tag" data-filter="abyss">Abyss</button>
+            <button class="filter-tag" data-filter="vortex">Vortex</button>
+            <button class="filter-tag" data-filter="cosmic_sea">Cosmic Sea</button>
+            <button class="filter-tag" data-filter="temporal_tide">Temporal Tide</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Category Tabs -->
+      <div class="catalog-tabs">
+        <button class="catalog-tab active" data-category="common">Common</button>
+        <button class="catalog-tab" data-category="uncommon">Uncommon</button>
+        <button class="catalog-tab" data-category="rare">Rare</button>
+        <button class="catalog-tab" data-category="legendary">Legendary</button>
+        <button class="catalog-tab" data-category="mythic">Mythic</button>
+        <button class="catalog-tab" data-category="chimerical">Chimerical</button>
+        <button class="catalog-tab" data-category="seasonal">Seasonal</button>
+        <button class="catalog-tab" data-category="junk">Junk</button>
+      </div>
+      
+      <!-- Loading Indicator -->
+      <div class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading fish data...</p>
+      </div>
+      
+      <!-- Fish Cards Container -->
+      <div class="catalog-content"></div>
+    </div>
+    
+    <!-- Fish Detail Modal -->
+    <div id="fishModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div id="fishDetailContent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> | 
+      <a href="terms-of-service.html">Terms of Service</a> | 
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="social-links">
+      <a href="#" aria-label="Discord Support Server"><i class="fab fa-discord"></i></a>
+    </div>
+  </footer>
+
+  <!-- Load fish images and data first, then catalog script -->
+  <script src="fishImages.js"></script>
+  <script src="fish-data.js"></script>
+  <script src="fish-catalog.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
