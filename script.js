@@ -255,4 +255,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- Toggle Legal Section Expandable Content ---
+  const expandButtons = document.querySelectorAll('.expand-btn');
+  
+  expandButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Get the next sibling element (the expanded content div)
+      const expandedContent = this.nextElementSibling;
+      
+      // Toggle display
+      if (expandedContent.style.display === 'block') {
+        expandedContent.style.display = 'none';
+        this.textContent = this.textContent.replace('Hide', 'View');
+        this.textContent = this.textContent.replace('-', '+');
+      } else {
+        expandedContent.style.display = 'block';
+        this.textContent = this.textContent.replace('View', 'Hide');
+        this.textContent = this.textContent.replace('+', '-');
+      }
+    });
+  });
+
 }); // End DOMContentLoaded

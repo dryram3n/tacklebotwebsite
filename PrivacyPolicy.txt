@@ -1,0 +1,102 @@
+Privacy Policy for TackleBot Discord Bot
+Introduction
+This Privacy Policy outlines how TackleBot Discord Bot ("the Bot", "we", "us", "our") collects, uses, stores, and protects user data when you interact with our service. By using the Bot, you consent to the data practices described in this policy.
+
+Last Updated: March 25, 2025
+
+Data Collection
+Information We Collect
+The Bot collects and processes the following data to provide its services:
+
+Message Content
+- Content of messages for the /summary command functionality
+- Channel message analysis for the /summary command (temporary, not stored)
+- Content of messages in channels where the /summary command is used
+
+User Information
+- Discord User IDs for game features and user-specific settings
+- Discord Server (Guild) IDs for server-specific settings and moderation features
+- Command interaction history for feature functionality
+
+Game and Feature Data
+- Player statistics for fishing game features
+- Fish inventory and related game data
+- User-created channels and permissions data
+
+Message Analysis and Summaries
+The Bot may analyze recent messages in a channel when:
+- A user explicitly requests a chat summary using the /summary command
+- This analysis is temporary and only used to generate the requested summary
+- Message content, along with usernames, is processed by Google Generative AI (Gemini)
+- The Bot does not permanently store the message content used for summaries
+- Only public messages visible to the Bot are included in summaries
+
+How We Use Your Data
+Your data is used solely to:
+- Create channel summaries via the /summary command using Google's Generative AI (Gemini)
+- Store game progress and statistics for features like fishing
+- Enable moderation features for server administrators
+- Improve Bot functionality and performance
+- Create and manage user-created channels
+
+Data Storage and Security
+Duration of Storage
+- Game data is stored until explicitly cleared by the user or server administrator
+- Channel creator information is stored until the channel is deleted or manually removed
+- Summary data is temporary and not permanently stored
+
+Backup System
+- The Bot maintains automated backups of game data
+- Backups are created regularly (approximately every 30 minutes)
+- A limited number of previous backups are retained
+
+Data Security
+We implement reasonable security measures to protect your data from unauthorized access, alteration, or disclosure.
+
+Third-Party Services
+The Bot utilizes several third-party services that may process your data:
+
+Discord API
+- Used for all Bot interactions within Discord
+- Subject to Discord's Privacy Policy
+
+Google Generative AI (Gemini)
+- Model: gemini-2.0-flash
+- Used solely for the /summary command functionality
+- Subject to Google's AI Principles and Privacy Policy
+
+Popcat API
+- Used for meme generation, facts, jokes, and entertainment features
+- May process message content and images for generating responses
+
+French Noodles API (Noodles Wrapper)
+- Used for image manipulation and meme creation
+- May process image data for feature functionality
+
+Your Rights
+You have the right to:
+- Request deletion of your game data
+- Opt out of data collection by discontinuing use of the Bot
+- Contact us with questions about your data
+
+Data Deletion
+The Bot provides several mechanisms to clear your data:
+- Game data can be cleared using specific commands
+- Server administrators can use moderation commands to manage data
+- Channel creators can delete their own channels
+
+Changes to This Policy
+We may update this Privacy Policy from time to time. We will notify users of any significant changes by updating the "Last Updated" date of this policy.
+
+Contact Information
+For questions about this Privacy Policy or data practices, please contact the development team through:
+- The official Bot support server
+- Our website: https://dryram3n.github.io/tacklebotwebsite/
+
+Legal Basis for Processing
+We process your data based on:
+- Consent provided when adding the Bot to your server
+- Legitimate interest in providing the Bot's functionality
+- The necessity to process data to provide the service you request
+
+By using the Bot, you acknowledge that you have read and understand this Privacy Policy and agree to its terms.

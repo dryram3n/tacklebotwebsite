@@ -1,0 +1,105 @@
+Terms of Service for TackleBot Discord Bot
+1. Introduction
+By using the TackleBot Discord Bot ("the Bot"), you agree to comply with these Terms of Service ("Terms"). These Terms govern your access to and use of the Bot, including any updates, enhancements, and new features.
+
+Visit our website for more information: https://dryram3n.github.io/tacklebotwebsite/
+
+2. Open Source License
+The TackleBot Discord Bot codebase is made available under an open-source license with the following conditions:
+
+- You may view, fork, modify, and distribute the code for personal or commercial use
+- You must attribute the original creators when using substantial portions of the code
+- Modified versions must be clearly marked as such and not be misrepresented as the original Bot
+- The original license must be included with any distribution of the code
+
+3. Third-Party Services
+The Bot utilizes the following third-party services and APIs:
+
+- Discord API: For all Bot interactions within Discord
+- Google Generative AI (Gemini): Used solely for the chat summary feature
+- Popcat API: For meme generation, facts, jokes, and other entertainment features
+- French Noodles API: For additional image manipulation and meme creation
+- Other image processing services: For various image-related commands
+
+4. Compliance Requirements
+4.1 Discord Terms of Service
+You must comply with Discord's Terms of Service when using the Bot. This includes but is not limited to:
+
+- Not using the Bot to violate Discord's Community Guidelines
+- Not attempting to abuse, exploit, or circumvent Discord rate limits
+- Respecting Discord's intellectual property rights
+- Not using the Bot to collect data from Discord in unauthorized ways
+
+4.2 Google AI Terms of Service
+When using the summary feature powered by Google's Gemini AI model, you must adhere to Google's AI Principles and Terms of Service, including:
+
+- Not attempting to generate harmful, abusive, or explicit content
+- Not using the AI for unauthorized surveillance or data collection
+- Respecting the usage limits and restrictions of the AI service
+- Not attempting to extract training data or model information
+
+4.3 Popcat API and French Noodles API
+When using features that leverage these APIs, you agree to:
+
+- Use generated content in compliance with their respective Terms of Service
+- Not attempt to overload these services with excessive requests
+- Respect any attribution requirements for content generated through these services
+
+5. User Conduct
+When using the Bot, you agree not to:
+
+- Use the Bot to harass, abuse, or harm others
+- Attempt to gain unauthorized access to the Bot or its connected systems
+- Use the Bot to distribute illegal, infringing, or harmful content
+- Interfere with or disrupt the normal operation of the Bot
+- Abuse moderation commands or channel management features
+- Attempt to exploit the fishing game system
+
+6. Data Usage and Privacy
+The Bot collects and processes certain data to provide its services:
+
+- Message content for summary functionality (temporary processing only)
+- User IDs for game progression and personalization
+- Server IDs for moderation and configuration settings
+- Game data for fishing features
+- Channel information for user-created channels
+
+This data is used solely to provide and improve Bot functionality. By using the Bot, you consent to this data processing. For more details, please refer to our Privacy Policy.
+
+7. Channel Creation and Management
+When creating channels through the Bot:
+
+- Each user is limited to creating a maximum of 1 text channel and 1 voice channel at a time
+- Channel creators are responsible for the content in their created channels
+- Moderators and server owners retain the right to delete any channel
+- Private channels will only be accessible to specified users and server moderators
+
+8. Moderation Features
+Server owners may designate moderators who have access to:
+
+- Channel deletion permissions
+- Message clearing capabilities
+- User management commands (kick, ban)
+- These features must be used responsibly and in compliance with Discord's Terms of Service
+
+9. Fishing Game Features
+When using the fishing game functionality:
+
+- The Bot tracks your fishing statistics and inventory
+- Progress is tied to your Discord user ID
+- Manipulation or exploitation of the fishing system is prohibited
+- Server owners may enable or disable fishing features as needed
+
+10. Disclaimer of Warranty
+The Bot is provided "as is" without warranty of any kind, either expressed or implied. The development team is not responsible for any damages or losses resulting from the use of the Bot.
+
+11. Limitation of Liability
+In no event shall the developers of the Bot be liable for any damages arising out of the use or inability to use the Bot, even if they have been advised of the possibility of such damages.
+
+12. Changes to Terms
+These Terms may be updated from time to time. Continued use of the Bot after such changes constitutes acceptance of the new Terms.
+
+13. Contact
+For questions about these Terms or the Bot's operation, please contact the development team through the official Bot support server or visit our website: https://dryram3n.github.io/tacklebotwebsite/
+
+Last updated: March 25, 2025
