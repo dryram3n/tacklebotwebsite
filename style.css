@@ -1184,6 +1184,9 @@ header, section, footer {
   transition: transform 1s ease-out, opacity 2s ease-out;
   opacity: 0.8;
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
+  /* Make sure the fish has appropriate size */
+  max-width: 100px; 
+  display: block;
 }
 
 .swimming-fish img {

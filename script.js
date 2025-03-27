@@ -219,9 +219,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const fishContainer = document.getElementById('fish-container');
     const waterBody = document.querySelector('.water-body');
     
-    if (!fishContainer || !waterBody || typeof FISH_IMAGES === 'undefined') {
-      console.error('Missing elements for fish animation or fish images not loaded');
+    // DEBUG: Check if container exists and is accessible
+    if (fishContainer) {
+      console.log("Fish container found, proceeding with fish animation");
+    } else {
+      console.error("Fish container not found!");
+    }
+    
+    if (!fishContainer || !waterBody) {
+      console.error('Missing elements for fish animation');
       return;
+    }
+    
+    // Check if FISH_IMAGES is loaded
+    if (typeof FISH_IMAGES === 'undefined') {
+      console.error('Fish images not loaded. Make sure fishImages.js is properly loaded before script.js');
+      return;
+    } else {
+      console.log(`Loaded ${Object.keys(FISH_IMAGES).length} fish images`);
     }
     
     // Performance detection
@@ -230,13 +245,15 @@ document.addEventListener('DOMContentLoaded', () => {
                            window.navigator.hardwareConcurrency < 4 ||
                            navigator.userAgent.match(/mobile|android/i);
     
-    // Determine number of fish based on device performance
-    const fishCount = isLowPerfDevice ? 2 : 
-                     (window.navigator.hardwareConcurrency >= 8 ? 6 : 4);
+    // Determine number of fish based on device performance - increase minimum
+    const fishCount = isLowPerfDevice ? 3 : 
+                     (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
     
-    // Get available fish images
+    console.log(`Creating ${fishCount} fish for animation`);
+    
+    // Get available fish images - pick from start of array to ensure we get some
     const fishImageKeys = Object.keys(FISH_IMAGES);
-    const fishImages = shuffleArray(fishImageKeys).slice(0, Math.min(fishCount * 3, fishImageKeys.length));
+    const fishImages = fishImageKeys.slice(0, Math.min(fishCount * 5, fishImageKeys.length));
     
     // Current water height
     let currentWaterHeight = parseFloat(waterBody.style.height) || 50;
@@ -244,97 +261,128 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tracking active fish for cleanup
     const activeFish = [];
     
-    // Create initial fish
+    // Create initial fish with staggered delay
     for (let i = 0; i < fishCount; i++) {
-      // Stagger fish creation for performance
-      setTimeout(() => createFish(), i * 500);
+      setTimeout(() => {
+        const newFish = createFish();
+        console.log(`Created fish #${i+1} - ${newFish ? 'success' : 'failed'}`);
+      }, i * 300); // Shorter intervals
     }
     
     // Create a fish with random properties
     function createFish() {
-      if (!isDocumentVisible()) return;
+      if (!isDocumentVisible()) return null;
       
-      // Create fish element
-      const fish = document.createElement('div');
-      fish.className = 'swimming-fish';
-      
-      // Select random fish image
-      const randomFishKey = fishImages[Math.floor(Math.random() * fishImages.length)];
-      const fishImageUrl = FISH_IMAGES[randomFishKey];
-      
-      // Create image element
-      const img = document.createElement('img');
-      img.src = fishImageUrl;
-      img.alt = randomFishKey;
-      img.loading = 'lazy'; // Optimize loading
-      
-      // Ensure image is loaded before adding to DOM
-      img.onload = function() {
-        // Image loaded successfully
-        console.log("Fish image loaded: " + randomFishKey);
-      };
-      
-      img.onerror = function() {
-        // Handle image loading error
-        console.error("Failed to load fish image: " + randomFishKey);
-        // Fallback to a default image or try another fish
-        img.src = "https://cdn.discordapp.com/attachments/1349726808488153168/1349728486880710666/Carp.png?ex=67d4281c&is=67d2d69c&hm=a080decf34c81199424c78c1af8ad50db2e9b6d26e76d5c5bfe27fbdeca7f48e&";
-      };
-      
-      fish.appendChild(img);
-      
-      // Random fish size based on rarity (assumed from the structure in fishImages.js)
-      let size;
-      if (randomFishKey.includes("Mythic") || randomFishKey.includes("Chimerical") || 
-          randomFishKey.includes("Legendary") || fishImageKeys.indexOf(randomFishKey) > fishImageKeys.length * 0.7) {
-        // Larger size for rare fish, but less common
-        size = 45 + Math.floor(Math.random() * 30);
-      } else {
-        // Smaller size for common fish
-        size = 20 + Math.floor(Math.random() * 25);
+      try {
+        // Create fish element
+        const fish = document.createElement('div');
+        fish.className = 'swimming-fish';
+        
+        // Ensure we select a valid fish 
+        const randomIndex = Math.floor(Math.random() * fishImages.length);
+        const randomFishKey = fishImages[randomIndex];
+        
+        if (!randomFishKey) {
+          console.error('Invalid fish key selected');
+          return null;
+        }
+        
+        const fishImageUrl = FISH_IMAGES[randomFishKey];
+        
+        if (!fishImageUrl) {
+          console.error(`No image URL found for fish: ${randomFishKey}`);
+          return null;
+        }
+        
+        console.log(`Creating fish: ${randomFishKey} with URL: ${fishImageUrl.substring(0, 50)}...`);
+        
+        // Create image element
+        const img = document.createElement('img');
+        img.crossOrigin = "anonymous"; // Try to avoid CORS issues
+        img.src = fishImageUrl;
+        img.alt = randomFishKey;
+        img.loading = 'lazy';
+        
+        // Ensure image is loaded before adding to DOM
+        img.onload = function() {
+          console.log(`Fish image loaded: ${randomFishKey}`);
+        };
+        
+        img.onerror = function() {
+          console.error(`Failed to load fish image: ${randomFishKey}`);
+          // Try a different fish if this one fails
+          const fallbackIndex = (randomIndex + 1) % fishImages.length;
+          const fallbackKey = fishImages[fallbackIndex];
+          const fallbackUrl = FISH_IMAGES[fallbackKey];
+          console.log(`Trying fallback fish: ${fallbackKey}`);
+          
+          if (fallbackUrl) {
+            img.src = fallbackUrl;
+          } else {
+            // Last resort fallback to a known working image
+            img.src = "https://cdn.discordapp.com/attachments/1349726808488153168/1349728486880710666/Carp.png?ex=67d4281c&is=67d2d69c&hm=a080decf34c81199424c78c1af8ad50db2e9b6d26e76d5c5bfe27fbdeca7f48e&";
+          }
+        };
+        
+        fish.appendChild(img);
+        
+        // Random fish size - make them more visible
+        let size;
+        if (randomFishKey.includes("Mythic") || randomFishKey.includes("Chimerical") || 
+            randomFishKey.includes("Legendary") || fishImageKeys.indexOf(randomFishKey) > fishImageKeys.length * 0.7) {
+          // Larger size for rare fish, but less common
+          size = 65 + Math.floor(Math.random() * 30);
+        } else {
+          // Smaller size for common fish
+          size = 40 + Math.floor(Math.random() * 25);
+        }
+        
+        // Apply size with slight random variation
+        fish.style.width = `${size}px`;
+        fish.style.height = 'auto';
+        
+        // Random starting position (always in water)
+        const startX = Math.random() * 100; // percent
+        const waterHeightPercent = currentWaterHeight; // vh
+        const startY = 100 - (Math.random() * (waterHeightPercent * 0.8)); // Keep fish in water
+        
+        fish.style.left = `${startX}vw`;
+        fish.style.bottom = `${startY}vh`;
+        
+        // Initial swimming direction
+        const direction = Math.random() > 0.5 ? 'right' : 'left';
+        if (direction === 'left') {
+          fish.classList.add('flip-horizontal');
+        }
+        
+        // Set swimming speed (larger fish are much slower) - GREATLY REDUCED SPEEDS
+        const speedFactor = isLowPerfDevice ? 0.1 : 0.2; // 5x slower than before
+        const baseSpeed = (40 - size * 0.3) * speedFactor; // Smaller fish move faster but still slow
+        const speed = Math.max(1, Math.min(10, baseSpeed)); // Much lower speed range
+        
+        fish.dataset.speed = speed;
+        fish.dataset.direction = direction;
+        fish.dataset.verticalDirection = Math.random() > 0.5 ? 'up' : 'down';
+        fish.dataset.verticalAmount = Math.random() * 6 + 2; // Reduced vertical movement
+        fish.dataset.originalY = startY;
+        fish.dataset.wiggleAmount = Math.random() * 0.5 + 0.5; // Random wiggle amount
+        fish.dataset.wigglePhase = Math.random() * Math.PI * 2; // Random wiggle phase
+        
+        // Add to container and tracking array
+        fishContainer.appendChild(fish);
+        console.log(`Fish added to container. Current count: ${fishContainer.children.length}`);
+        activeFish.push(fish);
+        
+        // Start animation in the next frame (prevents layout thrashing)
+        requestAnimationFrame(() => {
+          animateFish(fish);
+        });
+        
+        return fish;
+      } catch (err) {
+        console.error("Error creating fish:", err);
+        return null;
       }
-      
-      // Apply size with slight random variation
-      fish.style.width = `${size}px`;
-      fish.style.height = 'auto';
-      
-      // Random starting position (always in water)
-      const startX = Math.random() * 100; // percent
-      const waterHeightPercent = currentWaterHeight; // vh
-      const startY = 100 - (Math.random() * (waterHeightPercent * 0.8)); // Keep fish in water
-      
-      fish.style.left = `${startX}vw`;
-      fish.style.bottom = `${startY}vh`;
-      
-      // Initial swimming direction
-      const direction = Math.random() > 0.5 ? 'right' : 'left';
-      if (direction === 'left') {
-        fish.classList.add('flip-horizontal');
-      }
-      
-      // Set swimming speed (larger fish are much slower) - GREATLY REDUCED SPEEDS
-      const speedFactor = isLowPerfDevice ? 0.1 : 0.2; // 5x slower than before
-      const baseSpeed = (40 - size * 0.3) * speedFactor; // Smaller fish move faster but still slow
-      const speed = Math.max(1, Math.min(10, baseSpeed)); // Much lower speed range
-      
-      fish.dataset.speed = speed;
-      fish.dataset.direction = direction;
-      fish.dataset.verticalDirection = Math.random() > 0.5 ? 'up' : 'down';
-      fish.dataset.verticalAmount = Math.random() * 6 + 2; // Reduced vertical movement
-      fish.dataset.originalY = startY;
-      fish.dataset.wiggleAmount = Math.random() * 0.5 + 0.5; // Random wiggle amount
-      fish.dataset.wigglePhase = Math.random() * Math.PI * 2; // Random wiggle phase
-      
-      // Add to container and tracking array
-      fishContainer.appendChild(fish);
-      activeFish.push(fish);
-      
-      // Start animation in the next frame (prevents layout thrashing)
-      requestAnimationFrame(() => {
-        animateFish(fish);
-      });
-      
-      return fish;
     }
     
     // Fish animation logic - uses setTimeout for performance instead of RAF
