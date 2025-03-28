@@ -1,5 +1,3 @@
-// Fish data for the TackleBot website catalog
-
 // Fish rarity colors (matching Discord bot)
 const RARITY_COLORS = {
     common: '#ddbea9',
@@ -13,20 +11,22 @@ const RARITY_COLORS = {
     junk: '#a9a9a9'
 };
 
-// Fishing locations
+// --- UPDATED FISHING_LOCATIONS START ---
+// Fishing locations (Using new names, retaining original emojis)
 const FISHING_LOCATIONS = {
-    pond: { displayName: "Pond", emoji: "🏞️" },
-    river: { displayName: "River", emoji: "🌊" },
-    lake: { displayName: "Lake", emoji: "⛰️" },
-    ocean: { displayName: "Ocean", emoji: "🌊" },
+    pond: { displayName: "Tranquil Pond", emoji: "🏞️" },
+    river: { displayName: "Rushing River", emoji: "🌊" },
+    lake: { displayName: "Misty Lake", emoji: "⛰️" },
+    ocean: { displayName: "Deep Ocean", emoji: "🌊" },
     coral_reef: { displayName: "Coral Reef", emoji: "🪸" },
-    abyss: { displayName: "Abyss", emoji: "🕳️" },
+    abyss: { displayName: "The Abyss", emoji: "🕳️" },
     sunken_city: { displayName: "Sunken City", emoji: "🏙️" },
-    vortex: { displayName: "Vortex", emoji: "🌀" },
+    vortex: { displayName: "Mystic Vortex", emoji: "🌀" },
     cosmic_sea: { displayName: "Cosmic Sea", emoji: "✨" },
     temporal_tide: { displayName: "Temporal Tide", emoji: "⏳" },
-    fishverse: { displayName: "Fishverse", emoji: "🌌" } // Added from detailed list
+    fishverse: { displayName: "Fishverse", emoji: "🌌" }
 };
+// --- UPDATED FISHING_LOCATIONS END ---
 
 // Seasons
 const SEASONS = {
@@ -1053,7 +1053,7 @@ const FISH_DATA = {
     seasonal: SEASONAL_FISH,
     junk: JUNK_ITEMS,
     colors: RARITY_COLORS,
-    locations: FISHING_LOCATIONS,
+    locations: FISHING_LOCATIONS, // This now uses the updated location data
     seasons: SEASONS
 };
 
