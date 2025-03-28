@@ -127,7 +127,8 @@ a, button, input, select, textarea, [role="button"], label[for] {
   opacity: 0; /* Initially hidden, shown by JS */
   /* Use translate for positioning - updated by JS */
   transform: translate(-50%, -50%) rotate(45deg);
-  transition: opacity 0.3s ease, transform 0.1s linear; /* Smooth opacity, quick transform */
+  /* Transition only opacity and scale (on click), position is handled by JS lerp */
+  transition: opacity 0.3s ease, transform 0.15s ease-out;
   z-index: 9999;
   box-shadow: 0 0 10px var(--water-shadow);
   filter: blur(1px);
