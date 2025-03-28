@@ -2,24 +2,16 @@
 :root {
   /* Adorable Gradient Palette */
   --gradient-primary: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-  /* Light Blue/Cyan to Soft Blue */
   --gradient-secondary: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
-  /* Soft Pink to Rose */
   --gradient-accent: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-  /* Light Blue Fade */
   --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  /* Purple/Indigo */
 
   /* Solid Colors */
-  --primary-bg: #f0faff;
-  /* Very light blue, almost white */
-  --text-color: #4a5568;
-  /* Dark grayish blue */
-  --heading-color: #2a4365;
-  /* Darker blue for headings */
+  --primary-bg: #f0faff; /* Very light blue, almost white */
+  --text-color: #4a5568; /* Dark grayish blue */
+  --heading-color: #2a4365; /* Darker blue for headings */
   --white: #FFFFFF;
-  --shadow-light: rgba(102, 166, 255, 0.15);
-  /* Soft blue shadow */
+  --shadow-light: rgba(102, 166, 255, 0.15); /* Soft blue shadow */
   --shadow-medium: rgba(102, 166, 255, 0.25);
   --ripple-light: rgba(255, 255, 255, 0.7);
   --ripple-dark: rgba(0, 0, 0, 0.1);
@@ -31,25 +23,35 @@
   --water-color: rgba(137, 247, 254, 0.7);
   --water-shadow: rgba(102, 166, 255, 0.4);
   --water-splash: rgba(137, 247, 254, 0.5);
-
-  /* Water Background Variables */
   --water-surface: rgba(137, 247, 254, 0.5); /* Used for gradient and wave path 1 */
   --water-deep: rgba(102, 166, 255, 0.7); /* Used for gradient */
   --bubble-color: rgba(255, 255, 255, 0.7);
-  /* --wave-speed: 15s; REMOVED - Now dynamic */
 
   /* Sky Colors */
-  --sky-day: linear-gradient(to bottom, #87CEEB 30%, #ADD8E6 70%, #B0E0E6 100%); /* Light Sky Blue to Paler Blue */
-  --sky-sunset: linear-gradient(to bottom, #FFB6C1 0%, #FFA07A 40%, #FF7F50 70%, #4682B4 100%); /* Pink/Orange to Dusky Blue */
-  --sky-night: linear-gradient(to bottom, #000030 10%, #191970 50%, #2c3e50 100%); /* Deep Navy to Dark Slate Blue */
+  --sky-day: linear-gradient(to bottom, #87CEEB 30%, #ADD8E6 70%, #B0E0E6 100%);
+  /* --sky-sunset: defined dynamically in JS */
+  --sky-night: linear-gradient(to bottom, #000030 10%, #191970 50%, #2c3e50 100%);
   --sun-color: #FFD700; /* Gold */
   --moon-color: #F5F5F5; /* White Smoke */
   --cloud-color: rgba(255, 255, 255, 0.85);
 
-  /* Wave Animation Variables */
-  --wave-amplitude: 15; /* Base amplitude */
-  --wave-frequency: 0.01; /* Base frequency */
-  --wave-speed-factor: 1; /* Base speed */
+  /* Rarity Colors (for consistency) */
+  --rarity-common-bg: #ddbea9;
+  --rarity-common-text: #6b5b4b;
+  --rarity-uncommon-bg: #98d4bb;
+  --rarity-uncommon-text: #2d5744;
+  --rarity-rare-bg: #98bcd4;
+  --rarity-rare-text: #2d4e74;
+  --rarity-legendary-bg: #f4cc71;
+  --rarity-legendary-text: #7d6334;
+  --rarity-mythic-bg: #c79de0;
+  --rarity-mythic-text: #633f79;
+  --rarity-chimerical-bg: #cd7ae2;
+  --rarity-chimerical-text: #fff; /* High contrast needed */
+  --rarity-seasonal-bg: #f08080;
+  --rarity-seasonal-text: #fff; /* High contrast needed */
+  --rarity-junk-bg: #a9a9a9;
+  --rarity-junk-text: #fff; /* High contrast needed */
 }
 
 * {
@@ -60,21 +62,29 @@
 
 html {
   scroll-behavior: smooth;
+  /* Consider using JS for wider browser support if needed */
+  font-size: 16px; /* Base font size */
 }
 
 body {
   font-family: var(--font-primary);
   background-color: var(--primary-bg);
-  /* Optional: Add a subtle body gradient */
-  /* background-image: linear-gradient(to bottom, #f0faff, #e6f7ff); */
   color: var(--text-color);
   line-height: 1.7;
-  /* Slightly more spacing */
-  overflow-x: hidden;
-  /* Prevent horizontal scroll */
+  overflow-x: hidden; /* Prevent horizontal scroll */
   font-weight: 400;
-  /* Nunito looks good at normal weight */
-  cursor: none; /* Hide default cursor for custom water effect */
+  /* Custom cursor handled by JS initMouseTrail */
+  cursor: none;
+}
+
+/* Hide cursor only if trail is active (JS adds/removes this class) */
+body.custom-cursor-active {
+    cursor: none;
+}
+
+/* Show cursor on interactive elements */
+a, button, input, select, textarea, [role="button"], label[for] {
+  cursor: pointer;
 }
 
 /* --- Emojis --- */
@@ -82,28 +92,26 @@ body {
 .emoji-icon,
 .hero-emoji {
   display: inline-block;
-  /* Prevents weird line breaks */
   margin: 0 0.1em;
-  /* Small spacing around emojis */
   vertical-align: middle;
-  /* Align better with text */
+  /* Prevent selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .emoji-icon {
   font-size: 3rem;
-  /* Larger for feature icons */
   margin-bottom: 1rem;
   transition: transform 0.3s ease;
 }
 
 .feature-item:hover .emoji-icon {
   transform: scale(1.2) rotate(10deg);
-  /* Cute rotation on hover */
 }
 
 .hero-emoji {
   font-size: 10em;
-  /* Make hero emoji large */
   animation: float 4s ease-in-out infinite;
   text-shadow: 0 5px 15px var(--shadow-medium);
 }
@@ -113,61 +121,66 @@ body {
   position: fixed;
   width: 18px;
   height: 18px;
-  background: var(--water-color); /* Water color */
-  border-radius: 50% 40% 50% 40%; /* Irregular shape for water droplet */
+  background: var(--water-color);
+  border-radius: 50% 40% 50% 40%;
   pointer-events: none;
-  opacity: 0;
+  opacity: 0; /* Initially hidden, shown by JS */
+  /* Use translate for positioning - updated by JS */
   transform: translate(-50%, -50%) rotate(45deg);
-  transition: transform 0.3s ease;
-  z-index: 9999; /* Keep mouse trail on top */
+  transition: opacity 0.3s ease, transform 0.1s linear; /* Smooth opacity, quick transform */
+  z-index: 9999;
   box-shadow: 0 0 10px var(--water-shadow);
-  filter: blur(1px); /* Soft blur for water effect */
-  will-change: transform, left, top, opacity; /* Performance optimization */
+  filter: blur(1px);
+  will-change: transform, opacity; /* Optimize animation */
 }
 
-body:hover #mouse-trail {
-  opacity: 0.8;
-}
-
-/* Water Trail Effect */
+/* Water Trail Droplets */
 .trail-droplet {
   position: fixed;
-  width: 8px;
+  width: 8px; /* Base size */
   height: 8px;
   background: var(--water-color);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  opacity: 0.5;
-  transform: translate(-50%, -50%);
+  opacity: 0.5; /* Start opacity */
+  /* Position set by JS */
   box-shadow: 0 0 4px var(--water-shadow);
-  animation: fadeOut 0.8s linear forwards;
+  animation: fadeOutDroplet 0.8s linear forwards; /* Use specific animation */
+  will-change: transform, opacity;
 }
 
-@keyframes fadeOut {
-  0% {
+@keyframes fadeOutDroplet {
+  from {
     opacity: 0.5;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
-  100% {
+  to {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.3);
+    transform: scale(0.3);
   }
 }
 
 /* Water Splash Effect */
 .water-splash {
-  position: absolute;
+  position: fixed; /* Use fixed to position relative to viewport */
   pointer-events: none;
   z-index: 9998;
+  /* Position set by JS */
+  width: 1px; /* Minimal size container */
+  height: 1px;
+  overflow: visible; /* Allow droplets to fly out */
 }
 
 .splash-droplet {
-  position: absolute;
+  position: absolute; /* Position relative to water-splash container */
+  top: 0; left: 0; /* Start at center of splash */
   background: var(--water-splash);
   border-radius: 50%;
+  /* Size set by JS */
   transform-origin: center;
   animation: splashAnimation 0.6s ease-out forwards;
+  will-change: transform, opacity;
 }
 
 @keyframes splashAnimation {
@@ -176,15 +189,12 @@ body:hover #mouse-trail {
     opacity: 1;
   }
   100% {
-    transform: translate(var(--splash-x), var(--splash-y)) scale(0);
+    /* Use CSS variables set by JS for trajectory */
+    transform: translate(var(--splash-x, 0px), var(--splash-y, 0px)) scale(0);
     opacity: 0;
   }
 }
 
-/* Show cursor on interactive elements */
-a, button, input, select, textarea, [role="button"] {
-  cursor: pointer;
-}
 
 /* --- Header & Navigation --- */
 header {
@@ -197,7 +207,6 @@ header {
   width: 100%;
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
-  /* Gradient border */
 }
 
 nav {
@@ -206,18 +215,25 @@ nav {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 .logo {
   font-size: 1.9rem;
-  /* Slightly larger */
   font-weight: 800;
-  /* Bolder */
   color: var(--heading-color);
   display: flex;
   align-items: center;
   gap: 0.5rem;
   transition: transform 0.3s ease;
+  text-decoration: none; /* Remove underline from link */
+}
+.logo a {
+    text-decoration: none;
+    color: inherit; /* Inherit color from parent */
+    display: flex; /* Ensure link takes up space */
+    align-items: center;
+    gap: inherit;
 }
 
 .logo:hover {
@@ -226,31 +242,25 @@ nav {
 
 .logo .emoji {
   font-size: 1.5em;
-  /* Make logo emoji bigger */
-}
-
-.logo a {
-  text-decoration: none;
-  color: var(--heading-color);
 }
 
 nav ul {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 2rem;
-  /* More spacing */
+  gap: 1.5rem; /* Adjusted gap */
+  flex-wrap: wrap; /* Allow nav items to wrap */
+  justify-content: center; /* Center items when wrapped */
 }
 
 nav ul li a {
   text-decoration: none;
   color: var(--heading-color);
   font-weight: 700;
-  /* Bolder nav links */
-  padding-bottom: 8px;
-  /* More space for underline */
+  padding: 8px 4px; /* Add horizontal padding */
   position: relative;
   transition: color 0.3s ease;
+  white-space: nowrap; /* Prevent link text wrapping */
 }
 
 nav ul li a::after {
@@ -260,43 +270,33 @@ nav ul li a::after {
   left: 0;
   width: 0;
   height: 3px;
-  /* Thicker underline */
-  /* Gradient underline */
   background: var(--gradient-secondary);
   border-radius: 3px;
   transition: width 0.4s ease;
-  /* Smoother transition */
 }
 
 nav ul li a:hover {
   color: var(--heading-color);
-  /* Keep color on hover */
 }
 
-nav ul li a:hover::after {
+nav ul li a:hover::after,
+nav ul li a.active::after { /* Combine hover and active underline */
   width: 100%;
 }
 
 nav ul li a.active {
-  color: var(--heading-color);
-  font-weight: 800;
-}
-
-nav ul li a.active::after {
-  width: 100%;
+  /* Active state primarily indicated by underline */
+  font-weight: 800; /* Slightly bolder */
 }
 
 /* --- Buttons --- */
 .button {
   display: inline-flex;
-  /* Align icon/emoji better */
   align-items: center;
   justify-content: center;
   gap: 0.5em;
   padding: 14px 30px;
-  /* Larger padding */
   border-radius: 30px;
-  /* More rounded */
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
@@ -307,15 +307,16 @@ nav ul li a.active::after {
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 5px 15px var(--shadow-light);
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  user-select: none; /* Prevent text selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
-.button .emoji {
-  font-size: 1.2em;
-}
-
+.button .emoji,
 .button i {
-  /* For Discord icon */
   font-size: 1.2em;
+  pointer-events: none; /* Ensure icon doesn't interfere with clicks */
 }
 
 .button.nav-button {
@@ -326,14 +327,12 @@ nav ul li a.active::after {
 
 .button.nav-button:hover {
   transform: translateY(-3px) scale(1.03);
-  /* Add scale */
   box-shadow: 0 6px 15px rgba(238, 156, 167, 0.4);
 }
 
 .button.hero-button {
   background: var(--gradient-primary);
   color: var(--heading-color);
-  /* Darker text on light gradient */
   margin-right: 1rem;
   box-shadow: 0 6px 20px var(--shadow-medium);
 }
@@ -348,7 +347,6 @@ nav ul li a.active::after {
   color: var(--heading-color);
   border: 2px solid;
   border-image-source: var(--gradient-secondary);
-  /* Gradient border */
   border-image-slice: 1;
   box-shadow: none;
 }
@@ -357,7 +355,6 @@ nav ul li a.active::after {
   background: var(--gradient-secondary);
   color: var(--white);
   border-image-source: none;
-  /* Remove border image on hover */
   border-color: transparent;
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 15px rgba(238, 156, 167, 0.3);
@@ -368,10 +365,10 @@ nav ul li a.active::after {
   position: absolute;
   border-radius: 50%;
   background-color: var(--ripple-light);
-  /* Default light ripple */
   transform: scale(0);
   animation: ripple-animation 0.6s linear;
-  pointer-events: none;
+  pointer-events: none; /* Ripple should not be interactive */
+  z-index: 1; /* Ensure ripple is above button content but below text/icons if needed */
 }
 
 /* Darker ripple for light buttons */
@@ -381,7 +378,6 @@ nav ul li a.active::after {
 
 .button.secondary-button:hover .ripple {
   background-color: var(--ripple-light);
-  /* Ensure light ripple on hover bg */
 }
 
 
@@ -399,38 +395,36 @@ nav ul li a.active::after {
   align-items: center;
   justify-content: space-between;
   padding: 4rem 6%;
-  /* More horizontal padding */
   background: var(--gradient-accent);
-  /* Use accent gradient */
   max-width: 1200px;
   margin: 3rem auto;
-  /* More margin */
   border-radius: 30px;
-  /* More rounded */
   box-shadow: 0 15px 40px var(--shadow-light);
   gap: 3rem;
+  /* Subtle backdrop filter for depth */
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); /* Safari support */
   border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative; /* Needed for z-index */
+  z-index: 10; /* Ensure hero is above background effects */
 }
 
 .hero-content {
   flex-basis: 55%;
+  z-index: 1; /* Ensure content is above potential pseudo-elements */
 }
 
 .hero-content h1 {
-  font-size: 3.2rem;
-  /* Slightly larger */
+  font-size: clamp(2.5rem, 5vw, 3.2rem); /* Responsive font size */
   color: var(--heading-color);
   margin-bottom: 1.5rem;
   line-height: 1.3;
   font-weight: 800;
-  /* Bolder heading */
 }
 
 .hero-content p {
-  font-size: 1.25rem;
-  /* Slightly larger */
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem); /* Responsive font size */
   margin-bottom: 2.5rem;
   color: var(--text-color);
 }
@@ -438,22 +432,19 @@ nav ul li a.active::after {
 .hero-image {
   flex-basis: 40%;
   text-align: center;
+  z-index: 1;
 }
 
 @keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0) rotate(-5deg);
-  }
-
-  /* Add slight rotation */
-  50% {
-    transform: translateY(-25px) rotate(5deg);
-  }
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-25px) rotate(5deg); }
 }
 
 /* --- Sections General Styling --- */
+main {
+    display: block; /* Ensure main element takes block layout */
+}
+
 section {
   padding: 5rem 5%;
   max-width: 1200px;
@@ -464,21 +455,31 @@ section {
 
 section h2 {
   text-align: center;
-  font-size: 2.8rem;
+  font-size: clamp(2.2rem, 4vw, 2.8rem); /* Responsive font size */
   color: var(--heading-color);
   margin-bottom: 4rem;
   position: relative;
-  /* Needed for absolute positioning of ::after */
-  padding-bottom: 2.5rem;
-  /* INCREASED padding-bottom to create space */
+  padding-bottom: 1rem; /* Space for potential underline/decoration */
   font-weight: 800;
 }
+/* Optional: Add a decorative underline to section titles */
+/* section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+} */
+
 
 /* --- Features Section --- */
 #features {
   background-color: var(--white);
   border-radius: 30px;
-  /* More rounded */
   box-shadow: 0 10px 30px var(--shadow-light);
 }
 
@@ -486,30 +487,23 @@ section h2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2.5rem;
-  /* More gap */
 }
 
 .feature-item {
   background-color: var(--primary-bg);
-  /* Lighter background */
   padding: 2.5rem;
-  /* More padding */
   border-radius: 20px;
-  /* Rounded items */
   text-align: center;
   border: 2px solid transparent;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   position: relative;
-  /* For potential pseudo-elements */
   overflow: hidden;
 }
 
 .feature-item:hover {
   transform: translateY(-12px) scale(1.02);
-  /* More lift */
   box-shadow: 0 12px 35px var(--shadow-medium);
   border-image-source: var(--gradient-primary);
-  /* Gradient border on hover */
   border-image-slice: 1;
 }
 
@@ -533,6 +527,9 @@ section h2 {
 #commands p {
   margin-bottom: 3rem;
   font-size: 1.15rem;
+  max-width: 800px; /* Limit width of intro paragraph */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .commands-list {
@@ -540,22 +537,18 @@ section h2 {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
-  /* Keep gap reasonable */
 }
 
 .command-item {
   background-color: var(--white);
   padding: 1.8rem;
-  /* More padding */
   border-radius: 15px;
-  /* Rounded */
   box-shadow: 0 6px 15px var(--shadow-light);
   flex-basis: calc(33.33% - 2rem);
-  /* Adjust basis */
   min-width: 260px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #eee;
-  /* Subtle border */
+  text-align: left; /* Align content left */
 }
 
 .command-item:hover {
@@ -565,16 +558,16 @@ section h2 {
 
 .command-item code {
   background: var(--gradient-accent);
-  /* Use gradient */
   color: var(--heading-color);
   padding: 0.5rem 0.8rem;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 700;
-  display: block;
+  display: inline-block; /* Fit content width */
   margin-bottom: 1rem;
-  font-family: monospace;
+  font-family: 'Courier New', Courier, monospace; /* Monospace font */
   border: none;
+  word-break: keep-all; /* Prevent breaking within command */
 }
 
 .command-item p {
@@ -586,12 +579,9 @@ section h2 {
 /* --- CTA Section --- */
 .cta {
   background: var(--gradient-cta);
-  /* Use CTA gradient */
   border-radius: 30px;
-  /* Rounded */
   text-align: center;
   padding: 5rem 2rem;
-  /* More padding */
   box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
 }
 
@@ -601,43 +591,34 @@ section h2 {
   font-weight: 800;
 }
 
-.cta h2::after {
-  color: var(--white);
-  /* White emoji underline */
-  opacity: 0.8;
-}
-
 .cta p {
   color: rgba(255, 255, 255, 0.9);
-  /* Slightly transparent white */
   font-size: 1.3rem;
   margin-bottom: 2.5rem;
+  max-width: 700px; /* Limit width */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .cta .button {
   margin: 0.5rem;
 }
 
-/* CORRECTED RULE */
-.cta .cta-button {
+.cta .cta-button { /* Renamed from .cta-button for clarity */
   background: var(--white);
-  color: #667eea;
-  /* This is the correct color */
+  color: #667eea; /* Start color of CTA gradient */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .cta .cta-button:hover {
   background: #f0faff;
-  /* Very light blue */
-  color: #764ba2;
-  /* End color of CTA gradient */
+  color: #764ba2; /* End color of CTA gradient */
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .cta .cta-button .ripple {
   background-color: rgba(102, 126, 234, 0.3);
-  /* Purple ripple */
 }
 
 .cta .secondary-button {
@@ -645,36 +626,31 @@ section h2 {
   color: var(--white);
   background: transparent;
   border-image: none;
-  /* No gradient border here */
 }
 
 .cta .secondary-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
-  /* Transparent white */
   color: var(--white);
   border-color: transparent;
-  /* Hide border */
   transform: translateY(-3px) scale(1.05);
 }
 
 .cta .secondary-button .ripple {
   background-color: rgba(255, 255, 255, 0.4);
-  /* Lighter ripple */
 }
 
 
 /* --- Footer --- */
 footer {
   background-color: #e6f0ff;
-  /* Lighter blue footer */
   color: var(--text-color);
   text-align: center;
   padding: 2.5rem 5%;
   margin-top: 4rem;
   border-top: 5px solid transparent;
   border-image: var(--gradient-accent) 1;
-  position: relative; /* Ensure footer is above background */
-  z-index: 10; /* Higher than sky and water */
+  position: relative;
+  z-index: 10;
 }
 
 footer p {
@@ -684,7 +660,6 @@ footer p {
 
 footer a {
   color: #66a6ff;
-  /* Match gradient color */
   text-decoration: none;
   font-weight: 700;
   transition: color 0.3s ease;
@@ -695,26 +670,29 @@ footer a:hover {
   text-decoration: underline;
 }
 
-.social-links a { /* Corrected selector */
+.social-links {
+    margin-top: 1rem; /* Add space above social links */
+}
+
+.social-links a {
   font-size: 1.8rem;
-  /* Larger social icons */
   margin: 0 0.8rem;
   color: #66a6ff;
   transition: transform 0.3s ease, color 0.3s ease;
+  display: inline-block; /* Ensure transform works */
 }
 
-.social-links a:hover { /* Corrected selector */
+.social-links a:hover {
   color: var(--heading-color);
   transform: scale(1.2) rotate(5deg);
-  /* Rotate social icons */
 }
 
 /* --- Animation on Scroll --- */
 .animated-section {
   opacity: 0;
   transform: translateY(40px);
-  /* Start slightly lower */
-  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  will-change: opacity, transform; /* Optimize animation */
 }
 
 .animated-section.visible {
@@ -725,139 +703,117 @@ footer a:hover {
 
 /* --- Responsiveness --- */
 @media (max-width: 992px) {
+  nav ul {
+      gap: 1rem; /* Reduce gap slightly */
+  }
   .features-grid {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
-
-  .hero-content h1 {
-    font-size: 2.8rem;
-  }
-
-  section h2 {
-    font-size: 2.4rem;
-  }
-
   .command-item {
     flex-basis: calc(50% - 1.5rem);
+  }
+  .calculator-container {
+      grid-template-columns: 1fr; /* Stack calculator columns */
   }
 }
 
 @media (max-width: 768px) {
+  html {
+      font-size: 15px; /* Slightly smaller base font on medium screens */
+  }
   nav {
     flex-direction: column;
     gap: 1rem;
   }
-
   nav ul {
-    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem; /* Adjust gap */
     justify-content: center;
-    gap: 1rem 1.5rem;
   }
-
   #hero {
     flex-direction: column-reverse;
-    /* Image first */
     text-align: center;
     min-height: auto;
     padding: 4rem 5%;
     gap: 2rem;
   }
-
   .hero-image {
     margin-bottom: 1rem;
-    /* Space below image */
   }
-
   .hero-emoji {
     font-size: 8em;
-    /* Smaller hero emoji */
   }
-
-  .hero-content h1 {
-    font-size: 2.5rem;
+  .hero-content {
+      flex-basis: auto; /* Reset basis */
   }
-
-  .hero-content p {
-    font-size: 1.1rem;
-  }
-
   .button {
     padding: 12px 25px;
     font-size: 0.95rem;
   }
-
   .command-item {
     flex-basis: calc(50% - 1rem);
-    /* Adjust for smaller screens */
-    min-width: 200px;
+    min-width: 220px; /* Adjust min-width */
     padding: 1.5rem;
   }
-
-  section h2 {
-    font-size: 2.2rem;
-  }
+  .legal-card h3 { font-size: 1.5rem; }
+  .legal-card h4 { font-size: 1.3rem; }
+  .expand-btn { font-size: 0.9rem; padding: 0.6rem 1rem; }
+  .fish-catalog-section, .calculator-section { padding: 1.5rem; } /* Use section ID */
+  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+  .modal-content { width: 95%; padding: 2rem 1.5rem; }
 }
 
 @media (max-width: 576px) {
+  html {
+      font-size: 14px; /* Smaller base font on small screens */
+  }
   .command-item {
     flex-basis: 100%;
-    /* Stack commands */
     min-width: unset;
   }
-
-  .hero-content h1 {
-    font-size: 2.2rem;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
-  }
-
-  section h2 {
-    font-size: 2rem;
-  }
-
   .button {
     width: 90%;
-    /* Make buttons wider */
+    max-width: 350px; /* Max width for buttons */
     margin-left: auto;
     margin-right: auto;
     display: flex;
-    /* Ensure flex works */
     margin-bottom: 1rem;
-    /* Space between stacked buttons */
   }
-
   .button.hero-button {
     margin-right: auto;
-    /* Center stacked buttons */
   }
-
   .cta .button {
     width: 80%;
+    max-width: 300px;
   }
+  .legal-card { padding: 1.2rem; }
+  .legal-card h3 { font-size: 1.3rem; }
+  .legal-card h4 { font-size: 1.1rem; }
+  .legal-card ul { padding-left: 1.2rem; }
+  .fish-catalog-section, .calculator-section { padding: 1rem; } /* Use section ID */
+  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+  .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
+  .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
+  .catalog-tab { flex-shrink: 0; font-size: 0.9rem; padding: 0.6rem 1rem; }
+  .modal-content { padding: 1.5rem 1rem; }
+  .close-modal { top: 1rem; right: 1rem; }
+  .fish-detail-title { font-size: 1.5rem; }
+  .fish-detail-image { width: 150px; height: 150px; }
+  .calc-input-grid { grid-template-columns: 1fr; }
+  .calc-rarity-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 400px) {
   nav ul {
     gap: 0.5rem 1rem;
-    /* Smaller gap */
   }
-
   nav ul li a {
     font-size: 0.9rem;
   }
-
   .logo {
     font-size: 1.6rem;
   }
-
-  section h2 {
-    font-size: 1.8rem;
-  }
-
-  .hero-content h1 {
-    font-size: 2rem;
+  .hero-emoji {
+      font-size: 6em; /* Smaller on very small screens */
   }
 }
 
@@ -866,7 +822,7 @@ footer a:hover {
   background-color: var(--white);
   border-radius: 30px;
   box-shadow: 0 10px 30px var(--shadow-light);
-  padding: 5rem 5%;
+  padding: 3rem 5%; /* Adjusted padding */
   max-width: 1200px;
   margin: 4rem auto;
 }
@@ -916,6 +872,7 @@ footer a:hover {
 .legal-card ul {
   margin-bottom: 1rem;
   padding-left: 1.5rem;
+  list-style: disc; /* Ensure bullets are visible */
 }
 
 .legal-card li {
@@ -928,6 +885,7 @@ footer a:hover {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
+  word-break: break-all; /* Allow long links to break */
 }
 
 .legal-card a:hover {
@@ -981,64 +939,37 @@ footer a:hover {
   font-family: var(--font-primary);
   font-size: 0.95rem;
 }
-
 .expand-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px var(--shadow-light);
 }
-
+/* Use pseudo-element for +/- icon */
 .expand-btn::after {
-  content: '+';
+  content: '+'; /* Default icon */
   position: absolute;
   right: 1.2rem;
   font-size: 1.2rem;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+.expand-btn[aria-expanded="true"]::after {
+  content: '−'; /* Minus sign for expanded */
+  transform: rotate(180deg); /* Optional rotation */
 }
 
 .expanded-content {
-  display: none;
+  display: none; /* Hidden by default */
   padding: 1.5rem;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 0 0 15px 15px;
   margin-top: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border */
+  border-top: none;
+}
+.expand-btn[aria-expanded="true"] + .expanded-content {
+    display: block; /* Show when expanded */
 }
 
-/* Responsive adjustments for legal sections */
-@media (max-width: 768px) {
-  .legal-card {
-    padding: 1.5rem;
-  }
-
-  .legal-card h3 {
-    font-size: 1.5rem;
-  }
-
-  .legal-card h4 {
-    font-size: 1.3rem;
-  }
-
-  .expand-btn {
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .legal-card {
-    padding: 1.2rem;
-  }
-
-  .legal-card h3 {
-    font-size: 1.3rem;
-  }
-
-  .legal-card h4 {
-    font-size: 1.1rem;
-  }
-
-  .legal-card ul {
-    padding-left: 1.2rem;
-  }
-}
 
 /* --- Sky, Sun, Moon, Clouds --- */
 #sky-container {
@@ -1049,59 +980,43 @@ footer a:hover {
   height: 100%;
   z-index: -11; /* Behind water background */
   overflow: hidden;
-  transition: background 2s ease-in-out; /* Smooth transition for sky color */
-  background: var(--sky-day); /* Default to day */
-  contain: strict;
+  transition: background 2s ease-in-out;
+  background: var(--sky-day); /* Default */
+  contain: strict; /* Performance hint */
   will-change: background;
 }
 
 #sun, #moon {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: clamp(60px, 8vw, 80px); /* Responsive size */
+  height: clamp(60px, 8vw, 80px);
   border-radius: 50%;
-  top: 50%; /* Start centered vertically for calculation */
-  left: 50%; /* Start centered horizontally */
-  transform: translate(-50%, -50%); /* Center origin */
-  transition: transform 1s linear, opacity 0.8s ease-in-out; /* Adjusted opacity transition */
+  top: 50%; /* Centered for transform calculation */
+  left: 50%;
+  /* Transform set by JS */
+  transition: transform 1s linear, opacity 0.8s ease-in-out;
   opacity: 0; /* Start hidden */
   will-change: transform, opacity;
 }
 
 #sun {
   background-color: var(--sun-color);
-  box-shadow: 0 0 30px 10px rgba(255, 223, 0, 0.6); /* Sun glow */
+  box-shadow: 0 0 30px 10px rgba(255, 223, 0, 0.6);
   z-index: 2;
 }
 
 #moon {
   background-color: var(--moon-color);
-  box-shadow: 0 0 25px 5px rgba(245, 245, 245, 0.5); /* Moon glow */
+  box-shadow: 0 0 25px 5px rgba(245, 245, 245, 0.5);
   z-index: 1;
-  /* Optional: Crescent Moon Effect
-  overflow: hidden; */
 }
-/* Optional: Crescent Moon Effect using pseudo-element
-#moon::after {
-    content: '';
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: var(--sky-night); // Match night sky
-    top: 5px;
-    left: 15px; // Adjust for crescent shape
-    box-shadow: inset -5px 0 10px rgba(0,0,0,0.2);
-    transition: background-color 2s ease-in-out;
-} */
-
 
 #clouds-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 60%; /* Clouds mostly in the upper part */
+  height: 60%; /* Clouds mostly in upper part */
   z-index: 3; /* Above sun/moon */
   pointer-events: none;
   overflow: hidden;
@@ -1111,16 +1026,17 @@ footer a:hover {
   position: absolute;
   background: var(--cloud-color);
   border-radius: 50%;
-  box-shadow:
-    /* Main body shadow */
-    0 0 15px 5px rgba(255, 255, 255, 0.5),
-    /* Puffs */
-    inset -10px -5px 10px rgba(0, 0, 0, 0.05);
-  opacity: 0.7; /* Start slightly transparent */
-  animation: cloud-drift linear infinite;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.5), inset -10px -5px 10px rgba(0, 0, 0, 0.05);
+  opacity: 0; /* Start hidden, fade in via JS */
+  /* Animation properties set via JS/CSS vars */
+  animation: cloud-drift linear infinite var(--drift-speed, 60s);
   will-change: transform, opacity;
-  /* Create puffiness using pseudo-elements */
-  filter: blur(1px); /* Soft edges */
+  filter: blur(1px);
+  /* Base size, scaled by --cloud-scale */
+  width: 100px;
+  height: 35px;
+  transform: scale(var(--cloud-scale, 1));
+  transition: opacity 1s ease-in; /* Fade in transition */
 }
 
 .cloud::before,
@@ -1130,25 +1046,25 @@ footer a:hover {
   background: inherit;
   border-radius: 50%;
   box-shadow: inherit;
+  filter: inherit; /* Inherit blur */
 }
 
-/* Different cloud shapes/sizes */
-.cloud.type-1 { width: 120px; height: 40px; }
-.cloud.type-1::before { width: 60px; height: 60px; top: -25px; left: 15px; }
-.cloud.type-1::after { width: 70px; height: 50px; top: -15px; right: 10px; }
+/* Different cloud shapes using pseudo-elements relative to base size */
+.cloud.type-1::before { width: 60%; height: 150%; top: -50%; left: 15%; }
+.cloud.type-1::after { width: 70%; height: 120%; top: -30%; right: 10%; }
 
-.cloud.type-2 { width: 180px; height: 60px; }
-.cloud.type-2::before { width: 90px; height: 80px; top: -40px; left: 30px; }
-.cloud.type-2::after { width: 80px; height: 60px; top: -20px; right: 25px; }
+.cloud.type-2 { width: 150px; height: 50px; } /* Larger base */
+.cloud.type-2::before { width: 50%; height: 160%; top: -60%; left: 20%; }
+.cloud.type-2::after { width: 45%; height: 120%; top: -40%; right: 15%; }
 
-.cloud.type-3 { width: 90px; height: 30px; }
-.cloud.type-3::before { width: 40px; height: 40px; top: -15px; left: 10px; }
-.cloud.type-3::after { width: 50px; height: 35px; top: -10px; right: 8px; }
+.cloud.type-3 { width: 80px; height: 28px; } /* Smaller base */
+.cloud.type-3::before { width: 50%; height: 140%; top: -40%; left: 12%; }
+.cloud.type-3::after { width: 60%; height: 120%; top: -30%; right: 10%; }
 
 
 @keyframes cloud-drift {
-  from { transform: translateX(-200px) scale(var(--cloud-scale, 1)); } /* Start off-screen left */
-  to { transform: translateX(calc(100vw + 200px)) scale(var(--cloud-scale, 1)); } /* Move across and off-screen right */
+  from { transform: translateX(-250px) scale(var(--cloud-scale, 1)); } /* Start further off-screen */
+  to { transform: translateX(calc(100vw + 250px)) scale(var(--cloud-scale, 1)); } /* End further off-screen */
 }
 
 
@@ -1163,7 +1079,7 @@ footer a:hover {
   overflow: hidden;
   pointer-events: none;
   contain: strict;
-  will-change: opacity;
+  will-change: opacity; /* Might change if reduced motion */
 }
 
 .water-body {
@@ -1172,44 +1088,38 @@ footer a:hover {
   background: linear-gradient(to bottom, var(--water-surface) 0%, var(--water-deep) 100%);
   bottom: 0;
   left: 0;
-  transition: height 0.2s ease-out;
-  height: 50vh; /* Keep initial height */
+  /* Height transition handled by JS for performance */
+  height: 50vh; /* Initial height */
   will-change: height;
-  transform: translateZ(0);
+  transform: translateZ(0); /* Promote to own layer */
 }
 
 .water-surface {
   position: absolute;
   width: 100%;
-  /* Height is determined by SVG viewBox height */
+  /* Height determined by SVG */
   bottom: 50vh; /* Match water-body height */
   left: 0;
-  transition: bottom 0.2s ease-out;
+  /* Bottom transition handled by JS */
   will-change: bottom;
-  transform: translateZ(0);
-  overflow: visible; /* Allow wave peaks to go slightly above */
+  transform: translateZ(0); /* Promote to own layer */
+  overflow: visible; /* Allow wave peaks */
 }
 
 #wave-svg {
     position: absolute;
-    bottom: 0; /* Align bottom of SVG with the water surface line */
+    bottom: -1px; /* Overlap slightly with water body */
     left: 0;
     width: 100%;
     height: 60px; /* Match viewBox height */
-    display: block;
+    display: block; /* Remove extra space below SVG */
 }
 
 #wave-path-1, #wave-path-2 {
-    transition: d 0.5s ease-out; /* Smooth transition for path changes */
+    /* Path data 'd' updated by JS */
+    transition: d 0.1s linear; /* Faster transition for smoother look */
     will-change: d;
 }
-
-/* REMOVED old static wave styles */
-/* .wave { ... } */
-/* .wave1 { ... } */
-/* .wave2 { ... } */
-/* @keyframes wave-animation { ... } */
-
 
 .bubble {
   position: absolute;
@@ -1217,7 +1127,9 @@ footer a:hover {
   background: var(--bubble-color);
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
   will-change: transform, opacity;
-  transform: translateZ(0);
+  transform: translateZ(0); /* Promote to own layer */
+  /* Animation set by JS */
+  /* display: none; initially hidden by JS */
 }
 
 @keyframes bubble-rise {
@@ -1226,10 +1138,16 @@ footer a:hover {
     opacity: 0;
   }
   10% {
+    /* Fade in quickly */
     opacity: 0.6;
-    transform: translate(0, -20px) scale(1);
+    transform: translate(calc(var(--drift-x, 0px) * 0.1), -20px) scale(1);
+  }
+  90% {
+      /* Still visible before final fade */
+      opacity: 0.4;
   }
   100% {
+    /* Move up and drift, fade out */
     transform: translate(var(--drift-x, 0px), calc(-100vh - 50px)) scale(0.8);
     opacity: 0;
   }
@@ -1239,53 +1157,56 @@ footer a:hover {
 #fish-container {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100%; /* Cover the whole background area */
   bottom: 0;
   left: 0;
-  z-index: 3;      /* Higher than waves */
+  z-index: 3;      /* Above water body/surface, below UI */
   overflow: hidden;
   pointer-events: none;
 }
 
 .swimming-fish {
   position: absolute;
-  z-index: 4;      /* Higher than container & waves */
+  z-index: 4;      /* Above other background elements */
   transform-origin: center;
-  will-change: transform;
-  transition: transform 1s ease-out, opacity 2s ease-out;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
-  max-width: 100px;
+  will-change: left, bottom, opacity, transform; /* Properties changed by JS/CSS */
+  transition: opacity 0.5s ease-in; /* Fade-in transition */
+  opacity: 0; /* Start hidden, faded in by JS */
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2)); /* Softer shadow */
+  /* Width set by JS */
+  height: auto; /* Maintain aspect ratio */
   display: block;
+  /* Left/Bottom set by JS */
 }
 
 .swimming-fish img {
   width: 100%;
   height: auto;
-  object-fit: contain;
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
+  object-fit: contain; /* Ensure image fits within element bounds */
+  display: block; /* Remove extra space below image */
   position: relative;
-  z-index: 1; /* Ensure image is visible */
+  z-index: 1;
 }
 
 .swimming-fish.flip-horizontal {
+  /* Flipping handled by JS adding/removing class */
   transform: scaleX(-1);
 }
+/* Optional: slight scale on hover */
+/* .swimming-fish:hover {
+  transform: scale(1.05);
+} */
 
-.swimming-fish:hover {
-  opacity: 1;
-}
 
-/* --- Performance Optimizations --- */
+/* --- Performance Optimizations & Reduced Motion --- */
 .reduced-motion #sun,
 .reduced-motion #moon {
     transition-duration: 5s; /* Slower movement */
 }
 .reduced-motion .cloud {
-    animation-duration: calc(var(--drift-speed, 30s) * 3); /* Much slower clouds */
-    opacity: 0.5;
+    animation-duration: calc(var(--drift-speed, 60s) * 3) !important; /* Much slower clouds */
+    opacity: 0.5 !important;
+    transition: none !important; /* Disable fade-in */
 }
 .reduced-motion #wave-path-1,
 .reduced-motion #wave-path-2 {
@@ -1293,35 +1214,81 @@ footer a:hover {
 }
 .reduced-motion .bubble {
   box-shadow: none;
+  animation-duration: 10s !important; /* Slower bubbles */
 }
 .reduced-motion #water-background {
   opacity: 0.7;
 }
 .reduced-motion .swimming-fish {
-  transition-duration: 2s;
+  transition: opacity 2s ease-in !important; /* Slower fade */
+  /* JS should stop fish movement updates */
+}
+.reduced-motion #mouse-trail,
+.reduced-motion .trail-droplet,
+.reduced-motion .water-splash {
+    display: none !important; /* Hide mouse effects */
+}
+.reduced-motion body {
+    cursor: auto !important; /* Restore cursor */
+}
+.reduced-motion .animated-section {
+    opacity: 1; /* Show sections immediately */
+    transform: none;
+    transition: none;
+}
+.reduced-motion .hero-emoji {
+    animation: none; /* Disable float animation */
 }
 
 
-/* Disable animations completely for users who explicitly request reduced motion */
+/* Disable animations completely for users who explicitly prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important; /* Disable smooth scroll */
+  }
   #sun, #moon {
-    transition: opacity 1.5s ease-in-out; /* Only fade, no movement transition */
+    transition: opacity 1.5s ease-in-out !important; /* Only fade */
+    /* JS should prevent transform updates */
   }
   .cloud {
-    animation: none; /* Disable cloud movement */
-    opacity: 0.4;
+    animation: none !important;
+    opacity: 0.4 !important;
   }
    #wave-path-1, #wave-path-2 {
-    transition: none; /* No wave transitions */
+    transition: none !important;
+    /* JS should stop wave updates */
   }
   .bubble {
-    animation-duration: 0.5s !important;
+    animation: none !important;
+    display: none !important; /* Hide bubbles */
   }
   #water-background {
     opacity: 0.5;
   }
    .swimming-fish {
-    transition-duration: 3s !important;
+    transition: none !important;
+    opacity: 0.6 !important; /* Show fish statically */
+    /* JS should stop fish updates */
+  }
+  #mouse-trail, .trail-droplet, .water-splash {
+      display: none !important;
+  }
+  body {
+      cursor: auto !important;
+  }
+  .animated-section {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+  }
+   .hero-emoji {
+      animation: none !important;
+  }
+  .ripple {
+      display: none !important; /* Disable ripple effect */
   }
 }
 
@@ -1332,7 +1299,7 @@ footer a:hover {
   box-shadow: 0 10px 30px var(--shadow-light);
   padding: 3rem;
   margin: 2rem auto 4rem;
-  max-width: 1300px; /* Increased to use more space */
+  max-width: 1300px;
 }
 
 .catalog-container {
@@ -1350,7 +1317,7 @@ footer a:hover {
 .search-container {
   display: flex;
   width: 100%;
-  max-width: 600px; /* Widened for better visibility */
+  max-width: 600px;
 }
 
 .search-input {
@@ -1362,27 +1329,27 @@ footer a:hover {
   font-family: var(--font-primary);
   outline: none;
   transition: border-color 0.3s ease;
+  background-color: var(--white); /* Ensure background */
 }
-
 .search-input:focus {
   border-color: #66a6ff;
+  box-shadow: 0 0 5px rgba(102, 166, 255, 0.3); /* Add focus shadow */
 }
 
 .search-button {
   padding: 0.8rem 1.5rem;
-  background: linear-gradient(135deg, #89f7fe, #66a6ff);
+  background: var(--gradient-primary);
   border: none;
   border-radius: 0 0.8rem 0.8rem 0;
   color: var(--heading-color);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  white-space: nowrap; /* Prevent text wrap */
+  white-space: nowrap;
 }
-
 .search-button:hover {
-  background: linear-gradient(135deg, #66a6ff, #89f7fe);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #66a6ff, #89f7fe); /* Reverse gradient */
+  transform: scale(1.05); /* Slight scale */
 }
 
 .filter-section {
@@ -1413,13 +1380,12 @@ footer a:hover {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  color: var(--text-color); /* Ensure text color */
 }
-
 .filter-tag:hover {
   background-color: #e0e0e0;
   transform: translateY(-2px);
 }
-
 .filter-tag.active {
   background: var(--gradient-primary);
   color: var(--heading-color);
@@ -1443,7 +1409,7 @@ footer a:hover {
 .catalog-tab {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5em; /* Use em for spacing relative to font size */
   padding: 0.7rem 1.2rem;
   border: none;
   border-radius: 2rem;
@@ -1453,57 +1419,30 @@ footer a:hover {
   cursor: pointer;
   transition: all 0.3s ease;
   background-color: #f5f5f5;
+  color: var(--text-color); /* Default text color */
 }
-
 .catalog-tab:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .catalog-tab.active {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 4px 12px rgba(102, 166, 255, 0.25);
 }
-
-.tab-common {
-  background-color: #ddbea9;
-  color: #6b5b4b;
+.catalog-tab span { /* Style the emoji/icon */
+    font-size: 1.1em;
+    line-height: 1;
 }
 
-.tab-uncommon {
-  background-color: #98d4bb;
-  color: #2d5744;
-}
-
-.tab-rare {
-  background-color: #98bcd4;
-  color: #2d4e74;
-}
-
-.tab-legendary {
-  background-color: #f4cc71;
-  color: #7d6334;
-}
-
-.tab-mythic {
-  background-color: #c79de0;
-  color: #633f79;
-}
-
-.tab-chimerical {
-  background-color: #cd7ae2;
-  color: #fff;
-}
-
-.tab-seasonal {
-  background-color: #f08080;
-  color: #fff;
-}
-
-.tab-junk {
-  background-color: #a9a9a9;
-  color: #fff;
-}
+/* Use CSS variables for tab colors */
+.tab-common { background-color: var(--rarity-common-bg); color: var(--rarity-common-text); }
+.tab-uncommon { background-color: var(--rarity-uncommon-bg); color: var(--rarity-uncommon-text); }
+.tab-rare { background-color: var(--rarity-rare-bg); color: var(--rarity-rare-text); }
+.tab-legendary { background-color: var(--rarity-legendary-bg); color: var(--rarity-legendary-text); }
+.tab-mythic { background-color: var(--rarity-mythic-bg); color: var(--rarity-mythic-text); }
+.tab-chimerical { background-color: var(--rarity-chimerical-bg); color: var(--rarity-chimerical-text); }
+.tab-seasonal { background-color: var(--rarity-seasonal-bg); color: var(--rarity-seasonal-text); }
+.tab-junk { background-color: var(--rarity-junk-bg); color: var(--rarity-junk-text); }
 
 /* Results count */
 .results-count {
@@ -1511,6 +1450,7 @@ footer a:hover {
   font-size: 1rem;
   color: var(--text-color);
   font-weight: 500;
+  min-height: 1.5em; /* Prevent layout shift when count appears */
 }
 
 /* Fish cards grid */
@@ -1531,29 +1471,30 @@ footer a:hover {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 2px solid transparent;
+  border: 2px solid transparent; /* Base border */
 }
-
 .fish-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
-.fish-card.common { border-color: #ddbea9; }
-.fish-card.uncommon { border-color: #98d4bb; }
-.fish-card.rare { border-color: #98bcd4; }
-.fish-card.legendary { border-color: #f4cc71; }
-.fish-card.mythic { border-color: #c79de0; }
-.fish-card.chimerical { border-color: #cd7ae2; }
-.fish-card.seasonal { border-color: #f08080; }
-.fish-card.junk { border-color: #a9a9a9; }
+/* Use CSS variables for border colors */
+.fish-card.common { border-color: var(--rarity-common-bg); }
+.fish-card.uncommon { border-color: var(--rarity-uncommon-bg); }
+.fish-card.rare { border-color: var(--rarity-rare-bg); }
+.fish-card.legendary { border-color: var(--rarity-legendary-bg); }
+.fish-card.mythic { border-color: var(--rarity-mythic-bg); }
+.fish-card.chimerical { border-color: var(--rarity-chimerical-bg); }
+.fish-card.seasonal { border-color: var(--rarity-seasonal-bg); }
+.fish-card.junk { border-color: var(--rarity-junk-bg); }
 
 .fish-image {
   width: 100%;
   height: 180px;
   object-fit: contain;
   padding: 1rem;
-  background-color: white;
+  background-color: white; /* Ensure background for transparent images */
+  display: block; /* Remove extra space */
 }
 
 .fish-name {
@@ -1570,6 +1511,7 @@ footer a:hover {
   text-align: center;
   margin: 0;
   padding: 0.2rem 0;
+  font-style: italic; /* Italicize rarity */
 }
 
 .fish-value {
@@ -1579,13 +1521,17 @@ footer a:hover {
   margin: 0 0 1rem;
   padding: 0.2rem 0;
 }
+.fish-value::before {
+    content: '💰 '; /* Add coin emoji */
+}
 
 /* Loading indicator */
 .loading-indicator {
-  display: none;
+  display: none; /* Hidden by default, shown by JS */
   text-align: center;
   padding: 3rem;
   width: 100%;
+  grid-column: 1 / -1; /* Span full grid width */
 }
 
 .spinner {
@@ -1600,13 +1546,12 @@ footer a:hover {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .no-results {
-  grid-column: 1 / -1;
+  display: none; /* Hidden by default, shown by JS */
+  grid-column: 1 / -1; /* Span full grid width */
   text-align: center;
   padding: 2rem;
   color: var(--text-color);
@@ -1617,16 +1562,16 @@ footer a:hover {
 
 /* Modal for detailed fish view */
 .fish-modal {
-  display: none;
+  display: none; /* Hidden by default, shown by JS */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
+  z-index: 1001; /* Higher than header */
   overflow-y: auto;
-  padding: 20px 0;
+  padding: 20px 0; /* Padding for scroll */
 }
 
 .modal-content {
@@ -1634,7 +1579,7 @@ footer a:hover {
   margin: 5vh auto;
   padding: 2.5rem;
   width: 90%;
-  max-width: 900px; /* Increased for better content display */
+  max-width: 900px;
   border-radius: 1.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -1651,12 +1596,15 @@ footer a:hover {
   top: 1.5rem;
   right: 2rem;
   font-size: 2rem;
+  line-height: 1; /* Ensure consistent height */
   color: #555;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s, transform 0.3s;
   z-index: 10;
+  background: none; /* Remove default button styles */
+  border: none;
+  padding: 0;
 }
-
 .close-modal:hover {
   color: #f44336;
   transform: scale(1.1);
@@ -1679,6 +1627,7 @@ footer a:hover {
   background-color: rgba(255, 255, 255, 0.7);
   padding: 1rem;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: block; /* Ensure block display */
 }
 
 .fish-detail-title {
@@ -1695,6 +1644,7 @@ footer a:hover {
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1rem;
+  /* Colors applied by JS based on rarity */
 }
 
 .fish-detail-stats {
@@ -1716,6 +1666,7 @@ footer a:hover {
   color: var(--heading-color);
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  display: block; /* Ensure label is block */
 }
 
 .stat-value {
@@ -1740,6 +1691,10 @@ footer a:hover {
   align-items: center;
   gap: 0.5rem;
 }
+.lore-title::before {
+    content: '📜'; /* Add scroll emoji */
+    font-size: 1.2em;
+}
 
 .lore-text {
   font-style: italic;
@@ -1762,6 +1717,7 @@ footer a:hover {
   flex-wrap: wrap;
   gap: 0.7rem;
   margin-top: 0.5rem;
+  justify-content: center; /* Center tags */
 }
 
 .location-tag {
@@ -1785,125 +1741,17 @@ footer a:hover {
   margin-top: 0.8rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .fish-catalog-section {
-    padding: 2rem;
-  }
-
-  .catalog-content {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-
-  .fish-detail-stats {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .fish-catalog-section {
-    padding: 1.5rem;
-  }
-
-  .catalog-content {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .search-section {
-    flex-direction: column;
-  }
-
-  .search-container {
-    max-width: 100%;
-  }
-
-  .fish-detail-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .modal-content {
-    padding: 2rem 1.5rem;
-    width: 95%;
-  }
-
-  .fish-detail-image {
-    width: 180px;
-    height: 180px;
-  }
-
-  .fish-detail-title {
-    font-size: 1.8rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .fish-catalog-section {
-    padding: 1rem;
-  }
-
-  .catalog-content {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
-  }
-
-  .search-input, .search-button {
-    font-size: 0.9rem;
-    padding: 0.7rem 1rem;
-  }
-
-  .catalog-tabs {
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    flex-wrap: nowrap;
-  }
-
-  .catalog-tab {
-    flex-shrink: 0;
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
-  }
-
-  .modal-content {
-    padding: 1.5rem 1rem;
-    width: 95%;
-  }
-
-  .close-modal {
-    top: 1rem;
-    right: 1rem;
-  }
-
-  .fish-detail-title {
-    font-size: 1.5rem;
-  }
-
-  .fish-detail-image {
-    width: 150px;
-    height: 150px;
-  }
-
-  .fish-detail-stats {
-    gap: 1rem;
-  }
-
-  .stat-item {
-    padding: 1rem;
-  }
-
-  .fish-detail-lore {
-    padding: 1.5rem;
-  }
+.seasonal-badge::before {
+    content: '📅'; /* Add calendar emoji */
+    font-size: 1.1em;
 }
 
 /* --- Calculator Section --- */
-#calculator {
+#calculator { /* Use ID selector */
   background-color: var(--white);
   border-radius: 30px;
   box-shadow: 0 10px 30px var(--shadow-light);
-  padding: 3rem 4%; /* Adjusted padding */
+  padding: 3rem 4%;
 }
 
 #calculator p {
@@ -1917,7 +1765,7 @@ footer a:hover {
 
 .calculator-container {
   display: grid;
-  grid-template-columns: 1fr; /* Default to single column */
+  grid-template-columns: 1fr; /* Default single column */
   gap: 3rem;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 2rem;
@@ -1928,7 +1776,7 @@ footer a:hover {
 /* Use grid for larger screens */
 @media (min-width: 992px) {
   .calculator-container {
-    grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+    grid-template-columns: repeat(2, 1fr);
     gap: 4rem;
   }
 }
@@ -1975,6 +1823,7 @@ footer a:hover {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-color);
+  cursor: pointer; /* Make label clickable */
 }
 
 .calc-input, .calc-select {
@@ -1984,7 +1833,8 @@ footer a:hover {
   font-size: 1rem;
   font-family: var(--font-primary);
   background-color: var(--white);
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add box-shadow transition */
+  width: 100%; /* Ensure inputs fill grid cell */
 }
 
 .calc-input:focus, .calc-select:focus {
@@ -1993,9 +1843,10 @@ footer a:hover {
   box-shadow: 0 0 5px rgba(102, 166, 255, 0.3);
 }
 
+/* Improve number input appearance */
 .calc-input[type="number"] {
-  appearance: textfield; /* Standard property */
-  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 .calc-input::-webkit-outer-spin-button,
 .calc-input::-webkit-inner-spin-button {
@@ -2026,6 +1877,10 @@ footer a:hover {
   color: var(--text-color);
   padding-bottom: 0.8rem;
   border-bottom: 1px dashed #eee;
+  display: flex; /* Use flex for better alignment */
+  justify-content: space-between; /* Space out label and value */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 0.5rem; /* Gap between items if wrapped */
 }
 .calc-output-line:last-child {
   border-bottom: none;
@@ -2034,11 +1889,13 @@ footer a:hover {
 .calc-output-line strong {
   color: var(--heading-color);
   margin-right: 0.5em;
+  white-space: nowrap; /* Prevent label wrapping */
 }
 
 .calc-output-line span {
   font-weight: 600;
   color: #66a6ff; /* Highlight color */
+  text-align: right; /* Align value to the right */
 }
 
 .calc-rarity-header {
@@ -2066,27 +1923,41 @@ footer a:hover {
   gap: 0.8rem 1.5rem;
   margin-top: 0.5rem;
 }
+/* Ensure rarity lines also use flex */
+.calc-output-line.rarity-common,
+.calc-output-line.rarity-uncommon,
+.calc-output-line.rarity-rare,
+.calc-output-line.rarity-legendary,
+.calc-output-line.rarity-mythic,
+.calc-output-line.rarity-chimerical {
+    justify-content: flex-start; /* Align left for rarity list */
+}
 
-.calc-output-line.rarity-common span { color: #6b5b4b; }
-.calc-output-line.rarity-uncommon span { color: #2d5744; }
-.calc-output-line.rarity-rare span { color: #2d4e74; }
-.calc-output-line.rarity-legendary span { color: #b58900; } /* Adjusted for better contrast */
-.calc-output-line.rarity-mythic span { color: #633f79; }
-.calc-output-line.rarity-chimerical span { color: #a04db2; } /* Adjusted for better contrast */
+/* Use rarity variables for text color */
+.calc-output-line.rarity-common span { color: var(--rarity-common-text); }
+.calc-output-line.rarity-uncommon span { color: var(--rarity-uncommon-text); }
+.calc-output-line.rarity-rare span { color: var(--rarity-rare-text); }
+.calc-output-line.rarity-legendary span { color: var(--rarity-legendary-text); }
+.calc-output-line.rarity-mythic span { color: var(--rarity-mythic-text); }
+.calc-output-line.rarity-chimerical span { color: var(--rarity-chimerical-text); } /* Use text color var */
 
+/* Responsive adjustments for calculator */
 @media (max-width: 576px) {
-  .calc-input-grid {
-    grid-template-columns: 1fr; /* Stack inputs on small screens */
-  }
-  .calc-rarity-grid {
-    grid-template-columns: 1fr;
-  }
-  .calc-rarity-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .calc-luck-info {
-    text-align: left;
-  }
+    .calc-rarity-grid {
+        grid-template-columns: 1fr;
+    }
+    .calc-rarity-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .calc-luck-info {
+        text-align: left;
+    }
+    .calc-output-line {
+        justify-content: flex-start; /* Stack label/value */
+    }
+    .calc-output-line span {
+        text-align: left;
+    }
 }

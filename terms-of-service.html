@@ -4,51 +4,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/terms-of-service.html">
   <meta property="og:title" content="Terms of Service - TackleBot Discord Bot">
   <meta property="og:description" content="Terms of Service for TackleBot Discord Bot, outlining usage rules and guidelines.">
   <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
-  
+
   <!-- Theme color for browser UI -->
   <meta name="theme-color" content="#89f7fe">
-  
+
   <title>Terms of Service - TackleBot Discord Bot</title>
   <link rel="stylesheet" href="style.css">
   <!-- Google Fonts (Using Nunito - friendly and rounded) -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- Font Awesome for Discord Icon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-  <!-- Water Background Effect -->
+  <!-- Background Effects: Sky, Water, Fish -->
+  <div id="sky-container">
+      <div id="sun"></div>
+      <div id="moon"></div>
+      <div id="clouds-container"></div>
+  </div>
   <div id="water-background">
     <div class="water-body"></div>
     <div class="water-surface">
-      <div class="wave wave1"></div>
-      <div class="wave wave2"></div>
+        <svg id="wave-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path id="wave-path-1" fill="rgba(137, 247, 254, 0.5)" />
+            <path id="wave-path-2" fill="rgba(102, 166, 255, 0.3)" />
+        </svg>
     </div>
     <div id="bubbles-container"></div>
-    <!-- Fish Container -->
     <div id="fish-container"></div>
   </div>
-
-  <!-- Mouse Trail Effect Container -->
   <div id="mouse-trail"></div>
 
   <!-- Header -->
   <header>
     <nav>
       <div class="logo">
-        <a href="index.html">🎣 TackleBot</a>
+        <a href="index.html" aria-label="TackleBot Home">🎣 TackleBot</a>
       </div>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#features">Features</a></li>
         <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="calculator.html">Calculator</a></li>
         <li><a href="index.html#support">Support</a></li>
         <li><a href="fish-catalog.html">Fish Catalog</a></li>
         <li><a href="terms-of-service.html" class="active">Terms</a></li>
@@ -58,168 +63,171 @@
     </nav>
   </header>
 
-  <!-- Terms of Service Section -->
-  <section class="legal-section animated-section">
-    <h2>Terms of Service <span class="emoji">📜</span></h2>
-    <div class="legal-container">
-      <div class="legal-card">
-        <h3>1. Introduction</h3>
-        <p>By using the TackleBot Discord Bot ("the Bot"), you agree to comply with these Terms of Service ("Terms"). These Terms govern your access to and use of the Bot, including any updates, enhancements, and new features.</p>
-        <p>Visit our website for more information: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank">https://dryram3n.github.io/tacklebotwebsite/</a></p>
-      </div>
+  <!-- Main Content Area -->
+  <main>
+    <!-- Terms of Service Section -->
+    <section class="legal-section animated-section">
+      <h2>Terms of Service <span class="emoji">📜</span></h2>
+      <div class="legal-container">
+        <div class="legal-card">
+          <h3>1. Introduction</h3>
+          <p>By using the TackleBot Discord Bot ("the Bot"), you agree to comply with these Terms of Service ("Terms"). These Terms govern your access to and use of the Bot, including any updates, enhancements, and new features.</p>
+          <p>Visit our website for more information: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank" rel="noopener noreferrer">https://dryram3n.github.io/tacklebotwebsite/</a></p>
+        </div>
 
-      <div class="legal-card">
-        <h3>2. Open Source License</h3>
-        <p>The TackleBot Discord Bot codebase is made available under an open-source license with the following conditions:</p>
-        <ul>
-          <li>You may view, fork, modify, and distribute the code for personal or commercial use</li>
-          <li>You must attribute the original creators when using substantial portions of the code</li>
-          <li>Modified versions must be clearly marked as such and not be misrepresented as the original Bot</li>
-          <li>The original license must be included with any distribution of the code</li>
-        </ul>
-      </div>
+        <div class="legal-card">
+          <h3>2. Open Source License</h3>
+          <p>The TackleBot Discord Bot codebase is made available under an open-source license with the following conditions:</p>
+          <ul>
+            <li>You may view, fork, modify, and distribute the code for personal or commercial use.</li>
+            <li>You must attribute the original creators when using substantial portions of the code.</li>
+            <li>Modified versions must be clearly marked as such and not be misrepresented as the original Bot.</li>
+            <li>The original license must be included with any distribution of the code.</li>
+          </ul>
+        </div>
 
-      <div class="legal-card">
-        <h3>3. Third-Party Services</h3>
-        <p>The Bot utilizes the following third-party services and APIs:</p>
-        <ul>
-          <li>Discord API: For all Bot interactions within Discord</li>
-          <li>Google Generative AI (Gemini): Used solely for the chat summary feature</li>
-          <li>Popcat API: For meme generation, facts, jokes, and other entertainment features</li>
-          <li>French Noodles API: For additional image manipulation and meme creation</li>
-          <li>Other image processing services: For various image-related commands</li>
-        </ul>
-      </div>
+        <div class="legal-card">
+          <h3>3. Third-Party Services</h3>
+          <p>The Bot utilizes the following third-party services and APIs:</p>
+          <ul>
+            <li>Discord API: For all Bot interactions within Discord.</li>
+            <li>Google Generative AI (Gemini): Used solely for the chat summary feature.</li>
+            <li>Popcat API: For meme generation, facts, jokes, and other entertainment features.</li>
+            <li>French Noodles API: For additional image manipulation and meme creation.</li>
+            <li>Other image processing services: For various image-related commands.</li>
+          </ul>
+        </div>
 
-      <div class="legal-card">
-        <h3>4. Compliance Requirements</h3>
-        <h4>4.1 Discord Terms of Service</h4>
-        <p>You must comply with Discord's Terms of Service when using the Bot. This includes but is not limited to:</p>
-        <ul>
-          <li>Not using the Bot to violate Discord's Community Guidelines</li>
-          <li>Not attempting to abuse, exploit, or circumvent Discord rate limits</li>
-          <li>Respecting Discord's intellectual property rights</li>
-          <li>Not using the Bot to collect data from Discord in unauthorized ways</li>
-        </ul>
+        <div class="legal-card">
+          <h3>4. Compliance Requirements</h3>
+          <h4>4.1 Discord Terms of Service</h4>
+          <p>You must comply with Discord's Terms of Service when using the Bot. This includes but is not limited to:</p>
+          <ul>
+            <li>Not using the Bot to violate Discord's Community Guidelines.</li>
+            <li>Not attempting to abuse, exploit, or circumvent Discord rate limits.</li>
+            <li>Respecting Discord's intellectual property rights.</li>
+            <li>Not using the Bot to collect data from Discord in unauthorized ways.</li>
+          </ul>
 
-        <h4>4.2 Google AI Terms of Service</h4>
-        <p>When using the summary feature powered by Google's Gemini AI model, you must adhere to Google's AI Principles and Terms of Service, including:</p>
-        <ul>
-          <li>Not attempting to generate harmful, abusive, or explicit content</li>
-          <li>Not using the AI for unauthorized surveillance or data collection</li>
-          <li>Respecting the usage limits and restrictions of the AI service</li>
-          <li>Not attempting to extract training data or model information</li>
-        </ul>
+          <h4>4.2 Google AI Terms of Service</h4>
+          <p>When using the summary feature powered by Google's Gemini AI model, you must adhere to Google's AI Principles and Terms of Service, including:</p>
+          <ul>
+            <li>Not attempting to generate harmful, abusive, or explicit content.</li>
+            <li>Not using the AI for unauthorized surveillance or data collection.</li>
+            <li>Respecting the usage limits and restrictions of the AI service.</li>
+            <li>Not attempting to extract training data or model information.</li>
+          </ul>
 
-        <h4>4.3 Popcat API and French Noodles API</h4>
-        <p>When using features that leverage these APIs, you agree to:</p>
-        <ul>
-          <li>Use generated content in compliance with their respective Terms of Service</li>
-          <li>Not attempt to overload these services with excessive requests</li>
-          <li>Respect any attribution requirements for content generated through these services</li>
-        </ul>
-      </div>
+          <h4>4.3 Popcat API and French Noodles API</h4>
+          <p>When using features that leverage these APIs, you agree to:</p>
+          <ul>
+            <li>Use generated content in compliance with their respective Terms of Service.</li>
+            <li>Not attempt to overload these services with excessive requests.</li>
+            <li>Respect any attribution requirements for content generated through these services.</li>
+          </ul>
+        </div>
 
-      <div class="legal-card">
-        <h3>5. User Conduct</h3>
-        <p>When using the Bot, you agree not to:</p>
-        <ul>
-          <li>Use the Bot to harass, abuse, or harm others</li>
-          <li>Attempt to gain unauthorized access to the Bot or its connected systems</li>
-          <li>Use the Bot to distribute illegal, infringing, or harmful content</li>
-          <li>Interfere with or disrupt the normal operation of the Bot</li>
-          <li>Abuse moderation commands or channel management features</li>
-          <li>Attempt to exploit the fishing game system</li>
-        </ul>
-      </div>
+        <div class="legal-card">
+          <h3>5. User Conduct</h3>
+          <p>When using the Bot, you agree not to:</p>
+          <ul>
+            <li>Use the Bot to harass, abuse, or harm others.</li>
+            <li>Attempt to gain unauthorized access to the Bot or its connected systems.</li>
+            <li>Use the Bot to distribute illegal, infringing, or harmful content.</li>
+            <li>Interfere with or disrupt the normal operation of the Bot.</li>
+            <li>Abuse moderation commands or channel management features.</li>
+            <li>Attempt to exploit the fishing game system.</li>
+          </ul>
+        </div>
 
-      <div class="legal-card">
-        <h3>6-9. Additional Terms</h3>
-        <div class="expandable">
-          <button class="expand-btn">View Data Usage, Channel Creation, Moderation & Fishing Game Terms</button>
-          <div class="expanded-content">
-            <h4>6. Data Usage and Privacy</h4>
-            <p>The Bot collects and processes certain data to provide its services:</p>
-            <ul>
-              <li>Message content for summary functionality (temporary processing only)</li>
-              <li>User IDs for game progression and personalization</li>
-              <li>Server IDs for moderation and configuration settings</li>
-              <li>Game data for fishing features</li>
-              <li>Channel information for user-created channels</li>
-            </ul>
-            <p>This data is used solely to provide and improve Bot functionality. By using the Bot, you consent to this data processing. For more details, please refer to our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+        <div class="legal-card">
+          <h3>6-9. Additional Terms</h3>
+          <div class="expandable">
+            <button class="expand-btn">View Data Usage, Channel Creation, Moderation & Fishing Game Terms</button>
+            <div class="expanded-content">
+              <h4>6. Data Usage and Privacy</h4>
+              <p>The Bot collects and processes certain data to provide its services:</p>
+              <ul>
+                <li>Message content for summary functionality (temporary processing only).</li>
+                <li>User IDs for game progression and personalization.</li>
+                <li>Server IDs for moderation and configuration settings.</li>
+                <li>Game data for fishing features.</li>
+                <li>Channel information for user-created channels.</li>
+              </ul>
+              <p>This data is used solely to provide and improve Bot functionality. By using the Bot, you consent to this data processing. For more details, please refer to our <a href="privacy-policy.html">Privacy Policy</a>.</p>
 
-            <h4>7. Channel Creation and Management</h4>
-            <p>When creating channels through the Bot:</p>
-            <ul>
-              <li>Each user is limited to creating a maximum of 1 text channel and 1 voice channel at a time</li>
-              <li>Channel creators are responsible for the content in their created channels</li>
-              <li>Moderators and server owners retain the right to delete any channel</li>
-              <li>Private channels will only be accessible to specified users and server moderators</li>
-            </ul>
+              <h4>7. Channel Creation and Management</h4>
+              <p>When creating channels through the Bot:</p>
+              <ul>
+                <li>Each user is limited to creating a maximum of 1 text channel and 1 voice channel at a time.</li>
+                <li>Channel creators are responsible for the content in their created channels.</li>
+                <li>Moderators and server owners retain the right to delete any channel.</li>
+                <li>Private channels will only be accessible to specified users and server moderators.</li>
+              </ul>
 
-            <h4>8. Moderation Features</h4>
-            <p>Server owners may designate moderators who have access to:</p>
-            <ul>
-              <li>Channel deletion permissions</li>
-              <li>Message clearing capabilities</li>
-              <li>User management commands (kick, ban)</li>
-            </ul>
-            <p>These features must be used responsibly and in compliance with Discord's Terms of Service.</p>
+              <h4>8. Moderation Features</h4>
+              <p>Server owners may designate moderators who have access to:</p>
+              <ul>
+                <li>Channel deletion permissions.</li>
+                <li>Message clearing capabilities.</li>
+                <li>User management commands (kick, ban).</li>
+              </ul>
+              <p>These features must be used responsibly and in compliance with Discord's Terms of Service.</p>
 
-            <h4>9. Fishing Game Features</h4>
-            <p>When using the fishing game functionality:</p>
-            <ul>
-              <li>The Bot tracks your fishing statistics and inventory</li>
-              <li>Progress is tied to your Discord user ID</li>
-              <li>Manipulation or exploitation of the fishing system is prohibited</li>
-              <li>Server owners may enable or disable fishing features as needed</li>
-            </ul>
+              <h4>9. Fishing Game Features</h4>
+              <p>When using the fishing game functionality:</p>
+              <ul>
+                <li>The Bot tracks your fishing statistics and inventory.</li>
+                <li>Progress is tied to your Discord user ID.</li>
+                <li>Manipulation or exploitation of the fishing system is prohibited.</li>
+                <li>Server owners may enable or disable fishing features as needed.</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="legal-card">
-        <h3>10-13. Legal Notices</h3>
-        <div class="expandable">
-          <button class="expand-btn">View Warranty, Liability, Changes & Contact Information</button>
-          <div class="expanded-content">
-            <h4>10. Disclaimer of Warranty</h4>
-            <p>The Bot is provided "as is" without warranty of any kind, either expressed or implied. The development team is not responsible for any damages or losses resulting from the use of the Bot.</p>
+        <div class="legal-card">
+          <h3>10-13. Legal Notices</h3>
+          <div class="expandable">
+            <button class="expand-btn">View Warranty, Liability, Changes & Contact Information</button>
+            <div class="expanded-content">
+              <h4>10. Disclaimer of Warranty</h4>
+              <p>The Bot is provided "as is" without warranty of any kind, either expressed or implied. The development team is not responsible for any damages or losses resulting from the use of the Bot.</p>
 
-            <h4>11. Limitation of Liability</h4>
-            <p>In no event shall the developers of the Bot be liable for any damages arising out of the use or inability to use the Bot, even if they have been advised of the possibility of such damages.</p>
+              <h4>11. Limitation of Liability</h4>
+              <p>In no event shall the developers of the Bot be liable for any damages arising out of the use or inability to use the Bot, even if they have been advised of the possibility of such damages.</p>
 
-            <h4>12. Changes to Terms</h4>
-            <p>These Terms may be updated from time to time. Continued use of the Bot after such changes constitutes acceptance of the new Terms.</p>
+              <h4>12. Changes to Terms</h4>
+              <p>These Terms may be updated from time to time. Continued use of the Bot after such changes constitutes acceptance of the new Terms.</p>
 
-            <h4>13. Contact</h4>
-            <p>For questions about these Terms or the Bot's operation, please contact the development team through the official Bot support server or visit our website: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank">https://dryram3n.github.io/tacklebotwebsite/</a></p>
+              <h4>13. Contact</h4>
+              <p>For questions about these Terms or the Bot's operation, please contact the development team through the official Bot support server or visit our website: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank" rel="noopener noreferrer">https://dryram3n.github.io/tacklebotwebsite/</a></p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="legal-footer">
-        <p>Last updated: March 25, 2025</p>
-        <a href="index.html" class="back-to-top">Back to Home Page</a>
+        <div class="legal-footer">
+          <p>Last updated: March 25, 2025</p>
+          <a href="index.html" class="back-to-top">Back to Home Page</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> | 
-      <a href="terms-of-service.html">Terms of Service</a> | 
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+      <a href="terms-of-service.html">Terms of Service</a> |
       <a href="privacy-policy.html">Privacy Policy</a>
     </p>
     <div class="social-links">
-      <a href="#" aria-label="Discord Support Server"><i class="fab fa-discord"></i></a>
+      <a href="#" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
     </div>
   </footer>
 
-  <!-- Load fish images data before main script -->
-  <script src="fishImages.js"></script>
-  <script src="script.js"></script>
+  <!-- Load scripts deferred -->
+  <script src="fishImages.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 
 </html>
