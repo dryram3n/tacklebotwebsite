@@ -47,11 +47,11 @@
   --rarity-mythic-bg: #c79de0;
   --rarity-mythic-text: #633f79;
   --rarity-chimerical-bg: #cd7ae2;
-  --rarity-chimerical-text: #fff; /* High contrast needed */
+  --rarity-chimerical-text: #ea00ff;
   --rarity-seasonal-bg: #f08080;
-  --rarity-seasonal-text: #fff; /* High contrast needed */
+  --rarity-seasonal-text: #fff;
   --rarity-junk-bg: #a9a9a9;
-  --rarity-junk-text: #fff; /* High contrast needed */
+  --rarity-junk-text: #fff;
 }
 
 * {
