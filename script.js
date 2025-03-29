@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubblesContainer = document.getElementById('bubbles-container');
     const fishContainer = document.getElementById('fish-container');
     const trail = document.getElementById('mouse-trail');
+    const uiToggleContainer = document.getElementById('ui-toggle-container'); // Added
+    const hideUiButton = document.getElementById('hide-ui-button'); // Added
+    const showUiButton = document.getElementById('show-ui-button'); // Added
 
     // --- Sky, Sun, Moon ---
     const NUM_CLOUDS = isLowPerfDevice ? 3 : 7;
@@ -955,6 +958,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function initStaticListeners() {
         // Button Ripple Effect (using event delegation on body for potential future dynamic buttons)
         document.body.addEventListener('mousedown', function (e) {
+            // Exclude UI toggle buttons from ripple
+            if (e.target.closest('#ui-toggle-container')) return;
+
             const button = e.target.closest('.button'); // Find closest ancestor button
             if (!button) return; // Exit if click wasn't on or inside a button
 
@@ -977,7 +983,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Fade-in Sections on Scroll (Intersection Observer)
-        const animatedSections = document.querySelectorAll('.animated-section');
+        // Select sections that should initially fade in
+        const animatedSections = document.querySelectorAll('.animated-section.fade-in');
         if ('IntersectionObserver' in window && animatedSections.length > 0) {
             const observerOptions = {
                 root: null, // Use viewport as root
@@ -988,13 +995,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+                        entry.target.classList.remove('fade-in'); // Remove fade-in class once visible
                         obs.unobserve(entry.target); // Stop observing once visible
                     }
                 });
             }, observerOptions);
             animatedSections.forEach(section => observer.observe(section));
         } else { // Fallback for older browsers or no sections found
-            animatedSections.forEach(section => section.classList.add('visible')); // Make visible immediately
+            animatedSections.forEach(section => {
+                section.classList.add('visible');
+                section.classList.remove('fade-in');
+            }); // Make visible immediately
         }
 
 
@@ -1067,26 +1078,31 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update ARIA attribute for accessibility
             button.setAttribute('aria-expanded', !isVisible);
             // Update button text (handled by CSS ::after now)
-            // button.textContent = isVisible
-            //     ? button.textContent.replace('Hide', 'View').replace('−', '+') // Use minus sign instead of hyphen
-            //     : button.textContent.replace('View', 'Hide').replace('+', '−');
         });
         // Initialize ARIA attributes for expandable buttons
         document.querySelectorAll('.expand-btn').forEach(button => {
             const expandedContent = button.nextElementSibling;
             const isVisible = expandedContent?.style.display === 'block';
             button.setAttribute('aria-expanded', isVisible);
-            // Ensure initial text matches state (handled by CSS ::after now)
-            //  button.textContent = isVisible
-            //     ? button.textContent.replace('View', 'Hide').replace('+', '−')
-            //     : button.textContent.replace('Hide', 'View').replace('−', '+');
-            //  // Ensure the correct symbol is used initially based on display state
-            //  if (isVisible && !button.textContent.includes('−')) {
-            //      button.textContent = button.textContent.replace('+','−');
-            //  } else if (!isVisible && !button.textContent.includes('+')) {
-            //      button.textContent = button.textContent.replace('−','+');
-            //  }
         });
+
+        // --- UI Toggle Button Logic ---
+        if (hideUiButton && showUiButton) {
+            hideUiButton.addEventListener('click', () => {
+                document.body.classList.add('ui-hidden');
+                hideUiButton.style.display = 'none';
+                showUiButton.style.display = 'inline-flex'; // Use inline-flex to match .button style
+            });
+
+            showUiButton.addEventListener('click', () => {
+                document.body.classList.remove('ui-hidden');
+                hideUiButton.style.display = 'inline-flex'; // Use inline-flex
+                showUiButton.style.display = 'none';
+            });
+        } else {
+            console.warn("UI toggle buttons not found.");
+        }
+        // --- End UI Toggle Button Logic ---
     }
 
 

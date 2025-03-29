@@ -208,6 +208,8 @@ header {
   width: 100%;
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
+  transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+  will-change: opacity; /* Added for UI hide */
 }
 
 nav {
@@ -444,6 +446,8 @@ nav ul li a.active {
 /* --- Sections General Styling --- */
 main {
     display: block; /* Ensure main element takes block layout */
+    transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+    will-change: opacity; /* Added for UI hide */
 }
 
 section {
@@ -652,6 +656,8 @@ footer {
   border-image: var(--gradient-accent) 1;
   position: relative;
   z-index: 10;
+  transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+  will-change: opacity; /* Added for UI hide */
 }
 
 footer p {
@@ -690,10 +696,15 @@ footer a:hover {
 
 /* --- Animation on Scroll --- */
 .animated-section {
-  opacity: 0;
-  transform: translateY(40px);
+  opacity: 1; /* Start visible */
+  transform: translateY(0); /* Start in place */
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   will-change: opacity, transform; /* Optimize animation */
+}
+
+.animated-section.fade-in { /* New class for initial fade-in */
+  opacity: 0;
+  transform: translateY(40px);
 }
 
 .animated-section.visible {
@@ -1961,4 +1972,49 @@ footer a:hover {
     .calc-output-line span {
         text-align: left;
     }
+}
+
+/* --- UI Toggle Button --- */
+#ui-toggle-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1001; /* Above header/footer */
+    transition: opacity 0.5s ease-in-out;
+    will-change: opacity;
+}
+
+.ui-toggle-button {
+    padding: 10px 15px; /* Smaller padding */
+    font-size: 0.9rem;
+    background: var(--gradient-secondary);
+    color: var(--white);
+    box-shadow: 0 3px 10px rgba(238, 156, 167, 0.4);
+}
+.ui-toggle-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(238, 156, 167, 0.5);
+}
+
+.ui-toggle-button.icon-button {
+    padding: 10px; /* Square padding */
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    border-radius: 50%; /* Circular */
+    font-size: 1.1rem; /* Slightly larger icon */
+    line-height: 1; /* Center icon vertically */
+}
+
+/* --- UI Hidden State --- */
+body.ui-hidden header,
+body.ui-hidden main,
+body.ui-hidden footer {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Keep toggle button visible and interactive when UI is hidden */
+body.ui-hidden #ui-toggle-container {
+    opacity: 1;
+    pointer-events: auto;
 }
