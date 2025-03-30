@@ -470,6 +470,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let adjustFishToWaterInterval = null; // Interval to check if fish are above water
     let fishRefreshInterval = null; // Interval to periodically replace fish
     let fishCount = 0; // Target number of fish on screen
+    // ADDED: Variable to track water top boundary in vh
+    let currentWaterTopVh = 50;
 
     function initSwimmingFish() {
         if (!fishContainer || !waterBody) {
@@ -487,6 +489,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fishImageKeys = Object.keys(FISH_IMAGES); // Get all fish names
         fishImages = fishImageKeys.map(key => FISH_IMAGES[key]); // Get all image URLs
         currentWaterHeightVh = parseFloat(waterBody.style.height) || 50; // Get initial water height
+        // ADDED: Calculate initial water top
+        currentWaterTopVh = 100 - currentWaterHeightVh;
 
         // Periodically check if fish are above the water line due to scrolling
         adjustFishToWaterInterval = setInterval(() => {
@@ -495,15 +499,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Only adjust if water height changed significantly
             if (Math.abs(waterHeight - currentWaterHeightVh) > 1) {
                 currentWaterHeightVh = waterHeight; // Update tracked height
+                // ADDED: Update water top boundary
+                currentWaterTopVh = 100 - currentWaterHeightVh;
+
                 activeFish.forEach(fish => {
                     if (!fish?.element?.isConnected) return; // Skip if fish element was removed
-                    // If fish is now above the water surface, move it down
-                    if (fish.currentBottomVh > currentWaterHeightVh - 2) { // Use a small buffer (2vh)
-                        // Move fish to a random position within the new water height
-                        const newY = currentWaterHeightVh * (0.1 + Math.random() * 0.7); // 10% to 80% of water height
-                        fish.element.style.bottom = `${newY.toFixed(1)}vh`;
-                        fish.originalY = newY; // Update base vertical position
-                        fish.currentBottomVh = newY; // Update current vertical position
+
+                    // CHANGED: Check if fish is above the water surface (using Y from top)
+                    const fishTopBoundary = currentWaterTopVh + 2; // Add 2vh buffer below surface
+                    if (fish.currentY_vh < fishTopBoundary) {
+                        // Move fish to a random position within the new water height (from top)
+                        const newY_vh = fishTopBoundary + Math.random() * (currentWaterHeightVh - 4); // Keep within buffer
+                        fish.element.style.transform = `translate(${fish.currentX_vw.toFixed(1)}vw, ${newY_vh.toFixed(1)}vh) scaleX(${fish.direction === 'left' ? -1 : 1})`;
+                        fish.originalY_vh = newY_vh; // Update base vertical position (from top)
+                        fish.currentY_vh = newY_vh; // Update current vertical position (from top)
                     }
                 });
             }
@@ -604,33 +613,36 @@ document.addEventListener('DOMContentLoaded', () => {
             fishElement.style.height = 'auto'; // Maintain aspect ratio
 
             // Set initial position within the current water height
-            const startX = Math.random() * 100; // Random horizontal start (vw)
-            const startY = Math.random() * (currentWaterHeightVh * 0.8); // Random vertical start (vh, within 80% of water)
-            fishElement.style.left = `${startX.toFixed(1)}vw`;
-            fishElement.style.bottom = `${startY.toFixed(1)}vh`;
+            const startX_vw = Math.random() * 100; // Random horizontal start (vw)
+            // CHANGED: Calculate Y position from the TOP within water boundaries
+            const startY_vh = currentWaterTopVh + (Math.random() * (currentWaterHeightVh * 0.8)); // Random vertical start (vh, within 80% of water height, from top)
+
             fishElement.style.opacity = '0'; // Start invisible for fade-in
 
-            // Set initial direction and flip image if needed
+            // Set initial direction and determine scaleX for flipping
             const direction = Math.random() > 0.5 ? 'right' : 'left';
-            if (direction === 'left') fishElement.classList.add('flip-horizontal');
+            const scaleX = direction === 'left' ? -1 : 1;
+
+            // CHANGED: Set initial transform
+            fishElement.style.transform = `translate(${startX_vw.toFixed(1)}vw, ${startY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
 
             // Calculate speed (slower for larger fish, adjusted by performance)
             const speedFactor = isLowPerfDevice ? 0.4 : 1;
             const baseSpeed = (40 - size * 0.3) * 0.05 * speedFactor; // Base speed in vw/sec
             const speed = Math.max(0.5, Math.min(4, baseSpeed)); // Clamp speed
 
-            // Store fish state data
+            // Store fish state data (using vw/vh from top-left)
             const fishData = {
                 element: fishElement,
                 speed: speed, // Horizontal speed (vw per second)
                 direction: direction,
                 verticalDirection: Math.random() > 0.5 ? 'up' : 'down', // Initial vertical direction
                 verticalAmount: Math.random() * 5 + 2, // How far up/down it moves (vh)
-                originalY: startY, // Base vertical position (vh)
+                originalY_vh: startY_vh, // Base vertical position (vh from top)
                 wiggleAmount: Math.random() * 0.4 + 0.3, // How much it wiggles
                 wigglePhase: Math.random() * Math.PI * 2, // Starting point in wiggle cycle
-                currentXPercent: startX, // Current horizontal position (vw)
-                currentBottomVh: startY // Current vertical position (vh)
+                currentX_vw: startX_vw, // Current horizontal position (vw)
+                currentY_vh: startY_vh // Current vertical position (vh from top)
             };
 
             fishContainer.appendChild(fishElement);
@@ -655,7 +667,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const elapsedSeconds = elapsedSinceLastThrottledFrame / 1000; // Time since last update in seconds
         const boundaryPadding = 3; // Keep fish away from screen edges (vw)
-        const waterTopBoundary = currentWaterHeightVh - 3; // Keep fish below water surface (vh)
+        // CHANGED: Define water boundaries from the top
+        const waterTopBoundary_vh = currentWaterTopVh + 1; // 1vh below surface
+        const waterBottomBoundary_vh = 100 - 2; // 2vh above viewport bottom
 
         activeFish.forEach((fish, index) => {
             // Check if fish element still exists in the DOM
@@ -667,66 +681,71 @@ document.addEventListener('DOMContentLoaded', () => {
             // Destructure fish data for easier access
             let {
                 element, speed, direction, verticalDirection, verticalAmount,
-                originalY, wiggleAmount, wigglePhase, currentXPercent, currentBottomVh
+                originalY_vh, wiggleAmount, wigglePhase, currentX_vw, currentY_vh
             } = fish;
 
             // Update Horizontal Movement & Check Boundaries
             const horizontalMove = speed * elapsedSeconds;
+            let scaleX = direction === 'left' ? -1 : 1; // Keep track of scale for transform
+
             if (direction === 'right') {
-                currentXPercent += horizontalMove;
-                if (currentXPercent > (100 - boundaryPadding)) { // Hit right edge
+                currentX_vw += horizontalMove;
+                if (currentX_vw > (100 - boundaryPadding)) { // Hit right edge
                     direction = 'left';
-                    element.classList.add('flip-horizontal'); // Flip image
+                    scaleX = -1; // Update scale for flipping
                 }
             } else { // Moving left
-                currentXPercent -= horizontalMove;
-                if (currentXPercent < boundaryPadding) { // Hit left edge
+                currentX_vw -= horizontalMove;
+                if (currentX_vw < boundaryPadding) { // Hit left edge
                     direction = 'right';
-                    element.classList.remove('flip-horizontal'); // Unflip image
+                    scaleX = 1; // Update scale for flipping
                 }
             }
             // Small random chance to change direction mid-screen
             if (Math.random() < 0.0005) {
                 direction = (direction === 'right' ? 'left' : 'right');
-                element.classList.toggle('flip-horizontal');
+                scaleX = direction === 'left' ? -1 : 1; // Update scale
             }
 
-            // Update Vertical Movement & Check Boundaries
+            // Update Vertical Movement & Check Boundaries (using vh from top)
             const verticalSpeed = speed * 0.3; // Vertical movement slower than horizontal
             const verticalMove = verticalSpeed * elapsedSeconds;
-            let targetY = currentBottomVh + (verticalDirection === 'up' ? verticalMove : -verticalMove);
+            let targetY_vh = currentY_vh + (verticalDirection === 'up' ? -verticalMove : verticalMove); // 'up' decreases vh
 
-            // Check vertical boundaries (stay within water and near original Y)
-            if (verticalDirection === 'up' && targetY > Math.min(waterTopBoundary, originalY + verticalAmount)) {
+            // Define vertical movement range based on original position
+            const verticalTopLimit = Math.max(waterTopBoundary_vh, originalY_vh - verticalAmount);
+            const verticalBottomLimit = Math.min(waterBottomBoundary_vh, originalY_vh + verticalAmount);
+
+            // Check vertical boundaries
+            if (verticalDirection === 'up' && targetY_vh < verticalTopLimit) {
                 verticalDirection = 'down'; // Turn down
-                targetY = currentBottomVh - verticalMove; // Adjust target for new direction
-            } else if (verticalDirection === 'down' && targetY < Math.max(2, originalY - verticalAmount)) { // Keep slightly above bottom (2vh)
+                targetY_vh = currentY_vh + verticalMove; // Adjust target for new direction
+            } else if (verticalDirection === 'down' && targetY_vh > verticalBottomLimit) {
                 verticalDirection = 'up'; // Turn up
-                targetY = currentBottomVh + verticalMove; // Adjust target for new direction
+                targetY_vh = currentY_vh - verticalMove; // Adjust target for new direction
             }
             // Small random chance to change vertical direction
             if (Math.random() < 0.002) {
                 verticalDirection = (verticalDirection === 'up' ? 'down' : 'up');
             }
 
-            // Apply vertical movement, clamping within water bounds
-            currentBottomVh = Math.max(1, Math.min(waterTopBoundary, targetY));
-
             // Apply Wiggle (subtle vertical oscillation)
             wigglePhase += 6 * elapsedSeconds; // Adjust wiggle speed
             const wiggle = Math.sin(wigglePhase) * wiggleAmount;
-            currentBottomVh += wiggle * 0.1; // Apply small wiggle offset
+            targetY_vh += wiggle * 0.1; // Apply small wiggle offset
 
-            // Apply updated position styles to the DOM element
-            element.style.left = `${currentXPercent.toFixed(1)}vw`;
-            element.style.bottom = `${currentBottomVh.toFixed(1)}vh`;
+            // Clamp final vertical position within absolute water boundaries
+            currentY_vh = Math.max(waterTopBoundary_vh, Math.min(waterBottomBoundary_vh, targetY_vh));
+
+            // CHANGED: Apply updated position and flip using transform
+            element.style.transform = `translate(${currentX_vw.toFixed(1)}vw, ${currentY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
 
             // Update the fish object state in the array
             fish.direction = direction;
             fish.verticalDirection = verticalDirection;
             fish.wigglePhase = wigglePhase % (Math.PI * 2); // Keep phase value reasonable
-            fish.currentXPercent = currentXPercent;
-            fish.currentBottomVh = currentBottomVh;
+            fish.currentX_vw = currentX_vw;
+            fish.currentY_vh = currentY_vh;
         });
     }
 

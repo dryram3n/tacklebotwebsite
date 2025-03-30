@@ -209,7 +209,7 @@ header {
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
   transition: opacity 0.5s ease-in-out; /* Added for UI hide */
-  will-change: opacity; /* Added for UI hide */
+  /* REMOVED will-change: opacity; */
 }
 
 nav {
@@ -447,7 +447,7 @@ nav ul li a.active {
 main {
     display: block; /* Ensure main element takes block layout */
     transition: opacity 0.5s ease-in-out; /* Added for UI hide */
-    will-change: opacity; /* Added for UI hide */
+    /* REMOVED will-change: opacity; */
 }
 
 section {
@@ -657,7 +657,7 @@ footer {
   position: relative;
   z-index: 10;
   transition: opacity 0.5s ease-in-out; /* Added for UI hide */
-  will-change: opacity; /* Added for UI hide */
+  /* REMOVED will-change: opacity; */
 }
 
 footer p {
@@ -995,7 +995,7 @@ footer a:hover {
   transition: background 2s ease-in-out;
   background: var(--sky-day); /* Default */
   contain: strict; /* Performance hint */
-  will-change: background;
+  /* REMOVED will-change: background; */
 }
 
 #sun, #moon {
@@ -1091,7 +1091,7 @@ footer a:hover {
   overflow: hidden;
   pointer-events: none;
   contain: strict;
-  will-change: opacity; /* Might change if reduced motion */
+  /* REMOVED will-change: opacity; */
 }
 
 .water-body {
@@ -1102,7 +1102,7 @@ footer a:hover {
   left: 0;
   /* Height transition handled by JS for performance */
   height: 50vh; /* Initial height */
-  will-change: height;
+  /* REMOVED will-change: height; */
   transform: translateZ(0); /* Promote to own layer */
 }
 
@@ -1113,7 +1113,7 @@ footer a:hover {
   bottom: 50vh; /* Match water-body height */
   left: 0;
   /* Bottom transition handled by JS */
-  will-change: bottom;
+  /* REMOVED will-change: bottom; */
   transform: translateZ(0); /* Promote to own layer */
   overflow: visible; /* Allow wave peaks */
 }
@@ -1170,7 +1170,8 @@ footer a:hover {
   position: absolute;
   width: 100%;
   height: 100%; /* Cover the whole background area */
-  bottom: 0;
+  /* CHANGE: Use top instead of bottom for positioning context */
+  top: 0;
   left: 0;
   z-index: 3;      /* Above water body/surface, below UI */
   overflow: hidden;
@@ -1179,16 +1180,20 @@ footer a:hover {
 
 .swimming-fish {
   position: absolute;
+  /* CHANGE: Establish top/left origin for transform */
+  top: 0;
+  left: 0;
   z-index: 4;      /* Above other background elements */
   transform-origin: center;
-  will-change: left, bottom, opacity, transform; /* Properties changed by JS/CSS */
+  /* CHANGE: Update will-change properties */
+  will-change: transform, opacity; /* Properties changed by JS/CSS */
   transition: opacity 0.5s ease-in; /* Fade-in transition */
   opacity: 0; /* Start hidden, faded in by JS */
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2)); /* Softer shadow */
   /* Width set by JS */
   height: auto; /* Maintain aspect ratio */
   display: block;
-  /* Left/Bottom set by JS */
+  /* REMOVE: Left/Bottom styles - will be controlled by transform */
 }
 
 .swimming-fish img {
@@ -1200,14 +1205,7 @@ footer a:hover {
   z-index: 1;
 }
 
-.swimming-fish.flip-horizontal {
-  /* Flipping handled by JS adding/removing class */
-  transform: scaleX(-1);
-}
-/* Optional: slight scale on hover */
-/* .swimming-fish:hover {
-  transform: scale(1.05);
-} */
+/* REMOVED: .flip-horizontal class - flipping will be done via transform: scaleX() */
 
 
 /* --- Performance Optimizations & Reduced Motion --- */
