@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const calcContainer = document.getElementById('calculator');
 
     if (calcContainer) {
-      // --- Constants (Copied from .txt files) ---
-      // It's better if these were actual JS modules, but copying for now
+      // Constants for upgrades and game mechanics
+      // Ideally, these would be imported from shared modules, but copied for now
       const SHOP_UPGRADES = {
           luck: { name: "Lucky Lure", description: "Increases chance of rare fish", maxLevel: 100, basePrice: 75, priceMultiplier: 1.18, effectPerLevel: 0.5 },
           speed: { name: "Quick Cast", description: "Reduces fishing time", maxLevel: 100, basePrice: 100, priceMultiplier: 1.18, effectPerLevel: 0.5 },
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
           treasureHunter: { name: "Treasure Hunter", description: "Increases chest spawn rate and value", maxLevel: 5, basePrice: 200000, priceMultiplier: 2.0, effectPerLevel: 10, researchTimeHours: 24, timeMultiplier: 1.5, requires: { value: 50 } },
           specialLure: { name: "Special Fish Attractor", description: "Increases special fish chance", maxLevel: 5, basePrice: 500000, priceMultiplier: 2.0, effectPerLevel: 5, researchTimeHours: 36, timeMultiplier: 1.5, requires: { luck: 60, value: 40 } }
       };
-      // --- UPDATED FISHING_LOCATIONS START ---
+      // Updated fishing location data
       const FISHING_LOCATIONS = {
           pond: {
               name: "Tranquil Pond",
@@ -48,36 +48,35 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           abyss: {
               name: "The Abyss",
-              fishModifiers: { common: 0.6, uncommon: 0.75, rare: 1.0, legendary: 1.1, mythic: 0.6, chimerical: 0.25 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 10, legendaryBoost: 10, mythicBoost: 2, chimericalBoost: 1 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.6, uncommon: 0.75, rare: 1.0, legendary: 1.1, mythic: 0.6, chimerical: 0.25 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 10, legendaryBoost: 10, mythicBoost: 2, chimericalBoost: 1
           },
           sunken_city: {
               name: "Sunken City",
-              fishModifiers: { common: 0.5, uncommon: 0.65, rare: 0.9, legendary: 1.2, mythic: 0.8, chimerical: 0.3 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 5, legendaryBoost: 15, mythicBoost: 3, chimericalBoost: 1 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.5, uncommon: 0.65, rare: 0.9, legendary: 1.2, mythic: 0.8, chimerical: 0.3 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 5, legendaryBoost: 15, mythicBoost: 3, chimericalBoost: 1
           },
           vortex: {
               name: "Mystic Vortex",
-              fishModifiers: { common: 0.4, uncommon: 0.55, rare: 0.8, legendary: 1.1, mythic: 1.0, chimerical: 0.35 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 10, mythicBoost: 5, chimericalBoost: 2 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.4, uncommon: 0.55, rare: 0.8, legendary: 1.1, mythic: 1.0, chimerical: 0.35 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 10, mythicBoost: 5, chimericalBoost: 2
           },
           cosmic_sea: {
               name: "Cosmic Sea",
-              fishModifiers: { common: 0.3, uncommon: 0.45, rare: 0.7, legendary: 1.0, mythic: 1.2, chimerical: 0.4 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 15, mythicBoost: 5, chimericalBoost: 2 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.3, uncommon: 0.45, rare: 0.7, legendary: 1.0, mythic: 1.2, chimerical: 0.4 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 15, mythicBoost: 5, chimericalBoost: 2
           },
           temporal_tide: {
               name: "Temporal Tide",
-              fishModifiers: { common: 0.2, uncommon: 0.35, rare: 0.6, legendary: 0.9, mythic: 1.2, chimerical: 0.45 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 10, mythicBoost: 8, chimericalBoost: 3 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.2, uncommon: 0.35, rare: 0.6, legendary: 0.9, mythic: 1.2, chimerical: 0.45 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 10, mythicBoost: 8, chimericalBoost: 3
           },
           fishverse: {
               name: "Fishverse",
-              fishModifiers: { common: 0.1, uncommon: 0.25, rare: 0.5, legendary: 0.8, mythic: 1.2, chimerical: 1.0 }, // Chimerical updated
-              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 5, mythicBoost: 10, chimericalBoost: 5 // Mythic/Chimerical updated
+              fishModifiers: { common: 0.1, uncommon: 0.25, rare: 0.5, legendary: 0.8, mythic: 1.2, chimerical: 1.0 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 5, mythicBoost: 10, chimericalBoost: 5
           }
       };
-      // --- UPDATED FISHING_LOCATIONS END ---
       const SEASONS = {
           spring: { name: 'Spring', modifier: { common: 0.9, uncommon: 1.0, rare: 1.05, legendary: 1.05, mythic: 1.1, chimerical: 1.0 } },
           summer: { name: 'Summer', modifier: { common: 1.0, uncommon: 1.0, rare: 1.0, legendary: 1.05, mythic: 1.1, chimerical: 1.05 } },
@@ -86,9 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       const RARITY_WEIGHTS = { common: 0.608, uncommon: 0.218, rare: 0.099, legendary: 0.03, mythic: 0.025, chimerical: 0.02 };
       const SPECIAL_FISH_CHANCE = 0.005; // 0.5% base chance
-      const BASE_INVENTORY = 20; // Assuming a base inventory size
+      const BASE_INVENTORY = 20; // Default inventory size
 
-      // --- Get DOM Elements ---
+      // Get references to the input and output elements in the HTML
       const inputs = {
         luck: document.getElementById('calc-luck'),
         speed: document.getElementById('calc-speed'),
@@ -123,44 +122,42 @@ document.addEventListener('DOMContentLoaded', () => {
         rarityChimerical: document.getElementById('calc-output-rarity-chimerical')
       };
 
-      // --- Populate Select Options ---
+      // Fill the location and season dropdowns with options
       function populateOptions() {
         // Locations
-        // Clear existing options first
-        inputs.location.innerHTML = '';
+        inputs.location.innerHTML = ''; // Clear existing options first
         for (const key in FISHING_LOCATIONS) {
           const option = document.createElement('option');
           option.value = key;
-          option.textContent = FISHING_LOCATIONS[key].name; // Use the updated name
+          option.textContent = FISHING_LOCATIONS[key].name; // Use the display name
           inputs.location.appendChild(option);
         }
         // Seasons
-        // Clear existing options first
-        inputs.season.innerHTML = '';
+        inputs.season.innerHTML = ''; // Clear existing options first
         for (const key in SEASONS) {
           const option = document.createElement('option');
           option.value = key;
           option.textContent = SEASONS[key].name;
           inputs.season.appendChild(option);
         }
-        // Set default season based on current date
-        const currentMonth = new Date().getMonth();
-        let currentSeasonKey = 'winter';
-        if (currentMonth >= 2 && currentMonth <= 4) currentSeasonKey = 'spring';
-        else if (currentMonth >= 5 && currentMonth <= 7) currentSeasonKey = 'summer';
-        else if (currentMonth >= 8 && currentMonth <= 10) currentSeasonKey = 'fall';
+        // Set default season based on the current date (approximated)
+        const currentMonth = new Date().getMonth(); // 0 = Jan, 11 = Dec
+        let currentSeasonKey = 'winter'; // Default
+        if (currentMonth >= 2 && currentMonth <= 4) currentSeasonKey = 'spring'; // Mar, Apr, May
+        else if (currentMonth >= 5 && currentMonth <= 7) currentSeasonKey = 'summer'; // Jun, Jul, Aug
+        else if (currentMonth >= 8 && currentMonth <= 10) currentSeasonKey = 'fall'; // Sep, Oct, Nov
         inputs.season.value = currentSeasonKey;
       }
 
-      // --- Helper Functions ---
+      // Helper to safely get integer input values within bounds
       function getInputValue(element, maxVal = Infinity) {
         const value = parseInt(element.value, 10) || 0;
-        return Math.max(0, Math.min(value, maxVal)); // Ensure value is within 0 and maxVal
+        return Math.max(0, Math.min(value, maxVal)); // Ensure value is between 0 and maxVal
       }
 
-      // --- Calculation Logic ---
+      // Main function to calculate and display all stats
       function calculateStats() {
-        // Read all input values
+        // Read all current input values
         const levels = {
           luck: getInputValue(inputs.luck, SHOP_UPGRADES.luck.maxLevel),
           speed: getInputValue(inputs.speed, SHOP_UPGRADES.speed.maxLevel),
@@ -178,15 +175,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedLocation = inputs.location.value;
         const selectedSeason = inputs.season.value;
 
-        // --- Calculate Individual Stats ---
+        // Calculate individual stats based on levels and constants
 
-        // Speed Reduction
+        // Speed Reduction (%)
         const baseSpeed = levels.speed * SHOP_UPGRADES.speed.effectPerLevel;
         const efficiencyEffect = levels.efficiency * RESEARCH_UPGRADES.efficiency.effectPerLevel;
         const totalSpeedReduction = baseSpeed + efficiencyEffect;
         outputs.speed.textContent = `${totalSpeedReduction.toFixed(1)}%`;
 
-        // Sell Value Bonus
+        // Sell Value Bonus (%)
         const totalValueBonus = levels.value * SHOP_UPGRADES.value.effectPerLevel;
         outputs.value.textContent = `${totalValueBonus.toFixed(1)}%`;
 
@@ -194,22 +191,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalInventory = BASE_INVENTORY + (levels.inventory * SHOP_UPGRADES.inventory.effectPerLevel);
         outputs.inventory.textContent = `${totalInventory}`;
 
-        // Multi-Catch Chance
+        // Multi-Catch Chance (%)
         const baseMultiCatch = levels.multiCatch * SHOP_UPGRADES.multiCatch.effectPerLevel;
         const masterNetEffect = levels.masterNet * RESEARCH_UPGRADES.masterNet.effectPerLevel;
         const totalMultiCatch = baseMultiCatch + masterNetEffect;
         outputs.multiCatch.textContent = `${totalMultiCatch.toFixed(1)}%`;
 
-        // Special Fish Chance
+        // Special Fish Chance (%)
         const specialLureBoost = levels.specialLure * RESEARCH_UPGRADES.specialLure.effectPerLevel;
-        const totalSpecialChance = (SPECIAL_FISH_CHANCE * 100) + specialLureBoost; // Base chance is 0.005 -> 0.5%
+        const totalSpecialChance = (SPECIAL_FISH_CHANCE * 100) + specialLureBoost; // Base chance is 0.5%
         outputs.specialChance.textContent = `${totalSpecialChance.toFixed(1)}%`;
 
-        // Treasure Hunter Bonus
+        // Treasure Hunter Bonus (%)
         const treasureBonus = levels.treasureHunter * RESEARCH_UPGRADES.treasureHunter.effectPerLevel;
         outputs.treasure.textContent = `${treasureBonus.toFixed(0)}%`; // Display as whole number
 
-        // Unlocked Locations (This mapping remains based on Explorer level, not player level)
+        // Unlocked Locations (Based on Explorer level only)
         const locationMapping = {
             0: ['pond'], 1: ['pond', 'river'], 2: ['pond', 'river', 'lake'], 3: ['pond', 'river', 'lake', 'ocean'],
             4: ['pond', 'river', 'lake', 'ocean', 'coral_reef'], 5: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss'],
@@ -220,38 +217,38 @@ document.addEventListener('DOMContentLoaded', () => {
             10: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea', 'temporal_tide', 'fishverse']
         };
         const unlocked = (locationMapping[levels.explorer] || ['pond'])
-            .map(locId => FISHING_LOCATIONS[locId]?.name || locId) // Use updated names
+            .map(locId => FISHING_LOCATIONS[locId]?.name || locId) // Use display names
             .join(', ');
         outputs.locations.textContent = unlocked;
 
-        // --- Calculate Luck ---
-        const baseLuck = levels.luck; // Shop luck level IS the base luck value used in catchFish
+        // Calculate Luck Influence
+        const baseLuck = levels.luck; // Shop luck level IS the base luck value used in the bot's catchFish function
         const advancedLuckEffect = levels.advancedLuck * RESEARCH_UPGRADES.advancedLuck.effectPerLevel;
-        const levelLuck = Math.floor(levels.level / 10); // Approximation from fishUtils.catchFish
+        const levelLuck = Math.floor(levels.level / 10); // Luck bonus from player level (approximation)
         // The 'total' luck in fishEffects seems to be used for the *boost* calculation, not the raw luck value passed to catchFish.
         // The raw luck passed seems to be baseLuck + levelLuck. Advanced luck modifies the *outcome* later.
-        const luckValueForBoostCalc = baseLuck + (advancedLuckEffect / 2) + levelLuck; // From fishEffects
-        const luckValueForRarityShift = baseLuck + levelLuck; // Approximation of value passed to catchFish
+        const luckValueForBoostCalc = baseLuck + (advancedLuckEffect / 2) + levelLuck; // Used for rarity shift calculation (from fishEffects logic)
+        const luckValueForRarityShift = baseLuck + levelLuck; // Approximation of the raw luck value passed to catchFish
         outputs.luck.textContent = `${luckValueForRarityShift} (Shop: ${baseLuck}, Level: ${levelLuck}) + ${advancedLuckEffect.toFixed(1)}% (Research)`;
 
-        // --- Calculate Rarity Chances (Approximate) ---
-        const locationData = FISHING_LOCATIONS[selectedLocation] || FISHING_LOCATIONS.pond; // Use updated location data
+        // Calculate Approximate Rarity Chances
+        const locationData = FISHING_LOCATIONS[selectedLocation] || FISHING_LOCATIONS.pond;
         const seasonData = SEASONS[selectedSeason] || SEASONS.winter;
         const modifiedWeights = {};
         let totalWeight = 0;
 
+        // Apply base weights, location/season modifiers, and location boosts
         for (const rarity in RARITY_WEIGHTS) {
             const baseWeight = RARITY_WEIGHTS[rarity];
             const locModifier = locationData.fishModifiers[rarity] || 1.0;
             const seasonModifier = seasonData.modifier[rarity] || 1.0;
-            const locBoost = (locationData[`${rarity}Boost`] || 0) / 100.0; // Use updated boost values
+            const locBoost = (locationData[`${rarity}Boost`] || 0) / 100.0; // Convert boost % to decimal
 
-            // Apply modifiers and boosts
             let weight = baseWeight * locModifier * seasonModifier + locBoost;
             modifiedWeights[rarity] = Math.max(0, weight); // Ensure weight isn't negative
         }
 
-        // Normalize weights before applying luck shift
+        // Normalize weights so they sum to 1 before applying luck shift
         totalWeight = Object.values(modifiedWeights).reduce((sum, w) => sum + w, 0);
         if (totalWeight > 0) {
             for (const rarity in modifiedWeights) {
@@ -259,30 +256,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Apply Luck Shift (Approximation)
-        // Higher luck increases chances of rarer fish, decreases common/uncommon
-        // We use the 'luckValueForBoostCalc' as it represents the overall luck influence
-        const luckFactor = luckValueForBoostCalc * 0.0015; // Adjust this multiplier to control luck's impact
+        // Apply Luck Shift (Approximation of the bot's logic)
+        // Higher luck increases chances of rarer fish, decreases common/uncommon.
+        // We use 'luckValueForBoostCalc' as it represents the overall luck influence on rarity distribution.
+        const luckFactor = luckValueForBoostCalc * 0.0015; // This multiplier controls how strongly luck affects rarity shift
 
-        // Calculate shift amounts (proportional to current weight and rarity value)
-        const rarityValues = { common: 1, uncommon: 2, rare: 4, legendary: 8, mythic: 16, chimerical: 32 };
+        // Calculate how much weight to shift *down* from common/uncommon
+        const rarityValues = { common: 1, uncommon: 2, rare: 4, legendary: 8, mythic: 16, chimerical: 32 }; // Relative value of each rarity
         let totalShiftDown = 0;
         let totalShiftUpWeight = 0;
 
-        // Shift down from common/uncommon
         ['common', 'uncommon'].forEach(rarity => {
-            const shiftAmount = modifiedWeights[rarity] * luckFactor * (1 / rarityValues[rarity]);
+            const shiftAmount = modifiedWeights[rarity] * luckFactor * (1 / rarityValues[rarity]); // Shift less from uncommon than common
             modifiedWeights[rarity] -= shiftAmount;
             totalShiftDown += shiftAmount;
-            modifiedWeights[rarity] = Math.max(0.001, modifiedWeights[rarity]); // Prevent going to zero
+            modifiedWeights[rarity] = Math.max(0.001, modifiedWeights[rarity]); // Prevent rarity chance going to absolute zero
         });
 
-        // Calculate total weight for rarer categories to distribute the shifted amount
+        // Calculate the total weighted value of rarer categories to distribute the shifted amount proportionally
         ['rare', 'legendary', 'mythic', 'chimerical'].forEach(rarity => {
             totalShiftUpWeight += modifiedWeights[rarity] * rarityValues[rarity];
         });
 
-        // Distribute the shifted amount to rarer categories proportionally
+        // Distribute the shifted weight *up* to rarer categories based on their current weight and value
         if (totalShiftUpWeight > 0) {
             ['rare', 'legendary', 'mythic', 'chimerical'].forEach(rarity => {
                 const proportion = (modifiedWeights[rarity] * rarityValues[rarity]) / totalShiftUpWeight;
@@ -290,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Final Normalization (to ensure sum is exactly 100%)
+        // Final Normalization to ensure percentages sum precisely to 100% after shifts
         totalWeight = Object.values(modifiedWeights).reduce((sum, w) => sum + w, 0);
         if (totalWeight > 0) {
             for (const rarity in modifiedWeights) {
@@ -298,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Update UI
+        // Update the UI with the calculated rarity percentages
         outputs.rarityCommon.textContent = `~${(modifiedWeights.common * 100).toFixed(1)}%`;
         outputs.rarityUncommon.textContent = `~${(modifiedWeights.uncommon * 100).toFixed(1)}%`;
         outputs.rarityRare.textContent = `~${(modifiedWeights.rare * 100).toFixed(1)}%`;
@@ -307,17 +303,17 @@ document.addEventListener('DOMContentLoaded', () => {
         outputs.rarityChimerical.textContent = `~${(modifiedWeights.chimerical * 100).toFixed(1)}%`;
       }
 
-      // --- Event Listeners ---
-      populateOptions(); // Fill dropdowns (will now use updated names)
-      calculateStats(); // Initial calculation
+      // Setup and Initial Calculation
+      populateOptions(); // Fill dropdowns with locations and seasons
+      calculateStats(); // Run the calculation once on page load
 
-      // Recalculate whenever an input changes
+      // Add event listeners to recalculate whenever any input changes
       for (const key in inputs) {
-        if (inputs[key]) { // Ensure element exists before adding listener
+        if (inputs[key]) { // Check if the element actually exists
           inputs[key].addEventListener('input', calculateStats);
         } else {
           console.warn(`Calculator input element not found: ${key}`);
         }
       }
-    } // End if(calcContainer)
-  }); // End DOMContentLoaded
+    } // End of if(calcContainer) check
+  }); // End of DOMContentLoaded listener

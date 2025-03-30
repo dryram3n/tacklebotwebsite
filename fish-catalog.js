@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // References to DOM elements
+    // Get references to important elements on the page
     const catalogContent = document.querySelector('.catalog-content');
     const catalogTabs = document.querySelectorAll('.catalog-tab');
     const searchInput = document.querySelector('.search-input');
@@ -9,103 +9,106 @@ document.addEventListener('DOMContentLoaded', () => {
     const fishDetailContent = document.getElementById('fishDetailContent');
     const closeModal = document.querySelector('.close-modal');
     const loadingIndicator = document.querySelector('.loading-indicator');
-    
-    // Add initialization guard to prevent multiple initializations
+
+    // Flag to prevent running initialization multiple times
     let isInitialized = false;
-    
-    // Current state tracking
-    let currentCategory = 'common';
-    let currentLocationFilter = 'all';
+
+    // Track the current filter/search state
+    let currentCategory = 'common'; // Default category
+    let currentLocationFilter = 'all'; // Default location
     let searchTerm = '';
-    
-    // Initialize the catalog
+
+    // Initialize the fish catalog functionality
     function initCatalog() {
-        // Prevent multiple initializations
+        // Only run initialization once
         if (isInitialized) {
             return;
         }
-        
-        // Check if FISH_DATA is loaded
+
+        // Check if the main fish data (FISH_DATA) is loaded
         if (typeof FISH_DATA === 'undefined') {
-            console.error('Fish data not loaded. Make sure fish-info.js is properly loaded before fish-catalog.js');
-            // Try again after a short delay, but only once
+            console.error('Fish data (FISH_DATA) not loaded. Make sure fish-info.js is loaded before fish-catalog.js');
+            // Try checking again after a short delay, just in case of loading order issues
             setTimeout(() => {
                 if (!isInitialized && typeof FISH_DATA !== 'undefined') {
                     initCatalog();
                 } else {
+                    // If still not loaded, show an error message
                     if (loadingIndicator) loadingIndicator.style.display = 'none';
                     catalogContent.innerHTML = '<div class="error-message">Failed to load fish data. Please refresh the page.</div>';
                 }
             }, 2000);
             return;
         }
-        
-        // Set flag to prevent re-initialization
+
+        // Mark as initialized
         isInitialized = true;
-        
-        // Set up event listeners
+
+        // Set up all the button clicks and input listeners
         setupEventListeners();
-        
-        // Load initial fish category
+
+        // Load the initial view (default category)
         displayFishByCategory(currentCategory);
-        
+
         console.log('Fish catalog initialized');
     }
-    
-    // Set up all event listeners
+
+    // Set up event listeners for tabs, search, filters, and modal
     function setupEventListeners() {
-        // Category tab switching
+        // Category tab clicks
         catalogTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const category = tab.dataset.category;
                 setActiveCategory(category);
-                displayFishByCategory(category);
+                displayFishByCategory(category); // Refresh display with new category
             });
         });
-        
-        // Search functionality
+
+        // Search button click and Enter key press
         searchButton.addEventListener('click', performSearch);
         searchInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') performSearch();
         });
-        
-        // Filter tags
+
+        // Location filter tag clicks
         filterTags.forEach(tag => {
             tag.addEventListener('click', () => {
+                // Update active state visually
                 filterTags.forEach(t => t.classList.remove('active'));
                 tag.classList.add('active');
+                // Update filter state and refresh display
                 currentLocationFilter = tag.dataset.filter;
                 displayFishByCategory(currentCategory);
             });
         });
-        
-        // Modal close button
+
+        // Modal close button click
         closeModal.addEventListener('click', () => {
             fishModal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
-            document.body.classList.remove('modal-open');
+            document.body.style.overflow = 'auto'; // Allow background scrolling again
+            document.body.classList.remove('modal-open'); // Remove body class
         });
-        
-        // Close modal on click outside
+
+        // Close modal if user clicks outside the modal content area
         window.addEventListener('click', (e) => {
             if (e.target === fishModal) {
                 fishModal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Re-enable scrolling
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('modal-open');
             }
         });
-        
-        // ESC key to close modal
+
+        // Close modal if user presses the Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && fishModal.style.display === 'block') {
                 fishModal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Re-enable scrolling
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('modal-open');
             }
         });
     }
-    
-    // Set active category tab
+
+    // Update the visual state of the category tabs
     function setActiveCategory(category) {
         catalogTabs.forEach(tab => {
             tab.classList.remove('active');
@@ -113,70 +116,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 tab.classList.add('active');
             }
         });
-        currentCategory = category;
+        currentCategory = category; // Update the current category state
     }
-    
-    // Display fish by category with optional filtering
+
+    // Display fish cards based on the current category, location filter, and search term
     function displayFishByCategory(category) {
-        // Prevent operation if not initialized
-        if (!isInitialized) return;
-        
-        // Clear previous content
-        catalogContent.innerHTML = '';
-        
+        if (!isInitialized) return; // Don't run if not initialized
+
+        catalogContent.innerHTML = ''; // Clear previous fish cards
         if (loadingIndicator) {
-            loadingIndicator.style.display = 'block';
+            loadingIndicator.style.display = 'block'; // Show loading spinner
         }
-        
-        // Add a short delay to avoid UI freezing and ensure loading indicator shows
+
+        // Use a small timeout to allow the loading indicator to render before potentially heavy filtering/DOM manipulation
         setTimeout(() => {
             try {
-                // Get fish for the selected category
+                // Get the list of fish for the selected category
                 let fishList = FISH_DATA[category] || [];
-                
-                // Apply location filter if not 'all'
+
+                // Apply location filter if one is selected (and not 'all')
                 if (currentLocationFilter !== 'all') {
-                    fishList = fishList.filter(fish => 
+                    fishList = fishList.filter(fish =>
                         fish.locations && fish.locations.includes(currentLocationFilter)
                     );
                 }
-                
-                // Apply search term if any
+
+                // Apply search term filter if there's a search term entered
                 if (searchTerm) {
                     const term = searchTerm.toLowerCase();
-                    fishList = fishList.filter(fish => 
-                        fish.name.toLowerCase().includes(term) || 
+                    fishList = fishList.filter(fish =>
+                        fish.name.toLowerCase().includes(term) ||
                         (fish.description && fish.description.toLowerCase().includes(term)) ||
                         (fish.lore && fish.lore.toLowerCase().includes(term))
                     );
                 }
-                
-                // Update results count
+
+                // Update the results count display
                 const resultsCount = document.getElementById('resultsCount');
                 if (resultsCount) {
-                    resultsCount.textContent = fishList.length > 0 
-                        ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish` 
+                    resultsCount.textContent = fishList.length > 0
+                        ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish`
                         : 'No results found';
                 }
-                
-                // Display message if no fish found
+
+                // If no fish match the criteria, display a message
+                const noResultsElement = document.getElementById('noResults');
                 if (fishList.length === 0) {
-                    catalogContent.innerHTML = `
-                        <div class="no-results">
-                            <p>No fish found matching your criteria. Try changing your filters or search term.</p>
-                        </div>
-                    `;
-                    if (loadingIndicator) {
-                        loadingIndicator.style.display = 'none';
-                    }
-                    return;
+                    if (noResultsElement) noResultsElement.style.display = 'block';
+                    if (loadingIndicator) loadingIndicator.style.display = 'none';
+                    return; // Stop processing
+                } else {
+                    if (noResultsElement) noResultsElement.style.display = 'none';
                 }
-                
-                // Create fish cards
+
+                // Create and append a card for each fish in the filtered list
                 fishList.forEach(fish => {
                     const fishCard = createFishCard(fish, category);
                     catalogContent.appendChild(fishCard);
                 });
+
             } catch (error) {
                 console.error('Error displaying fish:', error);
                 catalogContent.innerHTML = `
@@ -185,101 +183,99 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
             } finally {
+                // Hide loading indicator regardless of success or error
                 if (loadingIndicator) {
                     loadingIndicator.style.display = 'none';
                 }
             }
-        }, 10); // Small delay for UI responsiveness
+        }, 10); // Small delay (10ms) for UI responsiveness
     }
-    
-    // Create a fish card element
+
+    // Create the HTML structure for a single fish card
     function createFishCard(fish, category) {
         const card = document.createElement('div');
-        card.className = `fish-card ${category}`;
-        
-        // Get fish image URL from the fishImages.js file if available
+        card.className = `fish-card ${category}`; // Add category class for styling
+
+        // Get the fish image URL from FISH_IMAGES, use placeholder if not found
         let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
         if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
             imageUrl = FISH_IMAGES[fish.name];
         }
-        
+
         card.innerHTML = `
             <img src="${imageUrl}" alt="${fish.name}" class="fish-image" onerror="this.src='images/placeholder-fish.png'">
             <h3 class="fish-name">${fish.name}</h3>
             <p class="fish-rarity">${capitalizeFirst(fish.rarity || 'unknown')}</p>
-            <p class="fish-value">Value: 🪙 ${fish.baseValue || '?'}</p>
+            <p class="fish-value">${fish.baseValue ? `🪙 ${fish.baseValue}` : 'Value: ?'}</p>
         `;
-        
-        // Add click event to open detailed modal
+
+        // Add click listener to open the details modal for this fish
         card.addEventListener('click', () => displayFishDetail(fish));
-        
+
         return card;
     }
-    
-    // Display detailed fish information in modal
+
+    // Populate and display the fish details modal
     function displayFishDetail(fish) {
         document.body.classList.add('modal-open'); // Add class to prevent background scrolling
-        
-        // Get fish image
+
+        // Get fish image URL
         let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
         if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
             imageUrl = FISH_IMAGES[fish.name];
         }
-        
-        // Get fish lore if available
+
+        // Get fish lore text
         const getLore = () => {
-            // Try to fetch from fish-info lore property
+            // Try the 'lore' property directly from fish-info.js
             if (fish.lore) return fish.lore;
-            
-            // Try to fetch from the custom getFishLore function if available
-            if (typeof getFishLore === 'function') {
-                const lore = getFishLore(fish.name);
-                if (lore) return lore;
-            }
-            
-            return 'Lore for this fish has yet to be discovered. Continue fishing to unlock more information!';
+            // Fallback if lore isn't directly in the object (though it should be now)
+            return 'Lore for this fish has yet to be discovered. Continue fishing!';
         };
-        
-        // Format locations if available
+
+        // Format the locations list into HTML tags
         let locationsHtml = '';
         if (fish.locations && fish.locations.length > 0) {
             locationsHtml = `
                 <div class="fish-locations">
-                    ${fish.locations.map(loc => {
-                        const location = FISH_DATA.locations[loc];
-                        return `<span class="location-tag">${location ? location.emoji : ''} ${location ? location.displayName : loc}</span>`;
+                    ${fish.locations.map(locKey => {
+                        // Get location details (name, emoji) from FISH_DATA
+                        const locationInfo = FISH_DATA.locations[locKey];
+                        const emoji = locationInfo ? locationInfo.emoji : '';
+                        const name = locationInfo ? locationInfo.displayName : locKey; // Use displayName
+                        return `<span class="location-tag">${emoji} ${name}</span>`;
                     }).join('')}
                 </div>
             `;
         }
-        
-        // Format seasonal info if available
+
+        // Format seasonal badge if the fish is seasonal
         let seasonalHtml = '';
         if (fish.seasonal) {
-            const season = FISH_DATA.seasons[fish.seasonal];
-            if (season) {
+            const seasonInfo = FISH_DATA.seasons[fish.seasonal];
+            if (seasonInfo) {
                 seasonalHtml = `
                     <div class="seasonal-badge">
-                        ${season.displayEmoji} ${season.name} Season Exclusive
+                        ${seasonInfo.displayEmoji} ${seasonInfo.name} Season Exclusive
                     </div>
                 `;
             }
         }
-        
-        // Build modal content
+
+        // Build the inner HTML for the modal content area
         fishDetailContent.innerHTML = `
             <div class="fish-detail-header">
-                <img src="${imageUrl}" alt="${fish.name}" class="fish-detail-image" 
+                <img src="${imageUrl}" alt="${fish.name}" class="fish-detail-image"
                     onerror="this.src='images/placeholder-fish.png'">
-                <h2 class="fish-detail-title">${fish.name}</h2>
-                <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity]}; color: #fff;">
+                <h2 id="fishDetailTitle" class="fish-detail-title">${fish.name}</h2>
+                <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity] || '#ccc'}; color: #fff;">
                     ${capitalizeFirst(fish.rarity || 'unknown')}
                 </span>
                 ${seasonalHtml}
             </div>
-            
+
             <p class="fish-detail-description">${fish.description || 'No description available.'}</p>
-            
+
             <div class="fish-detail-stats">
                 ${fish.baseValue ? `
                     <div class="stat-item">
@@ -287,14 +283,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="stat-value">🪙 ${fish.baseValue}</div>
                     </div>
                 ` : ''}
-                
+
                 ${fish.weightRange ? `
                     <div class="stat-item">
                         <div class="stat-label">Weight Range</div>
                         <div class="stat-value">${fish.weightRange.min}kg - ${fish.weightRange.max}kg</div>
                     </div>
                 ` : ''}
-                
+
                 ${fish.lengthRange ? `
                     <div class="stat-item">
                         <div class="stat-label">Length Range</div>
@@ -302,38 +298,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 ` : ''}
             </div>
-            
+
             ${locationsHtml ? `
                 <div class="stat-item">
                     <div class="stat-label">Found In</div>
                     ${locationsHtml}
                 </div>
             ` : ''}
-            
+
             <div class="fish-detail-lore">
                 <h3 class="lore-title">📜 Lore</h3>
                 <p class="lore-text">${getLore()}</p>
             </div>
         `;
-        
-        // Position modal at the top of the viewport and display it
+
+        // Display the modal and scroll to the top
         fishModal.style.display = 'block';
-        window.scrollTo(0, 0); // Scroll to top when modal opens
-        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        window.scrollTo(0, 0);
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling while modal is open
     }
-    
-    // Perform search based on input value
+
+    // Trigger fish display update based on the search input value
     function performSearch() {
-        searchTerm = searchInput.value.trim();
-        displayFishByCategory(currentCategory);
+        searchTerm = searchInput.value.trim(); // Update the search term state
+        displayFishByCategory(currentCategory); // Refresh the display
     }
-    
-    // Helper function to capitalize first letter
+
+    // Simple helper function to capitalize the first letter of a string
     function capitalizeFirst(str) {
+        if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-    
-    // Initialize the catalog when DOM is loaded - with error handling
+
+    // Attempt to initialize the catalog, with error handling
     try {
         initCatalog();
     } catch (error) {

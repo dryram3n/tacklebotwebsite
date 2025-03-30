@@ -1,4 +1,4 @@
-// Fish image mappings
+// Mapping of fish names to their image file paths
 const FISH_IMAGES = {
     // Common
     "Common Carp": "fishImages/Carp.png",
@@ -11,7 +11,7 @@ const FISH_IMAGES = {
     "Bluegill": "fishImages/Bluegill.png",
     "Perch": "fishImages/Perch.png",
     "Anchovy": "fishImages/Anchovy.png",
-    "Mal Anchovy": "fishImages/Mal-Anchovy.png", // Note: hyphen
+    "Mal Anchovy": "fishImages/Mal-Anchovy.png", // Note: hyphen in filename
     "Blobfish": "fishImages/Blobfish.png",
 
     // Uncommon
@@ -33,7 +33,7 @@ const FISH_IMAGES = {
     "Barracuda": "fishImages/Barracuda.png",
     "Piranha": "fishImages/Piranha.png",
     "Pufferfish": "fishImages/Pufferfish.png",
-    "Mahi Mahi": "fishImages/Mahi-Mahi.png", // Note: hyphen
+    "Mahi Mahi": "fishImages/Mahi-Mahi.png", // Note: hyphen in filename
     "Giant Sturgeon": "fishImages/Giant Sturgeon.png",
     "Electric Ray": "fishImages/Electric Ray.png",
     "Crystal Carp": "fishImages/Crystal Carp.png",
@@ -44,7 +44,7 @@ const FISH_IMAGES = {
     "Golden Koi": "fishImages/Golden Koi Fish.png", // Note: "Fish" added in filename
     "Gar": "fishImages/Gar.png",
     "Giant Catfish": "fishImages/Giant Catfish.png",
-    "Fish O Legend": "fishImages/Fish-O-Legend.png", // Note: hyphens
+    "Fish O Legend": "fishImages/Fish-O-Legend.png", // Note: hyphens in filename
     "Ancient Dragon Fish": "fishImages/Ancient Dragon Fish.png",
     "Anglerfish": "fishImages/Anglerfish.png",
     "Ghostly Eel": "fishImages/Ghostly Eel.png",
@@ -83,10 +83,11 @@ const FISH_IMAGES = {
     "Frogo": "fishImages/Frogo.png",
     "Toxic Sludge Fish": "fishImages/Toxic Sludge Fish.png",
 
+    // Fallback placeholder image
     "placeholder": "fishImages/Anchovy.png"
 };
 
-// Ensure it's globally accessible
+// Make this data available globally on the window object
 window.FISH_IMAGES = FISH_IMAGES;
-// Only log once during initial load and use a more concise message
+// Log a simple message to confirm the data is loaded
 console.log('FISH_IMAGES loaded successfully');

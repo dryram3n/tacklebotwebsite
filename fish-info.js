@@ -1,4 +1,4 @@
-// Fish rarity colors (matching Discord bot)
+// Colors used for different fish rarities (matches the Discord bot)
 const RARITY_COLORS = {
     common: '#ddbea9',
     uncommon: '#98d4bb',
@@ -6,13 +6,12 @@ const RARITY_COLORS = {
     legendary: '#f4cc71',
     mythic: '#c79de0',
     chimerical: '#cd7ae2',
-    special: '#ffdb58', // Keep special if used elsewhere, though not in current fish list
+    special: '#ffdb58', // Kept for potential future use
     seasonal: '#f08080',
     junk: '#a9a9a9'
 };
 
-// --- UPDATED FISHING_LOCATIONS START ---
-// Fishing locations (Using new names, retaining original emojis)
+// Fishing location details (using updated display names)
 const FISHING_LOCATIONS = {
     pond: { displayName: "Tranquil Pond", emoji: "🏞️" },
     river: { displayName: "Rushing River", emoji: "🌊" },
@@ -26,9 +25,8 @@ const FISHING_LOCATIONS = {
     temporal_tide: { displayName: "Temporal Tide", emoji: "⏳" },
     fishverse: { displayName: "Fishverse", emoji: "🌌" }
 };
-// --- UPDATED FISHING_LOCATIONS END ---
 
-// Seasons
+// Season details
 const SEASONS = {
     spring: { name: "Spring", displayEmoji: "🌸" },
     summer: { name: "Summer", displayEmoji: "☀️" },
@@ -36,9 +34,10 @@ const SEASONS = {
     winter: { name: "Winter", displayEmoji: "❄️" }
 };
 
-// --- START REPLACED FISH DATA ---
+// --- Fish Data Definitions ---
+// Note: Rarity chances mentioned are approximate base chances before modifiers/luck.
 
-// Common Fish (50% chance)
+// Common Fish (~50% base chance)
 const COMMON_FISH = [
     {
         name: "Common Carp",
@@ -162,7 +161,7 @@ const COMMON_FISH = [
     }
 ];
 
-// Uncommon fish (25% chance)
+// Uncommon fish (~25% base chance)
 const UNCOMMON_FISH = [
     {
         name: "Rainbow Trout",
@@ -195,7 +194,7 @@ const UNCOMMON_FISH = [
         lore: "The Catfish is a bottom-dwelling fish with barbels around its mouth that resemble a cat's whiskers. It is known for its whisker-like barbels and its ability to detect prey in murky waters. Catfish are popular among anglers for their size and their tasty flesh."
     },
     {
-        name: "Mackeral", // Note: Often spelled Mackerel
+        name: "Mackeral", // Often spelled Mackerel
         rarity: "uncommon",
         baseValue: 28,
         weightRange: { min: 0.8, max: 12 },
@@ -255,7 +254,7 @@ const UNCOMMON_FISH = [
         lore: "A beautiful woman with a fish tail, the Alluring Mermaid is said to lure sailors to their doom with her enchanting voice and mesmerizing beauty. Legends tell of sailors who have followed her siren song to their deaths, only to find themselves trapped in her underwater kingdom forever."
     },
     {
-        name: "Transparant Shark", // Note: Often spelled Transparent
+        name: "Transparant Shark", // Often spelled Transparent
         rarity: "uncommon",
         baseValue: 125,
         weightRange: { min: 20, max: 55 },
@@ -266,7 +265,7 @@ const UNCOMMON_FISH = [
     },
 ];
 
-// Rare fish (15% chance)
+// Rare fish (~15% base chance)
 const RARE_FISH = [
     {
         name: "Salmon",
@@ -390,7 +389,7 @@ const RARE_FISH = [
     }
 ];
 
-// Legendary fish (5% chance)
+// Legendary fish (~5% base chance)
 const LEGENDARY_FISH = [
     {
         name: "Golden Koi",
@@ -514,7 +513,7 @@ const LEGENDARY_FISH = [
     }
 ];
 
-// Mythic fish (1% chance)
+// Mythic fish (~1% base chance)
 const MYTHIC_FISH = [
     {
         name: "Kraken",
@@ -648,7 +647,7 @@ const MYTHIC_FISH = [
     },
 ];
 
-// Chimerical fish (0.3% chance - rarest of all)
+// Chimerical fish (~0.3% base chance - rarest)
 const CHIMERICAL_FISH = [
     {
         name: "Dimensional Leviathan",
@@ -772,12 +771,12 @@ const CHIMERICAL_FISH = [
     }
 ];
 
-// Seasonal fish
+// Seasonal fish (available only during specific seasons)
 const SEASONAL_FISH = [
-    // Spring seasonal fish
+    // Spring
     {
         name: "Cherry Salmon",
-        rarity: "rare", // Changed from rare in original to match detailed list
+        rarity: "rare", // Rarity confirmed from detailed list
         baseValue: 125,
         weightRange: { min: 2, max: 24 },
         lengthRange: { min: 30, max: 75 },
@@ -810,7 +809,7 @@ const SEASONAL_FISH = [
     },
     {
         name: "Dark Cherry Bass",
-        rarity: "common", // Changed from common in original to match detailed list
+        rarity: "common", // Rarity confirmed from detailed list
         baseValue: 25,
         weightRange: { min: 1, max: 10 },
         lengthRange: { min: 20, max: 50 },
@@ -841,11 +840,11 @@ const SEASONAL_FISH = [
         description: "An ancient entity embodying the chaotic energy of spring.",
         lore: "This powerful being awakens only in spring, its presence causing rapid growth and unpredictable weather. It's less a fish and more a force of nature, rarely seen and impossible to truly 'catch'."
     },
-    // Summer seasonal fish
+    // Summer
     {
         name: "Sunfish Prime",
-        rarity: "legendary", // Changed from legendary in original to match detailed list
-        baseValue: 130, // Value adjusted from original example
+        rarity: "legendary", // Rarity confirmed from detailed list
+        baseValue: 130, // Value adjusted
         weightRange: { min: 8, max: 40 },
         lengthRange: { min: 25, max: 80 },
         locations: ["river", "pond", "ocean", "vortex", "abyss", "fishverse", "lake"],
@@ -865,7 +864,7 @@ const SEASONAL_FISH = [
         lore: "This eel prefers the warmest parts of the water, often found near thermal vents or sun-baked shallows. Touching it feels surprisingly warm, and it's said they can slightly raise the temperature of small ponds."
     },
     {
-        name: "Golden Mackeral", // Note: Often spelled Mackerel
+        name: "Golden Mackeral", // Often spelled Mackerel
         rarity: "uncommon",
         baseValue: 40,
         weightRange: { min: 1, max: 6 },
@@ -875,7 +874,7 @@ const SEASONAL_FISH = [
         description: "A mackerel variant with shimmering golden scales, active in summer.",
         lore: "Catching the sunlight, the Golden Mackerel flashes brilliantly as it darts through the water. They are most active during the long days of summer, feeding near the surface."
     },
-    // Fall seasonal fish
+    // Fall
     {
         name: "Autumn Koi",
         rarity: "rare",
@@ -909,7 +908,7 @@ const SEASONAL_FISH = [
         description: "A bass with fiery orange and red markings, active during fall.",
         lore: "This bass becomes particularly vibrant as the weather cools, its markings resembling glowing embers. They are known to be more aggressive during the fall feeding season."
     },
-    // Winter seasonal fish
+    // Winter
     {
         name: "Frost Bass",
         rarity: "rare",
@@ -945,11 +944,11 @@ const SEASONAL_FISH = [
     }
 ];
 
-// Junk Items
+// Junk Items (caught occasionally instead of fish)
 const JUNK_ITEMS = [
     {
         name: "Old Boot",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk", // Rarity is 'junk'
         baseValue: 1,
         weightRange: { min: 0.3, max: 0.8 },
         lengthRange: { min: 15, max: 25 },
@@ -959,7 +958,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Rusty Can",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.1, max: 0.3 },
         lengthRange: { min: 10, max: 15 },
@@ -969,7 +968,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Seaweed Clump",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.2, max: 0.5 },
         lengthRange: { min: 20, max: 40 },
@@ -979,7 +978,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Plastic Bottle",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.1, max: 0.2 },
         lengthRange: { min: 15, max: 25 },
@@ -989,8 +988,8 @@ const JUNK_ITEMS = [
     },
     {
         name: "Waterlogged Phone",
-        rarity: "junk", // Corrected rarity
-        baseValue: 3, // Slightly higher value for amusement
+        rarity: "junk",
+        baseValue: 3, // Slightly more valuable for the humor
         weightRange: { min: 0.1, max: 0.2 },
         lengthRange: { min: 12, max: 18 },
         locations: ["pond", "river", "ocean", "lake"],
@@ -999,7 +998,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Rusted Fishing Hook",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.05, max: 0.1 },
         lengthRange: { min: 5, max: 7 },
@@ -1009,7 +1008,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Ancient Flip Flop",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 2,
         weightRange: { min: 0.2, max: 0.4 },
         lengthRange: { min: 20, max: 30 },
@@ -1019,7 +1018,7 @@ const JUNK_ITEMS = [
     },
     {
         name: "Tangled Fishing Line",
-        rarity: "junk", // Corrected rarity
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.1, max: 0.2 },
         lengthRange: { min: 50, max: 100 }, // Length represents the line length
@@ -1028,8 +1027,8 @@ const JUNK_ITEMS = [
         lore: "The bane of many anglers. Untangling this mess is often more trouble than it's worth."
     },
     {
-        name: "Micheal Mackeral", // Note: Often spelled Mackerel
-        rarity: "junk", // Corrected rarity
+        name: "Micheal Mackeral", // Often spelled Mackerel
+        rarity: "junk",
         baseValue: 1,
         weightRange: { min: 0.1, max: 0.3 },
         lengthRange: { min: 0.1, max: 0.3 },
@@ -1039,10 +1038,10 @@ const JUNK_ITEMS = [
     }
 ];
 
-// --- END REPLACED FISH DATA ---
+// --- End Fish Data Definitions ---
 
 
-// Combine all fish categories into one accessible object
+// Combine all fish/item data into one main object for easy access
 const FISH_DATA = {
     common: COMMON_FISH,
     uncommon: UNCOMMON_FISH,
@@ -1052,12 +1051,12 @@ const FISH_DATA = {
     chimerical: CHIMERICAL_FISH,
     seasonal: SEASONAL_FISH,
     junk: JUNK_ITEMS,
-    colors: RARITY_COLORS,
-    locations: FISHING_LOCATIONS, // This now uses the updated location data
-    seasons: SEASONS
+    colors: RARITY_COLORS, // Rarity color map
+    locations: FISHING_LOCATIONS, // Location details map
+    seasons: SEASONS // Season details map
 };
 
-// Helper function to get all fish (including junk and seasonal)
+// Helper function to get a flat list of all fish/items
 function getAllFish() {
     const allFish = [];
     const categoriesToInclude = ['common', 'uncommon', 'rare', 'legendary', 'mythic', 'chimerical', 'seasonal', 'junk'];
@@ -1065,10 +1064,10 @@ function getAllFish() {
     categoriesToInclude.forEach(category => {
         if (FISH_DATA[category] && Array.isArray(FISH_DATA[category])) {
             FISH_DATA[category].forEach(fish => {
-                // Add the category property to each fish object
+                // Add the category name to each fish object for easier filtering later
                 allFish.push({
                     ...fish,
-                    category: category // Ensure category is explicitly set
+                    category: category // Ensure the category is explicitly part of the object
                 });
             });
         } else {
@@ -1079,9 +1078,9 @@ function getAllFish() {
     return allFish;
 }
 
-// Export the data to the window object for global access
+// Make the data globally accessible via the window object
 window.FISH_DATA = FISH_DATA;
 window.getAllFish = getAllFish;
 
-// Simplify console logging to avoid potential performance issues
+// Log confirmation that data is loaded
 console.log('FISH_DATA loaded successfully');
