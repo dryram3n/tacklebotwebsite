@@ -712,123 +712,6 @@ footer a:hover {
   transform: translateY(0);
 }
 
-
-/* --- Responsiveness --- */
-@media (max-width: 992px) {
-  nav ul {
-      gap: 1rem; /* Reduce gap slightly */
-  }
-  .features-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-  .command-item {
-    flex-basis: calc(50% - 1.5rem);
-  }
-  .calculator-container {
-      grid-template-columns: 1fr; /* Stack calculator columns */
-  }
-}
-
-@media (max-width: 768px) {
-  html {
-      font-size: 15px; /* Slightly smaller base font on medium screens */
-  }
-  nav {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  nav ul {
-    gap: 0.8rem 1.2rem; /* Adjust gap */
-    justify-content: center;
-  }
-  #hero {
-    flex-direction: column-reverse;
-    text-align: center;
-    min-height: auto;
-    padding: 4rem 5%;
-    gap: 2rem;
-  }
-  .hero-image {
-    margin-bottom: 1rem;
-  }
-  .hero-emoji {
-    font-size: 8em;
-  }
-  .hero-content {
-      flex-basis: auto; /* Reset basis */
-  }
-  .button {
-    padding: 12px 25px;
-    font-size: 0.95rem;
-  }
-  .command-item {
-    flex-basis: calc(50% - 1rem);
-    min-width: 220px; /* Adjust min-width */
-    padding: 1.5rem;
-  }
-  .legal-card h3 { font-size: 1.5rem; }
-  .legal-card h4 { font-size: 1.3rem; }
-  .expand-btn { font-size: 0.9rem; padding: 0.6rem 1rem; }
-  .fish-catalog-section, .calculator-section { padding: 1.5rem; } /* Use section ID */
-  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
-  .modal-content { width: 95%; padding: 2rem 1.5rem; }
-}
-
-@media (max-width: 576px) {
-  html {
-      font-size: 14px; /* Smaller base font on small screens */
-  }
-  .command-item {
-    flex-basis: 100%;
-    min-width: unset;
-  }
-  .button {
-    width: 90%;
-    max-width: 350px; /* Max width for buttons */
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    margin-bottom: 1rem;
-  }
-  .button.hero-button {
-    margin-right: auto;
-  }
-  .cta .button {
-    width: 80%;
-    max-width: 300px;
-  }
-  .legal-card { padding: 1.2rem; }
-  .legal-card h3 { font-size: 1.3rem; }
-  .legal-card h4 { font-size: 1.1rem; }
-  .legal-card ul { padding-left: 1.2rem; }
-  .fish-catalog-section, .calculator-section { padding: 1rem; } /* Use section ID */
-  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-  .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
-  .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
-  .catalog-tab { flex-shrink: 0; font-size: 0.9rem; padding: 0.6rem 1rem; }
-  .modal-content { padding: 1.5rem 1rem; }
-  .close-modal { top: 1rem; right: 1rem; }
-  .fish-detail-title { font-size: 1.5rem; }
-  .fish-detail-image { width: 150px; height: 150px; }
-  .calc-input-grid { grid-template-columns: 1fr; }
-  .calc-rarity-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 400px) {
-  nav ul {
-    gap: 0.5rem 1rem;
-  }
-  nav ul li a {
-    font-size: 0.9rem;
-  }
-  .logo {
-    font-size: 1.6rem;
-  }
-  .hero-emoji {
-      font-size: 6em; /* Smaller on very small screens */
-  }
-}
-
 /* --- Legal Sections (TOS and Privacy Policy) --- */
 .legal-section {
   background-color: var(--white);
@@ -1206,101 +1089,6 @@ footer a:hover {
 }
 
 /* REMOVED: .flip-horizontal class - flipping will be done via transform: scaleX() */
-
-
-/* --- Performance Optimizations & Reduced Motion --- */
-.reduced-motion #sun,
-.reduced-motion #moon {
-    transition-duration: 5s; /* Slower movement */
-}
-.reduced-motion .cloud {
-    animation-duration: calc(var(--drift-speed, 60s) * 3) !important; /* Much slower clouds */
-    opacity: 0.5 !important;
-    transition: none !important; /* Disable fade-in */
-}
-.reduced-motion #wave-path-1,
-.reduced-motion #wave-path-2 {
-    transition-duration: 2s; /* Slower wave transitions */
-}
-.reduced-motion .bubble {
-  box-shadow: none;
-  animation-duration: 10s !important; /* Slower bubbles */
-}
-.reduced-motion #water-background {
-  opacity: 0.7;
-}
-.reduced-motion .swimming-fish {
-  transition: opacity 2s ease-in !important; /* Slower fade */
-  /* JS should stop fish movement updates */
-}
-.reduced-motion #mouse-trail,
-.reduced-motion .trail-droplet,
-.reduced-motion .water-splash {
-    display: none !important; /* Hide mouse effects */
-}
-.reduced-motion body {
-    cursor: auto !important; /* Restore cursor */
-}
-.reduced-motion .animated-section {
-    opacity: 1; /* Show sections immediately */
-    transform: none;
-    transition: none;
-}
-.reduced-motion .hero-emoji {
-    animation: none; /* Disable float animation */
-}
-
-
-/* Disable animations completely for users who explicitly prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important; /* Disable smooth scroll */
-  }
-  #sun, #moon {
-    transition: opacity 1.5s ease-in-out !important; /* Only fade */
-    /* JS should prevent transform updates */
-  }
-  .cloud {
-    animation: none !important;
-    opacity: 0.4 !important;
-  }
-   #wave-path-1, #wave-path-2 {
-    transition: none !important;
-    /* JS should stop wave updates */
-  }
-  .bubble {
-    animation: none !important;
-    display: none !important; /* Hide bubbles */
-  }
-  #water-background {
-    opacity: 0.5;
-  }
-   .swimming-fish {
-    transition: none !important;
-    opacity: 0.6 !important; /* Show fish statically */
-    /* JS should stop fish updates */
-  }
-  #mouse-trail, .trail-droplet, .water-splash {
-      display: none !important;
-  }
-  body {
-      cursor: auto !important;
-  }
-  .animated-section {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-  }
-   .hero-emoji {
-      animation: none !important;
-  }
-  .ripple {
-      display: none !important; /* Disable ripple effect */
-  }
-}
 
 /* --- Fish Catalog Styles --- */
 .fish-catalog-section {
@@ -1951,27 +1739,6 @@ footer a:hover {
 .calc-output-line.rarity-mythic span { color: var(--rarity-mythic-text); }
 .calc-output-line.rarity-chimerical span { color: var(--rarity-chimerical-text); } /* Use text color var */
 
-/* Responsive adjustments for calculator */
-@media (max-width: 576px) {
-    .calc-rarity-grid {
-        grid-template-columns: 1fr;
-    }
-    .calc-rarity-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    .calc-luck-info {
-        text-align: left;
-    }
-    .calc-output-line {
-        justify-content: flex-start; /* Stack label/value */
-    }
-    .calc-output-line span {
-        text-align: left;
-    }
-}
-
 /* --- UI Toggle Button --- */
 #ui-toggle-container {
     position: fixed;
@@ -2015,4 +1782,362 @@ body.ui-hidden footer {
 body.ui-hidden #ui-toggle-container {
     opacity: 1;
     pointer-events: auto;
+}
+
+/* --- START: Try Me Section Styles --- */
+#try-me {
+  background-color: var(--white);
+  border-radius: 30px;
+  box-shadow: 0 10px 30px var(--shadow-light);
+  padding: 3rem 4%;
+  text-align: center;
+}
+
+#try-me p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.try-me-container {
+  background-color: var(--primary-bg);
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 500px;
+  margin: 2rem auto;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 300px; /* Give it some base height */
+  justify-content: center; /* Center content vertically */
+}
+
+.try-me-status {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 0.5rem;
+}
+
+.try-me-coins {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e89f2e; /* Gold-ish color */
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+}
+
+.try-me-result {
+  border: 2px dashed var(--gradient-primary);
+  border-image-slice: 1;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 80%;
+  max-width: 300px;
+  opacity: 0; /* Start hidden */
+  transform: scale(0.9); /* Start slightly small */
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  will-change: opacity, transform;
+}
+
+.try-me-result.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.try-me-result img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.try-me-result h4 {
+  font-size: 1.3rem;
+  color: var(--heading-color);
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+}
+
+.try-me-result p {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 0.2rem;
+  line-height: 1.4;
+}
+
+#tryMeFishRarity {
+    font-weight: 600;
+    font-style: italic;
+}
+
+#tryMeFishValue {
+    font-weight: 600;
+}
+
+.try-me-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    justify-content: center;
+}
+
+.try-me-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    min-width: 150px; /* Give buttons some width */
+}
+
+.try-me-disclaimer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* Simple casting animation (optional) */
+@keyframes casting {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(-5deg); }
+    75% { transform: translateY(3px) rotate(3deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+#tryMeCastButton.casting {
+    animation: casting 0.5s ease-in-out;
+}
+/* --- END: Try Me Section Styles --- */
+
+
+/* --- Responsiveness --- */
+@media (max-width: 992px) {
+  nav ul {
+      gap: 1rem; /* Reduce gap slightly */
+  }
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .command-item {
+    flex-basis: calc(50% - 1.5rem);
+  }
+  .calculator-container {
+      grid-template-columns: 1fr; /* Stack calculator columns */
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+      font-size: 15px; /* Slightly smaller base font on medium screens */
+  }
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  nav ul {
+    gap: 0.8rem 1.2rem; /* Adjust gap */
+    justify-content: center;
+  }
+  #hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    min-height: auto;
+    padding: 4rem 5%;
+    gap: 2rem;
+  }
+  .hero-image {
+    margin-bottom: 1rem;
+  }
+  .hero-emoji {
+    font-size: 8em;
+  }
+  .hero-content {
+      flex-basis: auto; /* Reset basis */
+  }
+  .button {
+    padding: 12px 25px;
+    font-size: 0.95rem;
+  }
+  .command-item {
+    flex-basis: calc(50% - 1rem);
+    min-width: 220px; /* Adjust min-width */
+    padding: 1.5rem;
+  }
+  .legal-card h3 { font-size: 1.5rem; }
+  .legal-card h4 { font-size: 1.3rem; }
+  .expand-btn { font-size: 0.9rem; padding: 0.6rem 1rem; }
+  .fish-catalog-section, .calculator-section, #calculator, #try-me { padding: 1.5rem; } /* Use section ID */
+  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+  .modal-content { width: 95%; padding: 2rem 1.5rem; }
+  .try-me-container { padding: 1.5rem; }
+}
+
+@media (max-width: 576px) {
+  html {
+      font-size: 14px; /* Smaller base font on small screens */
+  }
+  .command-item {
+    flex-basis: 100%;
+    min-width: unset;
+  }
+  .button {
+    width: 90%;
+    max-width: 350px; /* Max width for buttons */
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  .button.hero-button {
+    margin-right: auto;
+  }
+  .cta .button {
+    width: 80%;
+    max-width: 300px;
+  }
+  .legal-card { padding: 1.2rem; }
+  .legal-card h3 { font-size: 1.3rem; }
+  .legal-card h4 { font-size: 1.1rem; }
+  .legal-card ul { padding-left: 1.2rem; }
+  .fish-catalog-section, .calculator-section, #calculator, #try-me { padding: 1rem; } /* Use section ID */
+  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+  .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
+  .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
+  .catalog-tab { flex-shrink: 0; font-size: 0.9rem; padding: 0.6rem 1rem; }
+  .modal-content { padding: 1.5rem 1rem; }
+  .close-modal { top: 1rem; right: 1rem; }
+  .fish-detail-title { font-size: 1.5rem; }
+  .fish-detail-image { width: 150px; height: 150px; }
+  .calc-input-grid { grid-template-columns: 1fr; }
+  .calc-rarity-grid { grid-template-columns: 1fr; }
+  .try-me-container { max-width: 95%; }
+  .try-me-button { width: 100%; max-width: 250px; }
+}
+
+@media (max-width: 400px) {
+  nav ul {
+    gap: 0.5rem 1rem;
+  }
+  nav ul li a {
+    font-size: 0.9rem;
+  }
+  .logo {
+    font-size: 1.6rem;
+  }
+  .hero-emoji {
+      font-size: 6em; /* Smaller on very small screens */
+  }
+}
+
+/* --- Performance Optimizations & Reduced Motion --- */
+.reduced-motion #sun,
+.reduced-motion #moon {
+    transition-duration: 5s; /* Slower movement */
+}
+.reduced-motion .cloud {
+    animation-duration: calc(var(--drift-speed, 60s) * 3) !important; /* Much slower clouds */
+    opacity: 0.5 !important;
+    transition: none !important; /* Disable fade-in */
+}
+.reduced-motion #wave-path-1,
+.reduced-motion #wave-path-2 {
+    transition-duration: 2s; /* Slower wave transitions */
+}
+.reduced-motion .bubble {
+  box-shadow: none;
+  animation-duration: 10s !important; /* Slower bubbles */
+}
+.reduced-motion #water-background {
+  opacity: 0.7;
+}
+.reduced-motion .swimming-fish {
+  transition: opacity 2s ease-in !important; /* Slower fade */
+  /* JS should stop fish movement updates */
+}
+.reduced-motion #mouse-trail,
+.reduced-motion .trail-droplet,
+.reduced-motion .water-splash {
+    display: none !important; /* Hide mouse effects */
+}
+.reduced-motion body {
+    cursor: auto !important; /* Restore cursor */
+}
+.reduced-motion .animated-section {
+    opacity: 1; /* Show sections immediately */
+    transform: none;
+    transition: none;
+}
+.reduced-motion .hero-emoji {
+    animation: none; /* Disable float animation */
+}
+
+
+/* Disable animations completely for users who explicitly prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important; /* Disable smooth scroll */
+  }
+  #sun, #moon {
+    transition: opacity 1.5s ease-in-out !important; /* Only fade */
+    /* JS should prevent transform updates */
+  }
+  .cloud {
+    animation: none !important;
+    opacity: 0.4 !important;
+  }
+   #wave-path-1, #wave-path-2 {
+    transition: none !important;
+    /* JS should stop wave updates */
+  }
+  .bubble {
+    animation: none !important;
+    display: none !important; /* Hide bubbles */
+  }
+  #water-background {
+    opacity: 0.5;
+  }
+   .swimming-fish {
+    transition: none !important;
+    opacity: 0.6 !important; /* Show fish statically */
+    /* JS should stop fish updates */
+  }
+  #mouse-trail, .trail-droplet, .water-splash {
+      display: none !important;
+  }
+  body {
+      cursor: auto !important;
+  }
+  .animated-section {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+  }
+   .hero-emoji {
+      animation: none !important;
+  }
+  .ripple {
+      display: none !important; /* Disable ripple effect */
+  }
+  #tryMeCastButton.casting {
+      animation: none !important; /* Disable casting animation */
+  }
+  .try-me-result {
+      transition: none !important; /* Disable result animation */
+  }
 }

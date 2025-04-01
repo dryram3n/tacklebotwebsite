@@ -1105,6 +1105,200 @@ document.addEventListener('DOMContentLoaded', () => {
         lastThrottledTimestamp = 0;
     }
 
+    // --- START: Try Me Fishing Simulator Logic ---
+    const tryMeSection = document.getElementById('try-me');
+
+    // Only initialize if the Try Me section exists on the current page
+    if (tryMeSection) {
+        const castButton = document.getElementById('tryMeCastButton');
+        const sellButton = document.getElementById('tryMeSellButton');
+        const resultDiv = document.getElementById('tryMeResult');
+        const fishImage = document.getElementById('tryMeFishImage');
+        const fishName = document.getElementById('tryMeFishName');
+        const fishRarity = document.getElementById('tryMeFishRarity');
+        const fishValue = document.getElementById('tryMeFishValue');
+        const coinDisplay = document.getElementById('tryMeCoinDisplay');
+        const statusText = document.getElementById('tryMeStatusText');
+
+        let simulatedCoins = 0;
+        let currentCatch = null;
+        let isCasting = false; // Prevent spamming cast
+
+        // Ensure FISH_DATA and FISH_IMAGES are loaded
+        // Use window object as they are loaded globally from separate files
+        if (typeof window.FISH_DATA === 'undefined' || typeof window.FISH_IMAGES === 'undefined') {
+            console.error("Try Me Simulator Error: FISH_DATA or FISH_IMAGES not loaded.");
+            if(statusText) statusText.textContent = "Error: Fish data not loaded.";
+            if (castButton) castButton.disabled = true;
+            // Optionally hide the whole section or show a more prominent error
+        } else {
+            // Initialize display
+            updateCoinDisplay();
+            if (castButton) castButton.style.display = 'inline-flex';
+            if (sellButton) sellButton.style.display = 'none';
+            if (resultDiv) resultDiv.style.display = 'none';
+            if (resultDiv) resultDiv.classList.remove('visible');
+
+            // Simplified catch logic
+            function simulateCatch() {
+                const rand = Math.random();
+                let selectedRarity = 'common'; // Default
+                let fishPool = [];
+
+                // Use globally available FISH_DATA
+                const localFishData = window.FISH_DATA;
+
+                // Simplified probabilities (adjust as needed)
+                if (rand < 0.01 && localFishData.junk?.length > 0) { // 1% Junk
+                    selectedRarity = 'junk';
+                    fishPool = localFishData.junk;
+                } else if (rand < 0.05 && localFishData.legendary?.length > 0) { // 4% Legendary (0.05 - 0.01)
+                    selectedRarity = 'legendary';
+                    fishPool = localFishData.legendary;
+                } else if (rand < 0.15 && localFishData.rare?.length > 0) { // 10% Rare (0.15 - 0.05)
+                    selectedRarity = 'rare';
+                    fishPool = localFishData.rare;
+                } else if (rand < 0.40 && localFishData.uncommon?.length > 0) { // 25% Uncommon (0.40 - 0.15)
+                    selectedRarity = 'uncommon';
+                    fishPool = localFishData.uncommon;
+                } else if (localFishData.common?.length > 0) { // 60% Common (remaining)
+                    selectedRarity = 'common';
+                    fishPool = localFishData.common;
+                } else {
+                    // Fallback if a category is empty
+                    console.warn("Could not find fish pool for selected rarity, defaulting to common.");
+                    selectedRarity = 'common';
+                    fishPool = localFishData.common || []; // Use common or empty array
+                }
+
+                if (fishPool.length === 0) {
+                    console.error(`No fish found in the '${selectedRarity}' pool!`);
+                    // Return a default placeholder or handle error
+                    return { name: "Nothing...", rarity: "none", baseValue: 0 };
+                }
+
+                // Select a random item from the pool
+                const randomIndex = Math.floor(Math.random() * fishPool.length);
+                const caughtItem = { ...fishPool[randomIndex] }; // Clone the item
+
+                // Assign a value even if it's junk for simplicity in the demo
+                caughtItem.displayValue = caughtItem.baseValue || (caughtItem.rarity === 'junk' ? 1 : 5);
+                caughtItem.rarity = caughtItem.rarity || 'unknown'; // Ensure rarity exists
+
+                return caughtItem;
+            }
+
+            // Display the result
+            function displayResult(item) {
+                currentCatch = item; // Store the catch
+
+                if (!fishName || !fishRarity || !fishValue || !fishImage || !resultDiv || !castButton || !sellButton || !statusText) {
+                    console.error("Try Me Simulator Error: One or more display elements not found.");
+                    return;
+                }
+
+                fishName.textContent = item.name;
+                fishRarity.textContent = capitalizeFirst(item.rarity);
+                fishValue.textContent = `Value: ${item.displayValue}`;
+
+                // Set rarity color (using inline style for simplicity here)
+                const rarityColor = window.FISH_DATA.colors[item.rarity] || '#cccccc';
+                fishRarity.style.color = rarityColor; // Color the text
+                // Optional: Add border color like catalog cards
+                // resultDiv.style.borderColor = rarityColor;
+
+                // Set image using globally available FISH_IMAGES
+                const imageUrl = window.FISH_IMAGES[item.name] || window.FISH_IMAGES['placeholder'] || 'images/placeholder-fish.png';
+                fishImage.src = imageUrl;
+                fishImage.alt = item.name;
+
+                resultDiv.style.display = 'block';
+                // Use timeout to allow display:block before adding class for transition
+                setTimeout(() => resultDiv.classList.add('visible'), 10);
+
+                // Update buttons and status
+                castButton.style.display = 'none';
+                if (item.rarity !== 'junk' && item.rarity !== 'none') {
+                    sellButton.style.display = 'inline-flex';
+                    statusText.textContent = `You caught a ${item.name}!`;
+                } else {
+                    sellButton.style.display = 'none';
+                    // Show cast button again immediately if junk/nothing
+                    setTimeout(resetSimulator, 1500); // Show cast after a delay
+                    statusText.textContent = `You caught ${item.name}...`;
+                }
+                isCasting = false; // Re-enable casting after result is shown
+                castButton.classList.remove('casting'); // Remove animation class
+            }
+
+            // Sell the current catch
+            function sellCatch() {
+                if (currentCatch && currentCatch.rarity !== 'junk' && currentCatch.rarity !== 'none') {
+                    simulatedCoins += currentCatch.displayValue;
+                    updateCoinDisplay();
+                    if(statusText) statusText.textContent = `Sold ${currentCatch.name} for ${currentCatch.displayValue} coins!`;
+                }
+                resetSimulator();
+            }
+
+            // Reset the simulator state
+            function resetSimulator() {
+                currentCatch = null;
+                if (resultDiv) {
+                    resultDiv.classList.remove('visible');
+                    // Hide result after transition ends
+                    setTimeout(() => {
+                        if (!resultDiv.classList.contains('visible')) { // Check if still hidden
+                             resultDiv.style.display = 'none';
+                        }
+                    }, 400); // Match CSS transition duration
+                }
+
+                if(sellButton) sellButton.style.display = 'none';
+                if(castButton) castButton.style.display = 'inline-flex';
+                if (!isCasting && statusText) { // Only update status if not currently casting
+                     statusText.textContent = "Ready to cast!";
+                }
+            }
+
+            // Update coin display
+            function updateCoinDisplay() {
+                if(coinDisplay) coinDisplay.textContent = simulatedCoins;
+            }
+
+            // Helper to capitalize
+            function capitalizeFirst(str) {
+                if (!str) return '';
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            // Event Listeners (check if buttons exist)
+            if (castButton) {
+                castButton.addEventListener('click', () => {
+                    if (isCasting) return; // Prevent multiple clicks while casting
+
+                    isCasting = true;
+                    if(statusText) statusText.textContent = "Casting...";
+                    castButton.disabled = true; // Disable button during cast
+                    castButton.classList.add('casting'); // Add animation class
+
+                    // Simulate casting time (e.g., 1 second)
+                    setTimeout(() => {
+                        const caughtItem = simulateCatch();
+                        displayResult(caughtItem);
+                        castButton.disabled = false; // Re-enable button
+                    }, 1000); // 1 second delay
+                });
+            }
+
+            if (sellButton) {
+                sellButton.addEventListener('click', sellCatch);
+            }
+        }
+    }
+    // --- END: Try Me Fishing Simulator Logic ---
+
+
     // Initialize all website features and animations
     function initializeWebsiteAnimations() {
         console.log("Initializing TackleBot animations...");
@@ -1121,11 +1315,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!document.hidden) {
                 startAnimationLoop(); // Resume loop
                 // Restart intervals that might have been cleared
-                if (!bubbleInterval && bubblesContainer) startBubbles();
+                if (!bubbleInterval && bubblesContainer) startBubbles(); // Assuming startBubbles is defined globally or accessible here
             } else {
                 stopAnimationLoop(); // Pause loop
                 // Clear intervals to save resources when hidden
-                if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; }
+                if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; } // Assuming bubbleInterval is global or accessible
             }
         });
 
@@ -1139,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Cleaning up animations and intervals...");
             stopAnimationLoop();
 
-            // Clear all known intervals
+            // Clear all known intervals (ensure these variables are accessible)
             if (skyUpdateInterval) clearInterval(skyUpdateInterval);
             if (waveStateInterval) clearInterval(waveStateInterval);
             if (bubbleInterval) clearInterval(bubbleInterval);
@@ -1159,4 +1353,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-}); // End DOMContentLoaded listener
+}); // End DOMContentLoaded listene
