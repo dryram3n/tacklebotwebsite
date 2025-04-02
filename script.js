@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global state for the animation loop
     let animationFrameId = null;
     let lastTimestamp = 0;
-    const FRAME_DURATION = 1000 / 30; // Target ~30fps for non-trail animations (in milliseconds)
+    const FRAME_DURATION = 1000 / 15; // Target ~15fps for non-trail animations (in milliseconds)
     let lastThrottledTimestamp = 0; // Separate timestamp for updates that don't need 60fps
     let isLoopRunning = false; // Track if the main animation loop is active
 
