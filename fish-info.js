@@ -1049,8 +1049,8 @@ const EVENT_FISH = [
        weightRange: { min: 10, max: 500 },
        lengthRange: { min: 50, max: 150 },
        locations: ["pond", "river", "lake", "ocean", "coral_reef", "abyss", "sunken_city", "vortex", "cosmic_sea", "temporal_tide", "fishverse"],
-       description: "A peculiar flounder said to appear only during foundational moments... or maybe just April Fools'.",
-       lore: "This flatfish seems oddly aware of its own existence within the bot's code. It whispers jokes about version control and database migrations. Catching one might grant temporary admin privileges... or just a chuckle.",
+       description: "Looks suspiciously flat... and maybe a bit... papery? Happy April Fools!",
+       lore: "Legends say this fish only appears when the veil between reality and silliness is thin. Some claim it's just a cleverly painted piece of cardboard, while others swear it whispered a terrible pun before flopping away. Its value is questionable, but the story is priceless.",
        event: "AprilFools2025", // Identifier for the event
        startDate: "2025-04-01T00:00:00Z", // Start date in ISO 8601 format (UTC)
        endDate: "2025-04-02T23:59:59Z"    // End date in ISO 8601 format (UTC)
@@ -1062,8 +1062,8 @@ const EVENT_FISH = [
        weightRange: { min: 54000, max: 69000 }, // Weight in grams (54-69kg)
        lengthRange: { min: 420, max: 690 }, // Length in cm
        locations: ["pond", "river", "lake", "ocean", "coral_reef", "abyss", "sunken_city", "vortex", "cosmic_sea", "temporal_tide", "fishverse"],
-       description: "The undisputed heavyweight champion of rizz. Its charisma is almost tangible.",
-       lore: "Legends say Ronald Rizz wasn't born, but manifested from pure, unfiltered confidence. He doesn't swim; the water currents rearrange themselves around him out of respect. Catching him requires impeccable timing and perhaps a compliment.",
+       description: "He's in so much pain. So much agony. His final words were 'Why did Miku leave me?'",
+       lore: "A frog that used to be a man. His existential dread makes everyone around him feel agony and despair. He constantly talks about bee's being in his skin and how his wife Hatsune Miku left him. His soul is so sad, he is glitching in and out of reality.",
        event: "Rizz2025",
        startDate: "2025-04-04T00:00:00Z",
        endDate: "2025-04-29T23:59:59Z"

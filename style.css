@@ -52,6 +52,8 @@
   --rarity-seasonal-text: #fff;
   --rarity-junk-bg: #a9a9a9;
   --rarity-junk-text: #fff;
+  --rarity-event-bg: #ffcc80; /* Add this line to match the event color */
+  --rarity-event-text: #8c5a00;
 }
 
 * {
@@ -674,7 +676,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-.social-links {
+social-links {
     margin-top: 1rem; /* Add space above social links */
 }
 
@@ -1230,7 +1232,7 @@ footer a:hover {
 .tab-mythic { background-color: var(--rarity-mythic-bg); color: var(--rarity-mythic-text); }
 .tab-chimerical { background-color: var(--rarity-chimerical-bg); color: var(--rarity-chimerical-text); }
 .tab-seasonal { background-color: var(--rarity-seasonal-bg); color: var(--rarity-seasonal-text); }
-.tab-event { background-color: var(--rarity-event); color: #8c5a00; }
+.tab-event { background-color: var(--rarity-event-bg); color: var(--rarity-event-text); }
 .tab-junk { background-color: var(--rarity-junk-bg); color: var(--rarity-junk-text); }
 
 /* Results count */

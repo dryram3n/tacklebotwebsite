@@ -92,7 +92,7 @@ const FISH_IMAGES = {
     "Lord Spring Fish": "fishImages/Lord Spring Fish.png",
 
     // Event Fish
-    "Ronald Rizz": "fishImages/Roandald Rizz.png",
+    "Ronald Rizz": "fishImages/Ronald Rizz.png",
     "Founder Flounder": "fishImages/April Fool Flounder.png",
 
     // Fallback placeholder image

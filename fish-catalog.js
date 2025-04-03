@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
             <img src="${imageUrl}" alt="${fish.name}" class="fish-image" onerror="this.src='images/placeholder-fish.png'">
             <h3 class="fish-name">${fish.name}</h3>
-            <p class="fish-rarity">${capitalizeFirst(fish.rarity || category)}</p> {/* Display original rarity */}
+            <p class="fish-rarity">${capitalizeFirst(fish.rarity || category)}</p>
             <p class="fish-value">${fish.baseValue ? `🪙 ${fish.baseValue}` : 'Value: ?'}</p>
         `;
 
@@ -296,10 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     onerror="this.src='images/placeholder-fish.png'">
                 <h2 id="fishDetailTitle" class="fish-detail-title">${fish.name}</h2>
                 <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity] || '#ccc'}; color: #fff;">
-                    ${capitalizeFirst(fish.rarity || 'event')} {/* Display original rarity */}
+                    ${capitalizeFirst(fish.rarity || 'event')}
                 </span>
                 ${seasonalHtml}
-                ${eventHtml} {/* Add the event badge here */}
+                ${eventHtml}
             </div>
 
             <p class="fish-detail-description">${fish.description || 'No description available.'}</p>
