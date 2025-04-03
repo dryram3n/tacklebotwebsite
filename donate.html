@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- Favicon -->
+   <link rel="icon" type="image/png" href="favicon.png">
+
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/donate.html">
+  <meta property="og:title" content="Donate - Support TackleBot Development">
+  <meta property="og:description" content="Support the development of TackleBot through Patreon, Ko-fi, PayPal, or Cash App. Your contributions help keep the bot running and improving!">
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/donate.html">
+  <meta property="twitter:title" content="Donate - Support TackleBot Development">
+  <meta property="twitter:description" content="Support the development of TackleBot through Patreon, Ko-fi, PayPal, or Cash App. Your contributions help keep the bot running and improving!">
+  <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Theme color for browser UI -->
+  <meta name="theme-color" content="#89f7fe">
+
+  <title>Donate - Support TackleBot 🎣</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <!-- Background Effects: Sky, Water, Fish -->
+  <div id="sky-container">
+      <div id="sun"></div>
+      <div id="moon"></div>
+      <div id="clouds-container"></div>
+  </div>
+  <div id="water-background">
+    <div class="water-body"></div>
+    <div class="water-surface">
+        <svg id="wave-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path id="wave-path-1" fill="rgba(137, 247, 254, 0.5)" />
+            <path id="wave-path-2" fill="rgba(102, 166, 255, 0.3)" />
+        </svg>
+    </div>
+    <div id="bubbles-container"></div>
+    <div id="fish-container"></div>
+  </div>
+  <div id="mouse-trail"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html" aria-label="TackleBot Home">🎣 TackleBot</a>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="index.html#try-me">Try Me!</a></li>
+        <li><a href="calculator.html">Calculator</a></li>
+        <li><a href="donate.html" class="active">Donate</a></li> <!-- Added Donate Link & Active Class -->
+        <li><a href="index.html#support">Support</a></li>
+        <li><a href="fish-catalog.html">Fish Catalog</a></li>
+        <li><a href="terms-of-service.html">Terms</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+        <li><a href="#" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    <!-- Donation Section -->
+    <section id="donation-section" class="animated-section">
+      <h2>Support TackleBot Development <span class="emoji">💖</span></h2>
+      <p>TackleBot is a passion project developed and maintained with love. Your generous donations help cover server costs, support ongoing development, and allow us to add exciting new features!</p>
+      <p>If you enjoy using TackleBot and want to contribute, please consider supporting us through one of the platforms below. Every little bit helps!</p>
+
+      <div class="donation-links-container">
+        <a href="https://www.patreon.com/c/thromblocreates" target="_blank" rel="noopener noreferrer" class="button donation-link patreon">
+          <i class="fab fa-patreon" aria-hidden="true"></i> Support on Patreon
+          <span class="ripple"></span>
+        </a>
+        <a href="https://ko-fi.com/thromblocreates" target="_blank" rel="noopener noreferrer" class="button donation-link kofi">
+          <i class="fas fa-coffee" aria-hidden="true"></i> Buy me a Coffee (Ko-fi)
+          <span class="ripple"></span>
+        </a>
+        <a href="https://www.paypal.com/paypalme/aurorasburst" target="_blank" rel="noopener noreferrer" class="button donation-link paypal">
+          <i class="fab fa-paypal" aria-hidden="true"></i> Donate via PayPal
+          <span class="ripple"></span>
+        </a>
+        <a href="https://cash.app/$DryRam3n" target="_blank" rel="noopener noreferrer" class="button donation-link cashapp">
+          <i class="fas fa-dollar-sign" aria-hidden="true"></i> Send via Cash App
+          <span class="ripple"></span>
+        </a>
+      </div>
+
+      <p class="donation-thanks">Thank you so much for your support! It means the world to us. <span class="emoji">😊</span></p>
+    </section>
+    <!-- End Donation Section -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+      <a href="terms-of-service.html">Terms of Service</a> |
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="social-links">
+      <a href="#" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
+    </div>
+  </footer>
+
+  <!-- UI Toggle Button -->
+  <div id="ui-toggle-container">
+      <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
+          <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
+      </button>
+      <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
+          <i class="fas fa-eye" aria-hidden="true"></i>
+      </button>
+  </div>
+
+  <!-- Load scripts deferred -->
+  <script src="fishImages.js" defer></script>
+  <script src="fish-info.js" defer></script> <!-- Ensure fish-info is loaded if needed by script.js -->
+  <script src="script.js" defer></script>
+</body>
+
+</html>
