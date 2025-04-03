@@ -1230,6 +1230,7 @@ footer a:hover {
 .tab-mythic { background-color: var(--rarity-mythic-bg); color: var(--rarity-mythic-text); }
 .tab-chimerical { background-color: var(--rarity-chimerical-bg); color: var(--rarity-chimerical-text); }
 .tab-seasonal { background-color: var(--rarity-seasonal-bg); color: var(--rarity-seasonal-text); }
+.tab-event { background-color: var(--rarity-event); color: #8c5a00; }
 .tab-junk { background-color: var(--rarity-junk-bg); color: var(--rarity-junk-text); }
 
 /* Results count */
@@ -1259,7 +1260,7 @@ footer a:hover {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 2px solid transparent; /* Base border */
+  border: 3px solid transparent; /* Base border */
 }
 .fish-card:hover {
   transform: translateY(-10px);

@@ -6,8 +6,9 @@ const RARITY_COLORS = {
     legendary: '#f4cc71',
     mythic: '#c79de0',
     chimerical: '#cd7ae2',
-    special: '#ffdb58', // Kept for potential future use
+    special: '#ffdb58', // For special ✨ fish
     seasonal: '#f08080',
+    event: '#ffcc80', // Added color for Event fish (e.g., light orange)
     junk: '#a9a9a9'
 };
 
@@ -1038,6 +1039,37 @@ const JUNK_ITEMS = [
     }
 ];
 
+// --- Event Fish ---
+// Fish available only during specific limited-time events.
+const EVENT_FISH = [
+   {
+       name: "Founder Flounder",
+       rarity: 'legendary', // Keep original rarity for potential sorting/filtering, but category is 'event'
+       baseValue: 750,
+       weightRange: { min: 10, max: 500 },
+       lengthRange: { min: 50, max: 150 },
+       locations: ["pond", "river", "lake", "ocean", "coral_reef", "abyss", "sunken_city", "vortex", "cosmic_sea", "temporal_tide", "fishverse"],
+       description: "A peculiar flounder said to appear only during foundational moments... or maybe just April Fools'.",
+       lore: "This flatfish seems oddly aware of its own existence within the bot's code. It whispers jokes about version control and database migrations. Catching one might grant temporary admin privileges... or just a chuckle.",
+       event: "AprilFools2025", // Identifier for the event
+       startDate: "2025-04-01T00:00:00Z", // Start date in ISO 8601 format (UTC)
+       endDate: "2025-04-02T23:59:59Z"    // End date in ISO 8601 format (UTC)
+   },
+   {
+       name: "Ronald Rizz",
+       rarity: 'mythic', // Keep original rarity
+       baseValue: 2000,
+       weightRange: { min: 54000, max: 69000 }, // Weight in grams (54-69kg)
+       lengthRange: { min: 420, max: 690 }, // Length in cm
+       locations: ["pond", "river", "lake", "ocean", "coral_reef", "abyss", "sunken_city", "vortex", "cosmic_sea", "temporal_tide", "fishverse"],
+       description: "The undisputed heavyweight champion of rizz. Its charisma is almost tangible.",
+       lore: "Legends say Ronald Rizz wasn't born, but manifested from pure, unfiltered confidence. He doesn't swim; the water currents rearrange themselves around him out of respect. Catching him requires impeccable timing and perhaps a compliment.",
+       event: "Rizz2025",
+       startDate: "2025-04-04T00:00:00Z",
+       endDate: "2025-04-29T23:59:59Z"
+   }
+];
+
 // --- End Fish Data Definitions ---
 
 
@@ -1050,6 +1082,7 @@ const FISH_DATA = {
     mythic: MYTHIC_FISH,
     chimerical: CHIMERICAL_FISH,
     seasonal: SEASONAL_FISH,
+    event: EVENT_FISH, // Add the event category
     junk: JUNK_ITEMS,
     colors: RARITY_COLORS, // Rarity color map
     locations: FISHING_LOCATIONS, // Location details map
@@ -1059,7 +1092,8 @@ const FISH_DATA = {
 // Helper function to get a flat list of all fish/items
 function getAllFish() {
     const allFish = [];
-    const categoriesToInclude = ['common', 'uncommon', 'rare', 'legendary', 'mythic', 'chimerical', 'seasonal', 'junk'];
+    // Include all categories where fish are defined
+    const categoriesToInclude = ['common', 'uncommon', 'rare', 'legendary', 'mythic', 'chimerical', 'seasonal', 'event', 'junk']; // Added 'event'
 
     categoriesToInclude.forEach(category => {
         if (FISH_DATA[category] && Array.isArray(FISH_DATA[category])) {
@@ -1067,7 +1101,7 @@ function getAllFish() {
                 // Add the category name to each fish object for easier filtering later
                 allFish.push({
                     ...fish,
-                    category: category // Ensure the category is explicitly part of the object
+                    category: category // Assign the correct category ('event' for event fish)
                 });
             });
         } else {
@@ -1083,4 +1117,4 @@ window.FISH_DATA = FISH_DATA;
 window.getAllFish = getAllFish;
 
 // Log confirmation that data is loaded
-console.log('FISH_DATA loaded successfully');
+console.log('FISH_DATA loaded successfully with separate Event category.');

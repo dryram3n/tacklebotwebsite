@@ -83,6 +83,18 @@ const FISH_IMAGES = {
     "Frogo": "fishImages/Frogo.png",
     "Toxic Sludge Fish": "fishImages/Toxic Sludge Fish.png",
 
+    // Seasonal Fish
+    "Cherry Salmon": "fishImages/Cherry Salmon.png",
+    "Rainbow Bloom": "fishImages/Rainbow Bloom.png",
+    "Spring Carp": "fishImages/Spring Carp.png",
+    "Dark Cherry Bass": "fishImages/Dark Cherry Bass.png",
+    "Disaster Clam": "fishImages/Disaster Clam.png",
+    "Lord Spring Fish": "fishImages/Lord Spring Fish.png",
+
+    // Event Fish
+    "Ronald Rizz": "fishImages/Roandald Rizz.png",
+    "Founder Flounder": "fishImages/April Fool Flounder.png",
+
     // Fallback placeholder image
     "placeholder": "fishImages/Anchovy.png"
 };

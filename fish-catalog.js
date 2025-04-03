@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Create and append a card for each fish in the filtered list
                 fishList.forEach(fish => {
-                    const fishCard = createFishCard(fish, category);
+                    const fishCard = createFishCard(fish, category); // Pass category here
                     catalogContent.appendChild(fishCard);
                 });
 
@@ -194,7 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create the HTML structure for a single fish card
     function createFishCard(fish, category) {
         const card = document.createElement('div');
-        card.className = `fish-card ${category}`; // Add category class for styling
+        // Use the fish's inherent rarity for border styling, but add 'event' class if applicable
+        const cardRarityClass = fish.rarity || category; // Use fish's rarity if defined, else category
+        card.className = `fish-card ${cardRarityClass}`;
+        if (category === 'event') {
+            card.classList.add('event'); // Add specific event class if needed for other styles
+        }
 
         // Get the fish image URL from FISH_IMAGES, use placeholder if not found
         let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
@@ -205,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
             <img src="${imageUrl}" alt="${fish.name}" class="fish-image" onerror="this.src='images/placeholder-fish.png'">
             <h3 class="fish-name">${fish.name}</h3>
-            <p class="fish-rarity">${capitalizeFirst(fish.rarity || 'unknown')}</p>
+            <p class="fish-rarity">${capitalizeFirst(fish.rarity || category)}</p> {/* Display original rarity */}
             <p class="fish-value">${fish.baseValue ? `🪙 ${fish.baseValue}` : 'Value: ?'}</p>
         `;
 
@@ -227,9 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Get fish lore text
         const getLore = () => {
-            // Try the 'lore' property directly from fish-info.js
             if (fish.lore) return fish.lore;
-            // Fallback if lore isn't directly in the object (though it should be now)
             return 'Lore for this fish has yet to be discovered. Continue fishing!';
         };
 
@@ -239,10 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
             locationsHtml = `
                 <div class="fish-locations">
                     ${fish.locations.map(locKey => {
-                        // Get location details (name, emoji) from FISH_DATA
                         const locationInfo = FISH_DATA.locations[locKey];
                         const emoji = locationInfo ? locationInfo.emoji : '';
-                        const name = locationInfo ? locationInfo.displayName : locKey; // Use displayName
+                        const name = locationInfo ? locationInfo.displayName : locKey;
                         return `<span class="location-tag">${emoji} ${name}</span>`;
                     }).join('')}
                 </div>
@@ -262,6 +264,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Format event badge if the fish is an event fish
+        let eventHtml = '';
+        if (fish.event && fish.startDate && fish.endDate) {
+            const formatEventDate = (dateString) => {
+                try {
+                    // Format as Month Day (e.g., Apr 1)
+                    return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+                } catch (e) {
+                    console.error("Error formatting event date:", e);
+                    return 'N/A';
+                }
+            };
+            const startDateFormatted = formatEventDate(fish.startDate);
+            const endDateFormatted = formatEventDate(fish.endDate);
+            // Check if the event is currently active
+            const now = new Date();
+            const isActive = now >= new Date(fish.startDate) && now <= new Date(fish.endDate);
+
+            eventHtml = `
+                <div class="event-badge ${isActive ? 'active-event' : ''}">
+                    🎉 Event: ${fish.event} (${startDateFormatted} - ${endDateFormatted})${isActive ? ' (Active!)' : ''}
+                </div>
+            `;
+        }
+
         // Build the inner HTML for the modal content area
         fishDetailContent.innerHTML = `
             <div class="fish-detail-header">
@@ -269,9 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     onerror="this.src='images/placeholder-fish.png'">
                 <h2 id="fishDetailTitle" class="fish-detail-title">${fish.name}</h2>
                 <span class="fish-detail-rarity" style="background-color: ${FISH_DATA.colors[fish.rarity] || '#ccc'}; color: #fff;">
-                    ${capitalizeFirst(fish.rarity || 'unknown')}
+                    ${capitalizeFirst(fish.rarity || 'event')} {/* Display original rarity */}
                 </span>
                 ${seasonalHtml}
+                ${eventHtml} {/* Add the event badge here */}
             </div>
 
             <p class="fish-detail-description">${fish.description || 'No description available.'}</p>
