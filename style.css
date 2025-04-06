@@ -55,15 +55,15 @@
   --rarity-event-bg: #ffcc80;
   --rarity-event-text: #8c5a00;
 
-  /* Z-Index Variables */
+  /* Z-Index Variables - Lowered background layers further */
   --z-sky: -11;
-  --z-water-canvas: -10; /* Canvas and DOM water bg */
-  --z-fish: -9; /* Below water, below content, but above sky */
-  --z-content: 10; /* Main sections, footer */
-  --z-header: 1000;
-  --z-modal: 1001;
-  --z-ui-toggle: 1001;
-  --z-mouse-trail: 5; /* Above fish, below content */
+  --z-water-canvas: -10; /* Canvas or DOM water body */
+  --z-fish: -9;          /* DOM fish */
+  --z-mouse-trail: -8;   /* DOM trail, visually below content */
+  --z-content: 10;       /* Main sections, footer */
+  --z-header: 1000;      /* Above content */
+  --z-modal: 1001;       /* Above header */
+  --z-ui-toggle: 1001;   /* Same level as modal */
 }
 
 /* --- Canvas Integration --- */
@@ -87,7 +87,6 @@ canvas {
 
 html {
   scroll-behavior: smooth;
-  /* Consider using JS for wider browser support if needed */
   font-size: 16px; /* Base font size */
 }
 
@@ -98,13 +97,24 @@ body {
   line-height: 1.7;
   overflow-x: hidden; /* Prevent horizontal scroll */
   font-weight: 400;
-  /* Default cursor is now handled by browser */
+  /* Ensure default cursor is always the base */
+  cursor: default;
 }
 
-/* Show cursor on interactive elements */
-a, button, input, select, textarea, [role="button"], label[for] {
+/* Explicitly set pointer for interactive elements */
+a, button, input[type="button"], input[type="submit"], input[type="reset"],
+input[type="checkbox"], input[type="radio"], select, label[for],
+.button, .filter-tag, .catalog-tab, .fish-card, .close-modal, .expand-btn,
+.search-button, .try-me-button, .donation-link, .nav-button, .hero-button,
+.secondary-button, .cta-button, .ui-toggle-button, .back-to-top {
   cursor: pointer;
 }
+
+/* Ensure text inputs show text cursor */
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea {
+    cursor: text;
+}
+
 
 /* --- Emojis --- */
 .emoji,
@@ -144,75 +154,57 @@ a, button, input, select, textarea, [role="button"], label[for] {
   border-radius: 50% 40% 50% 40%;
   pointer-events: none;
   opacity: 0; /* Initially hidden, shown by JS */
-  /* Use translate for positioning - updated by JS */
   transform: translate(-50%, -50%) rotate(45deg);
-  /* Transition only opacity and scale (on click), position is handled by JS lerp */
   transition: opacity 0.3s ease, transform 0.15s ease-out;
   z-index: var(--z-mouse-trail); /* Use variable */
   box-shadow: 0 0 10px var(--water-shadow);
   filter: blur(1px);
-  will-change: transform, opacity; /* Optimize animation */
+  will-change: transform, opacity;
 }
 
 /* Water Trail Droplets (DOM Fallback) */
 .trail-droplet {
   position: fixed;
-  width: 8px; /* Base size */
+  width: 8px;
   height: 8px;
   background: var(--water-color);
   border-radius: 50%;
   pointer-events: none;
   z-index: calc(var(--z-mouse-trail) - 1); /* Below main trail */
-  opacity: 0.5; /* Start opacity */
-  /* Position set by JS */
+  opacity: 0.5;
   box-shadow: 0 0 4px var(--water-shadow);
-  animation: fadeOutDroplet 0.8s linear forwards; /* Use specific animation */
+  animation: fadeOutDroplet 0.8s linear forwards;
   will-change: transform, opacity;
 }
 
 @keyframes fadeOutDroplet {
-  from {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.3);
-  }
+  from { opacity: 0.5; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.3); }
 }
 
 /* Water Splash Effect (DOM Fallback) */
 .water-splash {
-  position: fixed; /* Use fixed to position relative to viewport */
+  position: fixed;
   pointer-events: none;
-  z-index: calc(var(--z-mouse-trail) - 1); /* Below main trail */
-  /* Position set by JS */
-  width: 1px; /* Minimal size container */
+  z-index: calc(var(--z-mouse-trail) - 1);
+  width: 1px;
   height: 1px;
-  overflow: visible; /* Allow droplets to fly out */
+  overflow: visible;
 }
 
 .splash-droplet {
-  position: absolute; /* Position relative to water-splash container */
-  top: 0; left: 0; /* Start at center of splash */
+  position: absolute;
+  top: 0; left: 0;
   background: var(--water-splash);
   border-radius: 50%;
-  /* Size set by JS */
   transform-origin: center;
   animation: splashAnimation 0.6s ease-out forwards;
   will-change: transform, opacity;
 }
 
 @keyframes splashAnimation {
-  0% {
-    transform: translate(0, 0) scale(0.5);
-    opacity: 1;
-  }
-  100% {
-    /* Use CSS variables set by JS for trajectory */
-    transform: translate(var(--splash-x, 0px), var(--splash-y, 0px)) scale(0);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+  100% { transform: translate(var(--splash-x, 0px), var(--splash-y, 0px)) scale(0); opacity: 0; }
 }
 
 
@@ -223,11 +215,11 @@ header {
   padding: 0.8rem 5%;
   position: sticky;
   top: 0;
-  z-index: var(--z-header); /* Use variable */
+  z-index: var(--z-header);
   width: 100%;
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
-  transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+  transition: opacity 0.5s ease-in-out;
 }
 
 nav {
@@ -236,7 +228,7 @@ nav {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -247,12 +239,12 @@ nav {
   align-items: center;
   gap: 0.5rem;
   transition: transform 0.3s ease;
-  text-decoration: none; /* Remove underline from link */
+  text-decoration: none;
 }
 .logo a {
     text-decoration: none;
-    color: inherit; /* Inherit color from parent */
-    display: flex; /* Ensure link takes up space */
+    color: inherit;
+    display: flex;
     align-items: center;
     gap: inherit;
 }
@@ -269,19 +261,19 @@ nav ul {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Adjusted gap */
-  flex-wrap: wrap; /* Allow nav items to wrap */
-  justify-content: center; /* Center items when wrapped */
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 nav ul li a {
   text-decoration: none;
   color: var(--heading-color);
   font-weight: 700;
-  padding: 8px 4px; /* Add horizontal padding */
+  padding: 8px 4px;
   position: relative;
   transition: color 0.3s ease;
-  white-space: nowrap; /* Prevent link text wrapping */
+  white-space: nowrap;
 }
 
 nav ul li a::after {
@@ -301,13 +293,12 @@ nav ul li a:hover {
 }
 
 nav ul li a:hover::after,
-nav ul li a.active::after { /* Combine hover and active underline */
+nav ul li a.active::after {
   width: 100%;
 }
 
 nav ul li a.active {
-  /* Active state primarily indicated by underline */
-  font-weight: 800; /* Slightly bolder */
+  font-weight: 800;
 }
 
 /* --- Buttons --- */
@@ -321,15 +312,15 @@ nav ul li a.active {
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   transition: all 0.3s ease;
   border: none;
   position: relative;
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 5px 15px var(--shadow-light);
-  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
-  user-select: none; /* Prevent text selection */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
 }
@@ -337,7 +328,7 @@ nav ul li a.active {
 .button .emoji,
 .button i {
   font-size: 1.2em;
-  pointer-events: none; /* Ensure icon doesn't interfere with clicks */
+  pointer-events: none;
 }
 
 .button.nav-button {
@@ -388,11 +379,10 @@ nav ul li a.active {
   background-color: var(--ripple-light);
   transform: scale(0);
   animation: ripple-animation 0.6s linear;
-  pointer-events: none; /* Ripple should not be interactive */
-  z-index: 1; /* Ensure ripple is above button content but below text/icons if needed */
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* Darker ripple for light buttons */
 .button.hero-button .ripple {
   background-color: var(--ripple-dark);
 }
@@ -422,22 +412,21 @@ nav ul li a.active {
   border-radius: 30px;
   box-shadow: 0 15px 40px var(--shadow-light);
   gap: 3rem;
-  /* Subtle backdrop filter for depth */
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px); /* Safari support */
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  position: relative; /* Needed for z-index */
-  z-index: var(--z-content); /* Use variable */
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .hero-content {
   flex-basis: 55%;
-  z-index: 1; /* Ensure content is above potential pseudo-elements */
+  z-index: 1;
 }
 
 .hero-content h1 {
-  font-size: clamp(2.5rem, 5vw, 3.2rem); /* Responsive font size */
+  font-size: clamp(2.5rem, 5vw, 3.2rem);
   color: var(--heading-color);
   margin-bottom: 1.5rem;
   line-height: 1.3;
@@ -445,7 +434,7 @@ nav ul li a.active {
 }
 
 .hero-content p {
-  font-size: clamp(1.1rem, 2.5vw, 1.25rem); /* Responsive font size */
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
   margin-bottom: 2.5rem;
   color: var(--text-color);
 }
@@ -463,42 +452,29 @@ nav ul li a.active {
 
 /* --- Sections General Styling --- */
 main {
-    display: block; /* Ensure main element takes block layout */
-    transition: opacity 0.5s ease-in-out; /* Added for UI hide */
-    position: relative; /* Ensure main content establishes stacking context */
-    z-index: var(--z-content); /* Use variable */
+    display: block;
+    transition: opacity 0.5s ease-in-out;
+    position: relative;
+    z-index: var(--z-content);
 }
 
 section {
   padding: 5rem 5%;
   max-width: 1200px;
   margin: 4rem auto;
-  position: relative; /* Ensure sections establish stacking context */
-  z-index: var(--z-content); /* Use variable */
+  position: relative;
+  z-index: var(--z-content);
 }
 
 section h2 {
   text-align: center;
-  font-size: clamp(2.2rem, 4vw, 2.8rem); /* Responsive font size */
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
   color: var(--heading-color);
   margin-bottom: 4rem;
   position: relative;
-  padding-bottom: 1rem; /* Space for potential underline/decoration */
+  padding-bottom: 1rem;
   font-weight: 800;
 }
-/* Optional: Add a decorative underline to section titles */
-/* section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: var(--gradient-primary);
-    border-radius: 2px;
-} */
-
 
 /* --- Features Section --- */
 #features {
@@ -551,7 +527,7 @@ section h2 {
 #commands p {
   margin-bottom: 3rem;
   font-size: 1.15rem;
-  max-width: 800px; /* Limit width of intro paragraph */
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -572,7 +548,7 @@ section h2 {
   min-width: 260px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #eee;
-  text-align: left; /* Align content left */
+  text-align: left;
 }
 
 .command-item:hover {
@@ -587,11 +563,11 @@ section h2 {
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 700;
-  display: inline-block; /* Fit content width */
+  display: inline-block;
   margin-bottom: 1rem;
-  font-family: 'Courier New', Courier, monospace; /* Monospace font */
+  font-family: 'Courier New', Courier, monospace;
   border: none;
-  word-break: keep-all; /* Prevent breaking within command */
+  word-break: keep-all;
 }
 
 .command-item p {
@@ -619,7 +595,7 @@ section h2 {
   color: rgba(255, 255, 255, 0.9);
   font-size: 1.3rem;
   margin-bottom: 2.5rem;
-  max-width: 700px; /* Limit width */
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -628,15 +604,15 @@ section h2 {
   margin: 0.5rem;
 }
 
-.cta .cta-button { /* Renamed from .cta-button for clarity */
+.cta .cta-button {
   background: var(--white);
-  color: #667eea; /* Start color of CTA gradient */
+  color: #667eea;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .cta .cta-button:hover {
   background: #f0faff;
-  color: #764ba2; /* End color of CTA gradient */
+  color: #764ba2;
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
@@ -674,8 +650,8 @@ footer {
   border-top: 5px solid transparent;
   border-image: var(--gradient-accent) 1;
   position: relative;
-  z-index: var(--z-content); /* Use variable */
-  transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+  z-index: var(--z-content);
+  transition: opacity 0.5s ease-in-out;
 }
 
 footer p {
@@ -696,7 +672,7 @@ footer a:hover {
 }
 
 social-links {
-    margin-top: 1rem; /* Add space above social links */
+    margin-top: 1rem;
 }
 
 .social-links a {
@@ -704,7 +680,7 @@ social-links {
   margin: 0 0.8rem;
   color: #66a6ff;
   transition: transform 0.3s ease, color 0.3s ease;
-  display: inline-block; /* Ensure transform works */
+  display: inline-block;
 }
 
 .social-links a:hover {
@@ -714,13 +690,13 @@ social-links {
 
 /* --- Animation on Scroll --- */
 .animated-section {
-  opacity: 1; /* Start visible */
-  transform: translateY(0); /* Start in place */
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  will-change: opacity, transform; /* Optimize animation */
+  will-change: opacity, transform;
 }
 
-.animated-section.fade-in { /* New class for initial fade-in */
+.animated-section.fade-in {
   opacity: 0;
   transform: translateY(40px);
 }
@@ -735,7 +711,7 @@ social-links {
   background-color: var(--white);
   border-radius: 30px;
   box-shadow: 0 10px 30px var(--shadow-light);
-  padding: 3rem 5%; /* Adjusted padding */
+  padding: 3rem 5%;
   max-width: 1200px;
   margin: 4rem auto;
 }
@@ -785,7 +761,7 @@ social-links {
 .legal-card ul {
   margin-bottom: 1rem;
   padding-left: 1.5rem;
-  list-style: disc; /* Ensure bullets are visible */
+  list-style: disc;
 }
 
 .legal-card li {
@@ -798,7 +774,7 @@ social-links {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
-  word-break: break-all; /* Allow long links to break */
+  word-break: break-all;
 }
 
 .legal-card a:hover {
@@ -843,7 +819,7 @@ social-links {
   border: none;
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   font-weight: 600;
   width: 100%;
   text-align: left;
@@ -856,9 +832,8 @@ social-links {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px var(--shadow-light);
 }
-/* Use pseudo-element for +/- icon */
 .expand-btn::after {
-  content: '+'; /* Default icon */
+  content: '+';
   position: absolute;
   right: 1.2rem;
   font-size: 1.2rem;
@@ -866,21 +841,21 @@ social-links {
   transition: transform 0.3s ease;
 }
 .expand-btn[aria-expanded="true"]::after {
-  content: '−'; /* Minus sign for expanded */
-  transform: rotate(180deg); /* Optional rotation */
+  content: '−';
+  transform: rotate(180deg);
 }
 
 .expanded-content {
-  display: none; /* Hidden by default */
+  display: none;
   padding: 1.5rem;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 0 0 15px 15px;
   margin-top: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border */
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-top: none;
 }
 .expand-btn[aria-expanded="true"] + .expanded-content {
-    display: block; /* Show when expanded */
+    display: block;
 }
 
 
@@ -891,23 +866,22 @@ social-links {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: var(--z-sky); /* Use variable */
+  z-index: var(--z-sky);
   overflow: hidden;
   transition: background 2s ease-in-out;
-  background: var(--sky-day); /* Default */
-  contain: strict; /* Performance hint */
+  background: var(--sky-day);
+  contain: strict;
 }
 
 #sun, #moon {
   position: absolute;
-  width: clamp(60px, 8vw, 80px); /* Responsive size */
+  width: clamp(60px, 8vw, 80px);
   height: clamp(60px, 8vw, 80px);
   border-radius: 50%;
-  top: 50%; /* Centered for transform calculation */
+  top: 50%;
   left: 50%;
-  /* Transform set by JS */
   transition: transform 1s linear, opacity 0.8s ease-in-out;
-  opacity: 0; /* Start hidden */
+  opacity: 0;
   will-change: transform, opacity;
 }
 
@@ -928,8 +902,8 @@ social-links {
   top: 0;
   left: 0;
   width: 100%;
-  height: 60%; /* Clouds mostly in upper part */
-  z-index: 3; /* Above sun/moon */
+  height: 60%;
+  z-index: 3;
   pointer-events: none;
   overflow: hidden;
 }
@@ -939,16 +913,14 @@ social-links {
   background: var(--cloud-color);
   border-radius: 50%;
   box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.5), inset -10px -5px 10px rgba(0, 0, 0, 0.05);
-  opacity: 0; /* Start hidden, fade in via JS */
-  /* Animation properties set via JS/CSS vars */
+  opacity: 0;
   animation: cloud-drift linear infinite var(--drift-speed, 60s);
   will-change: transform, opacity;
   filter: blur(1px);
-  /* Base size, scaled by --cloud-scale */
   width: 100px;
   height: 35px;
   transform: scale(var(--cloud-scale, 1));
-  transition: opacity 1s ease-in; /* Fade in transition */
+  transition: opacity 1s ease-in;
 }
 
 .cloud::before,
@@ -958,25 +930,22 @@ social-links {
   background: inherit;
   border-radius: 50%;
   box-shadow: inherit;
-  filter: inherit; /* Inherit blur */
+  filter: inherit;
 }
 
-/* Different cloud shapes using pseudo-elements relative to base size */
 .cloud.type-1::before { width: 60%; height: 150%; top: -50%; left: 15%; }
 .cloud.type-1::after { width: 70%; height: 120%; top: -30%; right: 10%; }
-
-.cloud.type-2 { width: 150px; height: 50px; } /* Larger base */
+.cloud.type-2 { width: 150px; height: 50px; }
 .cloud.type-2::before { width: 50%; height: 160%; top: -60%; left: 20%; }
 .cloud.type-2::after { width: 45%; height: 120%; top: -40%; right: 15%; }
-
-.cloud.type-3 { width: 80px; height: 28px; } /* Smaller base */
+.cloud.type-3 { width: 80px; height: 28px; }
 .cloud.type-3::before { width: 50%; height: 140%; top: -40%; left: 12%; }
 .cloud.type-3::after { width: 60%; height: 120%; top: -30%; right: 10%; }
 
 
 @keyframes cloud-drift {
-  from { transform: translateX(-250px) scale(var(--cloud-scale, 1)); } /* Start further off-screen */
-  to { transform: translateX(calc(100vw + 250px)) scale(var(--cloud-scale, 1)); } /* End further off-screen */
+  from { transform: translateX(-250px) scale(var(--cloud-scale, 1)); }
+  to { transform: translateX(calc(100vw + 250px)) scale(var(--cloud-scale, 1)); }
 }
 
 
@@ -987,7 +956,7 @@ social-links {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: var(--z-water-canvas); /* Use variable (same as canvas) */
+  z-index: var(--z-water-canvas);
   overflow: hidden;
   pointer-events: none;
   contain: strict;
@@ -999,34 +968,30 @@ social-links {
   background: linear-gradient(to bottom, var(--water-surface) 0%, var(--water-deep) 100%);
   bottom: 0;
   left: 0;
-  /* Height transition handled by JS for performance */
-  height: 50vh; /* Initial height */
-  transform: translateZ(0); /* Promote to own layer */
+  height: 50vh;
+  transform: translateZ(0);
 }
 
 .water-surface {
   position: absolute;
   width: 100%;
-  /* Height determined by SVG */
-  bottom: 50vh; /* Match water-body height */
+  bottom: 50vh;
   left: 0;
-  /* Bottom transition handled by JS */
-  transform: translateZ(0); /* Promote to own layer */
-  overflow: visible; /* Allow wave peaks */
+  transform: translateZ(0);
+  overflow: visible;
 }
 
 #wave-svg {
     position: absolute;
-    bottom: -1px; /* Overlap slightly with water body */
+    bottom: -1px;
     left: 0;
     width: 100%;
-    height: 60px; /* Match viewBox height */
-    display: block; /* Remove extra space below SVG */
+    height: 60px;
+    display: block;
 }
 
 #wave-path-1, #wave-path-2 {
-    /* Path data 'd' updated by JS */
-    transition: d 0.1s linear; /* Faster transition for smoother look */
+    transition: d 0.1s linear;
     will-change: d;
 }
 
@@ -1036,67 +1001,46 @@ social-links {
   background: var(--bubble-color);
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
   will-change: transform, opacity;
-  transform: translateZ(0); /* Promote to own layer */
-  /* Animation set by JS */
-  /* display: none; initially hidden by JS */
+  transform: translateZ(0);
 }
 
 @keyframes bubble-rise {
-  0% {
-    transform: translate(0, 0) scale(0.5);
-    opacity: 0;
-  }
-  10% {
-    /* Fade in quickly */
-    opacity: 0.6;
-    transform: translate(calc(var(--drift-x, 0px) * 0.1), -20px) scale(1);
-  }
-  90% {
-      /* Still visible before final fade */
-      opacity: 0.4;
-  }
-  100% {
-    /* Move up and drift, fade out */
-    transform: translate(var(--drift-x, 0px), calc(-100vh - 50px)) scale(0.8);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  10% { opacity: 0.6; transform: translate(calc(var(--drift-x, 0px) * 0.1), -20px) scale(1); }
+  90% { opacity: 0.4; }
+  100% { transform: translate(var(--drift-x, 0px), calc(-100vh - 50px)) scale(0.8); opacity: 0; }
 }
 
 /* --- Fish Animation Styles (DOM Fallback) --- */
 #fish-container {
   position: absolute;
   width: 100%;
-  height: 100%; /* Cover the whole background area */
-  /* CHANGE: Use top instead of bottom for positioning context */
+  height: 100%;
   top: 0;
   left: 0;
-  z-index: var(--z-fish); /* Use variable */
+  z-index: var(--z-fish);
   overflow: hidden;
   pointer-events: none;
 }
 
 .swimming-fish {
   position: absolute;
-  /* CHANGE: Establish top/left origin for transform */
   top: 0;
   left: 0;
-  /* Fish elements don't need individual z-index if container is set */
   transform-origin: center;
-  /* CHANGE: Update will-change properties */
-  will-change: transform, opacity; /* Properties changed by JS/CSS */
-  transition: opacity 0.5s ease-in; /* Fade-in transition */
-  opacity: 0; /* Start hidden, faded in by JS */
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2)); /* Softer shadow */
-  /* Width set by JS */
-  height: auto; /* Maintain aspect ratio */
+  will-change: transform, opacity;
+  transition: opacity 0.5s ease-in;
+  opacity: 0;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+  height: auto;
   display: block;
 }
 
 .swimming-fish img {
   width: 100%;
   height: auto;
-  object-fit: contain; /* Ensure image fits within element bounds */
-  display: block; /* Remove extra space below image */
+  object-fit: contain;
+  display: block;
   position: relative;
   z-index: 1;
 }
@@ -1115,7 +1059,6 @@ social-links {
   width: 100%;
 }
 
-/* Search and filter section */
 .search-section {
   margin-bottom: 2.5rem;
   display: flex;
@@ -1138,11 +1081,11 @@ social-links {
   font-family: var(--font-primary);
   outline: none;
   transition: border-color 0.3s ease;
-  background-color: var(--white); /* Ensure background */
+  background-color: var(--white);
 }
 .search-input:focus {
   border-color: #66a6ff;
-  box-shadow: 0 0 5px rgba(102, 166, 255, 0.3); /* Add focus shadow */
+  box-shadow: 0 0 5px rgba(102, 166, 255, 0.3);
 }
 
 .search-button {
@@ -1152,13 +1095,13 @@ social-links {
   border-radius: 0 0.8rem 0.8rem 0;
   color: var(--heading-color);
   font-weight: 600;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   transition: all 0.3s;
   white-space: nowrap;
 }
 .search-button:hover {
-  background: linear-gradient(135deg, #66a6ff, #89f7fe); /* Reverse gradient */
-  transform: scale(1.05); /* Slight scale */
+  background: linear-gradient(135deg, #66a6ff, #89f7fe);
+  transform: scale(1.05);
 }
 
 .filter-section {
@@ -1187,9 +1130,9 @@ social-links {
   font-family: var(--font-primary);
   font-size: 0.9rem;
   font-weight: 500;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   transition: all 0.3s ease;
-  color: var(--text-color); /* Ensure text color */
+  color: var(--text-color);
 }
 .filter-tag:hover {
   background-color: #e0e0e0;
@@ -1203,7 +1146,6 @@ social-links {
   box-shadow: 0 3px 8px rgba(102, 166, 255, 0.2);
 }
 
-/* Category tabs */
 .catalog-tabs-container {
   margin-bottom: 2rem;
 }
@@ -1218,17 +1160,17 @@ social-links {
 .catalog-tab {
   display: flex;
   align-items: center;
-  gap: 0.5em; /* Use em for spacing relative to font size */
+  gap: 0.5em;
   padding: 0.7rem 1.2rem;
   border: none;
   border-radius: 2rem;
   font-family: var(--font-primary);
   font-size: 1rem;
   font-weight: 600;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   transition: all 0.3s ease;
   background-color: #f5f5f5;
-  color: var(--text-color); /* Default text color */
+  color: var(--text-color);
 }
 .catalog-tab:hover {
   transform: translateY(-3px);
@@ -1238,12 +1180,11 @@ social-links {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 4px 12px rgba(102, 166, 255, 0.25);
 }
-.catalog-tab span { /* Style the emoji/icon */
+.catalog-tab span {
     font-size: 1.1em;
     line-height: 1;
 }
 
-/* Use CSS variables for tab colors */
 .tab-common { background-color: var(--rarity-common-bg); color: var(--rarity-common-text); }
 .tab-uncommon { background-color: var(--rarity-uncommon-bg); color: var(--rarity-uncommon-text); }
 .tab-rare { background-color: var(--rarity-rare-bg); color: var(--rarity-rare-text); }
@@ -1254,16 +1195,14 @@ social-links {
 .tab-event { background-color: var(--rarity-event-bg); color: var(--rarity-event-text); }
 .tab-junk { background-color: var(--rarity-junk-bg); color: var(--rarity-junk-text); }
 
-/* Results count */
 .results-count {
   margin-bottom: 1rem;
   font-size: 1rem;
   color: var(--text-color);
   font-weight: 500;
-  min-height: 1.5em; /* Prevent layout shift when count appears */
+  min-height: 1.5em;
 }
 
-/* Fish cards grid */
 .catalog-content {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -1277,18 +1216,17 @@ social-links {
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 3px solid transparent; /* Base border */
+  border: 3px solid transparent;
 }
 .fish-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Use CSS variables for border colors */
 .fish-card.common { border-color: var(--rarity-common-bg); }
 .fish-card.uncommon { border-color: var(--rarity-uncommon-bg); }
 .fish-card.rare { border-color: var(--rarity-rare-bg); }
@@ -1297,15 +1235,15 @@ social-links {
 .fish-card.chimerical { border-color: var(--rarity-chimerical-bg); }
 .fish-card.seasonal { border-color: var(--rarity-seasonal-bg); }
 .fish-card.junk { border-color: var(--rarity-junk-bg); }
-.fish-card.event { border-color: var(--rarity-event-bg); } /* Added event border */
+.fish-card.event { border-color: var(--rarity-event-bg); }
 
 .fish-image {
   width: 100%;
   height: 180px;
   object-fit: contain;
   padding: 1rem;
-  background-color: white; /* Ensure background for transparent images */
-  display: block; /* Remove extra space */
+  background-color: white;
+  display: block;
 }
 
 .fish-name {
@@ -1322,7 +1260,7 @@ social-links {
   text-align: center;
   margin: 0;
   padding: 0.2rem 0;
-  font-style: italic; /* Italicize rarity */
+  font-style: italic;
 }
 
 .fish-value {
@@ -1333,16 +1271,15 @@ social-links {
   padding: 0.2rem 0;
 }
 .fish-value::before {
-    content: '💰 '; /* Add coin emoji */
+    content: '💰 ';
 }
 
-/* Loading indicator */
 .loading-indicator {
-  display: none; /* Hidden by default, shown by JS */
+  display: none;
   text-align: center;
   padding: 3rem;
   width: 100%;
-  grid-column: 1 / -1; /* Span full grid width */
+  grid-column: 1 / -1;
 }
 
 .spinner {
@@ -1361,8 +1298,8 @@ social-links {
 }
 
 .no-results {
-  display: none; /* Hidden by default, shown by JS */
-  grid-column: 1 / -1; /* Span full grid width */
+  display: none;
+  grid-column: 1 / -1;
   text-align: center;
   padding: 2rem;
   color: var(--text-color);
@@ -1371,18 +1308,17 @@ social-links {
   margin: 2rem 0;
 }
 
-/* Modal for detailed fish view */
 .fish-modal {
-  display: none; /* Hidden by default, shown by JS */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: var(--z-modal); /* Use variable */
+  z-index: var(--z-modal);
   overflow-y: auto;
-  padding: 20px 0; /* Padding for scroll */
+  padding: 20px 0;
 }
 
 .modal-content {
@@ -1407,12 +1343,12 @@ social-links {
   top: 1.5rem;
   right: 2rem;
   font-size: 2rem;
-  line-height: 1; /* Ensure consistent height */
+  line-height: 1;
   color: #555;
-  cursor: pointer;
+  /* cursor: pointer; /* Already set globally */
   transition: color 0.3s, transform 0.3s;
   z-index: 10;
-  background: none; /* Remove default button styles */
+  background: none;
   border: none;
   padding: 0;
 }
@@ -1438,7 +1374,7 @@ social-links {
   background-color: rgba(255, 255, 255, 0.7);
   padding: 1rem;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  display: block; /* Ensure block display */
+  display: block;
 }
 
 .fish-detail-title {
@@ -1455,7 +1391,6 @@ social-links {
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1rem;
-  /* Colors applied by JS based on rarity */
 }
 
 .fish-detail-stats {
@@ -1477,7 +1412,7 @@ social-links {
   color: var(--heading-color);
   margin-bottom: 0.5rem;
   font-size: 1rem;
-  display: block; /* Ensure label is block */
+  display: block;
 }
 
 .stat-value {
@@ -1503,7 +1438,7 @@ social-links {
   gap: 0.5rem;
 }
 .lore-title::before {
-    content: '📜'; /* Add scroll emoji */
+    content: '📜';
     font-size: 1.2em;
 }
 
@@ -1528,7 +1463,7 @@ social-links {
   flex-wrap: wrap;
   gap: 0.7rem;
   margin-top: 0.5rem;
-  justify-content: center; /* Center tags */
+  justify-content: center;
 }
 
 .location-tag {
@@ -1553,12 +1488,12 @@ social-links {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .seasonal-badge::before {
-    content: '📅'; /* Add calendar emoji */
+    content: '📅';
     font-size: 1.1em;
 }
 
 /* --- Calculator Section --- */
-#calculator { /* Use ID selector */
+#calculator {
   background-color: var(--white);
   border-radius: 30px;
   box-shadow: 0 10px 30px var(--shadow-light);
@@ -1576,7 +1511,7 @@ social-links {
 
 .calculator-container {
   display: grid;
-  grid-template-columns: 1fr; /* Default single column */
+  grid-template-columns: 1fr;
   gap: 3rem;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 2rem;
@@ -1584,7 +1519,6 @@ social-links {
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-/* Use grid for larger screens */
 @media (min-width: 992px) {
   .calculator-container {
     grid-template-columns: repeat(2, 1fr);
@@ -1634,7 +1568,7 @@ social-links {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-color);
-  cursor: pointer; /* Make label clickable */
+  /* cursor: pointer; /* Already set globally */
 }
 
 .calc-input, .calc-select {
@@ -1644,8 +1578,8 @@ social-links {
   font-size: 1rem;
   font-family: var(--font-primary);
   background-color: var(--white);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add box-shadow transition */
-  width: 100%; /* Ensure inputs fill grid cell */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
 }
 
 .calc-input:focus, .calc-select:focus {
@@ -1654,7 +1588,6 @@ social-links {
   box-shadow: 0 0 5px rgba(102, 166, 255, 0.3);
 }
 
-/* Improve number input appearance */
 .calc-input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
@@ -1688,10 +1621,10 @@ social-links {
   color: var(--text-color);
   padding-bottom: 0.8rem;
   border-bottom: 1px dashed #eee;
-  display: flex; /* Use flex for better alignment */
-  justify-content: space-between; /* Space out label and value */
-  flex-wrap: wrap; /* Allow wrapping */
-  gap: 0.5rem; /* Gap between items if wrapped */
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 .calc-output-line:last-child {
   border-bottom: none;
@@ -1700,13 +1633,13 @@ social-links {
 .calc-output-line strong {
   color: var(--heading-color);
   margin-right: 0.5em;
-  white-space: nowrap; /* Prevent label wrapping */
+  white-space: nowrap;
 }
 
 .calc-output-line span {
   font-weight: 600;
-  color: #66a6ff; /* Highlight color */
-  text-align: right; /* Align value to the right */
+  color: #66a6ff;
+  text-align: right;
 }
 
 .calc-rarity-header {
@@ -1734,36 +1667,34 @@ social-links {
   gap: 0.8rem 1.5rem;
   margin-top: 0.5rem;
 }
-/* Ensure rarity lines also use flex */
 .calc-output-line.rarity-common,
 .calc-output-line.rarity-uncommon,
 .calc-output-line.rarity-rare,
 .calc-output-line.rarity-legendary,
 .calc-output-line.rarity-mythic,
 .calc-output-line.rarity-chimerical {
-    justify-content: flex-start; /* Align left for rarity list */
+    justify-content: flex-start;
 }
 
-/* Use rarity variables for text color */
 .calc-output-line.rarity-common span { color: var(--rarity-common-text); }
 .calc-output-line.rarity-uncommon span { color: var(--rarity-uncommon-text); }
 .calc-output-line.rarity-rare span { color: var(--rarity-rare-text); }
 .calc-output-line.rarity-legendary span { color: var(--rarity-legendary-text); }
 .calc-output-line.rarity-mythic span { color: var(--rarity-mythic-text); }
-.calc-output-line.rarity-chimerical span { color: var(--rarity-chimerical-text); } /* Use text color var */
+.calc-output-line.rarity-chimerical span { color: var(--rarity-chimerical-text); }
 
 /* --- UI Toggle Button --- */
 #ui-toggle-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: var(--z-ui-toggle); /* Use variable */
+    z-index: var(--z-ui-toggle);
     transition: opacity 0.5s ease-in-out;
     will-change: opacity;
 }
 
 .ui-toggle-button {
-    padding: 10px 15px; /* Smaller padding */
+    padding: 10px 15px;
     font-size: 0.9rem;
     background: var(--gradient-secondary);
     color: var(--white);
@@ -1775,12 +1706,12 @@ social-links {
 }
 
 .ui-toggle-button.icon-button {
-    padding: 10px; /* Square padding */
-    width: 40px; /* Fixed width */
-    height: 40px; /* Fixed height */
-    border-radius: 50%; /* Circular */
-    font-size: 1.1rem; /* Slightly larger icon */
-    line-height: 1; /* Center icon vertically */
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    line-height: 1;
 }
 
 /* --- UI Hidden State --- */
@@ -1791,7 +1722,6 @@ body.ui-hidden footer {
     pointer-events: none;
 }
 
-/* Keep toggle button visible and interactive when UI is hidden */
 body.ui-hidden #ui-toggle-container {
     opacity: 1;
     pointer-events: auto;
@@ -1825,8 +1755,8 @@ body.ui-hidden #ui-toggle-container {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  min-height: 300px; /* Give it some base height */
-  justify-content: center; /* Center content vertically */
+  min-height: 300px;
+  justify-content: center;
 }
 
 .try-me-status {
@@ -1838,14 +1768,14 @@ body.ui-hidden #ui-toggle-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Allow wrapping */
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
 .try-me-coins {
     font-size: 1rem;
     font-weight: 700;
-    color: #e89f2e; /* Gold-ish color */
+    color: #e89f2e;
     background-color: rgba(255, 255, 255, 0.6);
     padding: 0.3rem 0.8rem;
     border-radius: 1rem;
@@ -1859,8 +1789,8 @@ body.ui-hidden #ui-toggle-container {
   background-color: rgba(255, 255, 255, 0.8);
   width: 80%;
   max-width: 300px;
-  opacity: 0; /* Start hidden */
-  transform: scale(0.9); /* Start slightly small */
+  opacity: 0;
+  transform: scale(0.9);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   will-change: opacity, transform;
 }
@@ -1905,14 +1835,14 @@ body.ui-hidden #ui-toggle-container {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
-    flex-wrap: wrap; /* Allow buttons to wrap */
+    flex-wrap: wrap;
     justify-content: center;
 }
 
 .try-me-button {
     padding: 12px 25px;
     font-size: 1rem;
-    min-width: 150px; /* Give buttons some width */
+    min-width: 150px;
 }
 
 .try-me-disclaimer {
@@ -1922,7 +1852,6 @@ body.ui-hidden #ui-toggle-container {
     font-style: italic;
 }
 
-/* Simple casting animation (optional) */
 @keyframes casting {
     0% { transform: translateY(0) rotate(0deg); }
     25% { transform: translateY(-5px) rotate(-5deg); }
@@ -1959,20 +1888,18 @@ body.ui-hidden #ui-toggle-container {
 
 .donation-links-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   max-width: 900px;
-  margin: 3rem auto; /* Center the container */
+  margin: 3rem auto;
 }
 
 .donation-link {
-  /* Use existing button styles */
   text-align: center;
   font-size: 1.1rem;
-  padding: 16px 25px; /* Slightly larger padding */
+  padding: 16px 25px;
 }
 
-/* Specific button colors (optional, adjust as desired) */
 .donation-link.patreon {
   background: linear-gradient(135deg, #f96854, #f98677);
   color: var(--white);
@@ -2002,14 +1929,14 @@ body.ui-hidden #ui-toggle-container {
 
 .donation-link.cashapp {
   background: linear-gradient(135deg, #00d632, #2cfd5b);
-  color: var(--heading-color); /* Darker text for light green */
+  color: var(--heading-color);
   box-shadow: 0 4px 10px rgba(0, 214, 50, 0.3);
 }
 .donation-link.cashapp:hover {
   box-shadow: 0 6px 15px rgba(0, 214, 50, 0.4);
 }
 .donation-link.cashapp .ripple {
-    background-color: rgba(0, 0, 0, 0.1); /* Darker ripple */
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 
@@ -2024,7 +1951,7 @@ body.ui-hidden #ui-toggle-container {
 /* --- Responsiveness --- */
 @media (max-width: 992px) {
   nav ul {
-      gap: 1rem; /* Reduce gap slightly */
+      gap: 1rem;
   }
   .features-grid {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -2033,20 +1960,20 @@ body.ui-hidden #ui-toggle-container {
     flex-basis: calc(50% - 1.5rem);
   }
   .calculator-container {
-      grid-template-columns: 1fr; /* Stack calculator columns */
+      grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   html {
-      font-size: 15px; /* Slightly smaller base font on medium screens */
+      font-size: 15px;
   }
   nav {
     flex-direction: column;
     gap: 1rem;
   }
   nav ul {
-    gap: 0.8rem 1.2rem; /* Adjust gap */
+    gap: 0.8rem 1.2rem;
     justify-content: center;
   }
   #hero {
@@ -2063,7 +1990,7 @@ body.ui-hidden #ui-toggle-container {
     font-size: 8em;
   }
   .hero-content {
-      flex-basis: auto; /* Reset basis */
+      flex-basis: auto;
   }
   .button {
     padding: 12px 25px;
@@ -2071,13 +1998,13 @@ body.ui-hidden #ui-toggle-container {
   }
   .command-item {
     flex-basis: calc(50% - 1rem);
-    min-width: 220px; /* Adjust min-width */
+    min-width: 220px;
     padding: 1.5rem;
   }
   .legal-card h3 { font-size: 1.5rem; }
   .legal-card h4 { font-size: 1.3rem; }
   .expand-btn { font-size: 0.9rem; padding: 0.6rem 1rem; }
-  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1.5rem; } /* Use section IDs */
+  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1.5rem; }
   .catalog-content { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
   .modal-content { width: 95%; padding: 2rem 1.5rem; }
   .try-me-container { padding: 1.5rem; }
@@ -2085,7 +2012,7 @@ body.ui-hidden #ui-toggle-container {
 
 @media (max-width: 576px) {
   html {
-      font-size: 14px; /* Smaller base font on small screens */
+      font-size: 14px;
   }
   .command-item {
     flex-basis: 100%;
@@ -2093,7 +2020,7 @@ body.ui-hidden #ui-toggle-container {
   }
   .button {
     width: 90%;
-    max-width: 350px; /* Max width for buttons */
+    max-width: 350px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -2110,7 +2037,7 @@ body.ui-hidden #ui-toggle-container {
   .legal-card h3 { font-size: 1.3rem; }
   .legal-card h4 { font-size: 1.1rem; }
   .legal-card ul { padding-left: 1.2rem; }
-  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1rem; } /* Use section IDs */
+  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1rem; }
   .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
   .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
   .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
@@ -2124,7 +2051,7 @@ body.ui-hidden #ui-toggle-container {
   .try-me-container { max-width: 95%; }
   .try-me-button { width: 100%; max-width: 250px; }
   .donation-links-container {
-    grid-template-columns: 1fr; /* Stack buttons on small screens */
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
   .donation-link {
@@ -2146,48 +2073,46 @@ body.ui-hidden #ui-toggle-container {
     font-size: 1.6rem;
   }
   .hero-emoji {
-      font-size: 6em; /* Smaller on very small screens */
+      font-size: 6em;
   }
 }
 
 /* --- Performance Optimizations & Reduced Motion --- */
 .reduced-motion #sun,
 .reduced-motion #moon {
-    transition-duration: 5s; /* Slower movement */
+    transition-duration: 5s;
 }
 .reduced-motion .cloud {
-    animation-duration: calc(var(--drift-speed, 60s) * 3) !important; /* Much slower clouds */
+    animation-duration: calc(var(--drift-speed, 60s) * 3) !important;
     opacity: 0.5 !important;
-    transition: none !important; /* Disable fade-in */
+    transition: none !important;
 }
 .reduced-motion #wave-path-1,
 .reduced-motion #wave-path-2 {
-    transition-duration: 2s; /* Slower wave transitions */
+    transition-duration: 2s;
 }
 .reduced-motion .bubble {
   box-shadow: none;
-  animation-duration: 10s !important; /* Slower bubbles */
+  animation-duration: 10s !important;
 }
 .reduced-motion #water-background {
   opacity: 0.7;
 }
 .reduced-motion .swimming-fish {
-  transition: opacity 2s ease-in !important; /* Slower fade */
-  /* JS should stop fish movement updates */
+  transition: opacity 2s ease-in !important;
 }
 .reduced-motion #mouse-trail,
 .reduced-motion .trail-droplet,
 .reduced-motion .water-splash {
-    display: none !important; /* Hide mouse effects */
+    display: none !important;
 }
-/* Removed cursor auto rule for reduced motion, default is auto */
 .reduced-motion .animated-section {
-    opacity: 1; /* Show sections immediately */
+    opacity: 1;
     transform: none;
     transition: none;
 }
 .reduced-motion .hero-emoji {
-    animation: none; /* Disable float animation */
+    animation: none;
 }
 
 
@@ -2197,11 +2122,10 @@ body.ui-hidden #ui-toggle-container {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important; /* Disable smooth scroll */
+      scroll-behavior: auto !important;
   }
   #sun, #moon {
-    transition: opacity 1.5s ease-in-out !important; /* Only fade */
-    /* JS should prevent transform updates */
+    transition: opacity 1.5s ease-in-out !important;
   }
   .cloud {
     animation: none !important;
@@ -2209,24 +2133,21 @@ body.ui-hidden #ui-toggle-container {
   }
    #wave-path-1, #wave-path-2 {
     transition: none !important;
-    /* JS should stop wave updates */
   }
   .bubble {
     animation: none !important;
-    display: none !important; /* Hide bubbles */
+    display: none !important;
   }
   #water-background {
     opacity: 0.5;
   }
    .swimming-fish {
     transition: none !important;
-    opacity: 0.6 !important; /* Show fish statically */
-    /* JS should stop fish updates */
+    opacity: 0.6 !important;
   }
   #mouse-trail, .trail-droplet, .water-splash {
       display: none !important;
   }
-  /* Removed cursor auto rule */
   .animated-section {
       opacity: 1 !important;
       transform: none !important;
@@ -2236,15 +2157,14 @@ body.ui-hidden #ui-toggle-container {
       animation: none !important;
   }
   .ripple {
-      display: none !important; /* Disable ripple effect */
+      display: none !important;
   }
   #tryMeCastButton.casting {
-      animation: none !important; /* Disable casting animation */
+      animation: none !important;
   }
   .try-me-result {
-      transition: none !important; /* Disable result animation */
+      transition: none !important;
   }
-  /* Reduced motion for canvas */
   body.using-canvas canvas {
     opacity: 0.7;
     filter: blur(1px);
@@ -2252,33 +2172,16 @@ body.ui-hidden #ui-toggle-container {
 }
 
 /* --- Canvas Integration --- */
-/* Class applied by JS when canvas successfully initializes */
 body.using-canvas #water-background,
 body.using-canvas #bubbles-container,
 body.using-canvas #fish-container,
 body.using-canvas #mouse-trail {
-  display: none !important; /* Hide DOM elements if canvas is active */
+  display: none !important;
 }
 
-/* Ensure interactive elements still show pointer when canvas is active */
-body.using-canvas a,
-body.using-canvas button,
-body.using-canvas input,
-body.using-canvas select,
-body.using-canvas textarea,
-body.using-canvas [role="button"],
-body.using-canvas label[for] {
-  cursor: pointer;
-}
-
-/* Fallback when canvas fails or is disabled */
 body.canvas-failed #water-background,
 body.canvas-failed #bubbles-container,
 body.canvas-failed #fish-container,
 body.canvas-failed #mouse-trail {
   display: block !important;
-}
-/* Ensure cursor is visible if canvas fails */
-body.canvas-failed {
-    cursor: auto; /* Default cursor */
 }
