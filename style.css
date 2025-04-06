@@ -2229,3 +2229,54 @@ body.ui-hidden #ui-toggle-container {
       transition: none !important; /* Disable result animation */
   }
 }
+
+/* --- Canvas Integration --- */
+canvas.water-effects-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -10; /* Match water background z-index */
+  will-change: transform;
+}
+
+/* Class applied by JS when canvas successfully initializes */
+body.using-canvas #water-background,
+body.using-canvas #bubbles-container,
+body.using-canvas #fish-container,
+body.using-canvas #mouse-trail {
+  display: none !important;
+}
+
+/* Fallback when canvas fails or is disabled */
+body.canvas-failed #water-background,
+body.canvas-failed #bubbles-container,
+body.canvas-failed #fish-container,
+body.canvas-failed #mouse-trail {
+  display: block !important;
+}
+
+/* Accessibility - Reduced motion support for canvas */
+@media (prefers-reduced-motion: reduce) {
+  canvas.water-effects-canvas {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+}
+
+/* When using canvas, ensure cursor is properly handled */
+body.using-canvas {
+  cursor: none;
+}
+
+body.using-canvas a, 
+body.using-canvas button, 
+body.using-canvas input, 
+body.using-canvas select, 
+body.using-canvas textarea, 
+body.using-canvas [role="button"], 
+body.using-canvas label[for] {
+  cursor: pointer;
+}

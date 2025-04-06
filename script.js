@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    // Add canvas detection near the top of the file
+    const supportsCanvas = (function() {
+        // Check if canvas is supported
+        const canvas = document.createElement('canvas');
+        return !!(canvas.getContext && canvas.getContext('2d'));
+    })();
+    
     // Detect if the device might have performance issues or prefers reduced motion
     const isLowPerfDevice = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
                            !('requestAnimationFrame' in window) || // Check for basic animation support
@@ -7,8 +13,34 @@ document.addEventListener('DOMContentLoaded', () => {
                            navigator.userAgent.match(/mobile|android/i); // Simple mobile check
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Add canvas feature detection
+    const useCanvas = supportsCanvas && !isLowPerfDevice && !prefersReducedMotion;
+    
     if (isLowPerfDevice) {
         document.body.classList.add('reduced-motion'); // Apply CSS class for reduced effects
+    }
+    
+    // Add class to body based on canvas usage
+    if (useCanvas) {
+        document.body.classList.add('using-canvas');
+        
+        // Load canvas dynamically to prevent unnecessary downloading on devices that won't use it
+        const canvasScript = document.createElement('script');
+        canvasScript.src = 'canvas-effects.js';
+        canvasScript.async = true;
+        canvasScript.onload = () => console.log('Canvas effects loaded successfully');
+        canvasScript.onerror = () => {
+            console.error('Failed to load canvas effects');
+            document.body.classList.remove('using-canvas');
+            document.body.classList.add('canvas-failed');
+            // Initialize the fallback animations
+            initializeWebsiteAnimations();
+        };
+        document.head.appendChild(canvasScript);
+    } else {
+        document.body.classList.add('canvas-failed');
+        // Continue with the existing animation code
+        initializeWebsiteAnimations();
     }
 
     // Global state for the animation loop
@@ -1163,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     fishPool = localFishData.uncommon;
                 } else if (localFishData.common?.length > 0) { // 60% Common (remaining)
                     selectedRarity = 'common';
-                    fishPool = localFishData.common;
+                    fishPool = localFishData.common || []; // Use common or empty array
                 } else {
                     // Fallback if a category is empty
                     console.warn("Could not find fish pool for selected rarity, defaulting to common.");
@@ -1299,8 +1331,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- END: Try Me Fishing Simulator Logic ---
 
 
-    // Initialize all website features and animations
+    // Modify initializeWebsiteAnimations() to only run when canvas isn't used
     function initializeWebsiteAnimations() {
+        // Don't initialize water effects if canvas is being used
+        if (document.body.classList.contains('using-canvas')) {
+            // Only initialize sky and static listeners, not water effects
+            console.log("Using canvas for water effects, skipping DOM-based water animations");
+            initSky();
+            initStaticListeners();
+            return;
+        }
+        
         console.log("Initializing TackleBot animations...");
         initSky();
         initWaterBackground();
@@ -1353,4 +1394,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-}); // End DOMContentLoaded listene
+}); // End DOMContentLoaded listener
