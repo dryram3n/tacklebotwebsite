@@ -1,3 +1,6 @@
+// Global variable to hold the canvas instance
+let waterCanvasInstance = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Add canvas detection near the top of the file
     const supportsCanvas = (function() {
@@ -5,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.createElement('canvas');
         return !!(canvas.getContext && canvas.getContext('2d'));
     })();
-    
+
     // Detect if the device might have performance issues or prefers reduced motion
     const isLowPerfDevice = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
                            !('requestAnimationFrame' in window) || // Check for basic animation support
@@ -15,25 +18,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add canvas feature detection
     const useCanvas = supportsCanvas && !isLowPerfDevice && !prefersReducedMotion;
-    
+
     if (isLowPerfDevice) {
         document.body.classList.add('reduced-motion'); // Apply CSS class for reduced effects
     }
-    
+
     // Add class to body based on canvas usage
     if (useCanvas) {
         document.body.classList.add('using-canvas');
-        
+        document.body.style.cursor = 'none'; // Hide cursor if canvas trail is used
+
         // Load canvas dynamically to prevent unnecessary downloading on devices that won't use it
         const canvasScript = document.createElement('script');
         canvasScript.src = 'canvas-effects.js';
         canvasScript.async = true;
-        canvasScript.onload = () => console.log('Canvas effects loaded successfully');
+        canvasScript.onload = () => {
+            console.log('Canvas effects script loaded successfully');
+            // Instantiate and start the canvas effects AFTER the script is loaded
+            if (typeof WaterCanvas !== 'undefined') {
+                waterCanvasInstance = new WaterCanvas();
+                waterCanvasInstance.start();
+                // Initialize non-water related animations after canvas setup
+                initializeWebsiteAnimations();
+            } else {
+                console.error("WaterCanvas class not found after loading script.");
+                document.body.classList.remove('using-canvas');
+                document.body.classList.add('canvas-failed');
+                initializeWebsiteAnimations(); // Fallback to DOM animations
+            }
+        };
         canvasScript.onerror = () => {
             console.error('Failed to load canvas effects');
             document.body.classList.remove('using-canvas');
             document.body.classList.add('canvas-failed');
-            // Initialize the fallback animations
             initializeWebsiteAnimations();
         };
         document.head.appendChild(canvasScript);
@@ -43,12 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeWebsiteAnimations();
     }
 
-    // Global state for the animation loop
+    // Global state for the animation loop (for DOM-based animations)
     let animationFrameId = null;
     let lastTimestamp = 0;
     const FRAME_DURATION = 1000 / 15; // Target ~15fps for non-trail animations (in milliseconds)
     let lastThrottledTimestamp = 0; // Separate timestamp for updates that don't need 60fps
-    let isLoopRunning = false; // Track if the main animation loop is active
+    let isLoopRunning = false; // Track if the main DOM animation loop is active
 
     // Cache frequently accessed DOM elements for performance
     const skyContainer = document.getElementById('sky-container');
@@ -374,6 +391,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const scrollPercentage = scrollMax > 0 ? Math.min(1, window.scrollY / scrollMax) : 0;
                 // Adjust target height based on scroll (range: 40vh at top to 85vh at bottom)
                 targetWaterHeight = 40 + (scrollPercentage * 45);
+
+                // Update canvas water height if canvas is active
+                if (waterCanvasInstance && typeof waterCanvasInstance.updateWaterHeight === 'function') {
+                    waterCanvasInstance.updateWaterHeight(targetWaterHeight);
+                }
             }, 10);
         }, { passive: true }); // Use passive listener for better scroll performance
 
@@ -798,6 +820,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Double-check: If canvas is somehow active, don't run this DOM trail
+        if (document.body.classList.contains('using-canvas')) {
+             if (trail) trail.style.display = 'none';
+             isTrailActive = false;
+             return;
+        }
+
         // Hide default cursor and prepare custom trail
         document.body.style.cursor = 'none';
         trail.style.opacity = '0'; // Start hidden
@@ -1072,7 +1101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Main Animation Loop - Coordinates all animations
+    // Main Animation Loop - Coordinates all DOM-based animations
     function mainLoop(timestamp) {
         if (!isLoopRunning) return; // Stop the loop if the flag is false
 
@@ -1114,10 +1143,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Functions to start and stop the main animation loop
+    // Functions to start and stop the main DOM animation loop
     function startAnimationLoop() {
         if (isLoopRunning) return; // Don't start if already running
-        console.log("Starting animation loop");
+        console.log("Starting DOM animation loop");
         isLoopRunning = true;
         lastTimestamp = performance.now(); // Reset timestamps before starting
         lastThrottledTimestamp = lastTimestamp;
@@ -1127,7 +1156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function stopAnimationLoop() {
         if (!isLoopRunning) return; // Don't stop if already stopped
-        console.log("Stopping animation loop");
+        console.log("Stopping DOM animation loop");
         isLoopRunning = false;
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId); // Cancel the next frame request
@@ -1333,45 +1362,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modify initializeWebsiteAnimations() to only run when canvas isn't used
     function initializeWebsiteAnimations() {
-        // Don't initialize water effects if canvas is being used
-        if (document.body.classList.contains('using-canvas')) {
-            // Only initialize sky and static listeners, not water effects
-            console.log("Using canvas for water effects, skipping DOM-based water animations");
-            initSky();
-            initStaticListeners();
-            return;
-        }
-        
+        // Don't initialize DOM water effects if canvas is being used
+        const isUsingCanvas = document.body.classList.contains('using-canvas');
+
         console.log("Initializing TackleBot animations...");
-        initSky();
-        initWaterBackground();
-        initDynamicWaves();
-        initMouseTrail();
-        initStaticListeners(); // Setup non-animated listeners
-        // Delay fish initialization slightly to prioritize initial page render
-        setTimeout(initSwimmingFish, 500);
+        initSky(); // Always initialize sky
+        initStaticListeners(); // Always setup non-animated listeners
 
-        // Pause/resume animations when tab visibility changes
-        document.addEventListener('visibilitychange', () => {
+        if (!isUsingCanvas) {
+            console.log("Initializing DOM-based water effects...");
+            initWaterBackground();
+            initDynamicWaves();
+            initMouseTrail();
+            // Delay fish initialization slightly to prioritize initial page render
+            setTimeout(initSwimmingFish, 500);
+
+            // Pause/resume DOM animations when tab visibility changes
+            document.addEventListener('visibilitychange', () => {
+                if (isUsingCanvas) return; // Canvas handles its own visibility
+                if (!document.hidden) {
+                    startAnimationLoop(); // Resume loop
+                    // Restart intervals that might have been cleared
+                    if (!bubbleInterval && bubblesContainer) startBubbles(); // Assuming startBubbles is defined globally or accessible here
+                } else {
+                    stopAnimationLoop(); // Pause loop
+                    // Clear intervals to save resources when hidden
+                    if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; } // Assuming bubbleInterval is global or accessible
+                }
+            });
+
+            // Start the DOM animation loop initially if the page is visible
             if (!document.hidden) {
-                startAnimationLoop(); // Resume loop
-                // Restart intervals that might have been cleared
-                if (!bubbleInterval && bubblesContainer) startBubbles(); // Assuming startBubbles is defined globally or accessible here
-            } else {
-                stopAnimationLoop(); // Pause loop
-                // Clear intervals to save resources when hidden
-                if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; } // Assuming bubbleInterval is global or accessible
+                startAnimationLoop();
             }
-        });
-
-        // Start the animation loop initially if the page is visible
-        if (!document.hidden) {
-            startAnimationLoop();
         }
 
         // Cleanup intervals and animation loop when the page is unloaded
         window.addEventListener('pagehide', () => { // 'pagehide' is better for mobile
             console.log("Cleaning up animations and intervals...");
+            // Stop and cleanup canvas if it exists
+            if (waterCanvasInstance && typeof waterCanvasInstance.stop === 'function') {
+                waterCanvasInstance.stop();
+                waterCanvasInstance = null;
+            }
+            // Stop DOM animation loop if it was running
             stopAnimationLoop();
 
             // Clear all known intervals (ensure these variables are accessible)

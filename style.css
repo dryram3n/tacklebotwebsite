@@ -52,8 +52,21 @@
   --rarity-seasonal-text: #fff;
   --rarity-junk-bg: #a9a9a9;
   --rarity-junk-text: #fff;
-  --rarity-event-bg: #ffcc80; /* Add this line to match the event color */
+  --rarity-event-bg: #ffcc80;
   --rarity-event-text: #8c5a00;
+}
+
+/* --- Canvas Integration --- */
+/* Style for the canvas element created by JS */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -10; /* Match water background z-index */
+  will-change: transform; /* Hint for performance */
 }
 
 * {
@@ -75,13 +88,8 @@ body {
   line-height: 1.7;
   overflow-x: hidden; /* Prevent horizontal scroll */
   font-weight: 400;
-  /* Custom cursor handled by JS initMouseTrail */
+  /* Custom cursor handled by JS initMouseTrail or canvas */
   cursor: none;
-}
-
-/* Hide cursor only if trail is active (JS adds/removes this class) */
-body.custom-cursor-active {
-    cursor: none;
 }
 
 /* Show cursor on interactive elements */
@@ -118,7 +126,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
   text-shadow: 0 5px 15px var(--shadow-medium);
 }
 
-/* --- Mouse Trail Effect --- */
+/* --- Mouse Trail Effect (DOM Fallback) --- */
 #mouse-trail {
   position: fixed;
   width: 18px;
@@ -137,7 +145,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
   will-change: transform, opacity; /* Optimize animation */
 }
 
-/* Water Trail Droplets */
+/* Water Trail Droplets (DOM Fallback) */
 .trail-droplet {
   position: fixed;
   width: 8px; /* Base size */
@@ -164,7 +172,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
   }
 }
 
-/* Water Splash Effect */
+/* Water Splash Effect (DOM Fallback) */
 .water-splash {
   position: fixed; /* Use fixed to position relative to viewport */
   pointer-events: none;
@@ -961,7 +969,7 @@ social-links {
 }
 
 
-/* --- Water Background Effect --- */
+/* --- Water Background Effect (DOM Fallback) --- */
 #water-background {
   position: fixed;
   width: 100%;
@@ -1043,7 +1051,7 @@ social-links {
   }
 }
 
-/* --- Fish Animation Styles --- */
+/* --- Fish Animation Styles (DOM Fallback) --- */
 #fish-container {
   position: absolute;
   width: 100%;
@@ -1278,6 +1286,7 @@ social-links {
 .fish-card.chimerical { border-color: var(--rarity-chimerical-bg); }
 .fish-card.seasonal { border-color: var(--rarity-seasonal-bg); }
 .fish-card.junk { border-color: var(--rarity-junk-bg); }
+.fish-card.event { border-color: var(--rarity-event-bg); } /* Added event border */
 
 .fish-image {
   width: 100%;
@@ -2228,26 +2237,35 @@ body.ui-hidden #ui-toggle-container {
   .try-me-result {
       transition: none !important; /* Disable result animation */
   }
+  /* Reduced motion for canvas */
+  body.using-canvas canvas {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
 }
 
 /* --- Canvas Integration --- */
-canvas.water-effects-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -10; /* Match water background z-index */
-  will-change: transform;
-}
-
 /* Class applied by JS when canvas successfully initializes */
 body.using-canvas #water-background,
 body.using-canvas #bubbles-container,
 body.using-canvas #fish-container,
 body.using-canvas #mouse-trail {
-  display: none !important;
+  display: none !important; /* Hide DOM elements if canvas is active */
+}
+
+/* When using canvas, ensure cursor is properly handled */
+body.using-canvas {
+  cursor: none; /* Hide default cursor */
+}
+/* Ensure interactive elements still show pointer when canvas is active */
+body.using-canvas a,
+body.using-canvas button,
+body.using-canvas input,
+body.using-canvas select,
+body.using-canvas textarea,
+body.using-canvas [role="button"],
+body.using-canvas label[for] {
+  cursor: pointer;
 }
 
 /* Fallback when canvas fails or is disabled */
@@ -2257,26 +2275,11 @@ body.canvas-failed #fish-container,
 body.canvas-failed #mouse-trail {
   display: block !important;
 }
-
-/* Accessibility - Reduced motion support for canvas */
-@media (prefers-reduced-motion: reduce) {
-  canvas.water-effects-canvas {
-    opacity: 0.7;
-    filter: blur(1px);
-  }
+/* Ensure cursor is visible if canvas fails but DOM trail isn't active */
+body.canvas-failed {
+    cursor: auto; /* Default cursor */
 }
-
-/* When using canvas, ensure cursor is properly handled */
-body.using-canvas {
-  cursor: none;
-}
-
-body.using-canvas a, 
-body.using-canvas button, 
-body.using-canvas input, 
-body.using-canvas select, 
-body.using-canvas textarea, 
-body.using-canvas [role="button"], 
-body.using-canvas label[for] {
-  cursor: pointer;
+/* Only hide cursor if DOM trail is active (JS handles this logic) */
+body.canvas-failed.custom-cursor-active {
+    cursor: none;
 }
