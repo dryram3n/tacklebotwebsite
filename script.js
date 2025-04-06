@@ -727,17 +727,25 @@ document.addEventListener('DOMContentLoaded', () => {
             button.setAttribute('aria-expanded', isVisible);
         });
         if (hideUiButton && showUiButton) {
-            hideUiButton.addEventListener('click', () => {
-                document.body.classList.add('ui-hidden');
-                hideUiButton.style.display = 'none';
-                showUiButton.style.display = 'inline-flex';
+            // Add both click and touch events for better mobile support
+            ['click', 'touchend'].forEach(eventType => {
+                hideUiButton.addEventListener(eventType, (e) => {
+                    if (eventType === 'touchend') e.preventDefault();
+                    document.body.classList.add('ui-hidden');
+                    hideUiButton.style.display = 'none';
+                    showUiButton.style.display = 'inline-flex';
+                });
+                
+                showUiButton.addEventListener(eventType, (e) => {
+                    if (eventType === 'touchend') e.preventDefault();
+                    document.body.classList.remove('ui-hidden');
+                    hideUiButton.style.display = 'inline-flex';
+                    showUiButton.style.display = 'none';
+                });
             });
-            showUiButton.addEventListener('click', () => {
-                document.body.classList.remove('ui-hidden');
-                hideUiButton.style.display = 'inline-flex';
-                showUiButton.style.display = 'none';
-            });
-        } else { console.warn("UI toggle buttons not found."); }
+        } else { 
+            console.warn("UI toggle buttons not found."); 
+        }
     }
 
     // Main Animation Loop

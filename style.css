@@ -1691,6 +1691,12 @@ social-links {
     z-index: var(--z-ui-toggle);
     transition: opacity 0.5s ease-in-out;
     will-change: opacity;
+    /* Ensure it's large enough on all devices */
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ui-toggle-button {
@@ -1699,19 +1705,57 @@ social-links {
     background: var(--gradient-secondary);
     color: var(--white);
     box-shadow: 0 3px 10px rgba(238, 156, 167, 0.4);
-}
-.ui-toggle-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(238, 156, 167, 0.5);
+    /* Add a min-width/height to ensure the button is tappable */
+    min-width: 44px;
+    min-height: 44px;
+    /* Make tap target larger for mobile */
+    touch-action: manipulation;
 }
 
 .ui-toggle-button.icon-button {
     padding: 10px;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     font-size: 1.1rem;
     line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure body.ui-hidden has high specificity */
+body.ui-hidden header,
+body.ui-hidden main,
+body.ui-hidden footer {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease-in-out;
+}
+
+body.ui-hidden #ui-toggle-container {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Enhance visibility on mobile */
+@media (max-width: 768px) {
+    #ui-toggle-container {
+        bottom: 15px;
+        right: 15px;
+        /* Make even more prominent on mobile */
+    }
+    
+    .ui-toggle-button {
+        padding: 12px 18px;
+        font-size: 1rem;
+    }
+    
+    .ui-toggle-button.icon-button {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
 }
 
 /* --- UI Hidden State --- */
