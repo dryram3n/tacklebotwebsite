@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add class to body based on canvas usage
     if (useCanvas) {
         document.body.classList.add('using-canvas');
-        document.body.style.cursor = 'none'; // Hide cursor if canvas trail is used
+        // REMOVED: Don't hide cursor
+        // document.body.style.cursor = 'none';
 
         // Load canvas dynamically to prevent unnecessary downloading on devices that won't use it
         const canvasScript = document.createElement('script');
@@ -526,7 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let adjustFishToWaterInterval = null; // Interval to check if fish are above water
     let fishRefreshInterval = null; // Interval to periodically replace fish
     let fishCount = 0; // Target number of fish on screen
-    // ADDED: Variable to track water top boundary in vh
     let currentWaterTopVh = 50;
 
     function initSwimmingFish() {
@@ -534,18 +534,18 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Missing elements for fish animation, skipping initialization.');
             return;
         }
-        // Ensure the FISH_IMAGES data is loaded and available
         if (typeof FISH_IMAGES === 'undefined' || Object.keys(FISH_IMAGES).length === 0) {
             console.error('Fish images data (FISH_IMAGES) not found or empty.');
             return;
         }
 
-        // Determine number of fish based on performance/cores
-        fishCount = isLowPerfDevice ? 3 : (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
-        fishImageKeys = Object.keys(FISH_IMAGES); // Get all fish names
-        fishImages = fishImageKeys.map(key => FISH_IMAGES[key]); // Get all image URLs
-        currentWaterHeightVh = parseFloat(waterBody.style.height) || 50; // Get initial water height
-        // ADDED: Calculate initial water top
+        // CHANGE: Update fish count logic to match canvas and user request (max 20)
+        fishCount = isLowPerfDevice ? 5 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12);
+        console.log(`Initializing DOM fish animation with target count: ${fishCount}`); // Log count
+
+        fishImageKeys = Object.keys(FISH_IMAGES);
+        fishImages = fishImageKeys.map(key => FISH_IMAGES[key]);
+        currentWaterHeightVh = parseFloat(waterBody.style.height) || 50;
         currentWaterTopVh = 100 - currentWaterHeightVh;
 
         // Periodically check if fish are above the water line due to scrolling
@@ -555,13 +555,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Only adjust if water height changed significantly
             if (Math.abs(waterHeight - currentWaterHeightVh) > 1) {
                 currentWaterHeightVh = waterHeight; // Update tracked height
-                // ADDED: Update water top boundary
                 currentWaterTopVh = 100 - currentWaterHeightVh;
 
                 activeFish.forEach(fish => {
                     if (!fish?.element?.isConnected) return; // Skip if fish element was removed
 
-                    // CHANGED: Check if fish is above the water surface (using Y from top)
                     const fishTopBoundary = currentWaterTopVh + 2; // Add 2vh buffer below surface
                     if (fish.currentY_vh < fishTopBoundary) {
                         // Move fish to a random position within the new water height (from top)
@@ -594,6 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const arrayIndex = activeFish.indexOf(fishToRemove);
                     if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
                     // Add a new fish if below target count and tab is visible
+                    // CHANGE: Ensure we don't exceed the new fishCount limit
                     if (!document.hidden && activeFish.length < fishCount) {
                         setTimeout(createFish, 500); // Add replacement with slight delay
                     }
@@ -604,6 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (fishToRemove.element.isConnected) fishToRemove.element.remove();
                     const arrayIndex = activeFish.indexOf(fishToRemove);
                     if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
+                    // CHANGE: Ensure we don't exceed the new fishCount limit
                     if (!document.hidden && activeFish.length < fishCount) {
                        setTimeout(createFish, 500);
                     }
@@ -614,6 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  const arrayIndex = activeFish.indexOf(fishToRemove);
                  if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
                  // Add replacement if needed
+                 // CHANGE: Ensure we don't exceed the new fishCount limit
                  if (!document.hidden && activeFish.length < fishCount) {
                      setTimeout(createFish, 500);
                  }
@@ -621,13 +622,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, isLowPerfDevice ? 30000 : 20000); // Longer refresh interval on low-perf
 
         // Create the initial set of fish with a slight stagger
+        // CHANGE: Ensure we don't exceed the new fishCount limit
         for (let i = 0; i < fishCount; i++) {
             setTimeout(createFish, i * (isLowPerfDevice ? 600 : 300));
         }
     }
 
     function createFish() {
-        if (document.hidden || !fishContainer || !fishImageKeys.length) return null; // Don't create if hidden or no data
+        // CHANGE: Add check to prevent exceeding fishCount
+        if (document.hidden || !fishContainer || !fishImageKeys.length || activeFish.length >= fishCount) return null; // Don't create if hidden or no data or limit reached
 
         try {
             const fishElement = document.createElement('div');
@@ -670,7 +673,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Set initial position within the current water height
             const startX_vw = Math.random() * 100; // Random horizontal start (vw)
-            // CHANGED: Calculate Y position from the TOP within water boundaries
             const startY_vh = currentWaterTopVh + (Math.random() * (currentWaterHeightVh * 0.8)); // Random vertical start (vh, within 80% of water height, from top)
 
             fishElement.style.opacity = '0'; // Start invisible for fade-in
@@ -679,7 +681,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const direction = Math.random() > 0.5 ? 'right' : 'left';
             const scaleX = direction === 'left' ? -1 : 1;
 
-            // CHANGED: Set initial transform
             fishElement.style.transform = `translate(${startX_vw.toFixed(1)}vw, ${startY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
 
             // Calculate speed (slower for larger fish, adjusted by performance)
@@ -687,13 +688,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const baseSpeed = (40 - size * 0.3) * 0.05 * speedFactor; // Base speed in vw/sec
             const speed = Math.max(0.5, Math.min(4, baseSpeed)); // Clamp speed
 
+            // CHANGE: Increase vertical amount range
+            const verticalAmount = Math.random() * 8 + 3; // vh range
+
             // Store fish state data (using vw/vh from top-left)
             const fishData = {
                 element: fishElement,
                 speed: speed, // Horizontal speed (vw per second)
                 direction: direction,
                 verticalDirection: Math.random() > 0.5 ? 'up' : 'down', // Initial vertical direction
-                verticalAmount: Math.random() * 5 + 2, // How far up/down it moves (vh)
+                verticalAmount: verticalAmount, // How far up/down it moves (vh)
                 originalY_vh: startY_vh, // Base vertical position (vh from top)
                 wiggleAmount: Math.random() * 0.4 + 0.3, // How much it wiggles
                 wigglePhase: Math.random() * Math.PI * 2, // Starting point in wiggle cycle
@@ -723,7 +727,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const elapsedSeconds = elapsedSinceLastThrottledFrame / 1000; // Time since last update in seconds
         const boundaryPadding = 3; // Keep fish away from screen edges (vw)
-        // CHANGED: Define water boundaries from the top
         const waterTopBoundary_vh = currentWaterTopVh + 1; // 1vh below surface
         const waterBottomBoundary_vh = 100 - 2; // 2vh above viewport bottom
 
@@ -740,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 originalY_vh, wiggleAmount, wigglePhase, currentX_vw, currentY_vh
             } = fish;
 
-            // Update Horizontal Movement & Check Boundaries
+            // --- Horizontal Movement ---
             const horizontalMove = speed * elapsedSeconds;
             let scaleX = direction === 'left' ? -1 : 1; // Keep track of scale for transform
 
@@ -758,17 +761,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             // Small random chance to change direction mid-screen
-            if (Math.random() < 0.0005) {
+            if (Math.random() < 0.0005) { // Keep random horizontal change chance low
                 direction = (direction === 'right' ? 'left' : 'right');
                 scaleX = direction === 'left' ? -1 : 1; // Update scale
             }
 
-            // Update Vertical Movement & Check Boundaries (using vh from top)
-            const verticalSpeed = speed * 0.3; // Vertical movement slower than horizontal
+            // --- Vertical Movement ---
+            // CHANGE: Add slow drift to originalY
+            originalY_vh += (Math.random() - 0.5) * 0.5 * elapsedSeconds; // Very slow drift (0.5 vh/sec max)
+            originalY_vh = Math.max(waterTopBoundary_vh + verticalAmount, Math.min(waterBottomBoundary_vh - verticalAmount, originalY_vh)); // Clamp drift
+
+            const verticalSpeed = speed * 0.4; // Slightly faster vertical potential
             const verticalMove = verticalSpeed * elapsedSeconds;
             let targetY_vh = currentY_vh + (verticalDirection === 'up' ? -verticalMove : verticalMove); // 'up' decreases vh
 
-            // Define vertical movement range based on original position
+            // Define vertical movement range based on drifted original position
             const verticalTopLimit = Math.max(waterTopBoundary_vh, originalY_vh - verticalAmount);
             const verticalBottomLimit = Math.min(waterBottomBoundary_vh, originalY_vh + verticalAmount);
 
@@ -780,25 +787,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 verticalDirection = 'up'; // Turn up
                 targetY_vh = currentY_vh - verticalMove; // Adjust target for new direction
             }
-            // Small random chance to change vertical direction
-            if (Math.random() < 0.002) {
+            // CHANGE: Increase random vertical direction change chance
+            if (Math.random() < 0.005) {
                 verticalDirection = (verticalDirection === 'up' ? 'down' : 'up');
             }
 
             // Apply Wiggle (subtle vertical oscillation)
-            wigglePhase += 6 * elapsedSeconds; // Adjust wiggle speed
+            wigglePhase += 7 * elapsedSeconds; // Slightly faster wiggle
             const wiggle = Math.sin(wigglePhase) * wiggleAmount;
-            targetY_vh += wiggle * 0.1; // Apply small wiggle offset
+            targetY_vh += wiggle * 0.2; // Slightly stronger wiggle effect
 
             // Clamp final vertical position within absolute water boundaries
             currentY_vh = Math.max(waterTopBoundary_vh, Math.min(waterBottomBoundary_vh, targetY_vh));
 
-            // CHANGED: Apply updated position and flip using transform
+            // Apply updated position and flip using transform
             element.style.transform = `translate(${currentX_vw.toFixed(1)}vw, ${currentY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
 
             // Update the fish object state in the array
             fish.direction = direction;
             fish.verticalDirection = verticalDirection;
+            fish.originalY_vh = originalY_vh; // Store drifted Y
             fish.wigglePhase = wigglePhase % (Math.PI * 2); // Keep phase value reasonable
             fish.currentX_vw = currentX_vw;
             fish.currentY_vh = currentY_vh;
@@ -817,7 +825,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Skip initialization if trail element missing, low performance, or touch device
         if (!trail || isLowPerfDevice || 'ontouchstart' in window) {
             if (trail) trail.style.display = 'none'; // Hide element if it exists but shouldn't run
-            document.body.style.cursor = 'auto'; // Ensure default cursor is visible
+            // REMOVED: Don't force cursor auto here
             document.body.classList.remove('custom-cursor-active'); // Remove class if trail not active
             isTrailActive = false;
             return;
@@ -831,9 +839,9 @@ document.addEventListener('DOMContentLoaded', () => {
              return;
         }
 
-        // Hide default cursor and prepare custom trail
-        document.body.style.cursor = 'none';
-        document.body.classList.add('custom-cursor-active'); // Add class to indicate custom cursor
+        // REMOVED: Don't hide default cursor
+        // document.body.style.cursor = 'none';
+        document.body.classList.add('custom-cursor-active'); // Still add class if needed for other styles
         trail.style.opacity = '0'; // Start hidden
         isTrailActive = true; // Enable trail updates in the main loop
 
@@ -1367,19 +1375,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modify initializeWebsiteAnimations() to only run when canvas isn't used
     function initializeWebsiteAnimations() {
-        // Don't initialize DOM water effects if canvas is being used
         const isUsingCanvas = document.body.classList.contains('using-canvas');
 
         console.log("Initializing TackleBot animations...");
-        initSky(); // Always initialize sky
-        initStaticListeners(); // Always setup non-animated listeners
+        initSky();
+        initStaticListeners();
 
         if (!isUsingCanvas) {
             console.log("Initializing DOM-based water effects...");
             initWaterBackground();
             initDynamicWaves();
-            initMouseTrail();
-            // Delay fish initialization slightly to prioritize initial page render
+            initMouseTrail(); // Initialize DOM trail if canvas isn't used
             setTimeout(initSwimmingFish, 500);
 
             // Pause/resume DOM animations when tab visibility changes
@@ -1400,6 +1406,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!document.hidden) {
                 startAnimationLoop();
             }
+        } else {
+            // If using canvas, ensure DOM trail is explicitly disabled
+            isTrailActive = false;
+            if (trail) trail.style.display = 'none';
+            document.body.classList.remove('custom-cursor-active');
         }
 
         // Cleanup intervals and animation loop when the page is unloaded
@@ -1430,67 +1441,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("TackleBot animations initialized.");
     }
 
-    // Add this near the initialization functions
-
-    function ensureProperCursorBehavior() {
-        // Get the current mode
-        const isUsingCanvas = document.body.classList.contains('using-canvas');
-        const isUsingDOMTrail = document.body.classList.contains('custom-cursor-active');
-        
-        // If neither canvas nor DOM trail is active, restore normal cursor
-        if (!isUsingCanvas && !isUsingDOMTrail) {
-            document.body.style.cursor = 'auto';
-        }
-        
-        // Add cursor:none to body only when appropriate
-        if (isUsingCanvas || isUsingDOMTrail) {
-            document.body.style.cursor = 'none';
-        }
-    }
+    // REMOVED: Cursor behavior/confirmation functions are no longer needed
 
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-    // Call after initializations are complete
-    setTimeout(ensureProperCursorBehavior, 1000);
-
-    // Add near the end of your existing DOMContentLoaded event handler
-
-    function confirmCursorFunctionality() {
-      // Wait for everything to initialize
-      setTimeout(() => {
-        // Check which cursor system is active
-        const usingCanvas = document.body.classList.contains('using-canvas');
-        const usingDOMTrail = document.body.classList.contains('custom-cursor-active');
-        
-        if (usingCanvas) {
-          // Verify canvas cursor is working by checking if waterCanvasInstance exists and is working
-          if (waterCanvasInstance && typeof waterCanvasInstance.animationFrameId === 'number') {
-            document.body.classList.add('canvas-confirmed');
-          } else {
-            // Fallback to normal cursor if canvas cursor isn't working
-            document.body.style.cursor = 'auto';
-          }
-        } else if (usingDOMTrail) {
-          // Verify DOM trail is visible by checking if it has opacity > 0
-          const trail = document.getElementById('mouse-trail');
-          if (trail && window.getComputedStyle(trail).opacity > 0) {
-            document.body.classList.add('custom-cursor-confirmed');
-          } else {
-            // Fallback to normal cursor if DOM trail isn't visible
-            document.body.style.cursor = 'auto';
-          }
-        } else {
-          // Neither system is active, ensure normal cursor
-          document.body.style.cursor = 'auto';
-        }
-        
-        // Apply cursor debugging styles in development, comment out in production
-        // document.body.classList.add('debug-cursor');
-      }, 2000); // Check after 2 seconds to allow animations to initialize
-    }
-
-    // Call after initialization
-    confirmCursorFunctionality();
+    // REMOVED: Calls to removed cursor functions
 
 }); // End DOMContentLoaded listener

@@ -56,6 +56,9 @@ class WaterCanvas {
       if (!this.prefersReducedMotion) {
           window.addEventListener('mousemove', this.handleMouseMove);
           window.addEventListener('click', this.handleClick);
+      } else {
+          // Ensure cursor is visible if reduced motion prevents trail
+          document.body.style.cursor = 'auto';
       }
 
       // Load fish images
@@ -127,7 +130,7 @@ class WaterCanvas {
 
     createInitialFish() {
       // Add some initial fish based on performance
-      const fishCount = this.isLowPerfDevice ? 3 : (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
+      const fishCount = this.isLowPerfDevice ? 5 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12); // Max 20
 
       for (let i = 0; i < fishCount; i++) {
         setTimeout(() => this.addFish(), i * (this.isLowPerfDevice ? 600 : 300)); // Stagger more on low perf
@@ -138,6 +141,10 @@ class WaterCanvas {
       // Logic to add a fish with random properties
       const keys = Object.keys(this.fishImages);
       if (keys.length === 0) return; // Don't add if no images loaded
+
+      // Prevent exceeding max fish count
+      const maxFish = this.isLowPerfDevice ? 5 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12);
+      if (this.fishes.length >= maxFish) return;
 
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       const img = this.fishImages[randomKey];
@@ -171,7 +178,8 @@ class WaterCanvas {
 
       // Speed and movement properties
       let speed = (40 - size * 0.3) * 0.05; // Base speed factor
-      let verticalAmount = Math.random() * 5 + 2; // Max vertical deviation
+      // CHANGE: Increase vertical amount range
+      let verticalAmount = Math.random() * 8 + 4; // Increased range
       let wiggleAmount = Math.random() * 0.4 + 0.3; // Wiggle intensity
 
       // Reduce speed and movement complexity on low perf
@@ -196,9 +204,9 @@ class WaterCanvas {
         speed: speed, // Speed factor
         direction: direction,
         scaleX: direction === 'left' ? -1 : 1,
-        verticalDirection: Math.random() > 0.5 ? 'up' : 'down',
-        verticalAmount: verticalAmount,
-        originalY: startY,
+        verticalDirection: Math.random() > 0.5 ? 'up' : 'down', // Keep this for potential future use or simpler logic
+        verticalAmount: verticalAmount, // Store base amount
+        originalY: startY, // Store initial Y
         wiggleAmount: wiggleAmount,
         wigglePhase: Math.random() * Math.PI * 2, // Wiggle start offset
         verticalPhase: Math.random() * Math.PI * 2 // Phase for vertical sine movement
@@ -281,7 +289,7 @@ class WaterCanvas {
       this.updateWaves(delta);
 
       // Update fish positions
-      this.updateFish(delta);
+      this.updateFish(delta); // Pass delta here
 
       // Update bubbles (only if not reduced motion)
       if (!this.prefersReducedMotion) {
@@ -299,7 +307,7 @@ class WaterCanvas {
       }
 
       // Occasionally add/remove fish (frame-rate independent)
-      const maxFish = this.isLowPerfDevice ? 4 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12); // Increased to 20 for high-perf devices
+      const maxFish = this.isLowPerfDevice ? 5 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12); // Max 20
       if (this.fishes.length < maxFish && Math.random() < 0.0001 * delta) {
         this.addFish();
       }
@@ -330,68 +338,78 @@ class WaterCanvas {
       }
     }
 
-    updateFish(delta) {
+    updateFish(delta) { // Accept delta
       // Move fish and keep them within bounds
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
-      const deltaSeconds = delta / 1000; // Time since last frame in seconds
+      const deltaSeconds = delta / 1000; // Time since last update in seconds
 
       for (let i = this.fishes.length - 1; i >= 0; i--) {
         const fish = this.fishes[i];
-        const fishWidth = fish.size; // Approximate width
-        const fishHeight = fish.img.complete ? fish.size * (fish.img.naturalHeight / fish.img.naturalWidth) : fish.size; // Calculate actual height if possible
+        const fishWidth = fish.size;
+        const fishHeight = fish.img.complete ? fish.size * (fish.img.naturalHeight / fish.img.naturalWidth) : fish.size;
 
         // --- Horizontal Movement & Containment ---
-        const horizontalSpeedPx = fish.speed * this.canvas.width * 0.1; // Adjust multiplier as needed
+        const horizontalSpeedPx = fish.speed * this.canvas.width * 0.1;
         let nextX = fish.x + (fish.direction === 'right' ? horizontalSpeedPx * deltaSeconds : -horizontalSpeedPx * deltaSeconds);
 
-        // Check boundaries and reverse direction if needed
         const leftBoundary = fishWidth / 2;
         const rightBoundary = this.canvas.width - fishWidth / 2;
 
         if (nextX <= leftBoundary && fish.direction === 'left') {
-            fish.direction = 'right';
-            fish.scaleX = 1;
-            nextX = leftBoundary + (leftBoundary - nextX); // Bounce effect (optional)
+            fish.direction = 'right'; fish.scaleX = 1;
+            nextX = leftBoundary + (leftBoundary - nextX);
         } else if (nextX >= rightBoundary && fish.direction === 'right') {
-            fish.direction = 'left';
-            fish.scaleX = -1;
-            nextX = rightBoundary - (nextX - rightBoundary); // Bounce effect (optional)
+            fish.direction = 'left'; fish.scaleX = -1;
+            nextX = rightBoundary - (nextX - rightBoundary);
         }
-        fish.x = Math.max(leftBoundary, Math.min(rightBoundary, nextX)); // Clamp position just in case
+        fish.x = Math.max(leftBoundary, Math.min(rightBoundary, nextX));
 
         // --- Vertical Movement & Containment ---
-        if (!this.prefersReducedMotion) { // Only do complex vertical movement if motion is allowed
-            fish.verticalPhase += deltaSeconds * 0.8; // Speed of vertical oscillation
-            const verticalOffset = Math.sin(fish.verticalPhase) * fish.verticalAmount * 5; // Adjust multiplier for range
+        const topWaterBoundary = waterLine + fishHeight / 2;
+        const bottomWaterBoundary = this.canvas.height - fishHeight / 2;
 
-            fish.wigglePhase += deltaSeconds * 5; // Speed of wiggle
-            const wiggleOffset = Math.sin(fish.wigglePhase) * fish.wiggleAmount * 10; // Adjust multiplier for range
+        if (!this.prefersReducedMotion) {
+            // CHANGE: Add slow drift to originalY
+            fish.originalY += (Math.random() - 0.5) * 10 * deltaSeconds; // Slow drift (max 5px/sec)
+            // Clamp drift within valid bounds, considering fish height and vertical range
+            const driftClampMargin = fish.verticalAmount * 8 + fish.wiggleAmount * 15; // Estimate max deviation
+            fish.originalY = Math.max(topWaterBoundary + driftClampMargin, Math.min(bottomWaterBoundary - driftClampMargin, fish.originalY));
 
-            // Combine vertical movements relative to original Y
+            fish.verticalPhase += deltaSeconds * 0.8;
+            // CHANGE: Increase vertical movement multipliers
+            const verticalOffset = Math.sin(fish.verticalPhase) * fish.verticalAmount * 8; // Increased range
+
+            fish.wigglePhase += deltaSeconds * 6; // Faster wiggle
+            // CHANGE: Increase wiggle multiplier
+            const wiggleOffset = Math.sin(fish.wigglePhase) * fish.wiggleAmount * 15; // Increased range
+
             fish.y = fish.originalY + verticalOffset + wiggleOffset;
+
+            // CHANGE: More robust boundary clamping after movement calculation
+            if (fish.y < topWaterBoundary) {
+              fish.y = topWaterBoundary;
+              // Reset originalY slightly below boundary to prevent sticking
+              fish.originalY = topWaterBoundary + Math.random() * 5;
+              fish.verticalPhase += Math.PI; // Reverse vertical direction smoothly
+            } else if (fish.y > bottomWaterBoundary) {
+              fish.y = bottomWaterBoundary;
+              // Reset originalY slightly above boundary
+              fish.originalY = bottomWaterBoundary - Math.random() * 5;
+              fish.verticalPhase += Math.PI; // Reverse vertical direction smoothly
+            }
+
         } else {
-            // If reduced motion, keep fish at its original Y or simple drift
-             fish.y = fish.originalY; // Or add a very slow drift if desired
+             fish.y = fish.originalY; // Keep at original Y if reduced motion
+             // Clamp original Y if it drifted out of bounds before reduced motion was enabled
+             fish.y = Math.max(topWaterBoundary, Math.min(bottomWaterBoundary, fish.y));
+             fish.originalY = fish.y;
         }
 
-        // Keep fish underwater and within vertical bounds
-        const fishTop = fish.y - fishHeight / 2;
-        const fishBottom = fish.y + fishHeight / 2;
-        const topWaterBoundary = waterLine + fishHeight / 2; // Top boundary considering fish height
-        const bottomWaterBoundary = this.canvas.height - fishHeight / 2; // Bottom boundary considering fish height
 
-        if (fish.y < topWaterBoundary) {
-          fish.y = topWaterBoundary;
-          fish.originalY = fish.y; // Reset original Y to prevent getting stuck
-          // Could reverse vertical phase here if using complex movement
-        } else if (fish.y > bottomWaterBoundary) {
-          fish.y = bottomWaterBoundary;
-          fish.originalY = fish.y; // Reset original Y
-        }
-
-        // --- Random Direction Change (Reduced chance on low perf) ---
-        const changeDirChance = this.isLowPerfDevice ? 0.00005 : 0.0001;
-        if (Math.random() < changeDirChance * delta) {
+        // --- Random Direction Change ---
+        // CHANGE: Slightly increase chance for more dynamic horizontal movement
+        const changeDirChance = this.isLowPerfDevice ? 0.0001 : 0.0002;
+        if (Math.random() < changeDirChance * delta) { // Use delta here
             fish.direction = fish.direction === 'right' ? 'left' : 'right';
             fish.scaleX = fish.direction === 'left' ? -1 : 1;
         }
@@ -594,6 +612,12 @@ class WaterCanvas {
       // Start animation loop if not already running
       if (!this.animationFrameId) {
           console.log("Starting Canvas Animation Loop (Target 30fps Update)");
+          // CHANGE: Ensure cursor is hidden ONLY if canvas starts successfully AND no reduced motion
+          if (!this.prefersReducedMotion) {
+              document.body.style.cursor = 'none';
+          } else {
+              document.body.style.cursor = 'auto';
+          }
           this.lastTimestamp = performance.now(); // Reset timestamp
           this.timeAccumulator = 0; // Reset accumulator
           this.animationFrameId = requestAnimationFrame((ts) => this.animate(ts));
@@ -607,6 +631,9 @@ class WaterCanvas {
         cancelAnimationFrame(this.animationFrameId);
         this.animationFrameId = null;
       }
+
+      // CHANGE: Always restore cursor when stopping
+      document.body.style.cursor = 'auto';
 
       // Remove the canvas from the DOM
       if (this.canvas && this.canvas.parentNode) {

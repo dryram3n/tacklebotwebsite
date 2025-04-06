@@ -58,12 +58,12 @@
   /* Z-Index Variables */
   --z-sky: -11;
   --z-water-canvas: -10; /* Canvas and DOM water bg */
-  --z-fish: 5; /* Above water, below content */
+  --z-fish: -9; /* Below water, below content, but above sky */
   --z-content: 10; /* Main sections, footer */
   --z-header: 1000;
   --z-modal: 1001;
   --z-ui-toggle: 1001;
-  --z-mouse-trail: 9990; /* High, but below modal/toggle */
+  --z-mouse-trail: 5; /* Above fish, below content */
 }
 
 /* --- Canvas Integration --- */
@@ -98,31 +98,12 @@ body {
   line-height: 1.7;
   overflow-x: hidden; /* Prevent horizontal scroll */
   font-weight: 400;
-  /* Custom cursor handled by JS initMouseTrail or canvas */
-  cursor: none;
+  /* Default cursor is now handled by browser */
 }
 
 /* Show cursor on interactive elements */
 a, button, input, select, textarea, [role="button"], label[for] {
   cursor: pointer;
-}
-
-/* Ensure cursor is correct over interactive elements */
-body.using-canvas a,
-body.using-canvas button,
-body.using-canvas input,
-body.using-canvas select,
-body.using-canvas textarea,
-body.using-canvas [role="button"],
-body.using-canvas label[for],
-body.custom-cursor-active a,
-body.custom-cursor-active button,
-body.custom-cursor-active input,
-body.custom-cursor-active select,
-body.custom-cursor-active textarea,
-body.custom-cursor-active [role="button"],
-body.custom-cursor-active label[for] {
-  cursor: pointer; /* Use pointer for explicitly interactive elements */
 }
 
 /* --- Emojis --- */
@@ -2199,9 +2180,7 @@ body.ui-hidden #ui-toggle-container {
 .reduced-motion .water-splash {
     display: none !important; /* Hide mouse effects */
 }
-.reduced-motion body {
-    cursor: auto !important; /* Restore cursor */
-}
+/* Removed cursor auto rule for reduced motion, default is auto */
 .reduced-motion .animated-section {
     opacity: 1; /* Show sections immediately */
     transform: none;
@@ -2247,9 +2226,7 @@ body.ui-hidden #ui-toggle-container {
   #mouse-trail, .trail-droplet, .water-splash {
       display: none !important;
   }
-  body {
-      cursor: auto !important;
-  }
+  /* Removed cursor auto rule */
   .animated-section {
       opacity: 1 !important;
       transform: none !important;
@@ -2283,10 +2260,6 @@ body.using-canvas #mouse-trail {
   display: none !important; /* Hide DOM elements if canvas is active */
 }
 
-/* When using canvas, ensure cursor is properly handled */
-body.using-canvas {
-  cursor: none; /* Hide default cursor */
-}
 /* Ensure interactive elements still show pointer when canvas is active */
 body.using-canvas a,
 body.using-canvas button,
@@ -2305,189 +2278,7 @@ body.canvas-failed #fish-container,
 body.canvas-failed #mouse-trail {
   display: block !important;
 }
-/* Ensure cursor is visible if canvas fails but DOM trail isn't active */
+/* Ensure cursor is visible if canvas fails */
 body.canvas-failed {
     cursor: auto; /* Default cursor */
-}
-/* Only hide cursor if DOM trail is active (JS handles this logic) */
-body.custom-cursor-active {
-    cursor: none;
-}
-
-/* --- Add these cursor styles after your existing canvas integration styles --- */
-
-/* Ensure cursor is visible on all cards and containers */
-.feature-item,
-.command-item,
-.fish-card,
-.catalog-tab,
-.filter-tag,
-.try-me-container,
-.calc-group,
-.calc-output-area,
-.legal-card,
-.fish-modal,
-.modal-content,
-.stat-item,
-.fish-detail-lore,
-.expandable,
-.expanded-content {
-  cursor: default !important; /* Show default cursor on non-interactive containers */
-}
-
-/* Keep pointer cursor on all interactive elements */
-.feature-item:hover,
-.command-item:hover,
-.fish-card:hover,
-.catalog-tab:hover,
-.filter-tag:hover,
-.button:hover,
-a:hover,
-button:hover,
-input,
-select,
-textarea,
-[role="button"]:hover,
-label[for]:hover,
-.expand-btn:hover,
-.close-modal:hover {
-  cursor: pointer !important; /* Force pointer on all interactive elements */
-}
-
-/* Updated hover styles for canvas mode to prevent cursor disappearing */
-body.using-canvas .feature-item,
-body.using-canvas .command-item,
-body.using-canvas .fish-card,
-body.using-canvas .legal-card,
-body.using-canvas .try-me-container,
-body.using-canvas .calc-group,
-body.using-canvas .calc-output-area,
-body.using-canvas .modal-content,
-body.using-canvas .fish-detail-header,
-body.using-canvas .stat-item,
-body.using-canvas .fish-detail-lore,
-body.using-canvas .expandable,
-body.using-canvas .expanded-content {
-  cursor: default !important;
-}
-
-/* Make custom trail follow mouse for these elements too (DOM mode) */
-body.custom-cursor-active .feature-item,
-body.custom-cursor-active .command-item,
-body.custom-cursor-active .fish-card,
-body.custom-cursor-active .legal-card,
-body.custom-cursor-active .try-me-container,
-body.custom-cursor-active .calc-group,
-body.custom-cursor-active .calc-output-area,
-body.custom-cursor-active .modal-content,
-body.custom-cursor-active .fish-detail-header,
-body.custom-cursor-active .stat-item,
-body.custom-cursor-active .fish-detail-lore,
-body.custom-cursor-active .expandable,
-body.custom-cursor-active .expanded-content {
-  cursor: none !important; /* Hide default cursor to show custom trail */
-}
-
-/* --- Cursor Behavior - Add these rules at the end of your CSS file --- */
-
-/* DEFAULT CURSOR BEHAVIOR - Only hide cursor when custom cursors are working properly */
-body {
-  cursor: auto !important; /* Always start with normal cursor */
-}
-
-/* Only enable custom cursor (none) when confirmed working */
-body.custom-cursor-confirmed, 
-body.canvas-confirmed {
-  cursor: none !important;
-}
-
-/* FAILSAFE: These critical elements must ALWAYS show a cursor, even in custom cursor mode */
-a, 
-button,
-input, 
-select, 
-textarea, 
-label[for], 
-[role="button"],
-.button,
-.filter-tag,
-.catalog-tab,
-.fish-card,
-.close-modal,
-.expand-btn,
-.search-button,
-.try-me-button,
-.donation-link,
-.nav-button,
-.hero-button,
-.secondary-button,
-.cta-button,
-.ui-toggle-button {
-  cursor: pointer !important;
-}
-
-/* ALL other elements that should be interactive */
-.feature-item,
-.command-item,
-.calc-group label,
-.calc-input-item,
-.legal-footer .back-to-top,
-.filter-section label,
-.modal-content button,
-.calculator-container input,
-calcuator-container select {
-  cursor: pointer !important;
-}
-
-/* Non-interactive containers should show default cursor */
-.feature-item *:not(a, button),
-.command-item *:not(a, button, .button),
-.fish-card *:not(a, button),
-.legal-card *:not(a, button),
-.try-me-container *:not(a, button, input),
-.calc-group *:not(input, select, button, label),
-.calc-output-area *:not(button, input),
-.modal-content *:not(button, a),
-.fish-detail-header *:not(button, a),
-.stat-item *:not(button, a),
-.fish-detail-lore *:not(button, a),
-.expandable *:not(button, a),
-.expanded-content *:not(button, a) {
-  cursor: default !important;
-}
-
-/* Override any canvas or custom cursor styles to ensure cursor visibility */
-body.using-canvas [onclick],
-body.using-canvas [href],
-body.using-canvas [type="button"],
-body.using-canvas [type="submit"],
-body.using-canvas [type="reset"],
-body.using-canvas [type="checkbox"],
-body.using-canvas [type="radio"],
-body.custom-cursor-active [onclick],
-body.custom-cursor-active [href],
-body.custom-cursor-active [type="button"],
-body.custom-cursor-active [type="submit"],
-body.custom-cursor-active [type="reset"],
-body.custom-cursor-active [type="checkbox"],
-body.custom-cursor-active [type="radio"] {
-  cursor: pointer !important;
-}
-
-/* Skip custom cursor completely for accessibility needs */
-@media (prefers-reduced-motion), (prefers-contrast), (forced-colors: active) {
-  body {
-    cursor: auto !important;
-  }
-  
-  body.using-canvas, 
-  body.custom-cursor-active {
-    cursor: auto !important;
-  }
-  
-  #mouse-trail, 
-  .trail-droplet, 
-  .water-splash {
-    display: none !important;
-  }
 }
