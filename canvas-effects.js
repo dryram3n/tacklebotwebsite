@@ -1,6 +1,18 @@
 // Canvas implementation for water effects
 class WaterCanvas {
     constructor() {
+      // --- START: Hardware Detection ---
+      this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.isLowPerfDevice = this.prefersReducedMotion ||
+                             !('requestAnimationFrame' in window) ||
+                             (window.navigator.hardwareConcurrency && window.navigator.hardwareConcurrency < 4) ||
+                             navigator.userAgent.match(/mobile|android/i);
+
+      if (this.isLowPerfDevice) {
+          console.log("Canvas Effects: Low performance device or reduced motion detected. Reducing effects.");
+      }
+      // --- END: Hardware Detection ---
+
       // Create canvas element
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
@@ -39,10 +51,12 @@ class WaterCanvas {
       this.resize();
       window.addEventListener('resize', this.resize);
 
-      // Mouse tracking for trail effect
+      // Mouse tracking for trail effect (disable if reduced motion)
       this.mousePos = { x: 0, y: 0 };
-      window.addEventListener('mousemove', this.handleMouseMove);
-      window.addEventListener('click', this.handleClick);
+      if (!this.prefersReducedMotion) {
+          window.addEventListener('mousemove', this.handleMouseMove);
+          window.addEventListener('click', this.handleClick);
+      }
 
       // Load fish images
       this.loadFishImages();
@@ -58,11 +72,15 @@ class WaterCanvas {
     }
 
     handleMouseMove(e) {
+      // No trail if reduced motion
+      if (this.prefersReducedMotion) return;
       this.mousePos = { x: e.clientX, y: e.clientY };
       this.addTrailPoint();
     }
 
     handleClick(e) {
+       // No splash if reduced motion
+       if (this.prefersReducedMotion) return;
        // Ignore clicks on interactive elements
        if (e.target.closest('a, button, .button, input, select, textarea, [role="button"]')) return;
        this.createSplash(e.clientX, e.clientY);
@@ -71,7 +89,7 @@ class WaterCanvas {
     initWavePoints() {
       // Create points for wave animation
       this.wavePoints = [];
-      const pointCount = Math.ceil(this.canvas.width / 20); // Point every 20px
+      const pointCount = Math.ceil(this.canvas.width / (this.isLowPerfDevice ? 40 : 20)); // Fewer points on low perf
 
       for (let i = 0; i <= pointCount; i++) { // Use <= to include the last point
         this.wavePoints.push({
@@ -91,9 +109,10 @@ class WaterCanvas {
           img.src = url;
           img.onload = () => { // Ensure image is loaded before adding fish that might use it
               this.fishImages[key] = img;
-              // Maybe trigger initial fish creation only after some images load?
-              if (Object.keys(this.fishImages).length === 1) {
-                   this.createInitialFish(); // Create fish once the first image loads
+              // Trigger initial fish creation only after some images load
+              // Check if enough images loaded to start creating fish
+              if (Object.keys(this.fishImages).length >= 3 && this.fishes.length === 0) {
+                   this.createInitialFish();
               }
           };
           img.onerror = () => {
@@ -107,11 +126,11 @@ class WaterCanvas {
     }
 
     createInitialFish() {
-      // Add some initial fish
-      const fishCount = window.navigator.hardwareConcurrency >= 8 ? 8 : 5;
+      // Add some initial fish based on performance
+      const fishCount = this.isLowPerfDevice ? 3 : (window.navigator.hardwareConcurrency >= 8 ? 8 : 5);
 
       for (let i = 0; i < fishCount; i++) {
-        setTimeout(() => this.addFish(), i * 300);
+        setTimeout(() => this.addFish(), i * (this.isLowPerfDevice ? 600 : 300)); // Stagger more on low perf
       }
     }
 
@@ -125,8 +144,6 @@ class WaterCanvas {
 
       // Check if image is actually loaded and has dimensions
       if (!img || !img.complete || !img.naturalWidth) {
-          // console.warn(`Skipping fish add for ${randomKey}, image not ready.`);
-          // Optionally try again later or pick another fish
           setTimeout(() => this.addFish(), 100); // Retry adding a fish shortly
           return;
       }
@@ -138,34 +155,62 @@ class WaterCanvas {
       } else if (randomKey.includes("Rare") || randomKey.includes("Shark") || randomKey.includes("Sturgeon")) {
           size = 50 + Math.random() * 25;
       }
+      // Reduce size slightly on low perf devices
+      if (this.isLowPerfDevice) size *= 0.8;
 
-      // Starting position
+      // Starting position (ensure it starts within bounds)
       const direction = Math.random() > 0.5 ? 'right' : 'left';
-      const startX = direction === 'right' ? -size : this.canvas.width + size;
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
-      const startY = waterLine + Math.random() * (this.canvas.height - waterLine - size);
+      const fishHeight = size * (img.naturalHeight / img.naturalWidth); // Calculate actual height
+      const minY = waterLine + fishHeight / 2;
+      const maxY = this.canvas.height - fishHeight / 2;
+      const startY = minY + Math.random() * (maxY - minY); // Ensure fish starts fully within water vertically
+
+      // Start fish just off screen or at edge depending on direction
+      const startX = direction === 'right' ? -size / 2 : this.canvas.width + size / 2;
 
       // Speed and movement properties
-      const speed = (40 - size * 0.3) * 0.05; // Base speed factor
+      let speed = (40 - size * 0.3) * 0.05; // Base speed factor
+      let verticalAmount = Math.random() * 5 + 2; // Max vertical deviation
+      let wiggleAmount = Math.random() * 0.4 + 0.3; // Wiggle intensity
+
+      // Reduce speed and movement complexity on low perf
+      if (this.isLowPerfDevice) {
+          speed *= 0.6;
+          verticalAmount *= 0.5;
+          wiggleAmount *= 0.5;
+      }
+      // Disable movement complexity if reduced motion preferred
+      if (this.prefersReducedMotion) {
+          verticalAmount = 0;
+          wiggleAmount = 0;
+          speed *= 0.5; // Even slower if reduced motion
+      }
+
 
       this.fishes.push({
         img: img,
         x: startX,
         y: startY,
         size: size,
-        speed: speed, // Speed factor (pixels per second will depend on canvas width)
+        speed: speed, // Speed factor
         direction: direction,
         scaleX: direction === 'left' ? -1 : 1,
         verticalDirection: Math.random() > 0.5 ? 'up' : 'down',
-        verticalAmount: Math.random() * 5 + 2, // Max vertical deviation
+        verticalAmount: verticalAmount,
         originalY: startY,
-        wiggleAmount: Math.random() * 0.4 + 0.3, // Wiggle intensity
+        wiggleAmount: wiggleAmount,
         wigglePhase: Math.random() * Math.PI * 2, // Wiggle start offset
         verticalPhase: Math.random() * Math.PI * 2 // Phase for vertical sine movement
       });
     }
 
     addBubble(x, y) {
+      // Reduce bubble frequency on low perf
+      if (this.isLowPerfDevice && Math.random() > 0.3) return;
+      // No bubbles if reduced motion
+      if (this.prefersReducedMotion) return;
+
       // Add a bubble at the given position
       const size = 5 + Math.random() * 10;
       const speedY = 1 + Math.random() * 2; // Pixels per frame (approx)
@@ -183,6 +228,9 @@ class WaterCanvas {
     }
 
     addTrailPoint() {
+      // No trail if reduced motion
+      if (this.prefersReducedMotion) return;
+
       // Add point to mouse trail
       this.mouseTrail.push({
         x: this.mousePos.x,
@@ -192,16 +240,14 @@ class WaterCanvas {
         age: 0,
         maxAge: 300 + Math.random() * 200 // Lifespan in ms
       });
-
-      // Limit trail length (optional, could also rely on age)
-      // if (this.mouseTrail.length > 30) {
-      //   this.mouseTrail.shift();
-      // }
     }
 
     createSplash(x, y) {
+      // No splash if reduced motion
+      if (this.prefersReducedMotion) return;
+
       // Create splash effect with multiple droplets
-      const dropletCount = 8 + Math.floor(Math.random() * 5);
+      const dropletCount = this.isLowPerfDevice ? 4 + Math.floor(Math.random() * 3) : 8 + Math.floor(Math.random() * 5); // Fewer droplets on low perf
 
       for (let i = 0; i < dropletCount; i++) {
         const angle = (Math.PI * 2 / dropletCount) * i + (Math.random() * 0.5 - 0.25);
@@ -237,25 +283,29 @@ class WaterCanvas {
       // Update fish positions
       this.updateFish(delta);
 
-      // Update bubbles
-      this.updateBubbles(delta);
+      // Update bubbles (only if not reduced motion)
+      if (!this.prefersReducedMotion) {
+          this.updateBubbles(delta);
+      }
 
-      // Update mouse trail
-      this.updateMouseTrail(delta);
+      // Update mouse trail (only if not reduced motion)
+      if (!this.prefersReducedMotion) {
+          this.updateMouseTrail(delta);
+      }
 
-      // Occasionally add bubbles (frame-rate independent)
-      if (Math.random() < 0.001 * delta) { // Adjust probability based on delta
+      // Occasionally add bubbles (frame-rate independent, handled in addBubble)
+      if (Math.random() < 0.001 * delta) {
         this.addBubble();
       }
 
       // Occasionally add/remove fish (frame-rate independent)
-      if (Math.random() < 0.0001 * delta) {
+      const maxFish = this.isLowPerfDevice ? 4 : (window.navigator.hardwareConcurrency >= 8 ? 10 : 6); // Reduced max fish
+      if (this.fishes.length < maxFish && Math.random() < 0.0001 * delta) {
         this.addFish();
       }
 
-      // Limit fish count
-      const maxFish = window.navigator.hardwareConcurrency >= 8 ? 12 : 8;
-      if (this.fishes.length > maxFish && Math.random() < 0.0005 * delta) {
+      // Remove fish if count exceeds max (less aggressive removal)
+      if (this.fishes.length > maxFish + 2 && Math.random() < 0.0002 * delta) {
         // Remove the oldest fish (first in array)
         this.fishes.shift();
       }
@@ -265,71 +315,83 @@ class WaterCanvas {
       // Animate wave points
       const waveTime = performance.now() * 0.001; // Time in seconds
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
+      const amplitudeMultiplier = this.isLowPerfDevice ? 0.6 : 1; // Reduce wave height on low perf
 
       for (let i = 0; i < this.wavePoints.length; i++) {
         const point = this.wavePoints[i];
         const xFactor = i / (this.wavePoints.length -1); // Normalize x position (0 to 1)
 
         // Calculate wave height using multiple sine functions for complexity
+        // Reduce amplitude if low performance
         point.y = waterLine +
-                  Math.sin(waveTime * 0.8 + xFactor * 10) * 4 + // Faster, smaller wave
-                  Math.sin(waveTime * 0.5 + xFactor * 6) * 6 +  // Main wave
-                  Math.sin(waveTime * 0.3 + xFactor * 4) * 3;  // Slower, broader wave
+                  (Math.sin(waveTime * 0.8 + xFactor * 10) * 4 * amplitudeMultiplier) +
+                  (Math.sin(waveTime * 0.5 + xFactor * 6) * 6 * amplitudeMultiplier) +
+                  (Math.sin(waveTime * 0.3 + xFactor * 4) * 3 * amplitudeMultiplier);
       }
     }
 
     updateFish(delta) {
-      // Move fish and remove those that are off-screen
+      // Move fish and keep them within bounds
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
       const deltaSeconds = delta / 1000; // Time since last frame in seconds
 
       for (let i = this.fishes.length - 1; i >= 0; i--) {
         const fish = this.fishes[i];
+        const fishWidth = fish.size; // Approximate width
+        const fishHeight = fish.img.complete ? fish.size * (fish.img.naturalHeight / fish.img.naturalWidth) : fish.size; // Calculate actual height if possible
 
-        // Update horizontal position based on speed factor and canvas width
+        // --- Horizontal Movement & Containment ---
         const horizontalSpeedPx = fish.speed * this.canvas.width * 0.1; // Adjust multiplier as needed
-        fish.x += fish.direction === 'right'
-          ? horizontalSpeedPx * deltaSeconds
-          : -horizontalSpeedPx * deltaSeconds;
+        let nextX = fish.x + (fish.direction === 'right' ? horizontalSpeedPx * deltaSeconds : -horizontalSpeedPx * deltaSeconds);
 
-        // Update vertical position using sine wave for smooth up/down movement
-        fish.verticalPhase += deltaSeconds * 0.8; // Speed of vertical oscillation
-        const verticalOffset = Math.sin(fish.verticalPhase) * fish.verticalAmount * 5; // Adjust multiplier for range
+        // Check boundaries and reverse direction if needed
+        const leftBoundary = fishWidth / 2;
+        const rightBoundary = this.canvas.width - fishWidth / 2;
 
-        // Update wiggle effect
-        fish.wigglePhase += deltaSeconds * 5; // Speed of wiggle
-        const wiggleOffset = Math.sin(fish.wigglePhase) * fish.wiggleAmount * 10; // Adjust multiplier for range
+        if (nextX <= leftBoundary && fish.direction === 'left') {
+            fish.direction = 'right';
+            fish.scaleX = 1;
+            nextX = leftBoundary + (leftBoundary - nextX); // Bounce effect (optional)
+        } else if (nextX >= rightBoundary && fish.direction === 'right') {
+            fish.direction = 'left';
+            fish.scaleX = -1;
+            nextX = rightBoundary - (nextX - rightBoundary); // Bounce effect (optional)
+        }
+        fish.x = Math.max(leftBoundary, Math.min(rightBoundary, nextX)); // Clamp position just in case
 
-        // Combine vertical movements
-        fish.y = fish.originalY + verticalOffset + wiggleOffset;
+        // --- Vertical Movement & Containment ---
+        if (!this.prefersReducedMotion) { // Only do complex vertical movement if motion is allowed
+            fish.verticalPhase += deltaSeconds * 0.8; // Speed of vertical oscillation
+            const verticalOffset = Math.sin(fish.verticalPhase) * fish.verticalAmount * 5; // Adjust multiplier for range
 
-        // Keep fish underwater and within bounds
-        const fishTop = fish.y - fish.size / 2;
-        const fishBottom = fish.y + fish.size / 2;
+            fish.wigglePhase += deltaSeconds * 5; // Speed of wiggle
+            const wiggleOffset = Math.sin(fish.wigglePhase) * fish.wiggleAmount * 10; // Adjust multiplier for range
 
-        if (fishTop < waterLine) {
-          fish.y = waterLine + fish.size / 2;
-          // Reset originalY and phase if hitting the surface? Optional.
-          // fish.originalY = fish.y;
-          // fish.verticalPhase = Math.PI / 2; // Start moving down
-        } else if (fishBottom > this.canvas.height) {
-          fish.y = this.canvas.height - fish.size / 2;
-          // fish.originalY = fish.y;
-          // fish.verticalPhase = -Math.PI / 2; // Start moving up
+            // Combine vertical movements relative to original Y
+            fish.y = fish.originalY + verticalOffset + wiggleOffset;
+        } else {
+            // If reduced motion, keep fish at its original Y or simple drift
+             fish.y = fish.originalY; // Or add a very slow drift if desired
         }
 
-        // Remove fish if far off-screen
-        const margin = fish.size * 3; // Generous margin
-        if ((fish.direction === 'right' && fish.x > this.canvas.width + margin) ||
-            (fish.direction === 'left' && fish.x < -margin)) {
-          this.fishes.splice(i, 1);
+        // Keep fish underwater and within vertical bounds
+        const fishTop = fish.y - fishHeight / 2;
+        const fishBottom = fish.y + fishHeight / 2;
+        const topWaterBoundary = waterLine + fishHeight / 2; // Top boundary considering fish height
+        const bottomWaterBoundary = this.canvas.height - fishHeight / 2; // Bottom boundary considering fish height
 
-          // Add a new fish to replace it (optional, handled by general addFish logic too)
-          // setTimeout(() => this.addFish(), 500 + Math.random() * 1000);
+        if (fish.y < topWaterBoundary) {
+          fish.y = topWaterBoundary;
+          fish.originalY = fish.y; // Reset original Y to prevent getting stuck
+          // Could reverse vertical phase here if using complex movement
+        } else if (fish.y > bottomWaterBoundary) {
+          fish.y = bottomWaterBoundary;
+          fish.originalY = fish.y; // Reset original Y
         }
 
-        // Flip direction randomly sometimes
-        if (Math.random() < 0.0001 * delta) {
+        // --- Random Direction Change (Reduced chance on low perf) ---
+        const changeDirChance = this.isLowPerfDevice ? 0.00005 : 0.0001;
+        if (Math.random() < changeDirChance * delta) {
             fish.direction = fish.direction === 'right' ? 'left' : 'right';
             fish.scaleX = fish.direction === 'left' ? -1 : 1;
         }
@@ -337,6 +399,12 @@ class WaterCanvas {
     }
 
     updateBubbles(delta) {
+      // No bubbles if reduced motion
+      if (this.prefersReducedMotion) {
+          this.bubbles = []; // Clear existing bubbles
+          return;
+      }
+
       // Move bubbles and remove those that reach the top
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
 
@@ -365,6 +433,12 @@ class WaterCanvas {
     }
 
     updateMouseTrail(delta) {
+      // No trail if reduced motion
+      if (this.prefersReducedMotion) {
+          this.mouseTrail = []; // Clear existing trail points
+          return;
+      }
+
       // Update trail points and splash droplets
       for (let i = this.mouseTrail.length - 1; i >= 0; i--) {
         const point = this.mouseTrail[i];
@@ -397,18 +471,14 @@ class WaterCanvas {
       // Draw water body
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
 
-      // Draw waves
-      if (this.wavePoints.length > 1) {
+      // Draw waves (only if not reduced motion)
+      if (!this.prefersReducedMotion && this.wavePoints.length > 1) {
           this.ctx.beginPath();
           this.ctx.moveTo(0, this.canvas.height); // Bottom-left
           this.ctx.lineTo(0, this.wavePoints[0].y); // Start of wave
 
           // Draw curve through points (simple lineTo for now)
           for (let i = 1; i < this.wavePoints.length; i++) {
-              // Could use quadraticCurveTo or bezierCurveTo for smoother waves
-              // const xc = (this.wavePoints[i].x + this.wavePoints[i + 1].x) / 2;
-              // const yc = (this.wavePoints[i].y + this.wavePoints[i + 1].y) / 2;
-              // this.ctx.quadraticCurveTo(this.wavePoints[i].x, this.wavePoints[i].y, xc, yc);
                this.ctx.lineTo(this.wavePoints[i].x, this.wavePoints[i].y);
           }
 
@@ -425,6 +495,13 @@ class WaterCanvas {
 
           this.ctx.fillStyle = gradient;
           this.ctx.fill();
+      } else {
+          // Draw simple rectangle if reduced motion or no wave points
+          const gradient = this.ctx.createLinearGradient(0, waterLine, 0, this.canvas.height);
+          gradient.addColorStop(0, 'rgba(137, 247, 254, 0.6)');
+          gradient.addColorStop(1, 'rgba(102, 166, 255, 0.8)');
+          this.ctx.fillStyle = gradient;
+          this.ctx.fillRect(0, waterLine, this.canvas.width, this.canvas.height - waterLine);
       }
 
 
@@ -442,7 +519,10 @@ class WaterCanvas {
         const width = fish.size;
         const height = fish.size * aspectRatio;
         try {
+          // Reduce opacity slightly on low perf for softer look
+          this.ctx.globalAlpha = this.isLowPerfDevice ? 0.85 : 1.0;
           this.ctx.drawImage(fish.img, -width / 2, -height / 2, width, height);
+          this.ctx.globalAlpha = 1.0; // Reset alpha
         } catch (e) {
             console.error("Error drawing fish image:", e, fish.img.src);
             // Skip drawing this fish if error occurs
@@ -451,26 +531,30 @@ class WaterCanvas {
         this.ctx.restore();
       }
 
-      // Draw bubbles
-      this.ctx.fillStyle = `rgba(255, 255, 255, 0.7)`; // Base bubble color
-      this.ctx.globalAlpha = 1; // Reset global alpha
-      for (const bubble of this.bubbles) {
-        this.ctx.beginPath();
-        this.ctx.arc(bubble.x, bubble.y, bubble.size, 0, Math.PI * 2);
-        this.ctx.globalAlpha = bubble.opacity; // Set alpha per bubble
-        this.ctx.fill();
+      // Draw bubbles (only if not reduced motion)
+      if (!this.prefersReducedMotion) {
+          this.ctx.fillStyle = `rgba(255, 255, 255, 0.7)`; // Base bubble color
+          this.ctx.globalAlpha = 1; // Reset global alpha
+          for (const bubble of this.bubbles) {
+            this.ctx.beginPath();
+            this.ctx.arc(bubble.x, bubble.y, bubble.size, 0, Math.PI * 2);
+            this.ctx.globalAlpha = bubble.opacity; // Set alpha per bubble
+            this.ctx.fill();
+          }
+          this.ctx.globalAlpha = 1; // Restore global alpha
       }
-      this.ctx.globalAlpha = 1; // Restore global alpha
 
-      // Draw mouse trail
-      this.ctx.fillStyle = `rgba(137, 247, 254, 1)`; // Trail color
-      for (const point of this.mouseTrail) {
-        this.ctx.beginPath();
-        this.ctx.arc(point.x, point.y, point.size / 2, 0, Math.PI * 2); // Use half size for radius
-        this.ctx.globalAlpha = point.opacity;
-        this.ctx.fill();
+      // Draw mouse trail (only if not reduced motion)
+      if (!this.prefersReducedMotion) {
+          this.ctx.fillStyle = `rgba(137, 247, 254, 1)`; // Trail color
+          for (const point of this.mouseTrail) {
+            this.ctx.beginPath();
+            this.ctx.arc(point.x, point.y, point.size / 2, 0, Math.PI * 2); // Use half size for radius
+            this.ctx.globalAlpha = point.opacity;
+            this.ctx.fill();
+          }
+           this.ctx.globalAlpha = 1; // Restore global alpha
       }
-       this.ctx.globalAlpha = 1; // Restore global alpha
     }
 
     animate(timestamp) {
@@ -531,8 +615,10 @@ class WaterCanvas {
 
       // Remove event listeners
       window.removeEventListener('resize', this.resize);
-      window.removeEventListener('mousemove', this.handleMouseMove);
-      window.removeEventListener('click', this.handleClick);
-      // Note: Scroll listener is added/removed in script.js conditionally
+      // Only remove mouse listeners if they were added
+      if (!this.prefersReducedMotion) {
+          window.removeEventListener('mousemove', this.handleMouseMove);
+          window.removeEventListener('click', this.handleClick);
+      }
     }
 }
