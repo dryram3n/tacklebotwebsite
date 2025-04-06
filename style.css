@@ -54,6 +54,16 @@
   --rarity-junk-text: #fff;
   --rarity-event-bg: #ffcc80;
   --rarity-event-text: #8c5a00;
+
+  /* Z-Index Variables */
+  --z-sky: -11;
+  --z-water-canvas: -10; /* Canvas and DOM water bg */
+  --z-fish: 5; /* Above water, below content */
+  --z-content: 10; /* Main sections, footer */
+  --z-header: 1000;
+  --z-modal: 1001;
+  --z-ui-toggle: 1001;
+  --z-mouse-trail: 9990; /* High, but below modal/toggle */
 }
 
 /* --- Canvas Integration --- */
@@ -65,7 +75,7 @@ canvas {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -10; /* Match water background z-index */
+  z-index: var(--z-water-canvas); /* Use variable */
   will-change: transform; /* Hint for performance */
 }
 
@@ -95,6 +105,24 @@ body {
 /* Show cursor on interactive elements */
 a, button, input, select, textarea, [role="button"], label[for] {
   cursor: pointer;
+}
+
+/* Ensure cursor is correct over interactive elements */
+body.using-canvas a,
+body.using-canvas button,
+body.using-canvas input,
+body.using-canvas select,
+body.using-canvas textarea,
+body.using-canvas [role="button"],
+body.using-canvas label[for],
+body.custom-cursor-active a,
+body.custom-cursor-active button,
+body.custom-cursor-active input,
+body.custom-cursor-active select,
+body.custom-cursor-active textarea,
+body.custom-cursor-active [role="button"],
+body.custom-cursor-active label[for] {
+  cursor: pointer; /* Use pointer for explicitly interactive elements */
 }
 
 /* --- Emojis --- */
@@ -139,7 +167,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
   transform: translate(-50%, -50%) rotate(45deg);
   /* Transition only opacity and scale (on click), position is handled by JS lerp */
   transition: opacity 0.3s ease, transform 0.15s ease-out;
-  z-index: 9999;
+  z-index: var(--z-mouse-trail); /* Use variable */
   box-shadow: 0 0 10px var(--water-shadow);
   filter: blur(1px);
   will-change: transform, opacity; /* Optimize animation */
@@ -153,7 +181,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
   background: var(--water-color);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: calc(var(--z-mouse-trail) - 1); /* Below main trail */
   opacity: 0.5; /* Start opacity */
   /* Position set by JS */
   box-shadow: 0 0 4px var(--water-shadow);
@@ -176,7 +204,7 @@ a, button, input, select, textarea, [role="button"], label[for] {
 .water-splash {
   position: fixed; /* Use fixed to position relative to viewport */
   pointer-events: none;
-  z-index: 9998;
+  z-index: calc(var(--z-mouse-trail) - 1); /* Below main trail */
   /* Position set by JS */
   width: 1px; /* Minimal size container */
   height: 1px;
@@ -214,7 +242,7 @@ header {
   padding: 0.8rem 5%;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: var(--z-header); /* Use variable */
   width: 100%;
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
@@ -419,7 +447,7 @@ nav ul li a.active {
   -webkit-backdrop-filter: blur(5px); /* Safari support */
   border: 1px solid rgba(255, 255, 255, 0.5);
   position: relative; /* Needed for z-index */
-  z-index: 10; /* Ensure hero is above background effects */
+  z-index: var(--z-content); /* Use variable */
 }
 
 .hero-content {
@@ -456,14 +484,16 @@ nav ul li a.active {
 main {
     display: block; /* Ensure main element takes block layout */
     transition: opacity 0.5s ease-in-out; /* Added for UI hide */
+    position: relative; /* Ensure main content establishes stacking context */
+    z-index: var(--z-content); /* Use variable */
 }
 
 section {
   padding: 5rem 5%;
   max-width: 1200px;
   margin: 4rem auto;
-  position: relative; /* Ensure sections are above background */
-  z-index: 10; /* Higher than sky and water */
+  position: relative; /* Ensure sections establish stacking context */
+  z-index: var(--z-content); /* Use variable */
 }
 
 section h2 {
@@ -663,7 +693,7 @@ footer {
   border-top: 5px solid transparent;
   border-image: var(--gradient-accent) 1;
   position: relative;
-  z-index: 10;
+  z-index: var(--z-content); /* Use variable */
   transition: opacity 0.5s ease-in-out; /* Added for UI hide */
 }
 
@@ -880,7 +910,7 @@ social-links {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -11; /* Behind water background */
+  z-index: var(--z-sky); /* Use variable */
   overflow: hidden;
   transition: background 2s ease-in-out;
   background: var(--sky-day); /* Default */
@@ -976,7 +1006,7 @@ social-links {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -10; /* Above sky */
+  z-index: var(--z-water-canvas); /* Use variable (same as canvas) */
   overflow: hidden;
   pointer-events: none;
   contain: strict;
@@ -1059,7 +1089,7 @@ social-links {
   /* CHANGE: Use top instead of bottom for positioning context */
   top: 0;
   left: 0;
-  z-index: 3;      /* Above water body/surface, below UI */
+  z-index: var(--z-fish); /* Use variable */
   overflow: hidden;
   pointer-events: none;
 }
@@ -1069,7 +1099,7 @@ social-links {
   /* CHANGE: Establish top/left origin for transform */
   top: 0;
   left: 0;
-  z-index: 4;      /* Above other background elements */
+  /* Fish elements don't need individual z-index if container is set */
   transform-origin: center;
   /* CHANGE: Update will-change properties */
   will-change: transform, opacity; /* Properties changed by JS/CSS */
@@ -1369,7 +1399,7 @@ social-links {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1001; /* Higher than header */
+  z-index: var(--z-modal); /* Use variable */
   overflow-y: auto;
   padding: 20px 0; /* Padding for scroll */
 }
@@ -1746,7 +1776,7 @@ social-links {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 1001; /* Above header/footer */
+    z-index: var(--z-ui-toggle); /* Use variable */
     transition: opacity 0.5s ease-in-out;
     will-change: opacity;
 }
@@ -2280,6 +2310,6 @@ body.canvas-failed {
     cursor: auto; /* Default cursor */
 }
 /* Only hide cursor if DOM trail is active (JS handles this logic) */
-body.canvas-failed.custom-cursor-active {
+body.custom-cursor-active {
     cursor: none;
 }

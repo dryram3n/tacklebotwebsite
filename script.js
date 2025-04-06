@@ -63,7 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global state for the animation loop (for DOM-based animations)
     let animationFrameId = null;
     let lastTimestamp = 0;
-    const FRAME_DURATION = 1000 / 15; // Target ~15fps for non-trail animations (in milliseconds)
+    // --- CHANGE FRAME RATE CAP ---
+    const FRAME_DURATION = 1000 / 30; // Target ~30fps for non-trail animations (in milliseconds)
+    // --- END CHANGE ---
     let lastThrottledTimestamp = 0; // Separate timestamp for updates that don't need 60fps
     let isLoopRunning = false; // Track if the main DOM animation loop is active
 
@@ -816,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!trail || isLowPerfDevice || 'ontouchstart' in window) {
             if (trail) trail.style.display = 'none'; // Hide element if it exists but shouldn't run
             document.body.style.cursor = 'auto'; // Ensure default cursor is visible
+            document.body.classList.remove('custom-cursor-active'); // Remove class if trail not active
             isTrailActive = false;
             return;
         }
@@ -823,12 +826,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Double-check: If canvas is somehow active, don't run this DOM trail
         if (document.body.classList.contains('using-canvas')) {
              if (trail) trail.style.display = 'none';
+             document.body.classList.remove('custom-cursor-active'); // Remove class if canvas overrides
              isTrailActive = false;
              return;
         }
 
         // Hide default cursor and prepare custom trail
         document.body.style.cursor = 'none';
+        document.body.classList.add('custom-cursor-active'); // Add class to indicate custom cursor
         trail.style.opacity = '0'; // Start hidden
         isTrailActive = true; // Enable trail updates in the main loop
 
@@ -1119,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             animateTrailFn(elapsedSinceLastFrame);
         }
 
-        // --- Throttled Updates (Run Less Frequently) ---
+        // --- Throttled Updates (Run Less Frequently - Now ~30fps) ---
         // Calculate time elapsed since the last *throttled* update
         if (!lastThrottledTimestamp) lastThrottledTimestamp = timestamp;
         const elapsedSinceLastThrottledFrame = timestamp - lastThrottledTimestamp;
