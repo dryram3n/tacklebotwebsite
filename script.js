@@ -1430,7 +1430,28 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("TackleBot animations initialized.");
     }
 
+    // Add this near the initialization functions
+
+    function ensureProperCursorBehavior() {
+        // Get the current mode
+        const isUsingCanvas = document.body.classList.contains('using-canvas');
+        const isUsingDOMTrail = document.body.classList.contains('custom-cursor-active');
+        
+        // If neither canvas nor DOM trail is active, restore normal cursor
+        if (!isUsingCanvas && !isUsingDOMTrail) {
+            document.body.style.cursor = 'auto';
+        }
+        
+        // Add cursor:none to body only when appropriate
+        if (isUsingCanvas || isUsingDOMTrail) {
+            document.body.style.cursor = 'none';
+        }
+    }
+
     // Run the main initialization function
     initializeWebsiteAnimations();
+
+    // Call after initializations are complete
+    setTimeout(ensureProperCursorBehavior, 1000);
 
 }); // End DOMContentLoaded listener
