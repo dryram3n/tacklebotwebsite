@@ -1454,4 +1454,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // Call after initializations are complete
     setTimeout(ensureProperCursorBehavior, 1000);
 
+    // Add near the end of your existing DOMContentLoaded event handler
+
+    function confirmCursorFunctionality() {
+      // Wait for everything to initialize
+      setTimeout(() => {
+        // Check which cursor system is active
+        const usingCanvas = document.body.classList.contains('using-canvas');
+        const usingDOMTrail = document.body.classList.contains('custom-cursor-active');
+        
+        if (usingCanvas) {
+          // Verify canvas cursor is working by checking if waterCanvasInstance exists and is working
+          if (waterCanvasInstance && typeof waterCanvasInstance.animationFrameId === 'number') {
+            document.body.classList.add('canvas-confirmed');
+          } else {
+            // Fallback to normal cursor if canvas cursor isn't working
+            document.body.style.cursor = 'auto';
+          }
+        } else if (usingDOMTrail) {
+          // Verify DOM trail is visible by checking if it has opacity > 0
+          const trail = document.getElementById('mouse-trail');
+          if (trail && window.getComputedStyle(trail).opacity > 0) {
+            document.body.classList.add('custom-cursor-confirmed');
+          } else {
+            // Fallback to normal cursor if DOM trail isn't visible
+            document.body.style.cursor = 'auto';
+          }
+        } else {
+          // Neither system is active, ensure normal cursor
+          document.body.style.cursor = 'auto';
+        }
+        
+        // Apply cursor debugging styles in development, comment out in production
+        // document.body.classList.add('debug-cursor');
+      }, 2000); // Check after 2 seconds to allow animations to initialize
+    }
+
+    // Call after initialization
+    confirmCursorFunctionality();
+
 }); // End DOMContentLoaded listener

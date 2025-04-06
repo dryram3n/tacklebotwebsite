@@ -299,7 +299,7 @@ class WaterCanvas {
       }
 
       // Occasionally add/remove fish (frame-rate independent)
-      const maxFish = this.isLowPerfDevice ? 4 : (window.navigator.hardwareConcurrency >= 8 ? 10 : 6); // Reduced max fish
+      const maxFish = this.isLowPerfDevice ? 4 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12); // Increased to 20 for high-perf devices
       if (this.fishes.length < maxFish && Math.random() < 0.0001 * delta) {
         this.addFish();
       }
