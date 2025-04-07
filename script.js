@@ -727,41 +727,32 @@ document.addEventListener('DOMContentLoaded', () => {
             button.setAttribute('aria-expanded', isVisible);
         });
         if (hideUiButton && showUiButton) {
-            // Enhanced touch event handling for mobile
-            const addButtonListeners = (button, action) => {
-                // Remove any existing listeners first to avoid duplicates
-                const newButton = button.cloneNode(true);
-                if (button.parentNode) {
-                    button.parentNode.replaceChild(newButton, button);
-                }
-                
-                // Add click listener
-                newButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    action();
-                });
-                
-                // Add touchstart listener for better mobile response
-                newButton.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); // Prevent default touch behavior
-                    action();
-                }, { passive: false }); // Important for preventing scroll on some browsers
-                
-                return newButton;
-            };
-            
-            // Replace buttons with enhanced versions
-            hideUiButton = addButtonListeners(hideUiButton, () => {
+            // Simplify the toggle implementation - remove the clone approach which is causing issues
+            hideUiButton.addEventListener('click', function() {
                 document.body.classList.add('ui-hidden');
                 hideUiButton.style.display = 'none';
                 showUiButton.style.display = 'inline-flex';
             });
             
-            showUiButton = addButtonListeners(showUiButton, () => {
+            hideUiButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                document.body.classList.add('ui-hidden');
+                hideUiButton.style.display = 'none';
+                showUiButton.style.display = 'inline-flex';
+            }, { passive: false });
+            
+            showUiButton.addEventListener('click', function() {
                 document.body.classList.remove('ui-hidden');
                 hideUiButton.style.display = 'inline-flex';
                 showUiButton.style.display = 'none';
             });
+            
+            showUiButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                document.body.classList.remove('ui-hidden');
+                hideUiButton.style.display = 'inline-flex';
+                showUiButton.style.display = 'none';
+            }, { passive: false });
         } else { 
             console.warn("UI toggle buttons not found."); 
         }
