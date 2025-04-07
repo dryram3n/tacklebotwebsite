@@ -1741,6 +1741,13 @@ body.ui-hidden #ui-toggle-container {
     pointer-events: auto !important;
 }
 
+/* Hide UI toggle completely on mobile devices */
+@media (max-width: 768px) {
+    #ui-toggle-container {
+        display: none !important;
+    }
+}
+
 /* Enhance visibility on mobile */
 @media (max-width: 768px) {
     #ui-toggle-container {
