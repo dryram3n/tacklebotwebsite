@@ -727,32 +727,55 @@ document.addEventListener('DOMContentLoaded', () => {
             button.setAttribute('aria-expanded', isVisible);
         });
         if (hideUiButton && showUiButton) {
-            // Simplify the toggle implementation - remove the clone approach which is causing issues
-            hideUiButton.addEventListener('click', function() {
+            // First, ensure clean state by removing any existing listeners
+            const hideUiClone = hideUiButton.cloneNode(true);
+            const showUiClone = showUiButton.cloneNode(true);
+            
+            if (hideUiButton.parentNode) {
+                hideUiButton.parentNode.replaceChild(hideUiClone, hideUiButton);
+            }
+            
+            if (showUiButton.parentNode) {
+                showUiButton.parentNode.replaceChild(showUiClone, showUiButton);
+            }
+            
+            // Set up toggle functions with the fresh elements
+            function hideUI(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 document.body.classList.add('ui-hidden');
-                hideUiButton.style.display = 'none';
-                showUiButton.style.display = 'inline-flex';
-            });
+                hideUiClone.style.display = 'none';
+                showUiClone.style.display = 'flex';
+            }
             
-            hideUiButton.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                document.body.classList.add('ui-hidden');
-                hideUiButton.style.display = 'none';
-                showUiButton.style.display = 'inline-flex';
-            }, { passive: false });
-            
-            showUiButton.addEventListener('click', function() {
+            function showUI(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 document.body.classList.remove('ui-hidden');
-                hideUiButton.style.display = 'inline-flex';
-                showUiButton.style.display = 'none';
-            });
+                hideUiClone.style.display = 'flex';
+                showUiClone.style.display = 'none';
+            }
             
-            showUiButton.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                document.body.classList.remove('ui-hidden');
-                hideUiButton.style.display = 'inline-flex';
-                showUiButton.style.display = 'none';
-            }, { passive: false });
+            // Add event listeners to the cloned elements
+            hideUiClone.addEventListener('click', hideUI);
+            showUiClone.addEventListener('click', showUI);
+            
+            // Add touch events for mobile with passive: false to allow preventDefault
+            hideUiClone.addEventListener('touchend', hideUI, { passive: false });
+            showUiClone.addEventListener('touchend', showUI, { passive: false });
+            
+            // Set initial state based on current body class
+            if (document.body.classList.contains('ui-hidden')) {
+                hideUiClone.style.display = 'none';
+                showUiClone.style.display = 'flex';
+            } else {
+                hideUiClone.style.display = 'flex';
+                showUiClone.style.display = 'none';
+            }
         } else { 
             console.warn("UI toggle buttons not found."); 
         }

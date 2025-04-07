@@ -1746,32 +1746,18 @@ body.ui-hidden #ui-toggle-container {
     #ui-toggle-container {
         bottom: 15px;
         right: 15px;
-        /* Make even more prominent on mobile */
     }
     
     .ui-toggle-button {
-        padding: 12px 18px;
+        padding: 14px 20px;
         font-size: 1rem;
     }
     
     .ui-toggle-button.icon-button {
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
+        width: 56px;
+        height: 56px;
+        font-size: 1.4rem;
     }
-}
-
-/* --- UI Hidden State --- */
-body.ui-hidden header,
-body.ui-hidden main,
-body.ui-hidden footer {
-    opacity: 0;
-    pointer-events: none;
-}
-
-body.ui-hidden #ui-toggle-container {
-    opacity: 1;
-    pointer-events: auto;
 }
 
 /* --- START: Try Me Section Styles --- */
