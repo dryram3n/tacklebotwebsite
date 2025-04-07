@@ -1741,29 +1741,10 @@ body.ui-hidden #ui-toggle-container {
     pointer-events: auto !important;
 }
 
-/* Hide UI toggle completely on mobile devices */
+/* Hide UI toggle completely on mobile devices - ensure this is the only mobile media query for this element */
 @media (max-width: 768px) {
     #ui-toggle-container {
         display: none !important;
-    }
-}
-
-/* Enhance visibility on mobile */
-@media (max-width: 768px) {
-    #ui-toggle-container {
-        bottom: 15px;
-        right: 15px;
-    }
-    
-    .ui-toggle-button {
-        padding: 14px 20px;
-        font-size: 1rem;
-    }
-    
-    .ui-toggle-button.icon-button {
-        width: 56px;
-        height: 56px;
-        font-size: 1.4rem;
     }
 }
 
