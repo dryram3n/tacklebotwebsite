@@ -705,11 +705,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const discordInviteLink = "https://discord.com/oauth2/authorize?client_id=1354018504470298624";
         const discordSupportLink = "https://discord.gg/6TxYjeQcXg";
         document.querySelectorAll('.invite-button').forEach(button => {
-            if (button.tagName === 'A') { button.href = discordInviteLink; button.target = "_blank"; button.rel = "noopener noreferrer"; }
+            if (button.tagName === 'A') { 
+                // Only set href if it's not already properly set
+                if (button.getAttribute('href') === '#' || !button.getAttribute('href')) {
+                    button.href = discordInviteLink; 
+                }
+                button.target = "_blank"; 
+                button.rel = "noopener noreferrer"; 
+            }
             else if (button.tagName === 'BUTTON') { button.addEventListener('click', () => window.open(discordInviteLink, '_blank', 'noopener,noreferrer')); }
         });
         document.querySelectorAll('.support-button').forEach(button => {
-            if (button.tagName === 'A') { button.href = discordSupportLink; button.target = "_blank"; button.rel = "noopener noreferrer"; }
+            if (button.tagName === 'A') { 
+                // Only set href if it's not already properly set
+                if (button.getAttribute('href') === '#' || !button.getAttribute('href')) {
+                    button.href = discordSupportLink; 
+                }
+                button.target = "_blank"; 
+                button.rel = "noopener noreferrer"; 
+            }
             else if (button.tagName === 'BUTTON') { button.addEventListener('click', () => window.open(discordSupportLink, '_blank', 'noopener,noreferrer')); }
         });
         document.body.addEventListener('click', function(e) {
