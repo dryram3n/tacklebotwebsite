@@ -10,7 +10,7 @@ class WaterCanvas {
     static WATER_COLOR_BOTTOM = 'rgba(102, 166, 255, 0.8)';
     
     constructor() {
-      // --- START: Hardware Detection ---
+      // Hardware Detect
       this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       this.isLowPerfDevice = this.prefersReducedMotion ||
                              !('requestAnimationFrame' in window) ||
@@ -20,11 +20,10 @@ class WaterCanvas {
       if (this.isLowPerfDevice) {
           console.log("Canvas Effects: Low performance device or reduced motion detected. Reducing effects.");
       }
-      // --- END: Hardware Detection ---
+
   
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
-      // Improve rendering quality slightly, especially for scaled images/lines
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'medium';
   
@@ -271,14 +270,13 @@ class WaterCanvas {
         if (this.prefersReducedMotion) { this.plants = []; return; }
         const time = performance.now();
         this.plants.forEach(plant => {
-            // More complex sway using two sine waves
             plant.swayPhase += plant.swaySpeed * delta;
             plant.swayPhase2 += plant.swaySpeed2 * delta;
             plant.currentSway = (Math.sin(plant.swayPhase) * plant.swayAmount) + (Math.sin(plant.swayPhase2) * plant.swayAmount2);
   
             if (plant.isBeingNibbledTimer > 0) {
                 plant.isBeingNibbledTimer -= delta;
-                plant.currentSway += Math.sin(time * 0.05) * 0.05; // Extra wiggle
+                plant.currentSway += Math.sin(time * 0.05) * 0.05;
             }
         });
     }
@@ -390,7 +388,7 @@ class WaterCanvas {
   
     addBackgroundFeature() {
         const x = Math.random() * this.canvas.width;
-        const y = this.canvas.height - Math.random() * this.canvas.height * 0.15; // Lower 15%
+        const y = this.canvas.height - Math.random() * this.canvas.height * 0.15;
         const type = Math.random() < 0.7 ? 'rocks' : 'cave';
         const size = 50 + Math.random() * (this.isLowPerfDevice ? 100 : 200);
         const colorValue = 30 + Math.random() * 40;
@@ -399,11 +397,11 @@ class WaterCanvas {
         const featureData = {
             x: x, y: y, size: size, type: type, color: color,
             points: [],
-            parallaxFactor: 0.1 + Math.random() * 0.2 // How much it moves with scroll (less = further away)
+            parallaxFactor: 0.1 + Math.random() * 0.2
         };
   
-        const pointCount = 6 + Math.floor(Math.random() * 6); // More points for bezier
-        let lastPoint = { x: size * (0.6 + Math.random() * 0.4), y: 0 }; // Start point
+        const pointCount = 6 + Math.floor(Math.random() * 6);
+        let lastPoint = { x: size * (0.6 + Math.random() * 0.4), y: 0 };
         featureData.points.push(lastPoint);
   
         for (let i = 1; i <= pointCount; i++) {
@@ -411,9 +409,8 @@ class WaterCanvas {
             const radius = size * (0.5 + Math.random() * 0.5); // Irregular radius
             const nextPoint = {
                 x: Math.cos(angle) * radius,
-                y: Math.sin(angle) * radius * (0.4 + Math.random() * 0.4) // Flatter shapes
+                y: Math.sin(angle) * radius * (0.4 + Math.random() * 0.4)
             };
-            // Calculate control points for bezier curve (simple midpoint approach)
             const cp1 = {
                 x: lastPoint.x + (nextPoint.x - lastPoint.x) * 0.3 + (Math.random() - 0.5) * size * 0.2,
                 y: lastPoint.y + (nextPoint.y - lastPoint.y) * 0.3 + (Math.random() - 0.5) * size * 0.2
@@ -461,9 +458,8 @@ class WaterCanvas {
       
       // Find an inactive raindrop in the pool
       const drop = this.raindropPool.find(d => !d.active);
-      if (!drop) return; // No available raindrops
+      if (!drop) return;
       
-      // Reuse the raindrop object
       drop.x = Math.random() * this.canvas.width;
       drop.y = -10;
       drop.length = 4 + Math.random() * 8;
@@ -486,7 +482,6 @@ class WaterCanvas {
   
             let waveSurfaceY = (100 - this.waterHeight) * this.canvas.height / 100;
             if (this.wavePoints.length > 1) {
-                // More accurate wave surface check using interpolation
                 let index = 0;
                 while (index < this.wavePoints.length - 2 && this.wavePoints[index + 1].x < drop.x) {
                     index++;
@@ -499,7 +494,7 @@ class WaterCanvas {
   
   
             if (drop.y + drop.length / 2 > waveSurfaceY) {
-                this.createSplash(drop.x, waveSurfaceY, 0.25, 0.3); // Even smaller splash for rain
+                this.createSplash(drop.x, waveSurfaceY, 0.25, 0.3);
                 this.raindrops.splice(i, 1);
             } else if (drop.y > this.canvas.height) {
                 this.raindrops.splice(i, 1);
@@ -513,8 +508,7 @@ class WaterCanvas {
     }
   
     updateWaterHeight(targetHeight) {
-      // Use lerp for smoother height changes
-      this.waterHeight += (targetHeight - this.waterHeight) * this.lerpFactor * 0.5; // Slower height change
+      this.waterHeight += (targetHeight - this.waterHeight) * this.lerpFactor * 0.5;
       this.fishManager.updateWaterHeight(this.waterHeight);
     }
   
@@ -532,8 +526,7 @@ class WaterCanvas {
       if (!this.prefersReducedMotion) { this.updateBubbles(delta); }
       if (!this.prefersReducedMotion) { this.updateMouseTrail(delta); }
   
-      // Add new bubbles/fish periodically
-      if (Math.random() < 0.0008 * delta) { this.addBubble(); } // Slightly less frequent bubbles
+      if (Math.random() < 0.0008 * delta) { this.addBubble(); }
       this.fishManager.manageFishPopulation(delta);
     }
   
@@ -548,7 +541,6 @@ class WaterCanvas {
         const point = this.wavePoints[i];
         const xFactor = i / (this.wavePoints.length - 1);
         
-        // Previous position for smoothing
         const prevY = point.y;
         
         if (this.prefersReducedMotion) {
@@ -560,7 +552,6 @@ class WaterCanvas {
           const wave3 = Math.sin(waveTime * 0.3 + xFactor * 4 + 1.0) * 3 * amplitudeMultiplier;
           const targetY = waterLine + wave1 + wave2 + wave3;
           
-          // Apply smoothing between frames
           point.y = this.lerp(prevY, targetY, Math.min(1, 0.3 * timeFactor));
         }
       }
@@ -613,9 +604,9 @@ class WaterCanvas {
           point.speedY += point.gravity * (delta / 16.67);
           point.x += point.speedX * (delta / 16.67);
           point.y += point.speedY * (delta / 16.67);
-          point.opacity = Math.max(0, 0.7 * (1 - point.age / point.maxAge)); // Slightly lower opacity
+          point.opacity = Math.max(0, 0.7 * (1 - point.age / point.maxAge));
         } else {
-          point.opacity = Math.max(0, 0.4 * (1 - point.age / point.maxAge)); // Lower opacity
+          point.opacity = Math.max(0, 0.4 * (1 - point.age / point.maxAge));
         }
   
         if (point.age >= point.maxAge || point.opacity <= 0) {
@@ -627,14 +618,10 @@ class WaterCanvas {
     render() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
-      const time = performance.now(); // For animations independent of frame rate
+      const time = performance.now();
   
-      // --- Render Background Features (Rocks/Caves) ---
       this.backgroundFeatures.forEach(feature => {
           this.ctx.save();
-          // Apply subtle parallax based on water height change (simulating scroll)
-          // This is a simplification; true scroll parallax needs scroll position.
-          // We'll use waterHeight as a proxy. A lower waterHeight means scrolled down.
           const parallaxOffset = (50 - this.waterHeight) * feature.parallaxFactor;
           this.ctx.translate(feature.x, feature.y + parallaxOffset);
   
@@ -643,19 +630,15 @@ class WaterCanvas {
           if (feature.points.length > 1) {
               this.ctx.moveTo(0, this.canvas.height);
               this.ctx.lineTo(0, this.wavePoints[0].y);
-              // Use bezier curves for smoother waves between points
               for (let i = 0; i < this.wavePoints.length - 1; i++) {
                   const p1 = this.wavePoints[i];
                   const p2 = this.wavePoints[i + 1];
-                  // Simple control points based on midpoint
                   const xc = (p1.x + p2.x) / 2;
                   const yc = (p1.y + p2.y) / 2;
-                  // Adjust control points slightly for smoother curves (can be refined further)
                   const cp1x = (xc + p1.x) / 2;
                   const cp1y = (yc + p1.y) / 2;
                   const cp2x = (xc + p2.x) / 2;
                   const cp2y = (yc + p2.y) / 2;
-                  // Using quadraticCurveTo is often sufficient and simpler here
                   this.ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
               }
               // Curve to the last point
@@ -676,8 +659,7 @@ class WaterCanvas {
               this.ctx.fill();
   
               if (feature.type === 'cave' && feature.cave) {
-                  // Darker, slightly offset cave entrance
-                  this.ctx.fillStyle = 'rgba(10, 10, 15, 0.6)'; // Darker, less blue
+                  this.ctx.fillStyle = 'rgba(10, 10, 15, 0.6)';
                   this.ctx.beginPath();
                   this.ctx.ellipse(0, feature.cave.yOffset, feature.cave.width / 2, feature.cave.height / 2, 0, 0, Math.PI * 2);
                   this.ctx.fill();
@@ -687,7 +669,6 @@ class WaterCanvas {
       });
   
   
-      // --- Render Water ---
       if (!this.prefersReducedMotion && this.wavePoints.length > 1) {
           this.ctx.beginPath();
           this.ctx.moveTo(0, this.canvas.height);
@@ -781,7 +762,6 @@ class WaterCanvas {
           });
       }
   
-      // --- Render Plants (Refined) ---
       if (!this.prefersReducedMotion) {
           this.plants.forEach(plant => {
               this.ctx.save();
@@ -855,10 +835,10 @@ class WaterCanvas {
       }
   
   
-      // --- Render Fish ---
+
       this.fishManager.renderFish();
   
-      // --- Render Bubbles ---
+
       if (!this.prefersReducedMotion) {
           this.ctx.fillStyle = `rgba(255, 255, 255, 0.6)`; // Slightly less opaque bubbles
           for (const bubble of this.bubblePool) {
@@ -871,7 +851,7 @@ class WaterCanvas {
           this.ctx.globalAlpha = 1;
       }
   
-      // --- Render Mouse Trail ---
+
       if (!this.prefersReducedMotion) {
           this.ctx.fillStyle = `rgba(137, 247, 254, 0.8)`; // Trail color slightly less opaque
           for (const point of this.mouseTrail) {
@@ -883,7 +863,7 @@ class WaterCanvas {
            this.ctx.globalAlpha = 1;
       }
   
-      // --- Render Rain ---
+
       if (!this.prefersReducedMotion && this.isRaining) {
           this.ctx.strokeStyle = 'rgba(180, 210, 230, 0.5)'; // More transparent rain
           this.ctx.lineWidth = 1; // Thinner rain
@@ -1013,11 +993,17 @@ class WaterCanvas {
       if (this.prefersReducedMotion) return;
       
       // Create 3-8 particles for the splash
-      const particleCount = 3 + Math.floor(Math.random() * 5);
+      const particleCount = Math.min(
+        3 + Math.floor(Math.random() * 5), 
+        this.maxTrailPoints - this.activeTrailPoints
+      );
+      
+      if (particleCount <= 0) return; // Avoid creating particles if we're at capacity
+      
       for (let i = 0; i < particleCount; i++) {
         // Find an inactive trail point from the pool
         const point = this.mouseTrailPool.find(p => !p.active);
-        if (!point) return; // No available trail points
+        if (!point) break; // Break instead of return to use particles we've already created
         
         // Configure the splash particle
         point.x = x + (Math.random() - 0.5) * 4;
@@ -1038,7 +1024,7 @@ class WaterCanvas {
     }
   }
   
-  // Fish Management Class - handles all fish-related logic
+
   class FishManager {
     constructor(canvas, ctx, options = {}) {
         // Canvas reference and context
