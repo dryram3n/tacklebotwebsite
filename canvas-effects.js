@@ -1,9 +1,6 @@
-// canvas-effects.js
-
 // Canvas implementation for water effects
 class WaterCanvas {
     constructor() {
-      // --- START: Hardware Detection ---
       this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       this.isLowPerfDevice = this.prefersReducedMotion ||
                              !('requestAnimationFrame' in window) ||
@@ -13,7 +10,6 @@ class WaterCanvas {
       if (this.isLowPerfDevice) {
           console.log("Canvas Effects: Low performance device or reduced motion detected. Reducing effects.");
       }
-      // --- END: Hardware Detection ---
   
       // Create canvas element
       this.canvas = document.createElement('canvas');
@@ -28,7 +24,7 @@ class WaterCanvas {
       this.canvas.style.zIndex = '-10'; // Use variable from CSS
       this.canvas.style.pointerEvents = 'none';
   
-      // Add to DOM before other content
+
       document.body.prepend(this.canvas);
   
       // Initialize properties
@@ -37,8 +33,8 @@ class WaterCanvas {
       this.bubbles = [];
       this.mouseTrail = [];
       this.plants = [];
-      this.corals = []; // NEW: Array for corals
-      this.backgroundFeatures = []; // NEW: Array for rocks/caves
+      this.corals = [];
+      this.backgroundFeatures = [];
       this.raindrops = [];
       this.waterHeight = 50; // Initial height in vh
       this.wavePoints = [];
@@ -58,10 +54,9 @@ class WaterCanvas {
       this.handleMouseMove = this.handleMouseMove.bind(this);
       this.handleClick = this.handleClick.bind(this);
   
-      this.resize(); // Call resize immediately to set initial dimensions and features
+      this.resize();
       window.addEventListener('resize', this.resize);
   
-      // Mouse tracking for trail effect (disable if reduced motion)
       this.mousePos = { x: 0, y: 0 };
       if (!this.prefersReducedMotion) {
           window.addEventListener('mousemove', this.handleMouseMove);
@@ -79,11 +74,10 @@ class WaterCanvas {
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.initWavePoints();
-      // Recreate features on resize
       this.plants = [];
       this.corals = [];
       this.backgroundFeatures = [];
-      this.createInitialBackgroundFeatures(); // Create background first
+      this.createInitialBackgroundFeatures();
       this.createInitialCorals();
       this.createInitialPlants();
     }
@@ -124,7 +118,7 @@ class WaterCanvas {
                fish.scaleX = fish.direction === 'left' ? -1 : 1;
                fish.targetY = fish.y + Math.sin(angleAway) * 30 + (Math.random() - 0.5) * 20;
                fish.targetPlant = null;
-               fish.targetCoral = null; // NEW: Stop targeting coral too
+               fish.targetCoral = null;
            }
        });
     }
@@ -215,7 +209,7 @@ class WaterCanvas {
         avoidanceVector: { x: 0, y: 0 },
         lastInteractionCheck: 0,
         targetPlant: null,
-        targetCoral: null, // NEW: Target for coral interaction
+        targetCoral: null,
         nibbleOffset: 0
       });
     }
@@ -261,7 +255,7 @@ class WaterCanvas {
     // --- START: Plant Methods ---
     createInitialPlants() {
         if (this.prefersReducedMotion) return;
-        const plantDensity = this.isLowPerfDevice ? 0.02 : 0.04; // Reduced density slightly
+        const plantDensity = this.isLowPerfDevice ? 0.02 : 0.04;
         const plantCount = Math.floor(this.canvas.width * plantDensity);
         for (let i = 0; i < plantCount; i++) {
             this.addPlant();
@@ -273,7 +267,7 @@ class WaterCanvas {
         const x = Math.random() * this.canvas.width;
         const baseY = this.canvas.height;
         const maxHeight = 30 + Math.random() * (this.isLowPerfDevice ? 40 : 80);
-        const type = Math.random() < 0.5 ? 'seaweed' : (Math.random() < 0.7 ? 'grass' : 'bushy'); // Added grass type
+        const type = Math.random() < 0.5 ? 'seaweed' : (Math.random() < 0.7 ? 'grass' : 'bushy');
         let color;
         if (type === 'seaweed') {
             color = `rgba(${40 + Math.random() * 40}, ${100 + Math.random() * 60}, ${40 + Math.random() * 40}, ${0.6 + Math.random() * 0.2})`; // Darker greens
@@ -290,7 +284,7 @@ class WaterCanvas {
             currentHeight: maxHeight * (0.8 + Math.random() * 0.2),
             color: color,
             type: type,
-            swayPhase: Math.random() * Math.PI * 2, // Use phase for smoother sway
+            swayPhase: Math.random() * Math.PI * 2,
             swaySpeed: 0.0003 + Math.random() * 0.0004,
             swayAmount: 0.05 + Math.random() * 0.15,
             segments: type === 'seaweed' ? 4 + Math.floor(Math.random() * 4) : (type === 'grass' ? 1 : 5 + Math.floor(Math.random() * 4)),
@@ -302,7 +296,6 @@ class WaterCanvas {
         if (this.prefersReducedMotion) { this.plants = []; return; }
         const time = performance.now();
         this.plants.forEach(plant => {
-            // Swaying motion using phase
             plant.swayPhase += plant.swaySpeed * delta;
             plant.currentSway = Math.sin(plant.swayPhase) * plant.swayAmount;
   
@@ -314,9 +307,7 @@ class WaterCanvas {
             }
         });
     }
-    // --- END: Plant Methods ---
   
-    // --- START: Coral Methods ---
     createInitialCorals() {
         if (this.prefersReducedMotion) return;
         const coralDensity = this.isLowPerfDevice ? 0.008 : 0.015; // Corals per 100 pixels
@@ -344,7 +335,7 @@ class WaterCanvas {
             swayPhase: Math.random() * Math.PI * 2, // For subtle animation
             swaySpeed: 0.0001 + Math.random() * 0.0002,
             swayAmount: 0.01 + Math.random() * 0.02,
-            isBeingNibbledTimer: 0 // NEW: Nibble timer for coral
+            isBeingNibbledTimer: 0
         };
   
         // Generate structure based on type
@@ -381,11 +372,11 @@ class WaterCanvas {
                 const radius = coral.size * (0.8 + Math.random() * 0.4); // Vary radius for bumpy shape
                 points.push({
                     x: Math.cos(angle) * radius,
-                    y: Math.sin(angle) * radius * 0.7 // Make it slightly flatter
+                    y: Math.sin(angle) * radius * 0.7
                 });
             }
             coral.structure.push({ type: 'brain', points: points }); // Store points for rendering
-        } else { // Fan coral (simplified 2D branching)
+        } else {
              const generateFanBranch = (x, y, angle, length, depth, width) => {
                 if (depth <= 0 || length < 1) return;
                 const endX = x + Math.cos(angle) * length;
@@ -404,7 +395,7 @@ class WaterCanvas {
     }
   
     updateCorals(delta) {
-        if (this.prefersReducedMotion) return; // No animation if reduced motion
+        if (this.prefersReducedMotion) return;
         this.corals.forEach(coral => {
             coral.swayPhase += coral.swaySpeed * delta;
             coral.currentSway = Math.sin(coral.swayPhase) * coral.swayAmount;
@@ -412,13 +403,11 @@ class WaterCanvas {
             // Nibbled feedback timer
             if (coral.isBeingNibbledTimer > 0) {
                 coral.isBeingNibbledTimer -= delta;
-                coral.currentSway += Math.sin(performance.now() * 0.06) * 0.03; // Extra wiggle
+                coral.currentSway += Math.sin(performance.now() * 0.06) * 0.03;
             }
         });
     }
-    // --- END: Coral Methods ---
   
-    // --- START: Background Feature Methods ---
     createInitialBackgroundFeatures() {
         const featureDensity = this.isLowPerfDevice ? 0.004 : 0.008; // Features per 100 pixels
         const featureCount = Math.floor(this.canvas.width * featureDensity);
@@ -462,9 +451,7 @@ class WaterCanvas {
   
         this.backgroundFeatures.push(featureData);
     }
-    // --- END: Background Feature Methods ---
   
-    // --- START: Rain Methods ---
     simulateWeather() {
         setInterval(() => {
             if (this.prefersReducedMotion) {
@@ -524,7 +511,6 @@ class WaterCanvas {
         }
         this.addRaindrop();
     }
-    // --- END: Rain Methods ---
   
   
     updateWaterHeight(targetHeight) {
@@ -532,7 +518,6 @@ class WaterCanvas {
       this.waterHeight += diff * 0.08;
     }
   
-    // --- START: Fish Interaction Logic ---
     updateFishInteractions(currentTimestamp) {
         if (this.prefersReducedMotion) return;
   
@@ -551,7 +536,7 @@ class WaterCanvas {
   
             if (fish1.state === 'darting') continue;
   
-            // Fish-to-Fish avoidance
+
             for (let j = i + 1; j < this.fishes.length; j++) {
                 const fish2 = this.fishes[j];
                 if (fish2.state === 'darting') continue;
@@ -575,7 +560,6 @@ class WaterCanvas {
                 }
             }
   
-            // Fish-to-Plant/Coral Interaction (Nibbling)
             if (fish1.state === 'swimming') {
                 const nibbleChance = 0.003; // Lower chance
                 const checkRadius = fish1.size * 1.5;
@@ -586,7 +570,7 @@ class WaterCanvas {
                     let minDistSq = checkRadius * checkRadius;
                     let targetType = null; // 'plant' or 'coral'
   
-                    // Check plants
+
                     for (const plant of this.plants) {
                         const plantTopY = plant.baseY - plant.currentHeight;
                         const dx = plant.x - fish1.x;
@@ -599,7 +583,6 @@ class WaterCanvas {
                         }
                     }
   
-                    // Check corals (only if no closer plant found or randomly prefer coral)
                     if (this.corals.length > 0 && (targetType !== 'plant' || Math.random() < 0.3)) {
                         for (const coral of this.corals) {
                             // Approximate coral center/top for distance check
@@ -639,13 +622,12 @@ class WaterCanvas {
             }
         }
     }
-    // --- END: Fish Interaction Logic ---
   
     update(delta) {
       const currentTimestamp = performance.now();
       this.updateWaves(delta);
       this.updatePlants(delta);
-      this.updateCorals(delta); // NEW: Update corals
+      this.updateCorals(delta);
       this.updateRaindrops(delta);
       if (!this.prefersReducedMotion) {
           this.updateFishInteractions(currentTimestamp);
@@ -875,7 +857,6 @@ class WaterCanvas {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
   
-      // --- Render Background Features (Rocks/Caves) ---
       this.backgroundFeatures.forEach(feature => {
           this.ctx.save();
           this.ctx.translate(feature.x, feature.y);
@@ -908,7 +889,6 @@ class WaterCanvas {
       });
   
   
-      // --- Render Water ---
       if (!this.prefersReducedMotion && this.wavePoints.length > 1) {
           this.ctx.beginPath();
           this.ctx.moveTo(0, this.canvas.height);
@@ -940,7 +920,6 @@ class WaterCanvas {
           this.ctx.fillRect(0, waterLine, this.canvas.width, this.canvas.height - waterLine);
       }
   
-      // --- Render Corals ---
       if (!this.prefersReducedMotion) {
           this.corals.forEach(coral => {
               this.ctx.save();
@@ -990,7 +969,6 @@ class WaterCanvas {
           });
       }
   
-      // --- Render Plants (Refined) ---
       if (!this.prefersReducedMotion) {
           this.plants.forEach(plant => {
               this.ctx.save();
@@ -1044,11 +1022,6 @@ class WaterCanvas {
                   const stemPoints = 3; // Simple stem
                   let lastStemX = 0;
                   let lastStemY = 0;
-                  // Draw a slightly curved central stem first (optional, subtle)
-                  // this.ctx.strokeStyle = `rgba(0,0,0,0.1)`; this.ctx.lineWidth = 2;
-                  // this.ctx.beginPath(); this.ctx.moveTo(0,0);
-                  // this.ctx.quadraticCurveTo((Math.random()-0.5)*5, -plant.currentHeight*0.5, 0, -plant.currentHeight);
-                  // this.ctx.stroke();
   
                   for (let i = 0; i < plant.segments; i++) { // Use segments for leaf count
                       const heightRatio = (0.2 + Math.random() * 0.8); // Place leaves randomly along height
@@ -1075,7 +1048,6 @@ class WaterCanvas {
       }
   
   
-      // --- Render Fish ---
       for (const fish of this.fishes) {
         if (!fish.img || !fish.img.complete || !fish.img.naturalWidth) continue;
   
@@ -1101,7 +1073,6 @@ class WaterCanvas {
       }
       this.ctx.globalAlpha = 1.0;
   
-      // --- Render Bubbles ---
       if (!this.prefersReducedMotion) {
           this.ctx.fillStyle = `rgba(255, 255, 255, 0.7)`;
           for (const bubble of this.bubbles) {
@@ -1112,8 +1083,7 @@ class WaterCanvas {
           }
           this.ctx.globalAlpha = 1;
       }
-  
-      // --- Render Mouse Trail ---
+
       if (!this.prefersReducedMotion) {
           this.ctx.fillStyle = `rgba(137, 247, 254, 1)`;
           for (const point of this.mouseTrail) {
@@ -1124,8 +1094,7 @@ class WaterCanvas {
           }
            this.ctx.globalAlpha = 1;
       }
-  
-      // --- Render Rain ---
+
       if (!this.prefersReducedMotion && this.isRaining) {
           this.ctx.strokeStyle = 'rgba(180, 210, 230, 0.6)';
           this.ctx.lineWidth = 1.5;
