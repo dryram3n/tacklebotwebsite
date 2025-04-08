@@ -10,12 +10,13 @@ class WaterCanvas {
     static WATER_COLOR_BOTTOM = 'rgba(102, 166, 255, 0.8)';
     
     constructor() {
-      // Hardware Detect
-      this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      this.isLowPerfDevice = this.prefersReducedMotion ||
-                             !('requestAnimationFrame' in window) ||
-                             (window.navigator.hardwareConcurrency && window.navigator.hardwareConcurrency < 4) ||
-                             navigator.userAgent.match(/mobile|android/i);
+        // Hardware Detect
+        this.prefersReducedMotion = false; // Force enable effects for testing
+        // window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.isLowPerfDevice = this.prefersReducedMotion ||
+                               !('requestAnimationFrame' in window) ||
+                               (window.navigator.hardwareConcurrency && window.navigator.hardwareConcurrency < 4) ||
+                               navigator.userAgent.match(/mobile|android/i);
   
       if (this.isLowPerfDevice) {
           console.log("Canvas Effects: Low performance device or reduced motion detected. Reducing effects.");
