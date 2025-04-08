@@ -390,48 +390,79 @@ class WaterCanvas {
     addBackgroundFeature() {
         const x = Math.random() * this.canvas.width;
         const y = this.canvas.height - Math.random() * this.canvas.height * 0.15;
-        const type = Math.random() < 0.7 ? 'rocks' : 'cave';
-        const size = 50 + Math.random() * (this.isLowPerfDevice ? 100 : 200);
-        const colorValue = 30 + Math.random() * 40;
-        const color = `rgba(${colorValue}, ${colorValue + Math.random() * 10}, ${colorValue + Math.random() * 20}, ${0.3 + Math.random() * 0.3})`;
-  
+        const featureType = Math.random() < 0.6 ? 'rocks' : 
+                            (Math.random() < 0.7 ? 'cave' : 'coral_formation');
+        const size = 50 + Math.random() * (this.isLowPerfDevice ? 150 : 300);
+        
+        // More dramatic color variations
+        let color;
+        const colorTheme = Math.random();
+        
+        if (colorTheme < 0.3) {
+            // Dark granite/obsidian
+            const baseValue = 20 + Math.random() * 30;
+            color = `rgba(${baseValue}, ${baseValue + Math.random() * 15}, 
+                           ${baseValue + Math.random() * 25}, ${0.6 + Math.random() * 0.3})`;
+        } else if (colorTheme < 0.6) {
+            // Reddish/sandstone formations
+            color = `rgba(${100 + Math.random() * 70}, ${60 + Math.random() * 40}, 
+                           ${40 + Math.random() * 30}, ${0.5 + Math.random() * 0.4})`;
+        } else if (colorTheme < 0.8) {
+            // Greenish (moss-covered)
+            color = `rgba(${40 + Math.random() * 30}, ${70 + Math.random() * 50}, 
+                           ${40 + Math.random() * 30}, ${0.4 + Math.random() * 0.4})`;
+        } else {
+            // Blue/gray slate
+            color = `rgba(${70 + Math.random() * 40}, ${80 + Math.random() * 40}, 
+                           ${90 + Math.random() * 60}, ${0.5 + Math.random() * 0.4})`;
+        }
+    
         const featureData = {
-            x: x, y: y, size: size, type: type, color: color,
+            x: x, y: y, size: size, type: featureType, color: color,
             points: [],
-            parallaxFactor: 0.1 + Math.random() * 0.2
+            parallaxFactor: 0.1 + Math.random() * 0.2,
+            hasTexture: Math.random() > 0.3, // Add texture to some rocks
+            hasHighlight: Math.random() > 0.6, // Add highlights to some rocks
+            textureType: Math.floor(Math.random() * 3) // Different texture patterns
         };
-  
-        const pointCount = 6 + Math.floor(Math.random() * 6);
-        let lastPoint = { x: size * (0.6 + Math.random() * 0.4), y: 0 };
-        featureData.points.push(lastPoint);
-  
-        for (let i = 1; i <= pointCount; i++) {
-            const angle = (Math.PI * 2 / pointCount) * i;
-            const radius = size * (0.5 + Math.random() * 0.5); // Irregular radius
-            const nextPoint = {
-                x: Math.cos(angle) * radius,
-                y: Math.sin(angle) * radius * (0.4 + Math.random() * 0.4)
-            };
-            const cp1 = {
-                x: lastPoint.x + (nextPoint.x - lastPoint.x) * 0.3 + (Math.random() - 0.5) * size * 0.2,
-                y: lastPoint.y + (nextPoint.y - lastPoint.y) * 0.3 + (Math.random() - 0.5) * size * 0.2
-            };
-            const cp2 = {
-                x: lastPoint.x + (nextPoint.x - lastPoint.x) * 0.7 + (Math.random() - 0.5) * size * 0.2,
-                y: lastPoint.y + (nextPoint.y - lastPoint.y) * 0.7 + (Math.random() - 0.5) * size * 0.2
-            };
-            featureData.points.push({ cp1: cp1, cp2: cp2, end: nextPoint });
-            lastPoint = nextPoint;
-        }
-  
-  
-        if (type === 'cave') {
-            const caveDepth = size * (0.2 + Math.random() * 0.3);
-            const caveWidth = size * (0.3 + Math.random() * 0.4);
+        
+        // More varied and interesting shapes
+        if (featureType === 'rocks') {
+            const shapeType = Math.random();
+            
+            if (shapeType < 0.4) {
+                // Jagged, angular rocks
+                const pointCount = 8 + Math.floor(Math.random() * 6);
+                this.generateAngularShape(featureData, pointCount, size);
+            } else if (shapeType < 0.7) {
+                // Smoother, round-ish rocks
+                const pointCount = 6 + Math.floor(Math.random() * 4);
+                this.generateSmoothShape(featureData, pointCount, size);
+            } else {
+                // Stacked/layered rocks
+                const layers = 2 + Math.floor(Math.random() * 3);
+                this.generateLayeredShape(featureData, layers, size);
+            }
+        } else if (featureType === 'cave') {
+            // Cave implementation with more dramatic entrance
+            const pointCount = 6 + Math.floor(Math.random() * 6);
+            this.generateSmoothShape(featureData, pointCount, size);
+            
+            const caveDepth = size * (0.3 + Math.random() * 0.4);
+            const caveWidth = size * (0.4 + Math.random() * 0.4);
             const caveYOffset = size * (0.1 + Math.random() * 0.2);
-            featureData.cave = { width: caveWidth, height: caveDepth, yOffset: caveYOffset };
+            featureData.cave = { 
+                width: caveWidth, 
+                height: caveDepth, 
+                yOffset: caveYOffset,
+                hasCrystals: Math.random() > 0.6
+            };
+        } else {
+            // Coral formation - uniquely shaped
+            const branches = 5 + Math.floor(Math.random() * 7);
+            this.generateCoralFormation(featureData, branches, size);
         }
-  
+    
         this.backgroundFeatures.push(featureData);
     }
   
@@ -596,25 +627,27 @@ class WaterCanvas {
     }
   
     updateMouseTrail(delta) {
-      if (this.prefersReducedMotion) { this.mouseTrail = []; return; }
-      for (let i = this.mouseTrail.length - 1; i >= 0; i--) {
-        const point = this.mouseTrail[i];
-        point.age += delta;
-  
-        if (point.isSplash) {
-          point.speedY += point.gravity * (delta / 16.67);
-          point.x += point.speedX * (delta / 16.67);
-          point.y += point.speedY * (delta / 16.67);
-          point.opacity = Math.max(0, 0.7 * (1 - point.age / point.maxAge));
-        } else {
-          point.opacity = Math.max(0, 0.4 * (1 - point.age / point.maxAge));
-        }
-  
-        if (point.age >= point.maxAge || point.opacity <= 0) {
-          this.mouseTrail.splice(i, 1);
+        if (this.prefersReducedMotion) { this.mouseTrail = []; return; }
+        for (let i = this.mouseTrail.length - 1; i >= 0; i--) {
+          const point = this.mouseTrail[i];
+          point.age += delta;
+      
+          if (point.isSplash) {
+            point.speedY += point.gravity * (delta / 16.67);
+            point.x += point.speedX * (delta / 16.67);
+            point.y += point.speedY * (delta / 16.67);
+            point.opacity = Math.max(0, 0.7 * (1 - point.age / point.maxAge));
+          } else {
+            point.opacity = Math.max(0, 0.4 * (1 - point.age / point.maxAge));
+          }
+      
+          if (point.age >= point.maxAge || point.opacity <= 0) {
+            point.active = false;
+            this.activeTrailPoints--;
+            this.mouseTrail.splice(i, 1);
+          }
         }
       }
-    }
   
     render() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -843,7 +876,7 @@ class WaterCanvas {
       if (!this.prefersReducedMotion) {
           this.ctx.fillStyle = `rgba(255, 255, 255, 0.6)`; // Slightly less opaque bubbles
           for (const bubble of this.bubblePool) {
-            if (!bubble.active) continue;
+            if (!bubble.active) continue; // Fixed logic to skip inactive bubbles
             this.ctx.beginPath();
             this.ctx.arc(bubble.x, bubble.y, bubble.size / 2, 0, Math.PI * 2);
             this.ctx.globalAlpha = bubble.opacity;
