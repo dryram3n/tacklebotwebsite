@@ -964,6 +964,78 @@ class WaterCanvas {
     lerp(start, end, factor) {
       return start + (end - start) * factor;
     }
+
+    addTrailPoint() {
+      if (this.prefersReducedMotion) return;
+      
+      // Find an inactive trail point from the pool
+      const point = this.mouseTrailPool.find(p => !p.active);
+      if (!point) return; // No available trail points
+      
+      // Configure the trail point
+      point.x = this.mousePos.x;
+      point.y = this.mousePos.y;
+      point.size = 4 + Math.random() * 6;
+      point.opacity = 0.3 + Math.random() * 0.3;
+      point.age = 0;
+      point.maxAge = 800 + Math.random() * 400;
+      point.isSplash = false;
+      point.active = true;
+      
+      this.mouseTrail.push(point);
+      this.activeTrailPoints++;
+    }
+  
+    addBubble() {
+      if (this.prefersReducedMotion) return;
+      
+      // Find an inactive bubble from the pool
+      const bubble = this.bubblePool.find(b => !b.active);
+      if (!bubble) return; // No available bubbles
+      
+      // Get water line position
+      const waterLine = (100 - this.waterHeight) * this.canvas.height / 100;
+      
+      // Configure the bubble
+      bubble.x = Math.random() * this.canvas.width;
+      bubble.y = this.canvas.height - Math.random() * (this.canvas.height - waterLine) * 0.9;
+      bubble.size = 2 + Math.random() * 6;
+      bubble.speedY = 0.3 + Math.random() * 0.4;
+      bubble.driftX = (Math.random() - 0.5) * 0.3;
+      bubble.maxOpacity = 0.2 + Math.random() * WaterCanvas.BUBBLE_MAX_OPACITY;
+      bubble.opacity = 0;
+      bubble.active = true;
+      
+      this.activeBubbles++;
+    }
+  
+    createSplash(x, y, sizeMultiplier = 1, opacityMultiplier = 1) {
+      if (this.prefersReducedMotion) return;
+      
+      // Create 3-8 particles for the splash
+      const particleCount = 3 + Math.floor(Math.random() * 5);
+      for (let i = 0; i < particleCount; i++) {
+        // Find an inactive trail point from the pool
+        const point = this.mouseTrailPool.find(p => !p.active);
+        if (!point) return; // No available trail points
+        
+        // Configure the splash particle
+        point.x = x + (Math.random() - 0.5) * 4;
+        point.y = y + (Math.random() - 0.5) * 4;
+        point.size = (4 + Math.random() * 4) * sizeMultiplier;
+        point.opacity = (0.4 + Math.random() * 0.4) * opacityMultiplier;
+        point.age = 0;
+        point.maxAge = 600 + Math.random() * 300;
+        point.speedX = (Math.random() - 0.5) * 2;
+        point.speedY = -1 - Math.random() * 2;
+        point.gravity = 0.05 + Math.random() * 0.05;
+        point.isSplash = true;
+        point.active = true;
+        
+        this.mouseTrail.push(point);
+        this.activeTrailPoints++;
+      }
+    }
   }
   
   // Fish Management Class - handles all fish-related logic
