@@ -91,26 +91,32 @@
             <div class="calc-input-grid">
               <div class="calc-input-item">
                 <label for="calc-luck" class="calc-label">Lucky Lure (Luck):</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-luck" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-luck">
               </div>
               <div class="calc-input-item">
                 <label for="calc-speed" class="calc-label">Quick Cast (Speed):</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-speed" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-speed">
               </div>
               <div class="calc-input-item">
                 <label for="calc-multiCatch" class="calc-label">Wide Net (Multi-Catch):</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-multiCatch" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-multiCatch">
               </div>
               <div class="calc-input-item">
                 <label for="calc-inventory" class="calc-label">Tackle Box (Inventory):</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-inventory" class="calc-input" min="0" max="20" value="0" aria-describedby="calc-output-inventory">
               </div>
               <div class="calc-input-item">
                 <label for="calc-value" class="calc-label">Market Contacts (Value):</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-value" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-value">
               </div>
               <div class="calc-input-item">
                 <label for="calc-explorer" class="calc-label">Explorer's Map:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-explorer" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-locations">
               </div>
             </div>
@@ -122,22 +128,27 @@
             <div class="calc-input-grid">
               <div class="calc-input-item">
                 <label for="calc-advancedLuck" class="calc-label">Advanced Lure Tech:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-advancedLuck" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-luck">
               </div>
               <div class="calc-input-item">
                 <label for="calc-efficiency" class="calc-label">Fishing Efficiency:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-efficiency" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-speed"> <!-- Efficiency affects speed -->
               </div>
               <div class="calc-input-item">
                 <label for="calc-masterNet" class="calc-label">Master Fishing Net:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-masterNet" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-multiCatch">
               </div>
               <div class="calc-input-item">
                 <label for="calc-treasureHunter" class="calc-label">Treasure Hunter:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-treasureHunter" class="calc-input" min="0" max="5" value="0" aria-describedby="calc-output-treasure">
               </div>
               <div class="calc-input-item">
                 <label for="calc-specialLure" class="calc-label">Special Fish Attractor:</label>
+                <!-- Updated max -->
                 <input type="number" id="calc-specialLure" class="calc-input" min="0" max="5" value="0" aria-describedby="calc-output-specialChance">
               </div>
             </div>
@@ -149,6 +160,7 @@
             <div class="calc-input-grid calc-input-grid-small">
               <div class="calc-input-item">
                 <label for="calc-level" class="calc-label">Your Fishing Level:</label>
+                <!-- No max for player level -->
                 <input type="number" id="calc-level" class="calc-input" min="0" value="0" aria-describedby="calc-output-luck"> <!-- Level affects luck -->
               </div>
               <div class="calc-input-item">
@@ -173,7 +185,8 @@
           <div class="calc-output-area" aria-live="polite"> <!-- Announce changes to screen readers -->
             <div class="calc-output-line"><strong>🎣 Cast Speed Reduction:</strong> <span id="calc-output-speed">0.0%</span></div>
             <div class="calc-output-line"><strong>💰 Sell Value Bonus:</strong> <span id="calc-output-value">0.0%</span></div>
-            <div class="calc-output-line"><strong>📦 Max Inventory:</strong> <span id="calc-output-inventory">25</span></div>
+            <!-- Updated base inventory display -->
+            <div class="calc-output-line"><strong>📦 Max Inventory:</strong> <span id="calc-output-inventory">20</span></div>
             <div class="calc-output-line"><strong>🎣 Multi-Catch Chance:</strong> <span id="calc-output-multiCatch">0.0%</span></div>
             <div class="calc-output-line"><strong>✨ Special Fish Bonus Chance:</strong> <span id="calc-output-specialChance">0.5%</span></div>
             <div class="calc-output-line"><strong>💎 Treasure Chest Bonus:</strong> <span id="calc-output-treasure">0%</span></div>
@@ -182,8 +195,9 @@
             <div class="calc-output-line calc-rarity-header">
               <strong>🎲 Rarity Chances (Approximate):</strong>
               <div class="calc-luck-info">
-                Total Luck Influence: <span id="calc-output-luck">0</span>
-                <small>(Shop + Research + Level)</small>
+                <!-- Updated luck display -->
+                Total Luck Influence: <span id="calc-output-luck">0 (Shop: 0, Level: 0) + 0.0% (Research)</span>
+                <small>(Shop + Level luck affect roll; Research boosts outcome)</small>
               </div>
             </div>
             <div class="calc-rarity-grid">
@@ -215,6 +229,7 @@
   </footer>
 
   <!-- Load data scripts first, then calculator logic, then general page script -->
+  <!-- Ensure these paths are correct relative to calculator.html -->
   <script src="fishImages.js" defer></script>
   <script src="script.js" defer></script>
   <script src="calculator.js" defer></script>
