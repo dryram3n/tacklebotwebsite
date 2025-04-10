@@ -74,6 +74,7 @@
     <section class="legal-section animated-section">
       <h2>Privacy Policy <span class="emoji">🔒</span></h2>
       <div class="legal-container">
+
         <div class="legal-card">
           <h3>Introduction</h3>
           <p>This Privacy Policy outlines how TackleBot Discord Bot ("the Bot", "we", "us", "our") collects, uses, stores, and protects user data when you interact with our service. By using the Bot, you consent to the data practices described in this policy.</p>
@@ -84,37 +85,48 @@
           <h4>Information We Collect</h4>
           <p>The Bot collects and processes the following data to provide its services:</p>
 
-          <h5>Message Content</h5>
+          <h5>1. User Information:</h5>
           <ul>
-            <li>Content of messages for the /summary command functionality.</li>
-            <li>Channel message analysis for the /summary command (temporary, not stored).</li>
-            <li>Content of messages in channels where the /summary command is used.</li>
+            <li><strong>Discord User IDs:</strong> For identifying users for game features, settings, moderation, channel creation, voting, whitelisting, bug reports, and command interactions.</li>
+            <li><strong>Discord Server (Guild) IDs:</strong> For server-specific settings, moderation features, channel creation, logging configuration, and command interactions.</li>
+            <li><strong>Command Interaction History:</strong> Basic information about which commands are used by which users and in which servers for functionality and improvement purposes.</li>
           </ul>
 
-          <h5>User Information</h5>
+          <h5>2. Game and Feature Data:</h5>
           <ul>
-            <li>Discord User IDs for game features and user-specific settings.</li>
-            <li>Discord Server (Guild) IDs for server-specific settings and moderation features.</li>
-            <li>Command interaction history for feature functionality.</li>
+            <li><strong>Fishing Game Data:</strong> Player statistics (level, XP, total catches, earnings, rarity counts, biggest fish, etc.), fish inventory, upgrade levels (luck, speed, multicatch, inventory, value, explorer), research progress, challenge progress, preferred fishing locations, fishing company data (boats, upgrades, earnings). Stored persistently associated with your User ID.</li>
+            <li><strong>Gamble Data:</strong> Gambling statistics (e.g., consecutive wins/losses). Stored persistently with your User ID.</li>
+            <li><strong>Achievement Data:</strong> Progress and completion status for in-game achievements. Stored persistently with your User ID.</li>
           </ul>
 
-          <h5>Game and Feature Data</h5>
+          <h5>3. Moderation and Configuration Data:</h5>
           <ul>
-            <li>Player statistics for fishing game features.</li>
-            <li>Fish inventory and related game data.</li>
-            <li>User-created channels and permissions data.</li>
+            <li><strong>Moderator List (<code>/moderator</code>):</strong> List of User IDs designated as moderators for a specific server. Stored persistently until removed.</li>
+            <li><strong>Fishing Whitelist (<code>/fishwhitelist</code>):</strong> List of User IDs exempt from certain anti-bot checks. Stored persistently until removed.</li>
+            <li><strong>Log Configuration (<code>/log setup</code>):</strong> The designated log channel ID for a server. Stored persistently until logging is disabled.</li>
+            <li><strong>Channel Creator Data (<code>/createchannel</code>):</strong> User ID of the channel creator and members granted access, associated with the created channel ID and server ID. This data is subject to periodic cleanup (see Data Storage).</li>
           </ul>
-        </div>
 
-        <div class="legal-card">
-          <h3>Message Analysis and Summaries</h3>
-          <p>The Bot may analyze recent messages in a channel when:</p>
+          <h5>4. Content Data (Processed, Mostly Not Stored Long-Term by the Bot):</h5>
           <ul>
-            <li>A user explicitly requests a chat summary using the /summary command.</li>
-            <li>This analysis is temporary and only used to generate the requested summary.</li>
-            <li>Message content, along with usernames, is processed by Google Generative AI (Gemini).</li>
-            <li>The Bot does not permanently store the message content used for summaries.</li>
-            <li>Only public messages visible to the Bot are included in summaries.</li>
+            <li><strong><code>/summary</code> Command:</strong> Content of recent public messages in the channel where the command is used. This content is sent to Google Generative AI (Gemini) for processing to generate the summary but is <strong>not</strong> permanently stored by the Bot.</li>
+            <li><strong><code>/fun</code> Commands (Text Input):</strong> Text provided by users for commands like <code>achievement</code>, <code>changemymind</code>, <code>awkwardmonkey</code>, <code>burnpaper</code>, <code>drake</code>, <code>sadcat</code>, <code>oogway</code>, <code>biden</code>, <code>pikachu</code>, <code>mock</code>, <code>lulcat</code>, <code>opinion</code>, <code>imdb</code>, <code>8ball</code>. This text is sent to the relevant third-party API (Popcat or Noodles Wrapper) for processing to generate the output image or text. It is <strong>not</strong> permanently stored by the Bot.</li>
+            <li><strong><code>/fun</code> Commands (Image Input):</strong> Images (uploaded or via URL) provided by users for commands like <code>blur</code>, <code>wide</code>, <code>uglyupclose</code>, <code>communist</code>, <code>whowouldwin</code>, <code>ship</code>, <code>opinion</code>. This image data is sent to the relevant third-party API (Popcat or Noodles Wrapper) for processing. It is <strong>not</strong> permanently stored by the Bot.</li>
+            <li><strong><code>/announce</code> Command:</strong> Announcement message content (temporary, not stored).</li>
+            <li><strong><code>/kick</code>, <code>/ban</code> Commands:</strong> Reason text provided by moderators (temporary, may be logged by Discord itself).</li>
+            <li><strong><code>/bug report</code> Command:</strong> Information submitted via the bug report modal (title, description, steps). Stored persistently until the report is resolved or closed.</li>
+            <li><strong>Server Event Logging (<code>/log</code>):</strong> If enabled by a server admin, details about events like message deletions (author, channel, content, attachment info), member joins (user info, account creation date), and member leaves (user info, join date, roles) are sent to the configured log channel within that server. The Bot does not store this log data long-term itself; storage is handled by Discord within the designated channel.</li>
+          </ul>
+
+          <h5>5. Vote Data (via Top.gg):</h5>
+          <ul>
+            <li>When you vote on Top.gg, we receive your Discord User ID via a webhook.</li>
+            <li>We store your User ID, the timestamp of your last vote, your current vote streak, and your preference for vote reminders. Stored persistently until data deletion is requested.</li>
+          </ul>
+
+          <h5>6. Anti-Bot Data:</h5>
+          <ul>
+            <li>Fishing activity patterns (timestamps of commands like <code>/fish cast</code>, interaction intervals) are analyzed temporarily for bot detection. Aggregate statistics might be stored. User-specific timing data is kept temporarily.</li>
           </ul>
         </div>
 
@@ -122,108 +134,133 @@
           <h3>How We Use Your Data</h3>
           <p>Your data is used solely to:</p>
           <ul>
-            <li>Create channel summaries via the /summary command using Google's Generative AI (Gemini).</li>
-            <li>Store game progress and statistics for features like fishing.</li>
-            <li>Enable moderation features for server administrators.</li>
-            <li>Improve Bot functionality and performance.</li>
-            <li>Create and manage user-created channels.</li>
+            <li>Provide Core Bot Functionality: Execute commands, respond to interactions.</li>
+            <li>Manage Game Systems: Store and retrieve fishing progress, inventory, upgrades, currency, challenges, achievements, and company data. Enable gambling features.</li>
+            <li>Enable Moderation: Facilitate <code>/kick</code>, <code>/ban</code>, <code>/clear</code> commands. Manage moderator lists (<code>/moderator</code>) and fishing whitelists (<code>/fishwhitelist</code>).</li>
+            <li>Generate Summaries: Process recent chat messages via Google Gemini for the <code>/summary</code> command upon user request.</li>
+            <li>Generate Fun Content: Process user-provided text and images via Popcat and Noodles APIs for <code>/fun</code> commands.</li>
+            <li>Manage User-Created Channels: Create channels (<code>/createchannel</code>) and manage their deletion (<code>/deletechannel</code>) based on creator permissions.</li>
+            <li>Track Voting: Record Top.gg votes, calculate streaks, award Voter Chests, and send DM reminders (if enabled).</li>
+            <li>Provide Server Logging: Send logs of specified server events to a designated channel if configured via <code>/log setup</code>.</li>
+            <li>Prevent Abuse: Analyze fishing patterns to detect potential botting activity and apply anti-bot measures (<code>/fishwhitelist</code> system).</li>
+            <li>Manage Bug Reports: Store, display, and manage bug reports submitted via <code>/bug report</code>.</li>
+            <li>Calculate Leaderboards: Determine weekly leaderboard winners based on fishing stats and distribute rewards.</li>
+            <li>Improve Bot Functionality: Analyze aggregated, anonymized command usage data to identify popular features or areas for improvement.</li>
           </ul>
         </div>
 
         <div class="legal-card">
           <h3>Data Storage and Security</h3>
-          <div class="expandable">
-            <button class="expand-btn" aria-expanded="false">View Data Storage, Backup & Security Information</button>
-            <div class="expanded-content" style="display: none;">
-              <h4>Duration of Storage</h4>
-              <ul>
-                <li>Game data is stored until explicitly cleared by the user or server administrator.</li>
-                <li>Channel creator information is stored until the channel is deleted or manually removed.</li>
-                <li>Summary data is temporary and not permanently stored.</li>
-              </ul>
 
-              <h4>Backup System</h4>
-              <ul>
-                <li>The Bot maintains automated backups of game data.</li>
-                <li>Backups are created regularly (approximately every 30 minutes).</li>
-                <li>A limited number of previous backups are retained.</li>
-              </ul>
+          <h4>Duration of Storage</h4>
+          <ul>
+            <li><strong>Game Data (Fishing, Gamble, Achievements, Company):</strong> Stored indefinitely until explicitly cleared by the user via commands or data deletion request.</li>
+            <li><strong>Moderator List & Whitelist Data:</strong> Stored indefinitely until a moderator/admin removes entries.</li>
+            <li><strong>Vote Data (Last Vote, Streak, Reminder Pref):</strong> Stored indefinitely until data deletion is requested.</li>
+            <li><strong>Channel Creator Data:</strong> Stored temporarily. Subject to periodic cleanup (e.g., cache expiry or manual deletion).</li>
+            <li><strong>Bug Report Data:</strong> Stored until the report is resolved or closed by the user or development team.</li>
+            <li><strong>Log Configuration:</strong> Stored indefinitely until logging is disabled for the server.</li>
+            <li><strong>Summary & Fun Command Content:</strong> Processed temporarily by third-party APIs; not stored permanently by the Bot.</li>
+            <li><strong>Server Event Logs:</strong> Sent to the configured Discord channel; not stored long-term by the Bot itself. Storage is subject to Discord's policies and the server's channel history.</li>
+            <li><strong>Anti-Bot Pattern Data:</strong> User-specific timing data stored temporarily for analysis. Aggregate, anonymized statistics may be kept longer.</li>
+          </ul>
 
-              <h4>Data Security</h4>
-              <p>We implement reasonable security measures to protect your data from unauthorized access, alteration, or disclosure.</p>
-            </div>
-          </div>
+          <h4>Backup System</h4>
+          <ul>
+            <li>The Bot maintains automated backups of persistent user data (like fishing data, stats, vote data, company data).</li>
+            <li>Backups are created regularly (e.g., approximately every 30 minutes).</li>
+            <li>A limited number of recent backups (e.g., the last 3) are retained for disaster recovery purposes.</li>
+          </ul>
+
+          <h4>Data Security</h4>
+          <p>We implement reasonable technical and administrative security measures to protect your data from unauthorized access, alteration, disclosure, or destruction. However, no online service can be 100% secure.</p>
         </div>
 
         <div class="legal-card">
           <h3>Third-Party Services</h3>
           <p>The Bot utilizes several third-party services that may process your data:</p>
-
-          <h4>Discord API</h4>
-          <ul>
-            <li>Used for all Bot interactions within Discord.</li>
-            <li>Subject to Discord's Privacy Policy.</li>
-          </ul>
-
-          <h4>Google Generative AI (Gemini)</h4>
-          <ul>
-            <li>Model: gemini-2.0-flash (Example model, confirm actual model used if possible)</li>
-            <li>Used solely for the /summary command functionality.</li>
-            <li>Subject to Google's AI Principles and Privacy Policy.</li>
-          </ul>
-
-          <h4>Other APIs</h4>
-          <ul>
-            <li>Popcat API: Used for meme generation, facts, jokes, and entertainment features.</li>
-            <li>French Noodles API (Noodles Wrapper): Used for image manipulation and meme creation.</li>
-          </ul>
+          <ol>
+            <li><strong>Discord API:</strong> Used for all Bot interactions within Discord. Subject to Discord's Privacy Policy.</li>
+            <li><strong>Google Generative AI (Gemini):</strong>
+              <ul>
+                <li>Model: <code>gemini-2.0-flash</code>.</li>
+                <li>Used <strong>solely</strong> for the <code>/summary</code> command functionality. Processes recent public message content from the specified channel to generate summaries.</li>
+                <li>Subject to Google's AI Principles and Privacy Policy.</li>
+              </ul>
+            </li>
+            <li><strong>Popcat API:</strong>
+              <ul>
+                <li>Used for various <code>/fun</code> subcommands (e.g., <code>fact</code>, <code>joke</code>, <code>imdb</code>, <code>sadcat</code>, <code>oogway</code>, <code>communist</code>, <code>showerthought</code>, <code>whowouldwin</code>, <code>lulcat</code>, <code>opinion</code>, <code>ship</code>, <code>biden</code>, <code>pikachu</code>, <code>mock</code>, <code>8ball</code>).</li>
+                <li>May process user-provided text or images/URLs to generate responses.</li>
+                <li>Subject to Popcat API's data handling practices.</li>
+              </ul>
+            </li>
+            <li><strong>Noodles Wrapper (French Noodles API):</strong>
+              <ul>
+                <li>Used for various <code>/fun</code> subcommands (e.g., <code>meme</code>, <code>achievement</code>, <code>changemymind</code>, <code>awkwardmonkey</code>, <code>blur</code>, <code>burnpaper</code>, <code>drake</code>, <code>wide</code>, <code>uglyupclose</code>).</li>
+                <li>May process user-provided text or images/URLs for feature functionality.</li>
+                <li>Subject to the API provider's data handling practices.</li>
+              </ul>
+            </li>
+            <li><strong>Top.gg API & Webhooks:</strong>
+              <ul>
+                <li>Used for tracking votes cast on Top.gg. Receives User IDs from Top.gg when a vote occurs.</li>
+                <li>Subject to Top.gg's Privacy Policy.</li>
+              </ul>
+            </li>
+          </ol>
         </div>
 
         <div class="legal-card">
-          <h3>Your Rights & Additional Information</h3>
-          <div class="expandable">
-            <button class="expand-btn" aria-expanded="false">View Rights, Deletion Options & Legal Basis</button>
-            <div class="expanded-content" style="display: none;">
-              <h4>Your Rights</h4>
-              <p>You have the right to:</p>
-              <ul>
-                <li>Request deletion of your game data.</li>
-                <li>Opt out of data collection by discontinuing use of the Bot.</li>
-                <li>Contact us with questions about your data.</li>
-              </ul>
+            <h3>Your Rights</h3>
+            <p>You have the right to:</p>
+            <ul>
+              <li>Request access to your stored game data (e.g., using <code>/fish stats</code>).</li>
+              <li>Request deletion of your game data (contact the development team or use relevant future commands).</li>
+              <li>Disable vote reminders via the button in the reminder DM or vote command message.</li>
+              <li>Opt out of data collection by removing the Bot from your server or discontinuing its use.</li>
+              <li>Contact us with questions or concerns about your data.</li>
+            </ul>
+        </div>
 
-              <h4>Data Deletion</h4>
-              <p>The Bot provides several mechanisms to clear your data:</p>
-              <ul>
-                <li>Game data can be cleared using specific commands.</li>
-                <li>Server administrators can use moderation commands to manage data.</li>
-                <li>Channel creators can delete their own channels.</li>
-              </ul>
+        <div class="legal-card">
+            <h3>Data Deletion</h3>
+            <ul>
+              <li>Game data (fishing stats, inventory, upgrades, achievements, company data) can be deleted upon request to the development team. Specific commands for data reset may be available.</li>
+              <li>Server administrators can remove users from the moderator list (<code>/moderator remove</code>) or fishing whitelist (<code>/fishwhitelist remove</code>).</li>
+              <li>Users who created channels via <code>/createchannel</code> can delete them using <code>/deletechannel</code> (subject to permissions). Admins/Mods may also delete these channels. Channel creator data is also subject to automated cleanup.</li>
+              <li>Vote reminder preferences can be changed using the provided buttons. Full vote history deletion requires contacting the development team.</li>
+              <li>Server administrators can disable logging (<code>/log disable</code>) which stops future event logging and removes the stored log channel configuration.</li>
+            </ul>
+        </div>
 
-              <h4>Changes to This Policy</h4>
-              <p>We may update this Privacy Policy from time to time. We will notify users of any significant changes by updating the "Last Updated" date of this policy.</p>
+        <div class="legal-card">
+            <h3>Changes to This Policy</h3>
+            <p>We may update this Privacy Policy from time to time. We will notify users of any significant changes by updating the "Last Updated" date of this policy, and potentially through in-Bot announcements (<code>/announce</code>).</p>
+        </div>
 
-              <h4>Contact Information</h4>
-              <p>For questions about this Privacy Policy or data practices, please contact the development team through:</p>
-              <ul>
-                <li>The official Bot support server.</li>
-                <li>Our website: <a href="https://dryram3n.github.io/tacklebotwebsite/" target="_blank" rel="noopener noreferrer">https://dryram3n.github.io/tacklebotwebsite/</a></li>
-              </ul>
+        <div class="legal-card">
+            <h3>Contact Information</h3>
+            <p>For questions about this Privacy Policy or your data, please contact the development team, led by Thromblo, through:</p>
+            <ul>
+              <li>The official Bot support server (link usually available via <code>/info</code> or <code>/help</code>).</li>
+              <li>Our website: <a href="https://dryram3n.github.io/tacklebotwebsite/privacy-policy.html" target="_blank" rel="noopener noreferrer">https://dryram3n.github.io/tacklebotwebsite/privacy-policy.html</a></li>
+            </ul>
+        </div>
 
-              <h4>Legal Basis for Processing</h4>
-              <p>We process your data based on:</p>
-              <ul>
-                <li>Consent provided when adding the Bot to your server.</li>
-                <li>Legitimate interest in providing the Bot's functionality.</li>
-                <li>The necessity to process data to provide the service you request.</li>
-              </ul>
-            </div>
-          </div>
+        <div class="legal-card">
+            <h3>Legal Basis for Processing</h3>
+            <p>We process your data based on:</p>
+            <ul>
+              <li><strong>Consent:</strong> Provided when you add the Bot to your server or use commands that explicitly state data processing (like <code>/summary</code>).</li>
+              <li><strong>Legitimate Interest:</strong> Necessary for providing the Bot's core functionality, game features, moderation tools, anti-abuse systems, and improving the service.</li>
+              <li><strong>Performance of a Contract (Implicit):</strong> Processing data is necessary to provide the service (the Bot's features) you request by interacting with it.</li>
+            </ul>
         </div>
 
         <div class="legal-footer">
-          <p>Last Updated: March 25, 2025</p>
-          <p>By using the Bot, you acknowledge that you have read and understand this Privacy Policy and agree to its terms.</p>
+          <p>Last Updated: April 10th, 2025</p> <!-- Updated Date -->
+          <p>By using TackleBot, you acknowledge that you have read and understand this Privacy Policy and agree to its terms.</p>
           <a href="index.html" class="back-to-top">Back to Home Page</a>
         </div>
       </div>
