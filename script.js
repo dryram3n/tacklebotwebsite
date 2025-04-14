@@ -729,26 +729,40 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.addEventListener('click', function(e) {
             const button = e.target.closest('.expand-btn');
             if (!button) return;
-            console.log("Expand button clicked:", button); // <<< ADD THIS
+            // console.log("Expand button clicked:", button); // Can remove logging now if desired
 
             const expandedContent = button.nextElementSibling;
-            console.log("Found next element sibling:", expandedContent); // <<< ADD THIS
+            // console.log("Found next element sibling:", expandedContent);
 
             if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
                 console.warn('Expanded content not found or incorrect class for button:', button);
                 return;
             }
-            const isVisible = expandedContent.style.display === 'block';
-            console.log("Current visibility:", isVisible ? 'block' : 'none'); // <<< ADD THIS
 
-            expandedContent.style.display = isVisible ? 'none' : 'block';
-            button.setAttribute('aria-expanded', !isVisible);
-            console.log("Set display to:", expandedContent.style.display, "and aria-expanded to:", !isVisible); // <<< ADD THIS
+            // Get the current state FROM the button's attribute
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            // Toggle the button's ARIA attribute - the CSS will do the rest
+            button.setAttribute('aria-expanded', !isExpanded);
+
+            // REMOVE the direct style manipulation:
+            // expandedContent.style.display = isVisible ? 'none' : 'block';
+            // console.log("Set display to:", expandedContent.style.display, "and aria-expanded to:", !isVisible);
         });
+
+        // Keep this part - it sets the initial state correctly on page load
         document.querySelectorAll('.expand-btn').forEach(button => {
             const expandedContent = button.nextElementSibling;
-            const isVisible = expandedContent?.style.display === 'block';
-            button.setAttribute('aria-expanded', isVisible);
+            // Check initial inline style OR if it's already expanded by default (if you change HTML later)
+            const isInitiallyVisible = expandedContent?.style.display === 'block';
+            button.setAttribute('aria-expanded', isInitiallyVisible);
+            // Ensure content starts hidden if JS is enabled (remove inline style if using max-height method)
+            if (expandedContent && isInitiallyVisible) {
+                 // If relying purely on CSS max-height, ensure inline display:block is removed
+                 // expandedContent.style.display = ''; // Optional: remove inline style if it exists
+            } else if (expandedContent) {
+                 expandedContent.style.display = ''; // Ensure display isn't 'none' if CSS handles hiding
+            }
         });
         if (hideUiButton && showUiButton) {
             // First, ensure clean state by removing any existing listeners

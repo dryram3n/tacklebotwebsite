@@ -4,7 +4,7 @@
   --gradient-primary: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
   --gradient-secondary: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
   --gradient-accent: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-  --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 0%);
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
@@ -2267,9 +2267,20 @@ body.canvas-failed #mouse-trail {
 
 /* Style the content area */
 .command-group-card .expanded-content {
-  padding: 1.5rem;
+  padding: 0 1.5rem; /* Adjust padding: top/bottom to 0 initially */
   background-color: #fdfdff; /* Slightly off-white */
   border-top: 1px solid #e0f0ff;
+  max-height: 0; /* Initially collapsed */
+  overflow: hidden; /* Hide content when collapsed */
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Add transition */
+  /* display: none; IS NO LONGER NEEDED HERE OR INLINE */
+}
+
+/* Style for when the content is expanded (based on button's ARIA state) */
+.command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
+  max-height: 1000px; /* Set a large max-height to allow expansion */
+  padding: 1.5rem; /* Restore padding when expanded */
+  /* You might need to adjust 1000px if your content can be taller */
 }
 
 .command-group-card .expanded-content p {
@@ -2278,43 +2289,28 @@ body.canvas-failed #mouse-trail {
   font-size: 1rem;
 }
 
-.command-group-card .expanded-content ul {
-  list-style: none; /* Remove default bullets */
-  padding-left: 0;
+/* Style the content area */
+.command-group-card .expanded-content {
+  padding: 0 1.5rem; /* Adjust padding: top/bottom to 0 initially */
+  background-color: #fdfdff; /* Slightly off-white */
+  border-top: 1px solid #e0f0ff;
+  max-height: 0; /* Initially collapsed */
+  overflow: hidden; /* Hide content when collapsed */
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Add transition */
+  /* display: none; IS NO LONGER NEEDED HERE OR INLINE */
 }
 
-.command-group-card .expanded-content li {
-  margin-bottom: 0.8rem;
-  padding-left: 1.5em; /* Indent list items */
-  position: relative;
+/* Style for when the content is expanded (based on button's ARIA state) */
+.command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
+  max-height: 1000px; /* Set a large max-height to allow expansion */
+  padding: 1.5rem; /* Restore padding when expanded */
+  /* You might need to adjust 1000px if your content can be taller */
 }
 
-/* Custom bullet points */
-.command-group-card .expanded-content li::before {
-  content: '🔹'; /* Or use Font Awesome icon */
-  position: absolute;
-  left: 0;
-  top: 0.1em;
-  color: #66a6ff;
-  font-size: 0.9em;
+.command-group-card .expanded-content p {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1rem;
 }
 
-.command-group-card .expanded-content code {
-  background-color: #eef2f7;
-  padding: 0.2em 0.5em;
-  border-radius: 4px;
-  font-family: 'Courier New', Courier, monospace;
-  color: #5570a7;
-  font-size: 0.95em;
-}
-
-/* Nested lists for sub-options */
-.command-group-card .expanded-content ul ul {
-  margin-top: 0.5rem;
-  padding-left: 1em; /* Further indent nested lists */
-}
-
-.command-group-card .expanded-content ul ul li::before {
-    content: '🔸'; /* Different bullet for nested items */
-    color: #764ba2; /* Accent color */
-}
+/* ... rest of existing styles for expanded-content children ... */
