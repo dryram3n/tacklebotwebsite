@@ -26,10 +26,17 @@
   <meta name="theme-color" content="#89f7fe">
 
   <title>How To Use TackleBot 🎣 - Your Discord Fishing Companion!</title>
+  
+  <!-- Base styles for shared elements with the main site, like header, footer, etc -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- How to Use specific CSS file -->
+  <link rel="stylesheet" href="how-to-use.css">
+  
   <!-- Google Fonts (Using Nunito - friendly and rounded) -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Discord Icon -->
+  
+  <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
@@ -709,10 +716,14 @@
     </button>
   </div>
 
-  <!-- Load scripts deferred -->
+  <!-- Load shared resources needed for visual effects -->
   <script src="fishImages.js" defer></script>
-  <script src="fish-info.js" defer></script>
+  
+  <!-- Load script.js to handle common functionality like UI toggle and visual effects -->
   <script src="script.js" defer></script>
+  
+  <!-- How to Use specific JavaScript -->
+  <script src="how-to-use.js" defer></script>
 </body>
 
 </html>

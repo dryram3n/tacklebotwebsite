@@ -1,0 +1,389 @@
+/* How to Use CSS - Extracted from main style.css */
+:root {
+  /* Adorable Gradient Palette */
+  --gradient-primary: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  --gradient-secondary: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+  --gradient-accent: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 0%);
+
+  /* Solid Colors */
+  --primary-bg: #f0faff; /* Very light blue, almost white */
+  --text-color: #4a5568; /* Dark grayish blue */
+  --heading-color: #2a4365; /* Darker blue for headings */
+  --white: #FFFFFF;
+  --shadow-light: rgba(102, 166, 255, 0.15); /* Soft blue shadow */
+  --shadow-medium: rgba(102, 166, 255, 0.25);
+  --text-secondary: #6c7a89;
+  --accent: #66a6ff;
+  --accent-dark: #3a89ff;
+}
+
+/* Table of Contents */
+.toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.toc-item {
+    background: linear-gradient(to bottom right, rgba(137, 247, 254, 0.2), rgba(102, 166, 255, 0.3));
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toc-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toc-item h3 {
+    margin: 0.5rem 0 0;
+    font-size: 1.1rem;
+}
+
+/* Content boxes */
+.content-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Commands table */
+.commands-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1rem 0;
+}
+
+.command-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 0.5rem;
+}
+
+.command-name {
+    font-weight: bold;
+    padding-right: 1rem;
+}
+
+.command-desc {
+    color: var(--text-secondary);
+}
+
+/* Help tips */
+.help-tip {
+    background: rgba(102, 166, 255, 0.15);
+    border-left: 4px solid var(--accent);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.help-tip.larger {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.info-box {
+    background: rgba(255, 255, 100, 0.15);
+    border-left: 4px solid #FFC107;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Expandable sections */
+.expand-btn {
+    background: linear-gradient(to right, rgba(137, 247, 254, 0.2), rgba(102, 166, 255, 0.3));
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.expand-btn i {
+    transition: transform 0.3s ease;
+}
+
+.expand-btn[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+.expanded-content {
+    display: none;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 1rem;
+}
+
+.expand-btn[aria-expanded="true"] + .expanded-content {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Rarity list */
+.rarity-list {
+    list-style: none;
+    padding-left: 0.5rem;
+}
+
+.rarity-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.rarity-dot {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+/* Locations grid */
+.locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.location-card {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.location-card h3 {
+    margin-top: 0;
+    border-bottom: 2px solid rgba(137, 247, 254, 0.5);
+    padding-bottom: 0.5rem;
+}
+
+.location-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Upgrades grid */
+.upgrades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.upgrade-card {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.upgrade-card h3 {
+    margin-top: 0;
+    color: var(--accent-dark);
+}
+
+.upgrade-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Seasons grid */
+.seasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.season-card {
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.season-card h3 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+}
+
+.season-card.spring {
+    background: linear-gradient(to bottom right, rgba(200, 255, 200, 0.9), rgba(180, 255, 180, 0.7));
+    border-left: 4px solid #4CAF50;
+}
+
+.season-card.summer {
+    background: linear-gradient(to bottom right, rgba(255, 245, 200, 0.9), rgba(255, 235, 180, 0.7));
+    border-left: 4px solid #FFC107;
+}
+
+.season-card.fall {
+    background: linear-gradient(to bottom right, rgba(255, 220, 180, 0.9), rgba(255, 200, 160, 0.7));
+    border-left: 4px solid #FF5722;
+}
+
+.season-card.winter {
+    background: linear-gradient(to bottom right, rgba(220, 240, 255, 0.9), rgba(200, 230, 255, 0.7));
+    border-left: 4px solid #2196F3;
+}
+
+/* Challenges list */
+.challenges-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.challenge-item {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.challenge-item h3 {
+    margin-top: 0;
+    color: var(--accent-dark);
+}
+
+/* Fun commands grid */
+.fun-commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.fun-category h3 {
+    background: linear-gradient(to right, rgba(137, 247, 254, 0.4), rgba(102, 166, 255, 0.3));
+    padding: 0.75rem 1rem;
+    border-radius: 8px 8px 0 0;
+    margin: 0;
+}
+
+.fun-category ul {
+    background: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    padding: 1rem 1rem 1rem 2rem;
+    border-radius: 0 0 8px 8px;
+}
+
+.fun-category li {
+    margin-bottom: 0.5rem;
+}
+
+.fun-category .small-note {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding: 0 1rem 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0 0 8px 8px;
+}
+
+/* Moderation grid */
+.moderation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.mod-category h3 {
+    background: linear-gradient(to right, rgba(137, 200, 254, 0.4), rgba(102, 120, 255, 0.3));
+    padding: 0.75rem 1rem;
+    border-radius: 8px 8px 0 0;
+    margin: 0;
+}
+
+.mod-category ul {
+    background: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    padding: 1rem 1rem 1rem 2rem;
+    border-radius: 0 0 8px 8px;
+}
+
+.mod-category li {
+    margin-bottom: 0.5rem;
+}
+
+/* Tips list */
+.tips-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.tip-item {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tip-item h3 {
+    margin-top: 0;
+    color: var(--accent-dark);
+    font-size: 1.1rem;
+}
+
+.tip-item p {
+    margin-bottom: 0;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .command-row {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+    }
+    
+    .locations-grid, 
+    .seasons-grid, 
+    .upgrades-grid, 
+    .challenges-list,
+    .fun-commands-grid,
+    .moderation-grid,
+    .tips-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .toc-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+}

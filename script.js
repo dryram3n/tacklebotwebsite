@@ -920,8 +920,10 @@ document.addEventListener('DOMContentLoaded', () => {
         initSky();
         initStaticListeners();
         
-        // Initialize expandable sections - Call the already defined function
-        initExpandableSections();
+        // Check if we're on how-to-use page - if not, initialize expandable sections here
+        if (!document.querySelector('.how-to-use-page')) {
+            initExpandableSections();
+        }
         
         if (!isUsingCanvas) {
             console.log("Initializing DOM-based water effects...");
