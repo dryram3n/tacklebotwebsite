@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/how-to-use.html">
+  <meta property="og:title" content="How to Use - TackleBot Discord Bot">
+  <meta property="og:description" content="A user-friendly guide on how to use TackleBot's commands in Discord.">
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/how-to-use.html">
+  <meta property="twitter:title" content="How to Use - TackleBot Discord Bot">
+  <meta property="twitter:description" content="A user-friendly guide on how to use TackleBot's commands in Discord.">
+  <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+
+  <!-- Theme color for browser UI -->
+  <meta name="theme-color" content="#89f7fe">
+
+  <title>How to Use - TackleBot 🎣</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <!-- Background Effects: Sky, Water, Fish -->
+  <div id="sky-container">
+      <div id="sun"></div>
+      <div id="moon"></div>
+      <div id="clouds-container"></div>
+  </div>
+  <div id="water-background">
+    <div class="water-body"></div>
+    <div class="water-surface">
+        <svg id="wave-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path id="wave-path-1" fill="rgba(137, 247, 254, 0.5)" />
+            <path id="wave-path-2" fill="rgba(102, 166, 255, 0.3)" />
+        </svg>
+    </div>
+    <div id="bubbles-container"></div>
+    <div id="fish-container"></div>
+  </div>
+  <div id="mouse-trail"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html" aria-label="TackleBot Home">🎣 TackleBot</a>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#commands">Commands</a></li>
+        <li><a href="how-to-use.html" class="active">How to Use</a></li> <!-- Added Link & Active Class -->
+        <li><a href="calculator.html">Calculator</a></li>
+        <li><a href="index.html#support">Support</a></li>
+        <li><a href="fish-catalog.html">Fish Catalog</a></li>
+        <li><a href="donate.html">Donate</a></li>
+        <li><a href="terms-of-service.html">Terms</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+        <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    <section id="how-to-use" class="animated-section">
+      <h2>How to Use TackleBot <span class="emoji">❓</span></h2>
+      <p>Welcome! TackleBot uses Discord's slash commands. Just type <code>/</code> in your chat bar and select a TackleBot command. Click on any command group below to see details!</p>
+
+      <div class="how-to-use-container">
+
+        <!-- General Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-info-circle" aria-hidden="true"></i> General Commands
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Basic information and help commands.</p>
+            <ul>
+              <li><code>/info</code>: Shows the bot's current version, uptime, latest updates, and links.</li>
+              <li><code>/help [section]</code>: Provides help information.
+                <ul>
+                    <li><code>/help commands</code>: Lists all available command groups.</li>
+                    <li><code>/help fishing</code>: Detailed guide on the fishing system.</li>
+                    <li><code>/help settings</code>: Information about bot configuration and permissions.</li>
+                    <li><code>/help moderation</code>: Guide for moderation commands.</li>
+                    <li><code>/help fun</code>: Guide for fun/entertainment commands.</li>
+                    <li><code>/help legal</code>: Information on Terms of Service and Privacy.</li>
+                    <li><code>/help donate</code>: Information on how to support the bot.</li>
+                </ul>
+              </li>
+              <li><code>/donate</code>: Shows ways to support TackleBot's development.</li>
+              <li><code>/vote</code>: Provides a link to vote for TackleBot on Top.gg and explains rewards.</li>
+              <li><code>/tos</code>: Displays the bot's Terms of Service.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Fishing Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-fish" aria-hidden="true"></i> Fishing Commands (<code>/fish ...</code>)
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>The core fishing gameplay commands.</p>
+            <ul>
+              <li><code>/fish cast [location]</code>: Cast your fishing rod! Optionally specify a location (e.g., <code>pond</code>, <code>river</code>) if unlocked.</li>
+              <li><code>/fish inventory</code>: View the fish you've caught. Use the buttons to navigate pages.</li>
+              <li><code>/fish sell [index]</code>: Sell a specific fish from your inventory using its number (from <code>/fish inventory</code>).</li>
+              <li><code>/fish sellall</code>: Sell all fish currently in your inventory.</li>
+              <li><code>/fish shop</code>: View available upgrades for purchase (Lures, Rods, etc.).</li>
+              <li><code>/fish buy [upgrade]</code>: Purchase an upgrade from the shop.</li>
+              <li><code>/fish stats [user]</code>: View your own or another user's fishing statistics (level, XP, catches, etc.).</li>
+              <li><code>/fish challenge</code>: View your current daily/seasonal fishing challenges and progress.</li>
+              <li><code>/fish index</code>: Browse the complete catalog of discoverable fish species.</li>
+              <li><code>/fish company</code>: Manage your fishing company (passive income feature).</li>
+              <!-- Add other /fish subcommands as needed -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Fun Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-grin-beam" aria-hidden="true"></i> Fun Commands (<code>/fun ...</code>)
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Entertainment and image manipulation commands.</p>
+            <ul>
+              <li><code>/fun meme</code>: Fetches a random meme.</li>
+              <li><code>/fun achievement [text]</code>: Creates a Minecraft-style achievement image.</li>
+              <li><code>/fun changemymind [text]</code>: Creates a "Change My Mind" meme image.</li>
+              <li><code>/fun drake [text1] [text2]</code>: Creates a Drake meme image.</li>
+              <li><code>/fun blur [image/user]</code>: Blurs the provided image or user's avatar.</li>
+              <li><code>/fun wide [image/user]</code>: Makes the provided image or user's avatar wide.</li>
+              <li><code>/fun communist [image/user]</code>: Adds a communist filter to an image/avatar.</li>
+              <li><code>/fun fact</code>: Displays a random interesting fact.</li>
+              <li><code>/fun joke</code>: Tells a random joke.</li>
+              <li><code>/fun imdb [title]</code>: Searches for movie/show information on IMDb.</li>
+              <li><code>/fun lulcat [text]</code>: Converts text to LOLCAT speak.</li>
+              <li><code>/fun showerthought</code>: Displays a random shower thought.</li>
+              <li><code>/fun ship [user1] [user2]</code>: "Ships" two users and shows a compatibility percentage.</li>
+              <li><code>/fun opinion [text] [image/user]</code>: Creates an "opinion" meme.</li>
+              <li><code>/fun whowouldwin [user1] [user2]</code>: Creates a "Who Would Win" meme.</li>
+              <li><code>/fun mock [text]</code>: Converts text to MoCkInG CaSe.</li>
+              <!-- Add other /fun subcommands -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moderation Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-shield-alt" aria-hidden="true"></i> Moderation Commands
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Commands for server management (require appropriate permissions).</p>
+            <ul>
+              <li><code>/kick [user] [reason]</code>: Removes a user from the server. Requires Kick Members permission.</li>
+              <li><code>/ban [user] [reason] [days]</code>: Bans a user from the server. Optionally delete messages from the past specified days. Requires Ban Members permission.</li>
+              <li><code>/clear [amount]</code>: Deletes a specified number of recent messages (up to 100). Requires Manage Messages permission.</li>
+              <li><code>/moderator add [user]</code>: Grants a user permission to use TackleBot's moderation commands within the bot. Only usable by the server owner.</li>
+              <li><code>/moderator remove [user]</code>: Revokes a user's permission to use TackleBot's moderation commands. Only usable by the server owner.</li>
+              <li><code>/log setup [channel]</code>: Sets up a channel for logging server events (message deletes, member joins/leaves). Requires Manage Server permission.</li>
+              <li><code>/log disable</code>: Disables server event logging. Requires Manage Server permission.</li>
+              <li><code>/fishwhitelist add [user]</code>: Adds a user to the fishing anti-bot whitelist (fewer checks). Requires Manage Server permission or Bot Moderator role.</li>
+              <li><code>/fishwhitelist remove [user]</code>: Removes a user from the fishing whitelist. Requires Manage Server permission or Bot Moderator role.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Channel Management Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-folder-plus" aria-hidden="true"></i> Channel Management Commands
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Commands for creating and deleting channels.</p>
+            <ul>
+              <li><code>/createchannel [name] [type] [private] [member1...]</code>: Creates a new channel.
+                <ul>
+                  <li><code>name</code>: The desired channel name.</li>
+                  <li><code>type</code>: (Optional) Choose 'text' (default) or 'voice'.</li>
+                  <li><code>private</code>: (Optional) Set to 'true' to make it private.</li>
+                  <li><code>member1</code>, <code>member2</code>, etc.: (Optional, if private) Mention users to grant access.</li>
+                  <li>Requires Manage Channels permission, but users can create a limited number for themselves.</li>
+                </ul>
+              </li>
+              <li><code>/deletechannel</code>: Deletes the channel this command is used in. Requires Manage Channels permission, OR the user must be the original creator of the channel (via <code>/createchannel</code>).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Server Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-server" aria-hidden="true"></i> Server Commands (<code>/server ...</code>)
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Commands related to the Discord server itself.</p>
+            <ul>
+              <li><code>/server stats</code>: Displays detailed statistics about the current server (member count, channel count, roles, creation date, etc.).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Special Commands -->
+        <div class="command-group-card">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-star" aria-hidden="true"></i> Special Commands
+          </button>
+          <div class="expanded-content" style="display: none;">
+            <p>Unique utility and interaction commands.</p>
+            <ul>
+              <li><code>/rizz [message]</code>: Summons the legendary Ronald Rizz (if he's in the server) with an optional message.</li>
+              <li><code>/summary [channel] [messages]</code>: Generates a humorous summary of recent messages in the current or a specified channel using AI.</li>
+              <li><code>/bug report</code>: Opens a modal to report a bug or issue with the bot.</li>
+              <li><code>/bug view [id]</code>: View the status or details of a specific bug report (Admin/Dev only).</li>
+              <li><code>/bug respond [id]</code>: Respond to a bug report (Admin/Dev only).</li>
+              <li><code>/bug close [id]</code>: Close a bug report (Admin/Dev only).</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- End how-to-use-container -->
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+      <a href="terms-of-service.html">Terms of Service</a> |
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="social-links">
+      <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
+    </div>
+  </footer>
+
+  <!-- UI Toggle Button -->
+  <div id="ui-toggle-container">
+      <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
+          <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
+      </button>
+      <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
+          <i class="fas fa-eye" aria-hidden="true"></i>
+      </button>
+  </div>
+
+  <!-- Load scripts deferred -->
+  <script src="fishImages.js" defer></script>
+  <script src="fish-info.js" defer></script> <!-- Ensure fish-info is loaded if needed by script.js -->
+  <script src="script.js" defer></script>
+</body>
+
+</html>

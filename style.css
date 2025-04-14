@@ -2206,3 +2206,151 @@ body.canvas-failed #fish-container,
 body.canvas-failed #mouse-trail {
   display: block !important;
 }
+
+/* --- How to Use Section --- */
+#how-to-use {
+  padding: 4rem 5%;
+  background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white */
+  border-radius: 15px;
+  box-shadow: 0 8px 25px var(--shadow-light);
+  margin: 2rem auto;
+  max-width: 1000px;
+}
+
+#how-to-use h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--heading-color);
+  font-size: 2.5rem;
+}
+
+#how-to-use > p { /* Target the intro paragraph directly under the section */
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+  color: var(--text-color);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.how-to-use-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Space between command group cards */
+}
+
+.command-group-card {
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px var(--shadow-light);
+  overflow: hidden; /* Ensures border-radius applies correctly */
+  border-left: 5px solid transparent; /* Prepare for colored border */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.command-group-card:hover {
+    box-shadow: 0 6px 20px var(--shadow-medium);
+}
+
+/* Add subtle border colors based on category maybe? (Optional) */
+.command-group-card:has(button > .fa-fish) { border-left-color: #66a6ff; }
+.command-group-card:has(button > .fa-grin-beam) { border-left-color: #ee9ca7; }
+.command-group-card:has(button > .fa-shield-alt) { border-left-color: #f4cc71; }
+.command-group-card:has(button > .fa-info-circle) { border-left-color: #98d4bb; }
+.command-group-card:has(button > .fa-folder-plus) { border-left-color: #c79de0; }
+.command-group-card:has(button > .fa-server) { border-left-color: #a9a9a9; }
+.command-group-card:has(button > .fa-star) { border-left-color: #cd7ae2; }
+
+
+/* Style the expand button within the card */
+.command-group-card .expand-btn {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically center icon and text */
+  gap: 0.8em; /* Space between icon and text */
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  background: linear-gradient(135deg, #eaf6ff 0%, #f8faff 100%); /* Very subtle gradient */
+  border: none;
+  border-bottom: 1px solid #e0f0ff; /* Light separator */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.command-group-card .expand-btn:hover {
+  background: linear-gradient(135deg, #e0f0ff 0%, #f0f8ff 100%);
+}
+
+.command-group-card .expand-btn i {
+    color: #66a6ff; /* Match primary gradient color */
+    font-size: 1.1em; /* Slightly larger icon */
+}
+
+/* Ensure the arrow indicator on the button is positioned correctly */
+.command-group-card .expand-btn::after {
+  margin-left: auto; /* Push arrow to the right */
+  font-size: 1.5rem; /* Make arrow slightly larger */
+  transition: transform 0.3s ease;
+}
+
+.command-group-card .expand-btn[aria-expanded="true"]::after {
+  transform: rotate(90deg);
+}
+
+/* Style the content area */
+.command-group-card .expanded-content {
+  padding: 1.5rem;
+  background-color: #fdfdff; /* Slightly off-white */
+  border-top: 1px solid #e0f0ff;
+}
+
+.command-group-card .expanded-content p {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.command-group-card .expanded-content ul {
+  list-style: none; /* Remove default bullets */
+  padding-left: 0;
+}
+
+.command-group-card .expanded-content li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5em; /* Indent list items */
+  position: relative;
+}
+
+/* Custom bullet points */
+.command-group-card .expanded-content li::before {
+  content: '🔹'; /* Or use Font Awesome icon */
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  color: #66a6ff;
+  font-size: 0.9em;
+}
+
+.command-group-card .expanded-content code {
+  background-color: #eef2f7;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #5570a7;
+  font-size: 0.95em;
+}
+
+/* Nested lists for sub-options */
+.command-group-card .expanded-content ul ul {
+  margin-top: 0.5rem;
+  padding-left: 1em; /* Further indent nested lists */
+}
+
+.command-group-card .expanded-content ul ul li::before {
+    content: '🔸'; /* Different bullet for nested items */
+    color: #764ba2; /* Accent color */
+}
