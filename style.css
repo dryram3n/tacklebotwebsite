@@ -813,40 +813,9 @@ social-links {
   margin: 1rem 0;
 }
 
-.expand-btn {
-  background: var(--gradient-accent);
-  color: var(--heading-color);
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 20px;
-  /* cursor: pointer; /* Already set globally */
-  font-weight: 600;
-  width: 100%;
-  text-align: left;
-  transition: all 0.3s ease;
-  position: relative;
-  font-family: var(--font-primary);
-  font-size: 0.95rem;
-}
-.expand-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px var(--shadow-light);
-}
-.expand-btn::after {
-  content: '+';
-  position: absolute;
-  right: 1.2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: transform 0.3s ease;
-}
-.expand-btn[aria-expanded="true"]::after {
-  content: '−';
-  transform: rotate(180deg);
-}
-
+/* Keep this rule for initial hiding, but ensure it's not overly specific */
 .expanded-content {
-  display: none;
+  display: none; /* Ensure this is present */
   padding: 1.5rem;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 0 0 15px 15px;
@@ -854,10 +823,6 @@ social-links {
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-top: none;
 }
-.expand-btn[aria-expanded="true"] + .expanded-content {
-    display: block;
-}
-
 
 /* --- Sky, Sun, Moon, Clouds --- */
 #sky-container {
