@@ -2199,89 +2199,160 @@ body.canvas-failed #mouse-trail {
   margin-right: auto;
 }
 
+/* Enhanced Command Group Styling */
 .how-to-use-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Space between command group cards */
+  gap: 1.8rem; /* Increased spacing between cards */
 }
 
 .command-group-card {
   background-color: var(--white);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px var(--shadow-light);
-  border-left: 5px solid transparent; /* Prepare for colored border */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 16px; /* Increased radius for softer look */
+  box-shadow: 0 5px 20px rgba(102, 166, 255, 0.12); /* Softer, more elegant shadow */
+  border-left: 6px solid transparent; /* Slightly thicker colored border */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: hidden; /* Ensure border radius applies to children */
 }
 
 .command-group-card:hover {
-    box-shadow: 0 6px 20px var(--shadow-medium);
+  transform: translateY(-5px); /* Subtle lift effect on hover */
+  box-shadow: 0 10px 25px rgba(102, 166, 255, 0.2);
 }
 
-/* Add subtle border colors based on category maybe? (Optional) */
+/* Better color coding for different command types */
 .command-group-card:has(button > .fa-fish) { border-left-color: #66a6ff; }
-.command-group-card:has(button > .fa-grin-beam) { border-left-color: #ee9ca7; }
+.command-group-card:has(button > .fa-grin-beam) { border-left-color: #f98677; }
 .command-group-card:has(button > .fa-shield-alt) { border-left-color: #f4cc71; }
 .command-group-card:has(button > .fa-info-circle) { border-left-color: #98d4bb; }
 .command-group-card:has(button > .fa-folder-plus) { border-left-color: #c79de0; }
-.command-group-card:has(button > .fa-server) { border-left-color: #a9a9a9; }
-.command-group-card:has(button > .fa-star) { border-left-color: #cd7ae2; }
+.command-group-card:has(button > .fa-server) { border-left-color: #9eb3c8; }
+.command-group-card:has(button > .fa-star) { border-left-color: #ffcc80; }
 
-
-/* Style the expand button within the card */
+/* Enhanced expand button styling */
 .command-group-card .expand-btn {
-  display: flex; /* Use flexbox for alignment */
-  align-items: center; /* Vertically center icon and text */
-  gap: 0.8em; /* Space between icon and text */
+  display: flex;
+  align-items: center;
+  gap: 1em;
   width: 100%;
   text-align: left;
-  padding: 1rem 1.5rem;
-  font-size: 1.2rem;
+  padding: 1.25rem 1.8rem; /* More generous padding */
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--heading-color);
-  background: linear-gradient(135deg, #eaf6ff 0%, #f8faff 100%); /* Very subtle gradient */
+  background: linear-gradient(to right, rgba(255,255,255,0.95), rgba(250,253,255,0.95)); /* Subtle gradient */
   border: none;
-  border-bottom: 1px solid #e0f0ff; /* Light separator */
+  border-bottom: 2px solid #e0f0ff; /* Slightly thicker separator */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative; /* For the after pseudo-element */
 }
 
 .command-group-card .expand-btn:hover {
-  background: linear-gradient(135deg, #e0f0ff 0%, #f0f8ff 100%);
+  background: linear-gradient(to right, rgba(240,250,255,0.95), rgba(230,245,255,0.95)); /* Slightly darker on hover */
 }
 
+/* Icon styling within buttons */
 .command-group-card .expand-btn i {
-    color: #66a6ff; /* Match primary gradient color */
-    font-size: 1.1em; /* Slightly larger icon */
+  font-size: 1.3em; /* Larger icon */
+  width: 36px; /* Fixed width for alignment */
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(102, 166, 255, 0.15);
 }
 
-/* Ensure the arrow indicator on the button is positioned correctly */
+/* Custom coloring for different command icons */
+.command-group-card:has(.fa-fish) .expand-btn i { color: #66a6ff; background: rgba(102, 166, 255, 0.1); }
+.command-group-card:has(.fa-grin-beam) .expand-btn i { color: #f98677; background: rgba(249, 134, 119, 0.1); }
+.command-group-card:has(.fa-shield-alt) .expand-btn i { color: #f4cc71; background: rgba(244, 204, 113, 0.1); }
+.command-group-card:has(.fa-info-circle) .expand-btn i { color: #2d5744; background: rgba(152, 212, 187, 0.1); }
+.command-group-card:has(.fa-folder-plus) .expand-btn i { color: #c79de0; background: rgba(199, 157, 224, 0.1); }
+.command-group-card:has(.fa-server) .expand-btn i { color: #5d7793; background: rgba(158, 179, 200, 0.1); }
+.command-group-card:has(.fa-star) .expand-btn i { color: #e89f2e; background: rgba(255, 204, 128, 0.1); }
+
+/* Add dropdown arrow indicator */
 .command-group-card .expand-btn::after {
-  margin-left: auto; /* Push arrow to the right */
-  font-size: 1.5rem; /* Make arrow slightly larger */
+  content: '\f105'; /* Font Awesome arrow icon */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-left: auto; /* Push to right */
+  font-size: 1.5rem;
   transition: transform 0.3s ease;
+  color: #a0c0e0; /* Softer color for the arrow */
 }
 
 .command-group-card .expand-btn[aria-expanded="true"]::after {
   transform: rotate(90deg);
 }
 
-/* Style the content area */
+/* Enhanced expanded content styling */
 .command-group-card .expanded-content {
-  padding: 1.5rem;
-  background-color: #fdfdff; /* Slightly off-white */
-  border-top: 1px solid #e0f0ff;
+  padding: 1.8rem;
+  background: linear-gradient(to bottom, #fdfdff, #f5faff);
+  border-top: none;
   display: none;
+  animation: fadeContent 0.4s ease-out;
 }
 
-/* Style for when the content is expanded (based on button's ARIA state) */
+@keyframes fadeContent {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Style for when the content is expanded */
 .command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
   display: block;
 }
 
 .command-group-card .expanded-content p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
 
-/* ... rest of existing styles for expanded-content children ... */
+/* Enhanced command list styling */
+.command-group-card .expanded-content ul {
+  margin-bottom: 1rem;
+  list-style-type: none;
+  padding-left: 0.5rem;
+}
+
+.command-group-card .expanded-content ul li {
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Enhanced code styling */
+.command-group-card .expanded-content code {
+  background: linear-gradient(135deg, rgba(137, 247, 254, 0.15), rgba(102, 166, 255, 0.15));
+  color: var(--heading-color);
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Courier New', Courier, monospace;
+  border: 1px solid rgba(102, 166, 255, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+
+/* Nested list styling */
+.command-group-card .expanded-content ul ul {
+  margin-top: 0.8rem;
+  margin-left: 1.5rem;
+  border-left: 2px solid rgba(102, 166, 255, 0.2);
+  padding-left: 1rem;
+}
+
+.command-group-card .expanded-content ul ul li {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
