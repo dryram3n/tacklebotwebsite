@@ -90,7 +90,7 @@
     <section id="how-to-use-hero" class="animated-section">
       <div class="hero-content">
         <h1>How to Use TackleBot <span class="emoji">📚</span></h1>
-        <p>Your comprehensive guide to fishing, catching, and enjoying everything TackleBot has to offer!</p>
+        <p>Your comprehensive guide to fishing, catching, upgrading, and enjoying everything TackleBot has to offer!</p> <!-- Updated description slightly -->
       </div>
     </section>
 
@@ -114,9 +114,29 @@
           <span class="emoji-icon">🛒</span>
           <h3>Shop & Upgrades</h3>
         </a>
+        <!-- Added Research -->
+        <a href="#research" class="toc-item">
+          <span class="emoji-icon">🔬</span>
+          <h3>Research Lab</h3>
+        </a>
+        <!-- Added Business -->
+        <a href="#business" class="toc-item">
+          <span class="emoji-icon">🚢</span>
+          <h3>Fishing Business</h3>
+        </a>
         <a href="#seasons" class="toc-item">
           <span class="emoji-icon">🍂</span>
           <h3>Seasonal System</h3>
+        </a>
+        <!-- Added Challenges -->
+        <a href="#challenges" class="toc-item">
+            <span class="emoji-icon">🎯</span>
+            <h3>Challenges</h3>
+        </a>
+        <!-- Added Voting -->
+        <a href="#voting" class="toc-item">
+            <span class="emoji-icon">🗳️</span>
+            <h3>Voting Rewards</h3>
         </a>
         <a href="#fun-commands" class="toc-item">
           <span class="emoji-icon">🎮</span>
@@ -140,7 +160,7 @@
         <p>Welcome to TackleBot! Here's how to get started:</p>
         <ol>
           <li><strong>Add TackleBot to your server</strong> using the "Invite Bot" button.</li>
-          <li><strong>Give TackleBot the right permissions</strong> - it needs permissions to send messages, use external emojis, add reactions, and read message history.</li>
+          <li><strong>Give TackleBot the right permissions</strong> - it needs permissions to send messages, use external emojis, add reactions, read message history, and potentially manage channels/messages/members if you plan to use moderation features.</li> <!-- Updated permissions slightly -->
           <li><strong>Start fishing</strong> with the <code>/fish cast</code> command!</li>
           <li><strong>View help</strong> anytime with <code>/help</code> or specific guides like <code>/help fishing</code></li>
         </ol>
@@ -158,39 +178,49 @@
         <div class="commands-table">
           <div class="command-row">
             <div class="command-name"><code>/fish cast [location]</code></div>
-            <div class="command-desc">Cast your fishing rod to catch fish - the core fishing command!</div>
+            <div class="command-desc">Cast your fishing rod to catch fish, junk, or treasure chests! Optionally specify a location.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
-            <div class="command-name"><code>/fish inventory</code></div>
-            <div class="command-desc">View all the fish you've caught so far</div>
+            <div class="command-name"><code>/fish inventory [page]</code></div>
+            <div class="command-desc">View your caught fish inventory (paginated). Includes buttons to sell or open chests.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
             <div class="command-name"><code>/fish sell [index]</code></div>
-            <div class="command-desc">Sell a specific fish from your inventory</div>
+            <div class="command-desc">Sell a specific fish or item from your inventory using its index number.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
             <div class="command-name"><code>/fish sellall</code></div>
-            <div class="command-desc">Sell your entire inventory at once</div>
+            <div class="command-desc">Sell all fish currently in your inventory (excludes chests).</div> <!-- Updated description -->
           </div>
           <div class="command-row">
             <div class="command-name"><code>/fish shop</code></div>
-            <div class="command-desc">Browse available upgrades in the shop</div>
+            <div class="command-desc">Browse available fishing upgrades and access the Research Lab.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
             <div class="command-name"><code>/fish buy [upgrade]</code></div>
-            <div class="command-desc">Purchase an upgrade from the shop</div>
+            <div class="command-desc">Purchase a standard fishing upgrade from the shop.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
-            <div class="command-name"><code>/fish stats</code></div>
-            <div class="command-desc">View your fishing statistics and progress</div>
+            <div class="command-name"><code>/fish stats [user]</code></div>
+            <div class="command-desc">View detailed fishing statistics. Includes buttons for Season Info, Fish Index, Leaderboards, Achievements, Challenges, and Business management.</div> <!-- Updated description -->
           </div>
           <div class="command-row">
-            <div class="command-name"><code>/fish challenge</code></div>
-            <div class="command-desc">View your current fishing challenges</div>
+            <div class="command-name"><code>/fish challenge [type]</code></div>
+            <div class="command-desc">View current Hourly, Daily, Weekly, Seasonal, or Epic fishing challenges and claim rewards.</div> <!-- Updated description -->
+          </div>
+          <!-- Added Gamble -->
+          <div class="command-row">
+            <div class="command-name"><code>/fish gamble [amount]</code></div>
+            <div class="command-desc">Gamble your coins for a chance at multipliers.</div>
+          </div>
+          <!-- Added Vote -->
+          <div class="command-row">
+            <div class="command-name"><code>/vote</code></div>
+            <div class="command-desc">Get info and the link to vote for TackleBot on Top.gg for rewards.</div>
           </div>
           <div class="command-row">
-            <div class="command-name"><code>/help</code></div>
-            <div class="command-desc">Opens the help menu for more information</div>
+            <div class="command-name"><code>/help [section]</code></div>
+            <div class="command-desc">Opens the help menu. Use options like `commands`, `fishing`, `moderation`, `fun`, `legal` for specific sections.</div> <!-- Updated description -->
           </div>
         </div>
 
@@ -203,6 +233,8 @@
             <li><code>/help fishing</code> - Get detailed fishing system guide</li>
             <li><code>/help moderation</code> - Information about moderation commands</li>
             <li><code>/help fun</code> - Learn about entertainment commands</li>
+            <li><code>/help legal</code> - View legal information (Terms/Privacy)</li> <!-- Added legal -->
+            <li><code>/help donate</code> - Information about supporting the bot</li> <!-- Added donate -->
           </ul>
         </div>
       </div>
@@ -219,17 +251,21 @@
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="expanded-content">
-          <p>Fish come in different rarities, each with its own value and catch probability:</p>
+          <p>Fish and items come in different rarities, each with its own value and catch probability:</p>
           <ul class="rarity-list">
-            <li><span class="rarity-dot" style="background-color: #8B4513;"></span> <strong>Common</strong> 🟤 - Basic fish, low value</li>
-            <li><span class="rarity-dot" style="background-color: #00A550;"></span> <strong>Uncommon</strong> 🟢 - Better value</li>
-            <li><span class="rarity-dot" style="background-color: #0096FF;"></span> <strong>Rare</strong> 🔵 - Valuable fish</li>
-            <li><span class="rarity-dot" style="background-color: #FFD700;"></span> <strong>Legendary</strong> 🟡 - Very valuable, hard to find</li>
-            <li><span class="rarity-dot" style="background-color: #9370DB;"></span> <strong>Mythic</strong> 🟣 - Extremely rare and valuable</li>
-            <li><span class="rarity-dot" style="background-color: #FF1493;"></span> <strong>Chimerical</strong> 🌟 - The rarest fish of all</li>
-            <li><span class="rarity-dot" style="background-color: #FFA500;"></span> <strong>Special Fish</strong> ⭐ - Unique variants with bonuses</li>
+            <li><span class="rarity-dot" style="background-color: #A0A0A0;"></span> <strong>Junk</strong> ⚫ - Worthless items, reduced by luck.</li> <!-- Added Junk -->
+            <li><span class="rarity-dot" style="background-color: #8B4513;"></span> <strong>Common</strong> 🟤 - Basic fish, low value.</li>
+            <li><span class="rarity-dot" style="background-color: #00A550;"></span> <strong>Uncommon</strong> 🟢 - Better value.</li>
+            <li><span class="rarity-dot" style="background-color: #0096FF;"></span> <strong>Rare</strong> 🔵 - Valuable fish.</li>
+            <li><span class="rarity-dot" style="background-color: #FFD700;"></span> <strong>Legendary</strong> 🟡 - Very valuable, hard to find.</li>
+            <li><span class="rarity-dot" style="background-color: #9370DB;"></span> <strong>Mythic</strong> 🟣 - Extremely rare and valuable.</li>
+            <li><span class="rarity-dot" style="background-color: #FF1493;"></span> <strong>Chimerical</strong> 🌟 - The rarest fish of all.</li>
+            <li><span class="rarity-dot" style="background-color: #FFA500;"></span> <strong>Special Fish</strong> ✨ - Rare variants (e.g., Shimmering, Divine) with boosted stats and significantly higher value.</li> <!-- Updated Special -->
+            <li><span class="rarity-dot" style="background-color: #FF6347;"></span> <strong>Seasonal Fish</strong> 🍂 - Appear only during specific real-world seasons.</li> <!-- Added Seasonal -->
+            <li><span class="rarity-dot" style="background-color: #FF4500;"></span> <strong>Event Fish</strong> 🎉 - Limited-time fish available during special events.</li> <!-- Added Event -->
+            <li><span class="rarity-dot" style="background-color: #CD853F;"></span> <strong>Treasure Chests</strong> 📦 - Contain random coin amounts. Tiers include Wooden, Metal, Golden, Ancient, Mysterious.</li> <!-- Added Chests -->
           </ul>
-          <p>The higher the rarity, the more valuable the fish - but they're also harder to catch!</p>
+          <p>Higher rarity fish are more valuable and give more XP, but are harder to catch! Luck upgrades help find better fish.</p> <!-- Updated description -->
         </div>
 
         <div class="expand-btn" aria-expanded="false">
@@ -237,18 +273,18 @@
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="expanded-content">
-          <p>As you fish, you'll gain experience and level up:</p>
+          <p>As you fish, you'll gain experience (XP) and level up:</p>
           <ul>
-            <li>Experience (XP) is gained from catching fish</li>
-            <li>Rarer fish give more XP</li>
+            <li>XP is gained primarily from catching fish (rarer fish give more XP).</li>
+            <li>Completing challenges and achievements also grants XP.</li> <!-- Added challenges/achievements -->
             <li>Higher levels unlock:</li>
             <ul>
-              <li>Better fishing rates</li>
-              <li>New shop upgrades</li>
-              <li>Additional fishing locations</li>
-              <li>Higher voting rewards</li>
+              <li>Better base fishing rates and stats.</li>
+              <li>New shop upgrades and research options.</li> <!-- Added research -->
+              <li>Access to new fishing locations.</li>
+              <li>Higher minimum values for Voter Chests.</li> <!-- Updated voting rewards -->
             </ul>
-            <li>Check your level with <code>/fish stats</code></li>
+            <li>Check your level, XP, and progress with <code>/fish stats</code>.</li>
           </ul>
         </div>
 
@@ -259,12 +295,27 @@
         <div class="expanded-content">
           <p>TackleBot keeps track of all the fish species you've discovered:</p>
           <ul>
-            <li>Access your collection from the Stats page</li>
-            <li>Organized by rarity categories</li>
-            <li>Shows your progress toward collecting every species</li>
-            <li>Each fish has unique lore and statistics</li>
-            <li>Discover special seasonal variants</li>
-            <li>Some fish are only available in specific locations or seasons</li>
+            <li>Access your collection via the "Fish Index" button on the <code>/fish stats</code> page.</li> <!-- Updated access -->
+            <li>Organized by rarity and location.</li> <!-- Added location -->
+            <li>Shows your progress toward collecting every species.</li>
+            <li>View images, lore, stats, and records (biggest/smallest) for each fish.</li> <!-- Added images/records -->
+            <li>Discover special seasonal and event variants.</li> <!-- Updated variants -->
+            <li>Some fish are only available in specific locations or seasons.</li>
+          </ul>
+        </div>
+
+        <!-- Added Fish Size -->
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">📏</span> Fish Size Categories
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>Fish you catch come in different sizes, affecting their name and sometimes value:</p>
+          <ul>
+            <li>Sizes are based on weight and length compared to the species' average.</li>
+            <li>Categories include: <strong>Baby, Small, Big, Adult, Massive, Colossal</strong>.</li>
+            <li>The size category is added to the fish's name (e.g., "Massive Common Carp").</li>
+            <li>Check your biggest and smallest catches in the Fish Index!</li>
           </ul>
         </div>
 
@@ -273,7 +324,7 @@
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="expanded-content">
-          <p>Compete with other fishers for top spots on the leaderboards:</p>
+          <p>Compete with other fishers globally for top spots on the weekly leaderboards:</p>
           <ul>
             <li>Categories include:</li>
             <ul>
@@ -283,12 +334,12 @@
             </ul>
             <li>Weekly rewards for top performers:</li>
             <ul>
-              <li>🥇 1st Place: 5 Champion Chests</li>
-              <li>🥈 2nd Place: 2 Champion Chests</li>
-              <li>🥉 3rd Place: 1 Champion Chest</li>
+              <li>🥇 1st Place: 5 Leaderboard Champion Chests</li>
+              <li>🥈 2nd Place: 2 Leaderboard Champion Chests</li>
+              <li>🥉 3rd Place: 1 Leaderboard Champion Chest</li>
             </ul>
-            <li>Champion Chests contain mythic or better fish!</li>
-            <li>Access leaderboards from the Stats page</li>
+            <li>Champion Chests contain high-value rewards like mythic/chimerical fish or rare chests!</li> <!-- Updated chest content -->
+            <li>Access leaderboards via the button on the <code>/fish stats</code> page.</li> <!-- Updated access -->
           </ul>
         </div>
       </div>
@@ -298,60 +349,90 @@
     <section id="locations" class="animated-section">
       <h2>Fishing Locations <span class="emoji">🌊</span></h2>
       <div class="content-box">
-        <p>Different locations have different fish species and rarity probabilities:</p>
+        <p>Different locations offer unique fish species, rarity probabilities, and unlock requirements. Unlock new locations by purchasing the <strong>Explorer's Map</strong> upgrade via <code>/fish buy explorer</code>.</p> <!-- Updated intro -->
         <div class="locations-grid">
+          <!-- Updated existing locations and added new ones -->
           <div class="location-card">
-            <h3>Tranquil Pond 🌿</h3>
+            <h3>Tranquil Pond 🌿 (Level 0)</h3>
             <p><strong>Starting location</strong></p>
             <p>A peaceful pond with mostly common fish. Perfect for beginners!</p>
             <div class="location-stats">
-              <span>Common: ★★★★</span>
-              <span>Uncommon: ★★</span>
-              <span>Rare: ★</span>
+              <span>Boost: Common +10%</span>
             </div>
           </div>
           <div class="location-card">
-            <h3>Rushing River 🏞️</h3>
+            <h3>Rushing River 🏞️ (Explorer Lvl 1)</h3>
             <p>A flowing river with a better chance for uncommon fish.</p>
             <div class="location-stats">
-              <span>Common: ★★★</span>
-              <span>Uncommon: ★★★</span>
-              <span>Rare: ★★</span>
+              <span>Boost: Common +5%, Uncommon +10%, Rare +2%</span>
             </div>
           </div>
           <div class="location-card">
-            <h3>Deep Ocean 🌊</h3>
+            <h3>Misty Lake 🌫️ (Explorer Lvl 2)</h3> <!-- Added Lake -->
+            <p>A foggy, mysterious lake where rare fish are more frequent.</p>
+            <div class="location-stats">
+              <span>Boost: Uncommon +5%, Rare +10%, Legendary +1%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Deep Ocean 🌊 (Explorer Lvl 3)</h3>
             <p>The vast ocean holds many secrets and rare catches!</p>
             <div class="location-stats">
-              <span>Common: ★★</span>
-              <span>Uncommon: ★★</span>
-              <span>Rare: ★★★</span>
-              <span>Legendary: ★★</span>
+              <span>Boost: Rare +15%, Legendary +3%, Mythic +1%</span>
             </div>
           </div>
           <div class="location-card">
-            <h3>The Abyss 🌑</h3>
-            <p>Dark depths with the best chance for legendary fish.</p>
+            <h3>Coral Reef 🐠 (Explorer Lvl 4)</h3> <!-- Added Coral Reef -->
+            <p>Vibrant ecosystem teeming with colorful and exotic fish.</p>
             <div class="location-stats">
-              <span>Common: ★</span>
-              <span>Rare: ★★</span>
-              <span>Legendary: ★★★</span>
-              <span>Mythic: ★★</span>
+              <span>Boost: Uncommon +10%, Rare +20%, Legendary +5%, Mythic +2%</span>
             </div>
           </div>
           <div class="location-card">
-            <h3>Mystic Vortex ✨</h3>
-            <p>A mysterious anomaly with the highest chances for mythic and chimerical fish.</p>
+            <h3>The Abyss 🌑 (Explorer Lvl 5)</h3>
+            <p>Dark depths with a good chance for legendary creatures.</p>
             <div class="location-stats">
-              <span>Rare: ★</span>
-              <span>Legendary: ★★</span>
-              <span>Mythic: ★★★</span>
-              <span>Chimerical: ★★</span>
+              <span>Boost: Rare +10%, Legendary +10%, Mythic +2%, Chimerical +1%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Sunken City 🏛️ (Explorer Lvl 6)</h3> <!-- Added Sunken City -->
+            <p>Ancient ruins harboring forgotten aquatic treasures.</p>
+            <div class="location-stats">
+              <span>Boost: Rare +5%, Legendary +15%, Mythic +3%, Chimerical +1%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Mystic Vortex ✨ (Explorer Lvl 7)</h3>
+            <p>Supernatural waters with a high chance for mythic beings.</p>
+            <div class="location-stats">
+              <span>Boost: Legendary +10%, Mythic +5%, Chimerical +2%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Cosmic Sea ⭐ (Explorer Lvl 8)</h3> <!-- Added Cosmic Sea -->
+            <p>Waters infused with celestial energy, attracting mythic fish.</p>
+            <div class="location-stats">
+              <span>Boost: Legendary +15%, Mythic +5%, Chimerical +2%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Temporal Tide ⏳ (Explorer Lvl 9)</h3> <!-- Added Temporal Tide -->
+            <p>A shifting current containing species from past and future.</p>
+            <div class="location-stats">
+              <span>Boost: Legendary +10%, Mythic +8%, Chimerical +3%</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Fishverse 🌌 (Explorer Lvl 10)</h3> <!-- Added Fishverse -->
+            <p>A chaotic realm where all fish converge. High risk, high reward!</p>
+            <div class="location-stats">
+              <span>Boost: Legendary +5%, Mythic +10%, Chimerical +5%</span>
             </div>
           </div>
         </div>
         <div class="help-tip">
-          <p><strong>Tip:</strong> Use <code>/fish cast [location name]</code> to fish in a specific spot! New locations unlock as you level up.</p>
+          <p><strong>Tip:</strong> Use <code>/fish cast location:[location name]</code> (e.g., <code>/fish cast location:ocean</code>) to fish in a specific spot! Your last used location is remembered.</p> <!-- Updated tip -->
         </div>
       </div>
     </section>
@@ -360,78 +441,164 @@
     <section id="shop" class="animated-section">
       <h2>Shop & Upgrades <span class="emoji">🛒</span></h2>
       <div class="content-box">
-        <p>Spend your hard-earned coins on upgrades to improve your fishing!</p>
+        <p>Spend your hard-earned coins on upgrades via <code>/fish shop</code> to improve your fishing!</p>
         <div class="expand-btn" aria-expanded="false">
-          <span class="emoji">🔧</span> Available Upgrades
+          <span class="emoji">🔧</span> Available Standard Upgrades
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="expanded-content">
           <div class="upgrades-grid">
             <div class="upgrade-card">
-              <h3>Lucky Lure 🍀</h3>
-              <p>Increases your chance of catching rare fish.</p>
+              <h3>Lucky Lure 🍀 (Luck)</h3> <!-- Added internal name -->
+              <p>Increases your chance of catching rarer fish and reduces junk.</p> <!-- Updated description -->
               <div class="upgrade-levels">
                 <span>Multiple levels available</span>
-                <span>Each level: +5% rare fish chance</span>
+                <span>Effect increases per level</span> <!-- Simplified effect -->
               </div>
             </div>
             <div class="upgrade-card">
-              <h3>Quick Cast ⏱️</h3>
-              <p>Reduces fishing cooldown time.</p>
+              <h3>Quick Cast ⏱️ (Speed)</h3> <!-- Added internal name -->
+              <p>Reduces the time between fishing casts.</p> <!-- Updated description -->
               <div class="upgrade-levels">
                 <span>Multiple levels available</span>
-                <span>Each level: -5% fishing time</span>
+                <span>Effect increases per level</span> <!-- Simplified effect -->
               </div>
             </div>
             <div class="upgrade-card">
-              <h3>Wide Net 🕸️</h3>
-              <p>Chance to catch multiple fish in one cast.</p>
+              <h3>Wide Net 🕸️ (MultiCatch)</h3> <!-- Added internal name -->
+              <p>Increases the chance to catch multiple fish in one cast.</p> <!-- Updated description -->
               <div class="upgrade-levels">
                 <span>Multiple levels available</span>
-                <span>Each level: +5% multi-catch chance</span>
+                <span>Effect increases per level</span> <!-- Simplified effect -->
               </div>
             </div>
             <div class="upgrade-card">
-              <h3>Tackle Box 🧰</h3>
-              <p>Increases your inventory capacity.</p>
+              <h3>Tackle Box 🧰 (Inventory)</h3> <!-- Added internal name -->
+              <p>Increases your inventory capacity (+5 slots per level).</p> <!-- Updated description -->
               <div class="upgrade-levels">
                 <span>Multiple levels available</span>
                 <span>Each level: +5 inventory slots</span>
               </div>
             </div>
             <div class="upgrade-card">
-              <h3>Fish Market Contacts 💼</h3>
-              <p>Get better selling prices for your fish.</p>
+              <h3>Fish Market Contacts 💼 (Value)</h3> <!-- Added internal name -->
+              <p>Increases the selling price for all your fish.</p> <!-- Updated description -->
               <div class="upgrade-levels">
                 <span>Multiple levels available</span>
-                <span>Each level: +5% sell value</span>
+                <span>Effect increases per level</span> <!-- Simplified effect -->
               </div>
             </div>
             <div class="upgrade-card">
-              <h3>Explorer's Map 🗺️</h3>
-              <p>Unlocks new fishing locations.</p>
+              <h3>Explorer's Map 🗺️ (Explorer)</h3> <!-- Added internal name -->
+              <p>Unlocks new fishing locations (1 per level).</p> <!-- Updated description -->
               <div class="upgrade-levels">
-                <span>One-time purchases</span>
-                <span>Each unlock: New location</span>
+                <span>10 levels available</span> <!-- Updated levels -->
+                <span>Each level: Unlocks next location</span>
               </div>
             </div>
           </div>
           <div class="help-tip">
-            <p><strong>How to buy:</strong> Use <code>/fish shop</code> to browse and <code>/fish buy [upgrade]</code> to purchase!</p>
+            <p><strong>How to buy:</strong> Use <code>/fish shop</code> to browse and <code>/fish buy [upgrade name]</code> (e.g., <code>/fish buy luck</code>) to purchase!</p> <!-- Updated tip -->
           </div>
         </div>
+        <!-- Research Section Moved Here -->
       </div>
+    </section>
+
+    <!-- Research Lab -->
+    <section id="research" class="animated-section">
+        <h2>Research Lab <span class="emoji">🔬</span></h2>
+        <div class="content-box">
+            <p>Unlock powerful late-game passive boosts through research! Access the lab via the "Research Upgrades" button in <code>/fish shop</code>.</p>
+            <div class="expand-btn" aria-expanded="false">
+                <span class="emoji">🧪</span> Available Research Projects
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="expanded-content">
+                <p>Research requires coins, time (hours), and sometimes prerequisites from standard upgrades. Research progresses automatically once started.</p>
+                <div class="upgrades-grid">
+                    <div class="upgrade-card">
+                        <h3>Advanced Luck 🍀</h3>
+                        <p>Significantly boosts your chance of finding rare fish.</p>
+                        <div class="upgrade-levels">
+                            <span>Multiple levels</span>
+                            <span>Requires: High Luck upgrade</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-card">
+                        <h3>Fishing Efficiency ⏱️</h3>
+                        <p>Further reduces fishing cooldown time.</p>
+                        <div class="upgrade-levels">
+                            <span>Multiple levels</span>
+                            <span>Requires: High Speed upgrade</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-card">
+                        <h3>Master Net 🕸️</h3>
+                        <p>Greatly increases the chance of multi-catches.</p>
+                        <div class="upgrade-levels">
+                            <span>Multiple levels</span>
+                            <span>Requires: High MultiCatch upgrade</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-card">
+                        <h3>Treasure Hunter 📦</h3>
+                        <p>Increases the chance of finding Treasure Chests and their potential value.</p>
+                        <div class="upgrade-levels">
+                            <span>Multiple levels</span>
+                            <span>Requires: High Explorer upgrade</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-card">
+                        <h3>Special Lure ✨</h3>
+                        <p>Increases the chance of catching rare Special Fish variants.</p>
+                        <div class="upgrade-levels">
+                            <span>Multiple levels</span>
+                            <span>Requires: High Value upgrade</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-tip">
+                    <p><strong>How to research:</strong> Go to <code>/fish shop</code>, click "Research Upgrades", then select a project to start. Check progress in the lab.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fishing Business -->
+    <section id="business" class="animated-section">
+        <h2>Fishing Business <span class="emoji">🚢</span></h2>
+        <div class="content-box">
+            <p>Become a fishing tycoon by starting your own Fishing Business! Generate passive income to fuel your adventures.</p>
+            <div class="expand-btn" aria-expanded="false">
+                <span class="emoji">📈</span> Managing Your Business
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="expanded-content">
+                <ul>
+                    <li><strong>Access:</strong> Manage your business via the "My Businesses" button on <code>/fish stats</code> or after using <code>/fish cast</code>.</li>
+                    <li><strong>Purchase:</strong> Start your first business (e.g., Fishing Fleet, Market Stall) for a significant coin investment.</li>
+                    <li><strong>Passive Income:</strong> Businesses generate income automatically over time based on their level and specific upgrades (like Boats, Nets, Engines, Workers for the Fleet).</li>
+                    <li><strong>Collect Income:</strong> Manually collect your earnings using the "Collect Income" button in the business management view.</li>
+                    <li><strong>Upgrades:</strong> Invest more coins to upgrade your business components (e.g., buy more Boats, improve Nets) to increase income generation rate and capacity. Access via the "Manage Upgrades" button.</li>
+                    <li><strong>Multiple Businesses:</strong> You can own and manage different types of businesses simultaneously (e.g., Fleet, Market).</li>
+                </ul>
+                <div class="help-tip">
+                    <p><strong>Strategy:</strong> Reinvesting your profits into business upgrades is key to maximizing your passive income stream!</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Seasonal System -->
     <section id="seasons" class="animated-section">
       <h2>Seasonal System <span class="emoji">🍂</span></h2>
       <div class="content-box">
-        <p>TackleBot features a dynamic seasonal system that changes the available fish throughout the year:</p>
+        <p>TackleBot features a dynamic seasonal system based on real-world seasons (Northern Hemisphere) that changes fish availability and rarity modifiers throughout the year:</p> <!-- Updated description -->
 
         <div class="seasons-grid">
           <div class="season-card spring">
-            <h3>Spring 🌱</h3>
+            <h3>Spring 🌱 (Mar-May)</h3> <!-- Added months -->
             <p>The season of new beginnings!</p>
             <ul>
               <li>Exclusive spring fish appear</li>
@@ -440,36 +607,36 @@
             </ul>
           </div>
           <div class="season-card summer">
-            <h3>Summer ☀️</h3>
+            <h3>Summer ☀️ (Jun-Aug)</h3> <!-- Added months -->
             <p>Hot days and tropical catches!</p>
             <ul>
               <li>Exclusive summer fish appear</li>
-              <li>Increased tropical varieties</li>
+              <li>Increased tropical & ocean varieties</li> <!-- Updated fish types -->
               <li>Special summer events</li>
             </ul>
           </div>
           <div class="season-card fall">
-            <h3>Fall 🍂</h3>
+            <h3>Fall 🍂 (Sep-Nov)</h3> <!-- Added months -->
             <p>The harvest season brings variety!</p>
             <ul>
               <li>Exclusive autumn fish appear</li>
-              <li>Increased migratory species</li>
+              <li>Increased migratory & river species</li> <!-- Updated fish types -->
               <li>Special Halloween events (October)</li>
             </ul>
           </div>
           <div class="season-card winter">
-            <h3>Winter ❄️</h3>
+            <h3>Winter ❄️ (Dec-Feb)</h3> <!-- Added months -->
             <p>Cold waters and rare treasures!</p>
             <ul>
               <li>Exclusive winter fish appear</li>
-              <li>Increased deep water species</li>
+              <li>Increased deep water & lake species</li> <!-- Updated fish types -->
               <li>Special holiday events (December)</li>
             </ul>
           </div>
         </div>
 
         <div class="help-tip">
-          <p><strong>Current Season:</strong> Check the current season and seasonal bonuses with <code>/fish stats</code>!</p>
+          <p><strong>Current Season:</strong> Check the current season, its effects, and days remaining via the "Season Info" button on <code>/fish stats</code>!</p> <!-- Updated tip -->
           <p><strong>Pro Tip:</strong> Some fish can only be caught during specific seasons - collect them all by fishing year-round!</p>
         </div>
       </div>
@@ -479,18 +646,28 @@
     <section id="challenges" class="animated-section">
       <h2>Challenges <span class="emoji">🎯</span></h2>
       <div class="content-box">
-        <p>Complete challenges to earn bonus rewards:</p>
+        <p>Complete dynamic challenges using <code>/fish challenge</code> to earn bonus coins, XP, and items!</p> <!-- Updated description -->
 
         <div class="challenges-list">
+          <!-- Added Hourly -->
+          <div class="challenge-item">
+            <h3>Hourly Challenges</h3>
+            <p>Quick tasks that reset every hour:</p>
+            <ul>
+              <li>Catch a small number of specific fish</li>
+              <li>Fish in a certain location</li>
+            </ul>
+            <p><strong>Rewards:</strong> Small coin bonuses</p>
+          </div>
           <div class="challenge-item">
             <h3>Daily Challenges</h3>
             <p>Tasks that reset every 24 hours:</p>
             <ul>
-              <li>Catch specific fish types</li>
+              <li>Catch specific fish types or rarities</li>
               <li>Earn a certain amount of coins</li>
-              <li>Fish in specific locations</li>
+              <li>Catch fish of specific sizes or weights</li> <!-- Added size/weight -->
             </ul>
-            <p><strong>Rewards:</strong> Bonus coins, XP, or special items</p>
+            <p><strong>Rewards:</strong> Bonus coins, XP</p> <!-- Updated rewards -->
           </div>
           <div class="challenge-item">
             <h3>Weekly Challenges</h3>
@@ -498,9 +675,9 @@
             <ul>
               <li>Catch a number of legendary+ fish</li>
               <li>Earn substantial coin amounts</li>
-              <li>Complete multiple fishing streaks</li>
+              <li>Catch a large number of fish</li> <!-- Added total catch -->
             </ul>
-            <p><strong>Rewards:</strong> Premium chests, larger coin bonuses</p>
+            <p><strong>Rewards:</strong> Larger coin bonuses, XP, sometimes items like chests</p> <!-- Updated rewards -->
           </div>
           <div class="challenge-item">
             <h3>Seasonal Challenges</h3>
@@ -510,12 +687,22 @@
               <li>Complete themed collections</li>
               <li>Participate in seasonal events</li>
             </ul>
-            <p><strong>Rewards:</strong> Exclusive seasonal items, cosmetics, titles</p>
+            <p><strong>Rewards:</strong> Exclusive seasonal items, large coin/XP bonuses</p> <!-- Updated rewards -->
+          </div>
+          <!-- Added Epic -->
+          <div class="challenge-item">
+            <h3>Epic Challenges</h3>
+            <p>Long-term or difficult tasks with big rewards:</p>
+            <ul>
+              <li>Catch extremely rare fish</li>
+              <li>Reach high milestones</li>
+            </ul>
+            <p><strong>Rewards:</strong> Very large coin bonuses, rare items, unique titles</p>
           </div>
         </div>
 
         <div class="help-tip">
-          <p>Check your current challenges with <code>/fish challenge</code>!</p>
+          <p>Check your current challenges and claim completed ones with <code>/fish challenge</code>! Notifications appear when you complete one.</p> <!-- Updated tip -->
         </div>
       </div>
     </section>
@@ -524,21 +711,24 @@
     <section id="voting" class="animated-section">
       <h2>Voting Rewards <span class="emoji">🗳️</span></h2>
       <div class="content-box">
-        <p>Support TackleBot and earn great rewards by voting:</p>
+        <p>Support TackleBot and earn great rewards by voting every 12 hours using <code>/vote</code>!</p> <!-- Updated description -->
 
         <div class="voting-info">
           <h3>How Voting Works:</h3>
           <ul>
-            <li>Use <code>/vote</code> to get the link to vote for TackleBot on Top.gg</li>
-            <li>Vote once every 12 hours</li>
-            <li>Receive Voter Chests as rewards (worth up to 1,000,000 coins!)</li>
-            <li>Higher fishing level increases minimum chest value</li>
-            <li>Maintain a voting streak to increase maximum potential reward</li>
-            <li>Toggle vote reminders with <code>/vote remind</code></li>
+            <li>Use <code>/vote</code> to get the link to vote for TackleBot on Top.gg.</li>
+            <li>Vote once every 12 hours.</li>
+            <li>Receive a **Voter Chest** for each vote.</li>
+            <li>Chests contain random coins (up to 🪙 1,000,000!).</li> <!-- Added max value -->
+            <li>**Chest Tiers:** Small ⭐, Medium ⭐⭐, Large ⭐⭐⭐, Jackpot ⭐⭐⭐⭐.</li> <!-- Added tiers -->
+            <li>Your **Fishing Level** increases the minimum potential coin value.</li> <!-- Updated factor -->
+            <li>Your **Voting Streak** increases the maximum potential value and chances for better tiers.</li> <!-- Updated factor -->
+            <li>Missing a vote resets your streak!</li>
+            <li>Toggle vote reminders with <code>/vote remind</code> (or buttons after voting).</li> <!-- Updated toggle -->
           </ul>
 
           <div class="help-tip">
-            <p><strong>Pro Tip:</strong> Consistent voters get the best rewards! A 7-day streak can significantly boost your chest values.</p>
+            <p><strong>Pro Tip:</strong> Consistent voting significantly boosts your chest values thanks to the streak bonus!</p> <!-- Updated tip -->
           </div>
         </div>
       </div>
@@ -548,35 +738,37 @@
     <section id="fun-commands" class="animated-section">
       <h2>Fun Commands <span class="emoji">🎮</span></h2>
       <div class="content-box">
-        <p>TackleBot isn't just about fishing! Enjoy these fun commands too:</p>
+        <p>TackleBot isn't just about fishing! Enjoy these fun commands too (most start with <code>/fun</code>):</p> <!-- Updated description -->
 
         <div class="fun-commands-grid">
           <div class="fun-category">
-            <h3>Meme Commands</h3>
+            <h3>Meme Generation</h3>
             <ul>
-              <li><code>/fun meme</code> - Random memes from popular subreddits</li>
-              <li><code>/fun achievement</code> - Generate Minecraft achievement</li>
-              <li><code>/fun changemymind</code> - Change My Mind template</li>
-              <li><code>/fun drake</code> - Drake preference meme</li>
-              <li><code>/fun sadcat</code> - Sad cat meme</li>
-              <li><code>/fun oogway</code> - Master Oogway wisdom</li>
-              <li><code>/fun biden</code> - Biden tweet</li>
-              <li><code>/fun mock</code> - MoCkInG sPoNgEbOb TeXt</li>
+              <li><code>/fun meme</code> - Random meme from Reddit</li>
+              <li><code>/fun achievement [text]</code> - Minecraft achievement</li>
+              <li><code>/fun changemymind [text]</code> - Change My Mind template</li>
+              <li><code>/fun drake [text1] [text2]</code> - Drake preference meme</li>
+              <li><code>/fun sadcat [text]</code> - Sad cat meme</li>
+              <li><code>/fun oogway [text]</code> - Master Oogway wisdom</li>
+              <li><code>/fun biden [text]</code> - Fake Biden tweet</li>
+              <li><code>/fun pikachu [text]</code> - Surprised Pikachu meme</li> <!-- Added -->
+              <li><code>/fun awkwardmonkey [text]</code> - Awkward Monkey meme</li> <!-- Added -->
+              <li><code>/fun burnpaper [text]</code> - SpongeBob burning paper</li> <!-- Added -->
+              <li><code>/fun whowouldwin [img1] [img2]</code> - Who Would Win template</li> <!-- Updated -->
+              <li><code>/fun opinion [text] [img]</code> - Opinion meme template</li> <!-- Updated -->
             </ul>
           </div>
 
           <div class="fun-category">
             <h3>Image Manipulation</h3>
             <ul>
-              <li><code>/fun blur</code> - Add blur effect to image</li>
-              <li><code>/fun wide</code> - Make an image comically wide</li>
-              <li><code>/fun uglyupclose</code> - Distorted closeup effect</li>
-              <li><code>/fun communist</code> - Add communist filter</li>
-              <li><code>/fun whowouldwin</code> - Who Would Win meme</li>
-              <li><code>/fun opinion</code> - Create opinion meme</li>
-              <li><code>/fun ship</code> - Ship two users/images</li>
+              <li><code>/fun blur [image]</code> - Add blur effect</li>
+              <li><code>/fun wide [image]</code> - Make image comically wide</li>
+              <li><code>/fun uglyupclose [image]</code> - Distorted closeup effect</li>
+              <li><code>/fun communist [image]</code> - Add communist filter</li>
+              <li><code>/fun ship [user1/img1] [user2/img2]</code> - Ship two users/images</li> <!-- Updated -->
             </ul>
-            <p class="small-note">Use attachment or mention to specify image</p>
+            <p class="small-note">Use attachment or mention for image commands</p>
           </div>
 
           <div class="fun-category">
@@ -584,11 +776,13 @@
             <ul>
               <li><code>/fun fact</code> - Random interesting fact</li>
               <li><code>/fun joke</code> - Random joke (family-friendly)</li>
+              <li><code>/fun 8ball [question]</code> - Ask the Magic 8-Ball</li> <!-- Added -->
               <li><code>/fun imdb [title]</code> - Search movie/show info</li>
-              <li><code>/fun lulcat [text]</code> - Convert to lolcat speak</li>
+              <li><code>/fun lulcat [text]</code> - Convert text to lolcat speak</li>
+              <li><code>/fun mock [text]</code> - MoCkInG sPoNgEbOb TeXt</li> <!-- Moved -->
               <li><code>/fun showerthought</code> - Random shower thought</li>
-              <li><code>/rizz [message]</code> - Summon Ronald Rizz</li>
-              <li><code>/summary [channel] [messages]</code> - Summarize recent chat</li>
+              <li><code>/rizz [message]</code> - Summon Ronald Rizz (separate command)</li> <!-- Updated -->
+              <li><code>/summary [channel] [messages]</code> - Summarize recent chat using AI (separate command)</li> <!-- Updated -->
             </ul>
           </div>
         </div>
@@ -599,40 +793,49 @@
     <section id="moderation" class="animated-section">
       <h2>Moderation Guide <span class="emoji">🛡️</span></h2>
       <div class="content-box">
-        <p>TackleBot includes useful moderation features for your server:</p>
+        <p>TackleBot includes useful moderation features for your server (require appropriate Discord permissions or Bot Moderator role):</p> <!-- Updated description -->
 
         <div class="moderation-grid">
           <div class="mod-category">
-            <h3>Basic Commands</h3>
+            <h3>User Management</h3> <!-- Renamed -->
             <ul>
-              <li><code>/kick [user] [reason]</code> - Remove user from server</li>
-              <li><code>/ban [user] [reason] [days]</code> - Ban user and optionally delete messages</li>
-              <li><code>/clear [amount]</code> - Delete up to 100 recent messages</li>
+              <li><code>/kick [user] [reason]</code> - Remove user (Requires Kick Members perm or Mod role)</li>
+              <li><code>/ban [user] [reason] [days]</code> - Ban user, optionally delete messages (Requires Ban Members perm or Mod role)</li>
+              <li><code>/clear [amount]</code> - Delete 1-100 recent messages (Requires Manage Messages perm or Mod role)</li>
             </ul>
           </div>
 
           <div class="mod-category">
-            <h3>Managing Moderators</h3>
+            <h3>Bot Moderators</h3> <!-- Renamed -->
             <ul>
-              <li><code>/moderator add [user]</code> - Add a new moderator</li>
-              <li><code>/moderator remove [user]</code> - Remove existing moderator</li>
-              <li>Only server owners can manage moderators</li>
+              <li><code>/moderator add [user]</code> - Grant a user permission to use TackleBot's mod commands (`/kick`, `/ban`, `/clear`, `/deletechannel`).</li>
+              <li><code>/moderator remove [user]</code> - Remove bot moderator permissions.</li>
+              <li><strong>Requires: Server Owner permission.</strong></li> <!-- Clarified permission -->
             </ul>
           </div>
 
           <div class="mod-category">
             <h3>Channel Management</h3>
             <ul>
-              <li><code>/createchannel [name] type:[text/voice]</code> - Create a text or voice channel</li>
-              <li><code>/createchannel [name] private:true member1:[user]</code> - Create a private channel</li>
-              <li><code>/deletechannel</code> - Delete the channel you're currently in</li>
-              <li>Limit: 1 text and 1 voice channel per user</li>
+              <li><code>/createchannel [name] type:[text/voice] [private] [member1...]</code> - Create text/voice channels, optionally private. (Requires Manage Channels perm)</li> <!-- Updated command/perm -->
+              <li><code>/deletechannel</code> - Delete the channel the command is used in. (Requires Manage Channels perm, Mod role, or being the channel creator)</li> <!-- Updated perm -->
+              <li>Limit: Users have limits on channels they can create.</li> <!-- Updated limit -->
+            </ul>
+          </div>
+
+          <!-- Added Logging -->
+          <div class="mod-category">
+            <h3>Server Logging</h3>
+            <ul>
+              <li><code>/log setup [channel]</code> - Set a channel to log server events (message deletes, member joins/leaves).</li>
+              <li><code>/log disable</code> - Disable server event logging.</li>
+              <li><strong>Requires: Administrator permission.</strong></li>
             </ul>
           </div>
         </div>
 
         <div class="help-tip">
-          <p><strong>Note:</strong> Users can only delete channels they created or if they have server management permissions. Moderators and server owners can delete any channel.</p>
+          <p><strong>Note:</strong> Bot Moderators (`/moderator add`) only get permission for TackleBot's commands, not full Discord permissions.</p> <!-- Updated note -->
         </div>
       </div>
     </section>
@@ -644,31 +847,44 @@
         <div class="tips-list">
           <div class="tip-item">
             <h3>Maximize Your Profits</h3>
-            <p>Invest in Fish Market Contacts early to increase all fish selling prices!</p>
+            <p>Invest in Fish Market Contacts (Value upgrade) and Business upgrades early to increase income!</p> <!-- Updated tip -->
           </div>
           <div class="tip-item">
             <h3>Efficient Fishing</h3>
-            <p>Quick Cast upgrades let you fish more frequently, increasing your overall earnings.</p>
+            <p>Quick Cast (Speed upgrade) and Fishing Efficiency (Research) let you fish more frequently.</p> <!-- Updated tip -->
           </div>
           <div class="tip-item">
             <h3>Location Strategy</h3>
-            <p>Match your fishing location to your goal: common fish are great for consistent money, but legendaries give more XP!</p>
+            <p>Fish in higher-level locations unlocked via Explorer upgrades for better chances at rare, mythic, and chimerical fish.</p> <!-- Updated tip -->
           </div>
           <div class="tip-item">
             <h3>Vote Regularly</h3>
-            <p>Maintain your voting streak for increasingly valuable rewards - it's free money!</p>
+            <p>Maintain your voting streak for increasingly valuable Voter Chests - it's free money!</p>
           </div>
           <div class="tip-item">
             <h3>Complete Challenges</h3>
-            <p>Daily challenges are quick to complete and provide a significant coin boost.</p>
+            <p>Hourly and Daily challenges are quick ways to earn extra coins and XP. Check <code>/fish challenge</code> often!</p> <!-- Updated tip -->
           </div>
           <div class="tip-item">
-            <h3>Seasonal Collection</h3>
-            <p>Don't miss seasonal fish - some only appear for a limited time each year!</p>
+            <h3>Seasonal & Event Collection</h3>
+            <p>Don't miss limited-time seasonal and event fish! Check the Season Info on <code>/fish stats</code>.</p> <!-- Updated tip -->
           </div>
           <div class="tip-item">
-            <h3>Anti-Bot Protection</h3>
-            <p>TackleBot has occasional verification to ensure fair play. These are simple captchas - just respond as prompted!</p>
+            <h3>Anti-Bot Verification</h3> <!-- Updated title -->
+            <p>TackleBot uses captchas if it detects unusual activity. Respond honestly to continue fishing. This ensures fair play for everyone!</p> <!-- Updated description -->
+          </div>
+          <!-- Added Tips -->
+          <div class="tip-item">
+            <h3>Passive Income Power</h3>
+            <p>Set up your Fishing Business early via <code>/fish stats</code> for a steady stream of passive income.</p>
+          </div>
+          <div class="tip-item">
+            <h3>Late Game Boosts</h3>
+            <p>Don't forget the Research Lab (via <code>/fish shop</code>) for powerful passive bonuses like Treasure Hunter and Special Lure.</p>
+          </div>
+           <div class="tip-item">
+            <h3>Explore /fish stats</h3>
+            <p>The <code>/fish stats</code> command has buttons leading to almost everything: Index, Leaderboards, Achievements, Challenges, Season Info, and Business!</p>
           </div>
         </div>
 
