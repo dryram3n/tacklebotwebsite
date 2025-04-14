@@ -809,20 +809,30 @@ social-links {
 }
 
 /* Expandable sections */
-.expandable {
+.expandable { /* This class seems unused, remove if not needed */
   margin: 1rem 0;
 }
 
-/* Keep this rule for initial hiding, but ensure it's not overly specific */
+/* Base style for hidden content */
 .expanded-content {
-  display: none; /* Ensure this is present */
-  padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 0 0 15px 15px;
-  margin-top: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: none; /* Initially hidden */
+  padding: 1.8rem; /* Match button padding */
+  background: linear-gradient(to bottom, #fdfdff, #f5faff); /* Match command group */
   border-top: none;
+  animation: fadeContent 0.4s ease-out;
+  /* Remove inline styles from HTML if they exist */
 }
+
+/* Show content when button's aria-expanded is true */
+.expand-btn[aria-expanded="true"] + .expanded-content {
+  display: block;
+}
+
+@keyframes fadeContent {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 /* --- Sky, Sun, Moon, Clouds --- */
 #sky-container {
@@ -1990,10 +2000,11 @@ body.ui-hidden #ui-toggle-container {
   .legal-card h3 { font-size: 1.5rem; }
   .legal-card h4 { font-size: 1.3rem; }
   .expand-btn { font-size: 0.9rem; padding: 0.6rem 1rem; }
-  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1.5rem; }
+  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section, #how-to-use, #faq { padding: 1.5rem; } /* Added #how-to-use, #faq */
   .catalog-content { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
   .modal-content { width: 95%; padding: 2rem 1.5rem; }
   .try-me-container { padding: 1.5rem; }
+  .command-group-card .expand-btn, .faq-item .expand-btn { padding: 1rem 1.2rem; font-size: 1.1rem; } /* Adjusted padding */
 }
 
 @media (max-width: 576px) {
@@ -2023,7 +2034,7 @@ body.ui-hidden #ui-toggle-container {
   .legal-card h3 { font-size: 1.3rem; }
   .legal-card h4 { font-size: 1.1rem; }
   .legal-card ul { padding-left: 1.2rem; }
-  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section { padding: 1rem; }
+  .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section, #how-to-use, #faq { padding: 1rem; } /* Added #how-to-use, #faq */
   .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
   .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
   .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
@@ -2046,6 +2057,8 @@ body.ui-hidden #ui-toggle-container {
     margin-left: auto;
     margin-right: auto;
   }
+  .command-group-card .expand-btn, .faq-item .expand-btn { padding: 0.8rem 1rem; font-size: 1rem; } /* Adjusted padding */
+  .command-group-card .expanded-content, .faq-item .expanded-content { padding: 1rem; } /* Adjusted padding */
 }
 
 @media (max-width: 400px) {
@@ -2099,6 +2112,12 @@ body.ui-hidden #ui-toggle-container {
 }
 .reduced-motion .hero-emoji {
     animation: none;
+}
+.reduced-motion .expand-btn::after {
+    transition: none !important;
+}
+.reduced-motion .expanded-content {
+    animation: none !important;
 }
 
 
@@ -2155,6 +2174,12 @@ body.ui-hidden #ui-toggle-container {
     opacity: 0.7;
     filter: blur(1px);
   }
+  .expand-btn::after {
+      transition: none !important;
+  }
+  .expanded-content {
+      animation: none !important;
+  }
 }
 
 /* --- Canvas Integration --- */
@@ -2178,7 +2203,7 @@ body.canvas-failed #mouse-trail {
   background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white */
   border-radius: 15px;
   box-shadow: 0 8px 25px var(--shadow-light);
-  margin: 2rem auto;
+  margin: 2rem auto 4rem; /* Added bottom margin */
   max-width: 1000px;
 }
 
@@ -2229,8 +2254,8 @@ body.canvas-failed #mouse-trail {
 .command-group-card:has(button > .fa-server) { border-left-color: #9eb3c8; }
 .command-group-card:has(button > .fa-star) { border-left-color: #ffcc80; }
 
-/* Enhanced expand button styling */
-.command-group-card .expand-btn {
+/* Enhanced expand button styling (Applies to both command groups and FAQ) */
+.expand-btn {
   display: flex;
   align-items: center;
   gap: 1em;
@@ -2248,12 +2273,12 @@ body.canvas-failed #mouse-trail {
   position: relative; /* For the after pseudo-element */
 }
 
-.command-group-card .expand-btn:hover {
+.expand-btn:hover {
   background: linear-gradient(to right, rgba(240,250,255,0.95), rgba(230,245,255,0.95)); /* Slightly darker on hover */
 }
 
 /* Icon styling within buttons */
-.command-group-card .expand-btn i {
+.expand-btn i {
   font-size: 1.3em; /* Larger icon */
   width: 36px; /* Fixed width for alignment */
   height: 36px;
@@ -2275,7 +2300,7 @@ body.canvas-failed #mouse-trail {
 .command-group-card:has(.fa-star) .expand-btn i { color: #e89f2e; background: rgba(255, 204, 128, 0.1); }
 
 /* Add dropdown arrow indicator */
-.command-group-card .expand-btn::after {
+.expand-btn::after {
   content: '\f105'; /* Font Awesome arrow icon */
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
@@ -2285,30 +2310,12 @@ body.canvas-failed #mouse-trail {
   color: #a0c0e0; /* Softer color for the arrow */
 }
 
-.command-group-card .expand-btn[aria-expanded="true"]::after {
+.expand-btn[aria-expanded="true"]::after {
   transform: rotate(90deg);
 }
 
-/* Enhanced expanded content styling */
-.command-group-card .expanded-content {
-  padding: 1.8rem;
-  background: linear-gradient(to bottom, #fdfdff, #f5faff);
-  border-top: none;
-  display: none;
-  animation: fadeContent 0.4s ease-out;
-}
-
-@keyframes fadeContent {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Style for when the content is expanded */
-.command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
-  display: block;
-}
-
-.command-group-card .expanded-content p {
+/* Enhanced expanded content styling (Applies to both command groups and FAQ) */
+.expanded-content p {
   margin-bottom: 1.2rem;
   color: var(--text-color);
   font-size: 1.05rem;
@@ -2330,7 +2337,7 @@ body.canvas-failed #mouse-trail {
 }
 
 /* Enhanced code styling */
-.command-group-card .expanded-content code {
+.expanded-content code {
   background: linear-gradient(135deg, rgba(137, 247, 254, 0.15), rgba(102, 166, 255, 0.15));
   color: var(--heading-color);
   padding: 0.35rem 0.6rem;
@@ -2355,4 +2362,94 @@ body.canvas-failed #mouse-trail {
 .command-group-card .expanded-content ul ul li {
   margin-bottom: 0.6rem;
   font-size: 0.95rem;
+}
+
+/* --- FAQ Section --- */
+#faq {
+  padding: 4rem 5%;
+  background-color: rgba(240, 245, 255, 0.7); /* Slightly different background */
+  border-radius: 15px;
+  box-shadow: 0 8px 25px var(--shadow-light);
+  margin: 4rem auto; /* Consistent margin */
+  max-width: 1000px;
+}
+
+#faq h2 {
+  text-align: center;
+  margin-bottom: 2.5rem; /* More space below heading */
+  color: var(--heading-color);
+  font-size: 2.5rem;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem; /* Consistent gap */
+}
+
+.faq-item {
+  background-color: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(102, 166, 255, 0.12);
+  border-left: 6px solid var(--gradient-secondary); /* Use secondary gradient color */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;
+}
+
+.faq-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(238, 156, 167, 0.2); /* Use secondary shadow color */
+}
+
+/* FAQ Icon Styling */
+.faq-item .expand-btn i {
+  color: #ee9ca7; /* Match border color */
+  background: rgba(238, 156, 167, 0.1);
+}
+
+/* FAQ Expanded Content */
+.faq-item .expanded-content ul {
+  list-style: disc; /* Use standard list style for FAQ */
+  padding-left: 1.5rem; /* Indent list */
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.faq-item .expanded-content ul li {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+/* Style for @mention */
+.discord-mention {
+  font-weight: 700;
+  color: #5865F2; /* Discord blue */
+  background-color: rgba(88, 101, 242, 0.1);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+}
+
+/* Style for inline links in FAQ */
+.support-button-inline {
+  color: #66a6ff;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px dashed #66a6ff;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.support-button-inline:hover {
+  color: var(--heading-color);
+  border-bottom-color: var(--heading-color);
+}
+
+.faq-item .expanded-content a {
+  color: #66a6ff;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px dashed #66a6ff;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.faq-item .expanded-content a:hover {
+  color: var(--heading-color);
+  border-bottom-color: var(--heading-color);
 }
