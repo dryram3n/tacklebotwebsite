@@ -988,12 +988,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Get current state
                 const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
+                console.log(`Button current state: ${isCurrentlyExpanded}`);
                 
                 // Toggle the state
                 button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
                 
-                // Toggle the display of the expanded content
-                expandedContent.style.display = isCurrentlyExpanded ? 'none' : 'block';
+                // Toggle the display of the expanded content - DIRECTLY SET STYLE
+                if (isCurrentlyExpanded) {
+                    expandedContent.style.display = 'none';
+                } else {
+                    expandedContent.style.display = 'block';
+                }
                 
                 console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
                 
@@ -1005,10 +1010,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false; // Prevent default behavior for good measure
             }
             
-            // Remove any existing event listeners (to prevent duplicates)
+            // Remove any existing event listeners to prevent duplicates
             button.removeEventListener('click', toggleExpansion);
             
-            // Use a single click handler for simplicity
+            // Add click handler
             button.addEventListener('click', toggleExpansion);
             
             // Additional handling for mobile devices

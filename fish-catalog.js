@@ -82,12 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Modal close button click
-        closeModal.addEventListener('click', () => {
-            fishModal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Allow background scrolling again
-            document.body.classList.remove('modal-open'); // Remove body class
-        });
+        // Modal close button click - Fixed by adding direct DOM access
+        if (closeModal) {
+            closeModal.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Close modal button clicked");
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Allow background scrolling again
+                document.body.classList.remove('modal-open'); // Remove body class
+            });
+        } else {
+            console.error("Close modal button not found");
+        }
 
         // Close modal if user clicks outside the modal content area
         window.addEventListener('click', (e) => {
