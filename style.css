@@ -2271,6 +2271,11 @@ body.canvas-failed #mouse-trail {
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative; /* For the after pseudo-element */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(102, 166, 255, 0.2);
+  
+  /* Ensure minimum touch target size (44px is recommended by WCAG) */
+  min-height: 44px;
 }
 
 .expand-btn:hover {
@@ -2452,4 +2457,27 @@ body.canvas-failed #mouse-trail {
 .faq-item .expanded-content a:hover {
   color: var(--heading-color);
   border-bottom-color: var(--heading-color);
+}
+
+/* Enhanced touch targets for mobile */
+.expand-btn {
+  /* Add to existing .expand-btn styles */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(102, 166, 255, 0.2);
+  
+  /* Ensure minimum touch target size (44px is recommended by WCAG) */
+  min-height: 44px;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .expand-btn {
+    /* Slightly larger padding on mobile for easier touch */
+    padding: 1.4rem 1.5rem;
+  }
+
+  /* Ensure we're using block display for expanded content */
+  .expand-btn[aria-expanded="true"] + .expanded-content {
+    display: block !important;
+  }
 }

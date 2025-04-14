@@ -1021,7 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-    // Fix for expandable sections
+    // Completely revised fix for expandable sections with better mobile support
     document.querySelectorAll('.expand-btn').forEach(button => {
         const expandedContent = button.nextElementSibling;
         
@@ -1030,41 +1030,43 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Set the initial ARIA state to collapsed
-        button.setAttribute('aria-expanded', 'false');
-        
-        // CRITICAL: Remove the inline style completely to allow CSS to control display
+        // Remove any existing inline styles that might interfere
         expandedContent.removeAttribute('style');
         
-        // Add direct touch event handler for mobile
-        button.addEventListener('touchend', function(e) {
-            e.preventDefault(); // Prevent default to avoid double triggering
-            
-            // Toggle the button's aria-expanded attribute
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', !isExpanded);
-            
-            // For added reliability, explicitly set the display style
-            expandedContent.style.display = isExpanded ? 'none' : 'block';
-        });
-    });
-
-    // Keep existing click handler for desktop
-    document.body.addEventListener('click', function(e) {
-        const button = e.target.closest('.expand-btn');
-        if (!button) return;
-
-        const expandedContent = button.nextElementSibling;
-        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-            return;
-        }
-
-        // Toggle the button's aria-expanded attribute
-        const isExpanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', !isExpanded);
+        // Set initial ARIA state
+        button.setAttribute('aria-expanded', 'false');
         
-        // For added reliability, explicitly set the display style
-        expandedContent.style.display = isExpanded ? 'none' : 'block';
+        // Use a single handler for both click and touch
+        function toggleExpand(e) {
+            // Prevent default for touch events to avoid double-firing with click
+            if (e.type === 'touchend') {
+                e.preventDefault();
+                console.log("Touch event detected on expand button");
+            }
+            
+            // Toggle the state
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', !isExpanded);
+            
+            // Explicitly set display style for maximum compatibility
+            expandedContent.style.display = isExpanded ? 'none' : 'block';
+            
+            // Log for debugging
+            console.log(`Button expanded state changed to: ${!isExpanded}`);
+        }
+        
+        // Remove existing listeners if any (to prevent duplicates)
+        button.removeEventListener('click', toggleExpand);
+        button.removeEventListener('touchend', toggleExpand);
+        
+        // Add both event listeners
+        button.addEventListener('click', toggleExpand);
+        
+        // Important: Add touch with passive:false to ensure preventDefault works
+        button.addEventListener('touchend', toggleExpand, { passive: false });
     });
+
+    // Remove the body click handler which can cause conflicts on mobile
+    // We're now handling everything directly on the buttons
 
 }); // End DOMContentLoaded listener
