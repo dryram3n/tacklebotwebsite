@@ -920,11 +920,6 @@ document.addEventListener('DOMContentLoaded', () => {
         initSky();
         initStaticListeners();
         
-        // Check if we're on how-to-use page - if not, initialize expandable sections here
-        if (!document.querySelector('.how-to-use-page')) {
-            initExpandableSections();
-        }
-        
         if (!isUsingCanvas) {
             console.log("Initializing DOM-based water effects...");
             initWaterBackground();
@@ -963,47 +958,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Cleanup complete.");
         });
         console.log("TackleBot animations initialized.");
-    }
-
-    // Function to initialize expandable sections - THIS IS THE ONLY IMPLEMENTATION
-    function initExpandableSections() {
-        console.log("Initializing expandable sections...");
-        document.querySelectorAll('.expand-btn').forEach(button => {
-            // Add data attribute to tell canvas to ignore this element
-            button.setAttribute('data-ignore-canvas', 'true');
-
-            const expandedContent = button.nextElementSibling;
-
-            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-                console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
-                return;
-            }
-
-            button.setAttribute('aria-expanded', 'false');
-
-            // Simple toggle function that relies on ARIA attribute for CSS
-            function toggleExpansion(event) {
-
-                // Get current state - always use attribute value as source of truth
-                const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
-                console.log(`Button clicked: ${button.textContent.trim()}, current state: ${isCurrentlyExpanded}`);
-
-                // Toggle the state
-                const newState = !isCurrentlyExpanded;
-                button.setAttribute('aria-expanded', newState ? 'true' : 'false');
-                // CSS rule .expand-btn[aria-expanded="true"] + .expanded-content will handle display
-
-                console.log(`Button expanded state toggled to: ${newState}`);
-            }
-
-            // Remove any existing event listeners to prevent duplicates
-            button.removeEventListener('click', toggleExpansion);
-            // Remove potential old capture listener if it existed
-            button.removeEventListener('click', toggleExpansion, true);
-
-            // Add a fresh click handler (bubble phase - default)
-            button.addEventListener('click', toggleExpansion);
-        });
     }
 
     // Run the main initialization function

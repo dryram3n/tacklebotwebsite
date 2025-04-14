@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize scroll animations specifically for this page
     initScrollAnimations();
+
+    // Initialize expandable sections specifically for this page
+    initExpandableSections(); // <-- Add this call
     
     // Function to initialize scroll animations
     function initScrollAnimations() {
@@ -85,4 +88,47 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Check for hash on page load
     checkUrlHash();
-});
+
+    // Function to initialize expandable sections - Moved from script.js
+    function initExpandableSections() {
+        console.log("Initializing expandable sections for How To Use page...");
+        document.querySelectorAll('.expand-btn').forEach(button => {
+            // Add data attribute to tell canvas to ignore this element
+            button.setAttribute('data-ignore-canvas', 'true');
+
+            const expandedContent = button.nextElementSibling;
+
+            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+                console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
+                return;
+            }
+
+            // Ensure initial state matches CSS (closed by default)
+            button.setAttribute('aria-expanded', 'false');
+
+            // Simple toggle function that relies on ARIA attribute for CSS
+            function toggleExpansion(event) {
+                // Prevent default if it's somehow triggered by something else
+                event.preventDefault();
+                event.stopPropagation(); // Stop event bubbling
+
+                // Get current state - always use attribute value as source of truth
+                const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
+                console.log(`Button clicked: ${button.textContent.trim()}, current state: ${isCurrentlyExpanded}`);
+
+                // Toggle the state
+                const newState = !isCurrentlyExpanded;
+                button.setAttribute('aria-expanded', newState ? 'true' : 'false');
+                // CSS rule .expand-btn[aria-expanded="true"] + .expanded-content will handle display
+
+                console.log(`Button expanded state toggled to: ${newState}`);
+            }
+
+            // Remove any existing event listeners to prevent duplicates
+            button.removeEventListener('click', toggleExpansion);
+            // Add a fresh click handler
+            button.addEventListener('click', toggleExpansion);
+        });
+    }
+
+}); // End DOMContentLoaded listener
