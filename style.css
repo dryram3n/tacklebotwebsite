@@ -2267,44 +2267,15 @@ body.canvas-failed #mouse-trail {
 
 /* Style the content area */
 .command-group-card .expanded-content {
-  padding: 0 1.5rem; /* Adjust padding: top/bottom to 0 initially */
+  padding: 1.5rem;
   background-color: #fdfdff; /* Slightly off-white */
   border-top: 1px solid #e0f0ff;
-  max-height: 0; /* Initially collapsed */
-  overflow: hidden; /* Hide content when collapsed */
-  transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Add transition */
-  /* display: none; IS NO LONGER NEEDED HERE OR INLINE */
+  display: none;
 }
 
 /* Style for when the content is expanded (based on button's ARIA state) */
 .command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
-  max-height: 1000px; /* Set a large max-height to allow expansion */
-  padding: 1.5rem; /* Restore padding when expanded */
-  /* You might need to adjust 1000px if your content can be taller */
-}
-
-.command-group-card .expanded-content p {
-  margin-bottom: 1rem;
-  color: var(--text-color);
-  font-size: 1rem;
-}
-
-/* Style the content area */
-.command-group-card .expanded-content {
-  padding: 0 1.5rem; /* Adjust padding: top/bottom to 0 initially */
-  background-color: #fdfdff; /* Slightly off-white */
-  border-top: 1px solid #e0f0ff;
-  max-height: 0; /* Initially collapsed */
-  overflow: hidden; /* Hide content when collapsed */
-  transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Add transition */
-  /* display: none; IS NO LONGER NEEDED HERE OR INLINE */
-}
-
-/* Style for when the content is expanded (based on button's ARIA state) */
-.command-group-card .expand-btn[aria-expanded="true"] + .expanded-content {
-  max-height: 1000px; /* Set a large max-height to allow expansion */
-  padding: 1.5rem; /* Restore padding when expanded */
-  /* You might need to adjust 1000px if your content can be taller */
+  display: block;
 }
 
 .command-group-card .expanded-content p {
