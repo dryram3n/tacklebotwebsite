@@ -969,7 +969,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.expand-btn').forEach(button => {
             // Add data attribute to tell canvas to ignore this element
             button.setAttribute('data-ignore-canvas', 'true');
-            
+
             const expandedContent = button.nextElementSibling;
 
             if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
@@ -977,46 +977,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Force set initial state consistently
-            expandedContent.style.display = 'none';
             button.setAttribute('aria-expanded', 'false');
-            
-            // Simple toggle function that directly manipulates the DOM
+
+            // Simple toggle function that relies on ARIA attribute for CSS
             function toggleExpansion(event) {
-                // Prevent any default behaviors
-                if (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                
+
                 // Get current state - always use attribute value as source of truth
                 const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
                 console.log(`Button clicked: ${button.textContent.trim()}, current state: ${isCurrentlyExpanded}`);
-                
+
                 // Toggle the state
                 const newState = !isCurrentlyExpanded;
                 button.setAttribute('aria-expanded', newState ? 'true' : 'false');
-                
-                // Toggle the display of the expanded content - DIRECTLY SET STYLE
-                expandedContent.style.display = newState ? 'block' : 'none';
-                
+                // CSS rule .expand-btn[aria-expanded="true"] + .expanded-content will handle display
+
                 console.log(`Button expanded state toggled to: ${newState}`);
             }
-            
+
             // Remove any existing event listeners to prevent duplicates
             button.removeEventListener('click', toggleExpansion);
-            
-            // Add a fresh click handler with capturing phase to ensure it fires first
-            button.addEventListener('click', toggleExpansion, true);
-            
-            // Additional handling for mobile devices
-            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-                button.addEventListener('touchend', function(e) {
-                    // Prevent the simulated mouse click after touchend
-                    e.preventDefault();
-                    toggleExpansion(e);
-                }, { passive: false });
-            }
+            // Remove potential old capture listener if it existed
+            button.removeEventListener('click', toggleExpansion, true);
+
+            // Add a fresh click handler (bubble phase - default)
+            button.addEventListener('click', toggleExpansion);
         });
     }
 
