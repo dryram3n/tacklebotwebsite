@@ -93,62 +93,33 @@ class WaterCanvas {
     handleClick(e) {
        if (this.prefersReducedMotion) return;
 
-       // First, explicitly check for data-ignore-canvas attribute - added for mobile support
-       if (e.target && e.target.getAttribute && e.target.getAttribute('data-ignore-canvas') === 'true') {
-           // This is an element that should be ignored by the canvas
-           e.stopPropagation();
+       // First, directly check if the click should be ignored to improve button functionality
+       if (e.target.closest) {
+           // Comprehensively check for any interactive elements or elements with click handlers
+           const ignoreList = [
+               'a', 'button', 'input', 'select', 'textarea', 'label',  // Standard form elements
+               '.button', '.expand-btn', '.close-modal', '.filter-tag', '.catalog-tab', // Common clickable classes
+               '[role="button"]', '[aria-expanded]', '[data-ignore-canvas]', // Accessibility attributes
+               '.ui-toggle-button', '.search-button', '.try-me-button' // More specific buttons
+           ].join(',');
+           
+           // If the target or any parent matches the ignore list, don't process the click
+           if (e.target.closest(ignoreList)) {
+               return; // Exit early without doing anything
+           }
+       }
+       
+       // Data attribute check (for elements explicitly marked to be ignored)
+       if (e.target.getAttribute && e.target.getAttribute('data-ignore-canvas') === 'true') {
            return;
        }
        
-       // Next, check for any parent element with data-ignore-canvas
-       if (e.target && e.target.closest && e.target.closest('[data-ignore-canvas="true"]')) {
-           e.stopPropagation();
+       // Also check for any parent element with data-ignore-canvas
+       if (e.target.closest && e.target.closest('[data-ignore-canvas="true"]')) {
            return;
        }
 
-       // Then, check if the click should be ignored (interactive element or expand button)
-       // using our previous approach for non-mobile browsers
-       let shouldIgnore = false;
-       
-       // Try using closest if available (most browsers)
-       if (e.target instanceof Element && typeof e.target.closest === 'function') {
-           const closestInteractive = e.target.closest('a, button, .button, input, select, textarea, [role="button"], .expand-btn');
-           if (closestInteractive) {
-               shouldIgnore = true;
-           }
-       } 
-       // Fallback for browsers without closest
-       else if (e.target.tagName) {
-           const tagName = e.target.tagName.toLowerCase();
-           const isInteractive = ['a', 'button', 'input', 'select', 'textarea'].includes(tagName);
-           
-           // Check class list for .button, .expand-btn, etc.
-           const hasRelevantClass = e.target.classList && 
-               (e.target.classList.contains('button') || 
-                e.target.classList.contains('expand-btn'));
-                
-           if (isInteractive || hasRelevantClass) {
-               shouldIgnore = true;
-           }
-           
-           // Also check parent elements (simplified alternative to closest)
-           let parent = e.target.parentElement;
-           for (let i = 0; i < 3 && parent && !shouldIgnore; i++) {
-               if (parent.classList && 
-                   (parent.classList.contains('button') || 
-                    parent.classList.contains('expand-btn'))) {
-                   shouldIgnore = true;
-               }
-               parent = parent.parentElement;
-           }
-       }
-       
-       if (shouldIgnore) {
-           e.stopPropagation();
-           return;
-       }
-
-       // Proceed with splash/fish reaction
+       // If we get here, it's safe to create a splash
        this.createSplash(e.clientX, e.clientY);
 
        // Fish Click Reaction
