@@ -1021,4 +1021,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
+    // Fix for expandable sections
+    document.querySelectorAll('.expand-btn').forEach(button => {
+        const expandedContent = button.nextElementSibling;
+        
+        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+            console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
+            return;
+        }
+
+        // Set the initial ARIA state to collapsed
+        button.setAttribute('aria-expanded', 'false');
+        
+        // CRITICAL: Remove the inline style completely to allow CSS to control display
+        expandedContent.removeAttribute('style');
+    });
+
+    document.body.addEventListener('click', function(e) {
+        const button = e.target.closest('.expand-btn');
+        if (!button) return;
+
+        const expandedContent = button.nextElementSibling;
+        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+            return;
+        }
+
+        // Toggle the button's aria-expanded attribute
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', !isExpanded);
+        
+        // For added reliability, explicitly set the display style
+        // This ensures it works even if CSS has issues
+        expandedContent.style.display = isExpanded ? 'none' : 'block';
+    });
+
 }); // End DOMContentLoaded listener
