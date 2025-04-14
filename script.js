@@ -919,6 +919,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Initializing TackleBot animations...");
         initSky();
         initStaticListeners();
+        
+        // Initialize expandable sections
+        initExpandableSections();
+        
         if (!isUsingCanvas) {
             console.log("Initializing DOM-based water effects...");
             initWaterBackground();
@@ -959,65 +963,73 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("TackleBot animations initialized.");
     }
 
+    // Function to initialize expandable sections
+    function initExpandableSections() {
+        console.log("Initializing expandable sections...");
+        document.querySelectorAll('.expand-btn').forEach(button => {
+            const expandedContent = button.nextElementSibling;
+
+            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+                console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
+                return;
+            }
+
+            // Ensure clean state on load
+            expandedContent.style.display = 'none';
+            button.setAttribute('aria-expanded', 'false');
+            
+            // Simple toggle function that directly manipulates the DOM
+            function toggleExpansion(event) {
+                // Prevent any default behaviors
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                // Get current state
+                const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
+                
+                // Toggle the state
+                button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
+                
+                // Toggle the display of the expanded content
+                expandedContent.style.display = isCurrentlyExpanded ? 'none' : 'block';
+                
+                console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
+                
+                // Explicitly stop propagation again for good measure
+                if (event && event.stopPropagation) {
+                    event.stopPropagation();
+                }
+                
+                return false; // Prevent default behavior for good measure
+            }
+            
+            // Remove any existing event listeners (to prevent duplicates)
+            button.removeEventListener('click', toggleExpansion);
+            
+            // Use a single click handler for simplicity
+            button.addEventListener('click', toggleExpansion);
+            
+            // Additional handling for mobile devices
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                // For mobile: capture both touchstart and touchend
+                button.addEventListener('touchend', function(e) {
+                    // Prevent the simulated mouse click after touchend
+                    e.preventDefault();
+                    toggleExpansion(e);
+                }, { passive: false });
+                
+                // Disable any canvas event handlers specifically for these buttons
+                button.addEventListener('touchstart', function(e) {
+                    // Mark this element to be ignored by canvas click handlers
+                    e.target.setAttribute('data-ignore-canvas', 'true');
+                }, { passive: true });
+            }
+        });
+    }
+
     // Run the main initialization function
     initializeWebsiteAnimations();
-
-    // --- START: Expandable Section Logic (Fixed for All Devices) ---
-    document.querySelectorAll('.expand-btn').forEach(button => {
-        const expandedContent = button.nextElementSibling;
-
-        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-            console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
-            return;
-        }
-
-        // Ensure clean state on load
-        expandedContent.removeAttribute('style');
-        button.setAttribute('aria-expanded', 'false');
-        
-        // Simple toggle function that directly manipulates the DOM
-        function toggleExpansion(event) {
-            // Prevent any default behaviors
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            // Get current state
-            const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
-            
-            // Toggle the state
-            button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
-            
-            console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
-            
-            // Explicitly stop propagation again for good measure
-            if (event && event.stopPropagation) {
-                event.stopPropagation();
-            }
-            
-            return false; // Prevent default behavior for good measure
-        }
-        
-        // Use a single click handler for simplicity
-        button.addEventListener('click', toggleExpansion);
-        
-        // Additional handling for mobile devices
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-            // For mobile: capture both touchstart and touchend
-            button.addEventListener('touchend', function(e) {
-                // Prevent the simulated mouse click after touchend
-                e.preventDefault();
-                toggleExpansion(e);
-            }, { passive: false });
-            
-            // Disable any canvas event handlers specifically for these buttons
-            button.addEventListener('touchstart', function(e) {
-                // Mark this element to be ignored by canvas click handlers
-                e.target.setAttribute('data-ignore-canvas', 'true');
-            }, { passive: true });
-        }
-    });
-    // --- END: Expandable Section Logic ---
 
 }); // End DOMContentLoaded listener

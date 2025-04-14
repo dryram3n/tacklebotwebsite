@@ -1135,7 +1135,7 @@ social-links {
   font-weight: 500;
   /* cursor: pointer; /* Already set globally */
   transition: all 0.3s ease;
-  color: var(--text-color);
+  color: var (--text-color);
 }
 .filter-tag:hover {
   background-color: #e0e0e0;
@@ -1694,12 +1694,10 @@ social-links {
     z-index: var(--z-ui-toggle);
     transition: opacity 0.5s ease-in-out;
     will-change: opacity;
-    /* Ensure it's large enough on all devices */
-    min-width: 44px;
-    min-height: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto !important;
 }
 
 .ui-toggle-button {
@@ -1724,10 +1722,6 @@ social-links {
     height: 48px;
     border-radius: 50%;
     font-size: 1.2rem;
-    line-height: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Ensure body.ui-hidden has high specificity */
