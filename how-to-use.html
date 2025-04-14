@@ -88,7 +88,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-info-circle" aria-hidden="true"></i> General Commands
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Basic information and help commands.</p>
             <ul>
               <li><code>/info</code>: Shows the bot's current version, uptime, latest updates, and links.</li>
@@ -115,7 +115,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-fish" aria-hidden="true"></i> Fishing Commands (<code>/fish ...</code>)
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>The core fishing gameplay commands.</p>
             <ul>
               <li><code>/fish cast [location]</code>: Cast your fishing rod! Optionally specify a location (e.g., <code>pond</code>, <code>river</code>) if unlocked.</li>
@@ -138,7 +138,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-grin-beam" aria-hidden="true"></i> Fun Commands (<code>/fun ...</code>)
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Entertainment and image manipulation commands.</p>
             <ul>
               <li><code>/fun meme</code>: Fetches a random meme.</li>
@@ -167,7 +167,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-shield-alt" aria-hidden="true"></i> Moderation Commands
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Commands for server management (require appropriate permissions).</p>
             <ul>
               <li><code>/kick [user] [reason]</code>: Removes a user from the server. Requires Kick Members permission.</li>
@@ -186,7 +186,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-folder-plus" aria-hidden="true"></i> Channel Management Commands
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Commands for creating and deleting channels.</p>
             <ul>
               <li><code>/createchannel [name] [type] [private] [member1...]</code>: Creates a new channel.
@@ -208,7 +208,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-server" aria-hidden="true"></i> Server Commands (<code>/server ...</code>)
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Commands related to the Discord server itself.</p>
             <ul>
               <li><code>/server stats</code>: Displays detailed statistics about the current server (member count, channel count, roles, creation date, etc.).</li>
@@ -221,7 +221,7 @@
           <button class="expand-btn" aria-expanded="false">
             <i class="fas fa-star" aria-hidden="true"></i> Special Commands
           </button>
-          <div class="expanded-content" style="display: none;">
+          <div class="expanded-content">
             <p>Unique utility and interaction commands.</p>
             <ul>
               <li><code>/rizz [message]</code>: Summons the legendary Ronald Rizz (if he's in the server) with an optional message.</li>
@@ -236,6 +236,57 @@
 
       </div> <!-- End how-to-use-container -->
     </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="animated-section">
+      <h2>Frequently Asked Questions <span class="emoji">🤔</span></h2>
+      <div class="faq-container">
+
+        <div class="faq-item">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-user-slash" aria-hidden="true"></i> I got restricted!
+          </button>
+          <div class="expanded-content">
+            <p>This means the anti-cheat system detected suspicious activity. You will need to wait for the restriction period to end. If you believe this was a mistake, please join the <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="support-button-inline">community server</a> and ping <span class="discord-mention">@thromblo</span> in the support channel.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-envelope-open-text" aria-hidden="true"></i> I didn't get a vote reminder/reward/etc...
+          </button>
+          <div class="expanded-content">
+            <p>Ensure you have Direct Messages (DMs) enabled for the bot or for servers in general. These types of notifications are sent via DM.</p>
+            <p>To check/enable DMs:</p>
+            <ul>
+              <li>Right-click the server icon -> Privacy Settings -> Allow direct messages from server members. (Make sure this is ON)</li>
+              <li>User Settings -> Privacy & Safety -> Server Privacy Defaults -> Allow direct messages from server members. (Make sure this is ON)</li>
+            </ul>
+            <p>If you still aren't receiving messages, please join the <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="support-button-inline">community server</a> and ping <span class="discord-mention">@thromblo</span>.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-user-secret" aria-hidden="true"></i> I think someone is cheating.
+          </button>
+          <div class="expanded-content">
+            <p>Please use the <code>/bug report</code> command. In the report, clearly state why you believe the user is cheating. Include their Discord username and User ID if possible. The development team will investigate.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="expand-btn" aria-expanded="false">
+            <i class="fas fa-question-circle" aria-hidden="true"></i> Is this bot the same as Virtual Fisher?
+          </button>
+          <div class="expanded-content">
+            <p>No. <a href="https://virtualfisher.com/" target="_blank" rel="noopener noreferrer">Virtual Fisher</a> is another awesome fishing bot, but it is not affiliated with TackleBot. Both bots offer unique fishing experiences, and we encourage you to check out Virtual Fisher too!</p>
+          </div>
+        </div>
+
+      </div> <!-- End faq-container -->
+    </section>
+
   </main>
 
   <!-- Footer -->
