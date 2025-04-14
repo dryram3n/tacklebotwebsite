@@ -920,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initSky();
         initStaticListeners();
         
-        // Initialize expandable sections
+        // Initialize expandable sections - Call the already defined function
         initExpandableSections();
         
         if (!isUsingCanvas) {
@@ -963,7 +963,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("TackleBot animations initialized.");
     }
 
-    // Function to initialize expandable sections
+    // Function to initialize expandable sections - THIS IS THE ONLY IMPLEMENTATION
     function initExpandableSections() {
         console.log("Initializing expandable sections...");
         document.querySelectorAll('.expand-btn').forEach(button => {
