@@ -11,42 +11,44 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/how-to-use.html">
-  <meta property="og:title" content="How to Use - TackleBot Discord Bot">
-  <meta property="og:description" content="A user-friendly guide on how to use TackleBot's commands in Discord.">
+  <meta property="og:title" content="How To Use TackleBot 🎣 - Your Discord Fishing Companion!">
+  <meta property="og:description" content="Learn how to use TackleBot, the cutest Discord fishing bot! Detailed guides for commands, fishing, upgrades, and more.">
   <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/how-to-use.html">
-  <meta property="twitter:title" content="How to Use - TackleBot Discord Bot">
-  <meta property="twitter:description" content="A user-friendly guide on how to use TackleBot's commands in Discord.">
+  <meta property="twitter:title" content="How To Use TackleBot 🎣 - Your Discord Fishing Companion!">
+  <meta property="twitter:description" content="Learn how to use TackleBot, the cutest Discord fishing bot! Detailed guides for commands, fishing, upgrades, and more.">
   <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
   <!-- Theme color for browser UI -->
   <meta name="theme-color" content="#89f7fe">
 
-  <title>How to Use - TackleBot 🎣</title>
+  <title>How To Use TackleBot 🎣 - Your Discord Fishing Companion!</title>
   <link rel="stylesheet" href="style.css">
   <!-- Google Fonts (Using Nunito - friendly and rounded) -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Icons -->
+  <!-- Font Awesome for Discord Icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
   <!-- Background Effects: Sky, Water, Fish -->
   <div id="sky-container">
-      <div id="sun"></div>
-      <div id="moon"></div>
-      <div id="clouds-container"></div>
+    <div id="sun"></div>
+    <div id="moon"></div>
+    <div id="clouds-container">
+      <!-- Clouds will be added here by JS -->
+    </div>
   </div>
   <div id="water-background">
     <div class="water-body"></div>
     <div class="water-surface">
-        <svg id="wave-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
-            <path id="wave-path-1" fill="rgba(137, 247, 254, 0.5)" />
-            <path id="wave-path-2" fill="rgba(102, 166, 255, 0.3)" />
-        </svg>
+      <svg id="wave-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+        <path id="wave-path-1" fill="rgba(137, 247, 254, 0.5)" />
+        <path id="wave-path-2" fill="rgba(102, 166, 255, 0.3)" />
+      </svg>
     </div>
     <div id="bubbles-container"></div>
     <div id="fish-container"></div>
@@ -63,7 +65,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#features">Features</a></li>
         <li><a href="index.html#commands">Commands</a></li>
-        <li><a href="how-to-use.html" class="active">How to Use</a></li> <!-- Added Link & Active Class -->
+        <li><a href="how-to-use.html" class="active">How to Use</a></li> <!-- Active on this page -->
         <li><a href="calculator.html">Calculator</a></li>
         <li><a href="index.html#support">Support</a></li>
         <li><a href="fish-catalog.html">Fish Catalog</a></li>
@@ -77,216 +79,612 @@
 
   <!-- Main Content Area -->
   <main>
-    <section id="how-to-use" class="animated-section">
-      <h2>How to Use TackleBot <span class="emoji">❓</span></h2>
-      <p>Welcome! TackleBot uses Discord's slash commands. Just type <code>/</code> in your chat bar and select a TackleBot command. Click on any command group below to see details!</p>
-
-      <div class="how-to-use-container">
-
-        <!-- General Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-info-circle" aria-hidden="true"></i> General Commands
-          </button>
-          <div class="expanded-content">
-            <p>Basic information and help commands.</p>
-            <ul>
-              <li><code>/info</code>: Shows the bot's current version, uptime, latest updates, and links.</li>
-              <li><code>/help [section]</code>: Provides help information.
-                <ul>
-                    <li><code>/help commands</code>: Lists all available command groups.</li>
-                    <li><code>/help fishing</code>: Detailed guide on the fishing system.</li>
-                    <li><code>/help settings</code>: Information about bot configuration and permissions.</li>
-                    <li><code>/help moderation</code>: Guide for moderation commands.</li>
-                    <li><code>/help fun</code>: Guide for fun/entertainment commands.</li>
-                    <li><code>/help legal</code>: Information on Terms of Service and Privacy.</li>
-                    <li><code>/help donate</code>: Information on how to support the bot.</li>
-                </ul>
-              </li>
-              <li><code>/donate</code>: Shows ways to support TackleBot's development.</li>
-              <li><code>/vote</code>: Provides a link to vote for TackleBot on Top.gg and explains rewards.</li>
-              <li><code>/tos</code>: Displays the bot's Terms of Service.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Fishing Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-fish" aria-hidden="true"></i> Fishing Commands (<code>/fish ...</code>)
-          </button>
-          <div class="expanded-content">
-            <p>The core fishing gameplay commands.</p>
-            <ul>
-              <li><code>/fish cast [location]</code>: Cast your fishing rod! Optionally specify a location (e.g., <code>pond</code>, <code>river</code>) if unlocked.</li>
-              <li><code>/fish inventory</code>: View the fish you've caught. Use the buttons to navigate pages.</li>
-              <li><code>/fish sell [index]</code>: Sell a specific fish from your inventory using its number (from <code>/fish inventory</code>).</li>
-              <li><code>/fish sellall</code>: Sell all fish currently in your inventory.</li>
-              <li><code>/fish shop</code>: View available upgrades for purchase (Lures, Rods, etc.).</li>
-              <li><code>/fish buy [upgrade]</code>: Purchase an upgrade from the shop.</li>
-              <li><code>/fish stats [user]</code>: View your own or another user's fishing statistics (level, XP, catches, etc.).</li>
-              <li><code>/fish challenge</code>: View your current daily/seasonal fishing challenges and progress.</li>
-              <li><code>/fish index</code>: Browse the complete catalog of discoverable fish species.</li>
-              <li><code>/fish company</code>: Manage your fishing company (passive income feature).</li>
-              <!-- Add other /fish subcommands as needed -->
-            </ul>
-          </div>
-        </div>
-
-        <!-- Fun Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-grin-beam" aria-hidden="true"></i> Fun Commands (<code>/fun ...</code>)
-          </button>
-          <div class="expanded-content">
-            <p>Entertainment and image manipulation commands.</p>
-            <ul>
-              <li><code>/fun meme</code>: Fetches a random meme.</li>
-              <li><code>/fun achievement [text]</code>: Creates a Minecraft-style achievement image.</li>
-              <li><code>/fun changemymind [text]</code>: Creates a "Change My Mind" meme image.</li>
-              <li><code>/fun drake [text1] [text2]</code>: Creates a Drake meme image.</li>
-              <li><code>/fun blur [image/user]</code>: Blurs the provided image or user's avatar.</li>
-              <li><code>/fun wide [image/user]</code>: Makes the provided image or user's avatar wide.</li>
-              <li><code>/fun communist [image/user]</code>: Adds a communist filter to an image/avatar.</li>
-              <li><code>/fun fact</code>: Displays a random interesting fact.</li>
-              <li><code>/fun joke</code>: Tells a random joke.</li>
-              <li><code>/fun imdb [title]</code>: Searches for movie/show information on IMDb.</li>
-              <li><code>/fun lulcat [text]</code>: Converts text to LOLCAT speak.</li>
-              <li><code>/fun showerthought</code>: Displays a random shower thought.</li>
-              <li><code>/fun ship [user1] [user2]</code>: "Ships" two users and shows a compatibility percentage.</li>
-              <li><code>/fun opinion [text] [image/user]</code>: Creates an "opinion" meme.</li>
-              <li><code>/fun whowouldwin [user1] [user2]</code>: Creates a "Who Would Win" meme.</li>
-              <li><code>/fun mock [text]</code>: Converts text to MoCkInG CaSe.</li>
-              <!-- Add other /fun subcommands -->
-            </ul>
-          </div>
-        </div>
-
-        <!-- Moderation Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-shield-alt" aria-hidden="true"></i> Moderation Commands
-          </button>
-          <div class="expanded-content">
-            <p>Commands for server management (require appropriate permissions).</p>
-            <ul>
-              <li><code>/kick [user] [reason]</code>: Removes a user from the server. Requires Kick Members permission.</li>
-              <li><code>/ban [user] [reason] [days]</code>: Bans a user from the server. Optionally delete messages from the past specified days. Requires Ban Members permission.</li>
-              <li><code>/clear [amount]</code>: Deletes a specified number of recent messages (up to 100). Requires Manage Messages permission.</li>
-              <li><code>/moderator add [user]</code>: Grants a user permission to use TackleBot's moderation commands within the bot. Only usable by the server owner.</li>
-              <li><code>/moderator remove [user]</code>: Revokes a user's permission to use TackleBot's moderation commands. Only usable by the server owner.</li>
-              <li><code>/log setup [channel]</code>: Sets up a channel for logging server events (message deletes, member joins/leaves). Requires Manage Server permission.</li>
-              <li><code>/log disable</code>: Disables server event logging. Requires Manage Server permission.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Channel Management Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-folder-plus" aria-hidden="true"></i> Channel Management Commands
-          </button>
-          <div class="expanded-content">
-            <p>Commands for creating and deleting channels.</p>
-            <ul>
-              <li><code>/createchannel [name] [type] [private] [member1...]</code>: Creates a new channel.
-                <ul>
-                  <li><code>name</code>: The desired channel name.</li>
-                  <li><code>type</code>: (Optional) Choose 'text' (default) or 'voice'.</li>
-                  <li><code>private</code>: (Optional) Set to 'true' to make it private.</li>
-                  <li><code>member1</code>, <code>member2</code>, etc.: (Optional, if private) Mention users to grant access.</li>
-                  <li>Requires Manage Channels permission, but users can create a limited number for themselves.</li>
-                </ul>
-              </li>
-              <li><code>/deletechannel</code>: Deletes the channel this command is used in. Requires Manage Channels permission, OR the user must be the original creator of the channel (via <code>/createchannel</code>).</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Server Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-server" aria-hidden="true"></i> Server Commands (<code>/server ...</code>)
-          </button>
-          <div class="expanded-content">
-            <p>Commands related to the Discord server itself.</p>
-            <ul>
-              <li><code>/server stats</code>: Displays detailed statistics about the current server (member count, channel count, roles, creation date, etc.).</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Special Commands -->
-        <div class="command-group-card">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-star" aria-hidden="true"></i> Special Commands
-          </button>
-          <div class="expanded-content">
-            <p>Unique utility and interaction commands.</p>
-            <ul>
-              <li><code>/rizz [message]</code>: Summons the legendary Ronald Rizz (if he's in the server) with an optional message.</li>
-              <li><code>/summary [channel] [messages]</code>: Generates a humorous summary of recent messages in the current or a specified channel using AI.</li>
-              <li><code>/bug report</code>: Opens a modal to report a bug or issue with the bot.</li>
-              <li><code>/bug view [id]</code>: View the status or details of a specific bug report (Admin/Dev/Reporter only).</li>
-              <li><code>/bug respond [id]</code>: Respond to a bug report (Admin/Dev/Reporter only).</li>
-              <li><code>/bug close [id]</code>: Close a bug report (Admin/Dev/Reporter only).</li>
-            </ul>
-          </div>
-        </div>
-
-      </div> <!-- End how-to-use-container -->
+    <!-- Hero Section with title -->
+    <section id="how-to-use-hero" class="animated-section">
+      <div class="hero-content">
+        <h1>How to Use TackleBot <span class="emoji">📚</span></h1>
+        <p>Your comprehensive guide to fishing, catching, and enjoying everything TackleBot has to offer!</p>
+      </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section id="faq" class="animated-section">
-      <h2>Frequently Asked Questions <span class="emoji">🤔</span></h2>
-      <div class="faq-container">
-
-        <div class="faq-item">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-user-slash" aria-hidden="true"></i> I got restricted!
-          </button>
-          <div class="expanded-content">
-            <p>This means the anti-cheat system detected suspicious activity. You will need to wait for the restriction period to end. If you believe this was a mistake, please join the <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="support-button-inline">community server</a> and ping <span class="discord-mention">@thromblo</span> in the support channel.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-envelope-open-text" aria-hidden="true"></i> I didn't get a vote reminder/reward/etc...
-          </button>
-          <div class="expanded-content">
-            <p>Ensure you have Direct Messages (DMs) enabled for the bot or for servers in general. These types of notifications are sent via DM.</p>
-            <p>To check/enable DMs:</p>
-            <ul>
-              <li>Right-click the server icon -> Privacy Settings -> Allow direct messages from server members. (Make sure this is ON)</li>
-              <li>User Settings -> Privacy & Safety -> Server Privacy Defaults -> Allow direct messages from server members. (Make sure this is ON)</li>
-            </ul>
-            <p>If you still aren't receiving messages, please join the <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="support-button-inline">community server</a> and ping <span class="discord-mention">@thromblo</span>.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-user-secret" aria-hidden="true"></i> I think someone is cheating.
-          </button>
-          <div class="expanded-content">
-            <p>Please use the <code>/bug report</code> command. In the report, clearly state why you believe the user is cheating. Include their Discord username and User ID if possible. The development team will investigate.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="expand-btn" aria-expanded="false">
-            <i class="fas fa-question-circle" aria-hidden="true"></i> Is this bot the same as Virtual Fisher?
-          </button>
-          <div class="expanded-content">
-            <p>No. <a href="https://virtualfisher.com/" target="_blank" rel="noopener noreferrer">Virtual Fisher</a> is another awesome fishing bot, but it is not affiliated with TackleBot. Both bots offer unique fishing experiences, and we encourage you to check out Virtual Fisher too!</p>
-          </div>
-        </div>
-
-      </div> <!-- End faq-container -->
+    <!-- Table of Contents -->
+    <section id="toc" class="animated-section">
+      <h2>Quick Navigation <span class="emoji">🧭</span></h2>
+      <div class="toc-grid">
+        <a href="#basic-commands" class="toc-item">
+          <span class="emoji-icon">📋</span>
+          <h3>Basic Commands</h3>
+        </a>
+        <a href="#fishing-guide" class="toc-item">
+          <span class="emoji-icon">🎣</span>
+          <h3>Fishing System</h3>
+        </a>
+        <a href="#locations" class="toc-item">
+          <span class="emoji-icon">🌊</span>
+          <h3>Fishing Locations</h3>
+        </a>
+        <a href="#shop" class="toc-item">
+          <span class="emoji-icon">🛒</span>
+          <h3>Shop & Upgrades</h3>
+        </a>
+        <a href="#seasons" class="toc-item">
+          <span class="emoji-icon">🍂</span>
+          <h3>Seasonal System</h3>
+        </a>
+        <a href="#fun-commands" class="toc-item">
+          <span class="emoji-icon">🎮</span>
+          <h3>Fun Commands</h3>
+        </a>
+        <a href="#moderation" class="toc-item">
+          <span class="emoji-icon">🛡️</span>
+          <h3>Moderation</h3>
+        </a>
+        <a href="#tips" class="toc-item">
+          <span class="emoji-icon">💡</span>
+          <h3>Tips & Tricks</h3>
+        </a>
+      </div>
     </section>
 
+    <!-- Getting Started -->
+    <section id="getting-started" class="animated-section">
+      <h2>Getting Started <span class="emoji">🚀</span></h2>
+      <div class="content-box">
+        <p>Welcome to TackleBot! Here's how to get started:</p>
+        <ol>
+          <li><strong>Add TackleBot to your server</strong> using the "Invite Bot" button.</li>
+          <li><strong>Give TackleBot the right permissions</strong> - it needs permissions to send messages, use external emojis, add reactions, and read message history.</li>
+          <li><strong>Start fishing</strong> with the <code>/fish cast</code> command!</li>
+          <li><strong>View help</strong> anytime with <code>/help</code> or specific guides like <code>/help fishing</code></li>
+        </ol>
+        <div class="info-box">
+          <p><strong>Note:</strong> TackleBot works in both server channels and direct messages (DMs).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Basic Commands -->
+    <section id="basic-commands" class="animated-section">
+      <h2>Basic Commands <span class="emoji">📋</span></h2>
+      <div class="content-box">
+        <p>Here are the essential commands to get you started:</p>
+        <div class="commands-table">
+          <div class="command-row">
+            <div class="command-name"><code>/fish cast [location]</code></div>
+            <div class="command-desc">Cast your fishing rod to catch fish - the core fishing command!</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish inventory</code></div>
+            <div class="command-desc">View all the fish you've caught so far</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish sell [index]</code></div>
+            <div class="command-desc">Sell a specific fish from your inventory</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish sellall</code></div>
+            <div class="command-desc">Sell your entire inventory at once</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish shop</code></div>
+            <div class="command-desc">Browse available upgrades in the shop</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish buy [upgrade]</code></div>
+            <div class="command-desc">Purchase an upgrade from the shop</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish stats</code></div>
+            <div class="command-desc">View your fishing statistics and progress</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/fish challenge</code></div>
+            <div class="command-desc">View your current fishing challenges</div>
+          </div>
+          <div class="command-row">
+            <div class="command-name"><code>/help</code></div>
+            <div class="command-desc">Opens the help menu for more information</div>
+          </div>
+        </div>
+
+        <div class="help-tip">
+          <h4>Help Command Options <span class="emoji">🆘</span></h4>
+          <p>Use these help command variations to get specific guidance:</p>
+          <ul>
+            <li><code>/help commands</code> - List all available commands</li>
+            <li><code>/help settings</code> - Learn about bot settings and configuration</li>
+            <li><code>/help fishing</code> - Get detailed fishing system guide</li>
+            <li><code>/help moderation</code> - Information about moderation commands</li>
+            <li><code>/help fun</code> - Learn about entertainment commands</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fishing System Guide -->
+    <section id="fishing-guide" class="animated-section">
+      <h2>Fishing System Guide <span class="emoji">🎣</span></h2>
+      <div class="content-box">
+        <p>Fishing is the core of TackleBot! Here's everything you need to know:</p>
+
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">📊</span> Rarity System
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>Fish come in different rarities, each with its own value and catch probability:</p>
+          <ul class="rarity-list">
+            <li><span class="rarity-dot" style="background-color: #8B4513;"></span> <strong>Common</strong> 🟤 - Basic fish, low value</li>
+            <li><span class="rarity-dot" style="background-color: #00A550;"></span> <strong>Uncommon</strong> 🟢 - Better value</li>
+            <li><span class="rarity-dot" style="background-color: #0096FF;"></span> <strong>Rare</strong> 🔵 - Valuable fish</li>
+            <li><span class="rarity-dot" style="background-color: #FFD700;"></span> <strong>Legendary</strong> 🟡 - Very valuable, hard to find</li>
+            <li><span class="rarity-dot" style="background-color: #9370DB;"></span> <strong>Mythic</strong> 🟣 - Extremely rare and valuable</li>
+            <li><span class="rarity-dot" style="background-color: #FF1493;"></span> <strong>Chimerical</strong> 🌟 - The rarest fish of all</li>
+            <li><span class="rarity-dot" style="background-color: #FFA500;"></span> <strong>Special Fish</strong> ⭐ - Unique variants with bonuses</li>
+          </ul>
+          <p>The higher the rarity, the more valuable the fish - but they're also harder to catch!</p>
+        </div>
+
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">📈</span> Leveling & Experience
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>As you fish, you'll gain experience and level up:</p>
+          <ul>
+            <li>Experience (XP) is gained from catching fish</li>
+            <li>Rarer fish give more XP</li>
+            <li>Higher levels unlock:</li>
+            <ul>
+              <li>Better fishing rates</li>
+              <li>New shop upgrades</li>
+              <li>Additional fishing locations</li>
+              <li>Higher voting rewards</li>
+            </ul>
+            <li>Check your level with <code>/fish stats</code></li>
+          </ul>
+        </div>
+
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">📖</span> Fish Collection & Index
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>TackleBot keeps track of all the fish species you've discovered:</p>
+          <ul>
+            <li>Access your collection from the Stats page</li>
+            <li>Organized by rarity categories</li>
+            <li>Shows your progress toward collecting every species</li>
+            <li>Each fish has unique lore and statistics</li>
+            <li>Discover special seasonal variants</li>
+            <li>Some fish are only available in specific locations or seasons</li>
+          </ul>
+        </div>
+
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">🏆</span> Leaderboards
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>Compete with other fishers for top spots on the leaderboards:</p>
+          <ul>
+            <li>Categories include:</li>
+            <ul>
+              <li>Fishing Level</li>
+              <li>Total Catches</li>
+              <li>Total Earnings</li>
+            </ul>
+            <li>Weekly rewards for top performers:</li>
+            <ul>
+              <li>🥇 1st Place: 5 Champion Chests</li>
+              <li>🥈 2nd Place: 2 Champion Chests</li>
+              <li>🥉 3rd Place: 1 Champion Chest</li>
+            </ul>
+            <li>Champion Chests contain mythic or better fish!</li>
+            <li>Access leaderboards from the Stats page</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fishing Locations -->
+    <section id="locations" class="animated-section">
+      <h2>Fishing Locations <span class="emoji">🌊</span></h2>
+      <div class="content-box">
+        <p>Different locations have different fish species and rarity probabilities:</p>
+        <div class="locations-grid">
+          <div class="location-card">
+            <h3>Tranquil Pond 🌿</h3>
+            <p><strong>Starting location</strong></p>
+            <p>A peaceful pond with mostly common fish. Perfect for beginners!</p>
+            <div class="location-stats">
+              <span>Common: ★★★★</span>
+              <span>Uncommon: ★★</span>
+              <span>Rare: ★</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Rushing River 🏞️</h3>
+            <p>A flowing river with a better chance for uncommon fish.</p>
+            <div class="location-stats">
+              <span>Common: ★★★</span>
+              <span>Uncommon: ★★★</span>
+              <span>Rare: ★★</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Deep Ocean 🌊</h3>
+            <p>The vast ocean holds many secrets and rare catches!</p>
+            <div class="location-stats">
+              <span>Common: ★★</span>
+              <span>Uncommon: ★★</span>
+              <span>Rare: ★★★</span>
+              <span>Legendary: ★★</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>The Abyss 🌑</h3>
+            <p>Dark depths with the best chance for legendary fish.</p>
+            <div class="location-stats">
+              <span>Common: ★</span>
+              <span>Rare: ★★</span>
+              <span>Legendary: ★★★</span>
+              <span>Mythic: ★★</span>
+            </div>
+          </div>
+          <div class="location-card">
+            <h3>Mystic Vortex ✨</h3>
+            <p>A mysterious anomaly with the highest chances for mythic and chimerical fish.</p>
+            <div class="location-stats">
+              <span>Rare: ★</span>
+              <span>Legendary: ★★</span>
+              <span>Mythic: ★★★</span>
+              <span>Chimerical: ★★</span>
+            </div>
+          </div>
+        </div>
+        <div class="help-tip">
+          <p><strong>Tip:</strong> Use <code>/fish cast [location name]</code> to fish in a specific spot! New locations unlock as you level up.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shop & Upgrades -->
+    <section id="shop" class="animated-section">
+      <h2>Shop & Upgrades <span class="emoji">🛒</span></h2>
+      <div class="content-box">
+        <p>Spend your hard-earned coins on upgrades to improve your fishing!</p>
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">🔧</span> Available Upgrades
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <div class="upgrades-grid">
+            <div class="upgrade-card">
+              <h3>Lucky Lure 🍀</h3>
+              <p>Increases your chance of catching rare fish.</p>
+              <div class="upgrade-levels">
+                <span>Multiple levels available</span>
+                <span>Each level: +5% rare fish chance</span>
+              </div>
+            </div>
+            <div class="upgrade-card">
+              <h3>Quick Cast ⏱️</h3>
+              <p>Reduces fishing cooldown time.</p>
+              <div class="upgrade-levels">
+                <span>Multiple levels available</span>
+                <span>Each level: -5% fishing time</span>
+              </div>
+            </div>
+            <div class="upgrade-card">
+              <h3>Wide Net 🕸️</h3>
+              <p>Chance to catch multiple fish in one cast.</p>
+              <div class="upgrade-levels">
+                <span>Multiple levels available</span>
+                <span>Each level: +5% multi-catch chance</span>
+              </div>
+            </div>
+            <div class="upgrade-card">
+              <h3>Tackle Box 🧰</h3>
+              <p>Increases your inventory capacity.</p>
+              <div class="upgrade-levels">
+                <span>Multiple levels available</span>
+                <span>Each level: +5 inventory slots</span>
+              </div>
+            </div>
+            <div class="upgrade-card">
+              <h3>Fish Market Contacts 💼</h3>
+              <p>Get better selling prices for your fish.</p>
+              <div class="upgrade-levels">
+                <span>Multiple levels available</span>
+                <span>Each level: +5% sell value</span>
+              </div>
+            </div>
+            <div class="upgrade-card">
+              <h3>Explorer's Map 🗺️</h3>
+              <p>Unlocks new fishing locations.</p>
+              <div class="upgrade-levels">
+                <span>One-time purchases</span>
+                <span>Each unlock: New location</span>
+              </div>
+            </div>
+          </div>
+          <div class="help-tip">
+            <p><strong>How to buy:</strong> Use <code>/fish shop</code> to browse and <code>/fish buy [upgrade]</code> to purchase!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seasonal System -->
+    <section id="seasons" class="animated-section">
+      <h2>Seasonal System <span class="emoji">🍂</span></h2>
+      <div class="content-box">
+        <p>TackleBot features a dynamic seasonal system that changes the available fish throughout the year:</p>
+
+        <div class="seasons-grid">
+          <div class="season-card spring">
+            <h3>Spring 🌱</h3>
+            <p>The season of new beginnings!</p>
+            <ul>
+              <li>Exclusive spring fish appear</li>
+              <li>Increased freshwater fish</li>
+              <li>Special Easter events (April)</li>
+            </ul>
+          </div>
+          <div class="season-card summer">
+            <h3>Summer ☀️</h3>
+            <p>Hot days and tropical catches!</p>
+            <ul>
+              <li>Exclusive summer fish appear</li>
+              <li>Increased tropical varieties</li>
+              <li>Special summer events</li>
+            </ul>
+          </div>
+          <div class="season-card fall">
+            <h3>Fall 🍂</h3>
+            <p>The harvest season brings variety!</p>
+            <ul>
+              <li>Exclusive autumn fish appear</li>
+              <li>Increased migratory species</li>
+              <li>Special Halloween events (October)</li>
+            </ul>
+          </div>
+          <div class="season-card winter">
+            <h3>Winter ❄️</h3>
+            <p>Cold waters and rare treasures!</p>
+            <ul>
+              <li>Exclusive winter fish appear</li>
+              <li>Increased deep water species</li>
+              <li>Special holiday events (December)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="help-tip">
+          <p><strong>Current Season:</strong> Check the current season and seasonal bonuses with <code>/fish stats</code>!</p>
+          <p><strong>Pro Tip:</strong> Some fish can only be caught during specific seasons - collect them all by fishing year-round!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenges -->
+    <section id="challenges" class="animated-section">
+      <h2>Challenges <span class="emoji">🎯</span></h2>
+      <div class="content-box">
+        <p>Complete challenges to earn bonus rewards:</p>
+
+        <div class="challenges-list">
+          <div class="challenge-item">
+            <h3>Daily Challenges</h3>
+            <p>Tasks that reset every 24 hours:</p>
+            <ul>
+              <li>Catch specific fish types</li>
+              <li>Earn a certain amount of coins</li>
+              <li>Fish in specific locations</li>
+            </ul>
+            <p><strong>Rewards:</strong> Bonus coins, XP, or special items</p>
+          </div>
+          <div class="challenge-item">
+            <h3>Weekly Challenges</h3>
+            <p>Larger tasks that reset every 7 days:</p>
+            <ul>
+              <li>Catch a number of legendary+ fish</li>
+              <li>Earn substantial coin amounts</li>
+              <li>Complete multiple fishing streaks</li>
+            </ul>
+            <p><strong>Rewards:</strong> Premium chests, larger coin bonuses</p>
+          </div>
+          <div class="challenge-item">
+            <h3>Seasonal Challenges</h3>
+            <p>Special tasks tied to the current season:</p>
+            <ul>
+              <li>Catch season-exclusive fish</li>
+              <li>Complete themed collections</li>
+              <li>Participate in seasonal events</li>
+            </ul>
+            <p><strong>Rewards:</strong> Exclusive seasonal items, cosmetics, titles</p>
+          </div>
+        </div>
+
+        <div class="help-tip">
+          <p>Check your current challenges with <code>/fish challenge</code>!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Voting Rewards -->
+    <section id="voting" class="animated-section">
+      <h2>Voting Rewards <span class="emoji">🗳️</span></h2>
+      <div class="content-box">
+        <p>Support TackleBot and earn great rewards by voting:</p>
+
+        <div class="voting-info">
+          <h3>How Voting Works:</h3>
+          <ul>
+            <li>Use <code>/vote</code> to get the link to vote for TackleBot on Top.gg</li>
+            <li>Vote once every 12 hours</li>
+            <li>Receive Voter Chests as rewards (worth up to 1,000,000 coins!)</li>
+            <li>Higher fishing level increases minimum chest value</li>
+            <li>Maintain a voting streak to increase maximum potential reward</li>
+            <li>Toggle vote reminders with <code>/vote remind</code></li>
+          </ul>
+
+          <div class="help-tip">
+            <p><strong>Pro Tip:</strong> Consistent voters get the best rewards! A 7-day streak can significantly boost your chest values.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fun Commands -->
+    <section id="fun-commands" class="animated-section">
+      <h2>Fun Commands <span class="emoji">🎮</span></h2>
+      <div class="content-box">
+        <p>TackleBot isn't just about fishing! Enjoy these fun commands too:</p>
+
+        <div class="fun-commands-grid">
+          <div class="fun-category">
+            <h3>Meme Commands</h3>
+            <ul>
+              <li><code>/fun meme</code> - Random memes from popular subreddits</li>
+              <li><code>/fun achievement</code> - Generate Minecraft achievement</li>
+              <li><code>/fun changemymind</code> - Change My Mind template</li>
+              <li><code>/fun drake</code> - Drake preference meme</li>
+              <li><code>/fun sadcat</code> - Sad cat meme</li>
+              <li><code>/fun oogway</code> - Master Oogway wisdom</li>
+              <li><code>/fun biden</code> - Biden tweet</li>
+              <li><code>/fun mock</code> - MoCkInG sPoNgEbOb TeXt</li>
+            </ul>
+          </div>
+
+          <div class="fun-category">
+            <h3>Image Manipulation</h3>
+            <ul>
+              <li><code>/fun blur</code> - Add blur effect to image</li>
+              <li><code>/fun wide</code> - Make an image comically wide</li>
+              <li><code>/fun uglyupclose</code> - Distorted closeup effect</li>
+              <li><code>/fun communist</code> - Add communist filter</li>
+              <li><code>/fun whowouldwin</code> - Who Would Win meme</li>
+              <li><code>/fun opinion</code> - Create opinion meme</li>
+              <li><code>/fun ship</code> - Ship two users/images</li>
+            </ul>
+            <p class="small-note">Use attachment or mention to specify image</p>
+          </div>
+
+          <div class="fun-category">
+            <h3>Other Fun Stuff</h3>
+            <ul>
+              <li><code>/fun fact</code> - Random interesting fact</li>
+              <li><code>/fun joke</code> - Random joke (family-friendly)</li>
+              <li><code>/fun imdb [title]</code> - Search movie/show info</li>
+              <li><code>/fun lulcat [text]</code> - Convert to lolcat speak</li>
+              <li><code>/fun showerthought</code> - Random shower thought</li>
+              <li><code>/rizz [message]</code> - Summon Ronald Rizz</li>
+              <li><code>/summary [channel] [messages]</code> - Summarize recent chat</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Moderation Guide -->
+    <section id="moderation" class="animated-section">
+      <h2>Moderation Guide <span class="emoji">🛡️</span></h2>
+      <div class="content-box">
+        <p>TackleBot includes useful moderation features for your server:</p>
+
+        <div class="moderation-grid">
+          <div class="mod-category">
+            <h3>Basic Commands</h3>
+            <ul>
+              <li><code>/kick [user] [reason]</code> - Remove user from server</li>
+              <li><code>/ban [user] [reason] [days]</code> - Ban user and optionally delete messages</li>
+              <li><code>/clear [amount]</code> - Delete up to 100 recent messages</li>
+            </ul>
+          </div>
+
+          <div class="mod-category">
+            <h3>Managing Moderators</h3>
+            <ul>
+              <li><code>/moderator add [user]</code> - Add a new moderator</li>
+              <li><code>/moderator remove [user]</code> - Remove existing moderator</li>
+              <li>Only server owners can manage moderators</li>
+            </ul>
+          </div>
+
+          <div class="mod-category">
+            <h3>Channel Management</h3>
+            <ul>
+              <li><code>/createchannel [name] type:[text/voice]</code> - Create a text or voice channel</li>
+              <li><code>/createchannel [name] private:true member1:[user]</code> - Create a private channel</li>
+              <li><code>/deletechannel</code> - Delete the channel you're currently in</li>
+              <li>Limit: 1 text and 1 voice channel per user</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="help-tip">
+          <p><strong>Note:</strong> Users can only delete channels they created or if they have server management permissions. Moderators and server owners can delete any channel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips & Tricks -->
+    <section id="tips" class="animated-section">
+      <h2>Tips & Tricks <span class="emoji">💡</span></h2>
+      <div class="content-box">
+        <div class="tips-list">
+          <div class="tip-item">
+            <h3>Maximize Your Profits</h3>
+            <p>Invest in Fish Market Contacts early to increase all fish selling prices!</p>
+          </div>
+          <div class="tip-item">
+            <h3>Efficient Fishing</h3>
+            <p>Quick Cast upgrades let you fish more frequently, increasing your overall earnings.</p>
+          </div>
+          <div class="tip-item">
+            <h3>Location Strategy</h3>
+            <p>Match your fishing location to your goal: common fish are great for consistent money, but legendaries give more XP!</p>
+          </div>
+          <div class="tip-item">
+            <h3>Vote Regularly</h3>
+            <p>Maintain your voting streak for increasingly valuable rewards - it's free money!</p>
+          </div>
+          <div class="tip-item">
+            <h3>Complete Challenges</h3>
+            <p>Daily challenges are quick to complete and provide a significant coin boost.</p>
+          </div>
+          <div class="tip-item">
+            <h3>Seasonal Collection</h3>
+            <p>Don't miss seasonal fish - some only appear for a limited time each year!</p>
+          </div>
+          <div class="tip-item">
+            <h3>Anti-Bot Protection</h3>
+            <p>TackleBot has occasional verification to ensure fair play. These are simple captchas - just respond as prompted!</p>
+          </div>
+        </div>
+
+        <div class="help-tip larger">
+          <h4>Need more help?</h4>
+          <p>Join our <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer">Support Server</a> for personalized assistance and to connect with other TackleBot users!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="cta" class="cta animated-section">
+      <h2>Ready to Start Fishing? <span class="emoji">🌊</span></h2>
+      <p>Add TackleBot to your server now and dive into the fun!</p>
+      <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button cta-button invite-button">
+        Add TackleBot Now! <span class="emoji">✨</span>
+        <span class="ripple"></span>
+      </a>
+      <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="button secondary-button support-button">
+        Join Support Server <span class="emoji">🤝</span>
+        <span class="ripple"></span>
+      </a>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -297,22 +695,23 @@
     </p>
     <div class="social-links">
       <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
+      <!-- <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a> -->
     </div>
   </footer>
 
   <!-- UI Toggle Button -->
   <div id="ui-toggle-container">
-      <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
-          <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
-      </button>
-      <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
-          <i class="fas fa-eye" aria-hidden="true"></i>
-      </button>
+    <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
+      <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
+    </button>
+    <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
+      <i class="fas fa-eye" aria-hidden="true"></i>
+    </button>
   </div>
 
   <!-- Load scripts deferred -->
   <script src="fishImages.js" defer></script>
-  <script src="fish-info.js" defer></script> <!-- Ensure fish-info is loaded if needed by script.js -->
+  <script src="fish-info.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 
