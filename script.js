@@ -653,19 +653,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize static event listeners
     function initStaticListeners() {
         document.body.addEventListener('mousedown', function (e) {
+            // Prevent ripple on UI toggle buttons specifically
             if (e.target.closest('#ui-toggle-container')) return;
+
             const button = e.target.closest('.button');
-            if (!button) return;
+            if (!button) return; // Only apply ripple to elements with the .button class
+
             const rect = button.getBoundingClientRect();
             const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+
+            // Remove existing ripple first if one exists
             const existingRipple = button.querySelector('.ripple');
-            if (existingRipple) existingRipple.remove();
+            if (existingRipple) {
+                existingRipple.remove();
+            }
+
             const ripple = document.createElement('span');
             ripple.classList.add('ripple');
             ripple.style.left = `${x}px`; ripple.style.top = `${y}px`;
             button.appendChild(ripple);
+
+            // Clean up ripple after animation
             ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
         });
+
+        // Animation on Scroll
         const animatedSections = document.querySelectorAll('.animated-section.fade-in');
         if ('IntersectionObserver' in window && animatedSections.length > 0) {
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
@@ -673,171 +685,100 @@ document.addEventListener('DOMContentLoaded', () => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        entry.target.classList.remove('fade-in');
-                        obs.unobserve(entry.target);
+                        obs.unobserve(entry.target); // Stop observing once visible
                     }
                 });
             }, observerOptions);
             animatedSections.forEach(section => observer.observe(section));
         } else {
+            // Fallback for older browsers
             animatedSections.forEach(section => {
                 section.classList.add('visible');
-                section.classList.remove('fade-in');
             });
         }
+
+        // Smooth scrolling for nav links
         document.body.addEventListener('click', function(e) {
             const anchor = e.target.closest('nav a[href^="#"]');
             if (!anchor) return;
+
             const href = anchor.getAttribute('href');
-            if (href && href.length > 1) {
-                e.preventDefault();
-                try {
-                    const targetElement = document.querySelector(href);
-                    if (targetElement) {
-                        const headerOffset = document.querySelector('header')?.offsetHeight || 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.scrollY - headerOffset;
-                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-                    } else { console.warn(`Smooth scroll target not found: ${href}`); }
-                } catch (err) { console.error("Error finding element for smooth scroll:", href, err); }
+            if (href && href.length > 1) { // Ensure it's not just "#"
+                const targetElement = document.getElementById(href.substring(1));
+                if (targetElement) {
+                    e.preventDefault(); // Prevent default anchor jump
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
+
+        // Invite and Support Links
         const discordInviteLink = "https://discord.com/oauth2/authorize?client_id=1354018504470298624";
-        const discordSupportLink = "https://discord.gg/6TxYjeQcXg";
+        const discordSupportLink = "https://discord.gg/TKqYnW4k29"; // Updated link
+
         document.querySelectorAll('.invite-button').forEach(button => {
-            if (button.tagName === 'A') { 
-                // Only set href if it's not already properly set
-                if (button.getAttribute('href') === '#' || !button.getAttribute('href')) {
-                    button.href = discordInviteLink; 
-                }
-                button.target = "_blank"; 
-                button.rel = "noopener noreferrer"; 
+            if (button.tagName === 'A') {
+                button.href = discordInviteLink;
+                button.target = '_blank';
+                button.rel = 'noopener noreferrer';
+            } else {
+                button.addEventListener('click', () => window.open(discordInviteLink, '_blank', 'noopener,noreferrer'));
             }
-            else if (button.tagName === 'BUTTON') { button.addEventListener('click', () => window.open(discordInviteLink, '_blank', 'noopener,noreferrer')); }
         });
+
         document.querySelectorAll('.support-button').forEach(button => {
-            if (button.tagName === 'A') { 
-                // Only set href if it's not already properly set
-                if (button.getAttribute('href') === '#' || !button.getAttribute('href')) {
-                    button.href = discordSupportLink; 
-                }
-                button.target = "_blank"; 
-                button.rel = "noopener noreferrer"; 
+            if (button.tagName === 'A') {
+                button.href = discordSupportLink;
+                button.target = '_blank';
+                button.rel = 'noopener noreferrer';
+            } else {
+                button.addEventListener('click', () => window.open(discordSupportLink, '_blank', 'noopener,noreferrer'));
             }
-            else if (button.tagName === 'BUTTON') { button.addEventListener('click', () => window.open(discordSupportLink, '_blank', 'noopener,noreferrer')); }
-        });
-        document.body.addEventListener('click', function(e) {
-            const button = e.target.closest('.expand-btn');
-            if (!button) return;
-            // console.log("Expand button clicked:", button); // Can remove logging now if desired
-
-            const expandedContent = button.nextElementSibling;
-            // console.log("Found next element sibling:", expandedContent);
-
-            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-                console.warn('Expanded content not found or incorrect class for button:', button);
-                return;
-            }
-
-            // Get the current state FROM the button's attribute
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-
-            // Toggle the button's ARIA attribute - the CSS will do the rest
-            button.setAttribute('aria-expanded', !isExpanded);
-
-            // REMOVE the direct style manipulation:
-            // expandedContent.style.display = isVisible ? 'none' : 'block';
-            // console.log("Set display to:", expandedContent.style.display, "and aria-expanded to:", !isVisible);
         });
 
-        // Keep this part - it sets the initial state correctly on page load
-        document.querySelectorAll('.expand-btn').forEach(button => {
-            const expandedContent = button.nextElementSibling;
-            // Ensure we have the correct sibling element
-            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-                console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
-                return; // Skip this button if structure is wrong
-            }
+        // REMOVED: Redundant expand button logic from here.
+        // The correct logic is now placed at the end of the DOMContentLoaded listener.
 
-            // Set the initial ARIA state to collapsed
-            button.setAttribute('aria-expanded', 'false');
-
-            // *** CRITICAL: Remove any inline display style from the HTML ***
-            // This allows the CSS rules based on aria-expanded to work correctly.
-            expandedContent.style.display = '';
-
-        });
-
-        // The click listener remains the same (it should ONLY toggle aria-expanded)
-        document.body.addEventListener('click', function(e) {
-            const button = e.target.closest('.expand-btn');
-            if (!button) return;
-
-            const expandedContent = button.nextElementSibling;
-            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
-                // Warning already handled if needed, just exit
-                return;
-            }
-
-            // Get the current state FROM the button's attribute
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-
-            // Toggle the button's ARIA attribute - the CSS will do the rest
-            button.setAttribute('aria-expanded', !isExpanded);
-        });
-
+        // UI Toggle Button Logic
         if (hideUiButton && showUiButton) {
-            // First, ensure clean state by removing any existing listeners
-            const hideUiClone = hideUiButton.cloneNode(true);
-            const showUiClone = showUiButton.cloneNode(true);
-            
-            if (hideUiButton.parentNode) {
-                hideUiButton.parentNode.replaceChild(hideUiClone, hideUiButton);
-            }
-            
-            if (showUiButton.parentNode) {
-                showUiButton.parentNode.replaceChild(showUiClone, showUiButton);
-            }
-            
-            // Set up toggle functions with the fresh elements
+            // Use the cached elements directly
             function hideUI(e) {
                 if (e) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
                 document.body.classList.add('ui-hidden');
-                hideUiClone.style.display = 'none';
-                showUiClone.style.display = 'flex';
+                hideUiButton.style.display = 'none';
+                showUiButton.style.display = 'flex'; // Use flex to match button styles if needed
+                localStorage.setItem('uiHidden', 'true');
             }
-            
+
             function showUI(e) {
                 if (e) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
                 document.body.classList.remove('ui-hidden');
-                hideUiClone.style.display = 'flex';
-                showUiClone.style.display = 'none';
+                hideUiButton.style.display = 'flex'; // Use flex to match button styles if needed
+                showUiButton.style.display = 'none';
+                localStorage.setItem('uiHidden', 'false');
             }
-            
-            // Add event listeners to the cloned elements
-            hideUiClone.addEventListener('click', hideUI);
-            showUiClone.addEventListener('click', showUI);
-            
-            // Add touch events for mobile with passive: false to allow preventDefault
-            hideUiClone.addEventListener('touchend', hideUI, { passive: false });
-            showUiClone.addEventListener('touchend', showUI, { passive: false });
-            
-            // Set initial state based on current body class
-            if (document.body.classList.contains('ui-hidden')) {
-                hideUiClone.style.display = 'none';
-                showUiClone.style.display = 'flex';
+
+            // Add event listeners using the cached elements
+            hideUiButton.addEventListener('click', hideUI);
+            showUiButton.addEventListener('click', showUI);
+
+            // Check local storage on load
+            if (localStorage.getItem('uiHidden') === 'true') {
+                hideUI(); // Call without event object
             } else {
-                hideUiClone.style.display = 'flex';
-                showUiClone.style.display = 'none';
+                showUI(); // Ensure correct initial state if not hidden
             }
-        } else { 
-            console.warn("UI toggle buttons not found."); 
+        } else {
+            console.warn("UI toggle buttons not found.");
+            if (uiToggleContainer) {
+                uiToggleContainer.style.display = 'none'; // Hide container if buttons are missing
+            }
         }
     }
 
