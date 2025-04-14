@@ -106,8 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ensure initial state matches CSS (closed by default)
             button.setAttribute('aria-expanded', 'false');
 
+            // Use a flag to prevent double toggling on touch devices
+            let touchHandled = false;
+
             // Simple toggle function that relies on ARIA attribute for CSS
             function toggleExpansion(event) {
+                // Prevent double firing on touch devices
+                if (event.type === 'touchend') {
+                    touchHandled = true;
+                } else if (event.type === 'click' && touchHandled) {
+                    touchHandled = false;
+                    return;
+                }
+
                 // Prevent default if it's somehow triggered by something else
                 event.preventDefault();
                 event.stopPropagation(); // Stop event bubbling
@@ -126,8 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Remove any existing event listeners to prevent duplicates
             button.removeEventListener('click', toggleExpansion);
+            button.removeEventListener('touchend', toggleExpansion);
             // Add a fresh click handler
             button.addEventListener('click', toggleExpansion);
+            button.addEventListener('touchend', toggleExpansion);
         });
     }
 
