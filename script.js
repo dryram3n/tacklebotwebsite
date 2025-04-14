@@ -729,11 +729,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.addEventListener('click', function(e) {
             const button = e.target.closest('.expand-btn');
             if (!button) return;
+            console.log("Expand button clicked:", button); // <<< ADD THIS
+
             const expandedContent = button.nextElementSibling;
-            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) { console.warn('Expanded content not found for button:', button); return; }
+            console.log("Found next element sibling:", expandedContent); // <<< ADD THIS
+
+            if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+                console.warn('Expanded content not found or incorrect class for button:', button);
+                return;
+            }
             const isVisible = expandedContent.style.display === 'block';
+            console.log("Current visibility:", isVisible ? 'block' : 'none'); // <<< ADD THIS
+
             expandedContent.style.display = isVisible ? 'none' : 'block';
             button.setAttribute('aria-expanded', !isVisible);
+            console.log("Set display to:", expandedContent.style.display, "and aria-expanded to:", !isVisible); // <<< ADD THIS
         });
         document.querySelectorAll('.expand-btn').forEach(button => {
             const expandedContent = button.nextElementSibling;
