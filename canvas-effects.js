@@ -93,21 +93,31 @@ class WaterCanvas {
     handleClick(e) {
        if (this.prefersReducedMotion) return;
 
-       // Enhanced robust type checking for mobile compatibility
-       // First verify that e.target exists
-       if (!e.target) return;
+       // First, explicitly check for data-ignore-canvas attribute - added for mobile support
+       if (e.target && e.target.getAttribute && e.target.getAttribute('data-ignore-canvas') === 'true') {
+           // This is an element that should be ignored by the canvas
+           e.stopPropagation();
+           return;
+       }
        
-       // Check if the click should be ignored (interactive element or expand button)
+       // Next, check for any parent element with data-ignore-canvas
+       if (e.target && e.target.closest && e.target.closest('[data-ignore-canvas="true"]')) {
+           e.stopPropagation();
+           return;
+       }
+
+       // Then, check if the click should be ignored (interactive element or expand button)
+       // using our previous approach for non-mobile browsers
        let shouldIgnore = false;
        
-       // Method 1: Try using closest if it's available on the target
+       // Try using closest if available (most browsers)
        if (e.target instanceof Element && typeof e.target.closest === 'function') {
            const closestInteractive = e.target.closest('a, button, .button, input, select, textarea, [role="button"], .expand-btn');
            if (closestInteractive) {
                shouldIgnore = true;
            }
        } 
-       // Method 2: If closest isn't available, check the target's classList or tagName
+       // Fallback for browsers without closest
        else if (e.target.tagName) {
            const tagName = e.target.tagName.toLowerCase();
            const isInteractive = ['a', 'button', 'input', 'select', 'textarea'].includes(tagName);
@@ -133,13 +143,12 @@ class WaterCanvas {
            }
        }
        
-       // If we should ignore this click, stop propagation and return
        if (shouldIgnore) {
            e.stopPropagation();
            return;
        }
 
-       // If the click wasn't on an ignored element, proceed with splash/fish reaction.
+       // Proceed with splash/fish reaction
        this.createSplash(e.clientX, e.clientY);
 
        // Fish Click Reaction

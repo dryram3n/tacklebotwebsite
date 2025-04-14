@@ -962,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-    // --- START: Expandable Section Logic (Revised for Mobile Compatibility) ---
+    // --- START: Expandable Section Logic (Fixed for All Devices) ---
     document.querySelectorAll('.expand-btn').forEach(button => {
         const expandedContent = button.nextElementSibling;
 
@@ -971,65 +971,52 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Ensure clean state on load: remove inline styles, set ARIA
-        expandedContent.removeAttribute('style'); // Let CSS handle display
-        button.setAttribute('aria-expanded', 'false'); // Start collapsed
-
-        // Define the toggle handler - used by both click and touchend
-        function toggleExpand(event) {
-            // Prevent default behavior (like link navigation or emulated click)
-            event.preventDefault();
-            
-            // CRITICAL: Ensure event propagation is completely stopped
-            // This prevents the canvas click handler from interfering
-            if (event.stopPropagation) event.stopPropagation();
-            if (event.cancelBubble !== undefined) event.cancelBubble = true;
-
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-            // Toggle the ARIA attribute - CSS will handle the display change
-            button.setAttribute('aria-expanded', String(!isExpanded));
-
-            console.log(`Button expanded state toggled via ${event.type} to: ${!isExpanded}`);
-            
-            // Return false as additional way to stop event (belt and suspenders approach)
-            return false;
-        }
-
-        // --- Event Listener Attachment ---
-        // Remove potentially duplicated listeners first
-        button.removeEventListener('click', toggleExpand);
-        button.removeEventListener('touchend', toggleExpand);
+        // Ensure clean state on load
+        expandedContent.removeAttribute('style');
+        button.setAttribute('aria-expanded', 'false');
         
-        // For mobile: Add touchstart listener with immediate action
-        // This ensures mobile taps are captured before other handlers
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-            button.addEventListener('touchstart', function(e) {
-                // Mark this button as being touched to help event coordination
-                button.dataset.touching = 'true';
-                // Don't prevent default here to allow focus/active states
-            }, { passive: true });
+        // Simple toggle function that directly manipulates the DOM
+        function toggleExpansion(event) {
+            // Prevent any default behaviors
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             
+            // Get current state
+            const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
+            
+            // Toggle the state
+            button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
+            
+            console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
+            
+            // Explicitly stop propagation again for good measure
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
+            }
+            
+            return false; // Prevent default behavior for good measure
+        }
+        
+        // Use a single click handler for simplicity
+        button.addEventListener('click', toggleExpansion);
+        
+        // Additional handling for mobile devices
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            // For mobile: capture both touchstart and touchend
             button.addEventListener('touchend', function(e) {
-                // If this was our touched button, handle the event
-                if (button.dataset.touching === 'true') {
-                    button.dataset.touching = 'false';
-                    return toggleExpand(e);
-                }
+                // Prevent the simulated mouse click after touchend
+                e.preventDefault();
+                toggleExpansion(e);
             }, { passive: false });
             
-            // Cancel touching state if touch is moved away
-            button.addEventListener('touchcancel', function() {
-                button.dataset.touching = 'false';
-            }, { passive: true });
-            
-            button.addEventListener('touchmove', function() {
-                // If finger moves significantly, cancel the touch action
-                button.dataset.touching = 'false';
+            // Disable any canvas event handlers specifically for these buttons
+            button.addEventListener('touchstart', function(e) {
+                // Mark this element to be ignored by canvas click handlers
+                e.target.setAttribute('data-ignore-canvas', 'true');
             }, { passive: true });
         }
-
-        // Still keep click for non-touch devices and as fallback
-        button.addEventListener('click', toggleExpand);
     });
     // --- END: Expandable Section Logic ---
 
