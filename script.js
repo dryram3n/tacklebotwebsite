@@ -967,6 +967,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function initExpandableSections() {
         console.log("Initializing expandable sections...");
         document.querySelectorAll('.expand-btn').forEach(button => {
+            // Add data attribute to tell canvas to ignore this element
+            button.setAttribute('data-ignore-canvas', 'true');
+            
             const expandedContent = button.nextElementSibling;
 
             if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
@@ -988,7 +991,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Get current state
                 const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
-                console.log(`Button current state: ${isCurrentlyExpanded}`);
+                console.log(`Button clicked: ${button.textContent.trim()}, current state: ${isCurrentlyExpanded}`);
                 
                 // Toggle the state
                 button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
@@ -1001,20 +1004,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
-                
-                // Explicitly stop propagation again for good measure
-                if (event && event.stopPropagation) {
-                    event.stopPropagation();
-                }
-                
-                return false; // Prevent default behavior for good measure
             }
             
             // Remove any existing event listeners to prevent duplicates
             button.removeEventListener('click', toggleExpansion);
             
-            // Add click handler
-            button.addEventListener('click', toggleExpansion);
+            // Add click handler with capture phase to ensure it fires first
+            button.addEventListener('click', toggleExpansion, true);
             
             // Additional handling for mobile devices
             if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
@@ -1024,12 +1020,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                     toggleExpansion(e);
                 }, { passive: false });
-                
-                // Disable any canvas event handlers specifically for these buttons
-                button.addEventListener('touchstart', function(e) {
-                    // Mark this element to be ignored by canvas click handlers
-                    e.target.setAttribute('data-ignore-canvas', 'true');
-                }, { passive: true });
             }
         });
     }
