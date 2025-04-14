@@ -977,7 +977,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Ensure clean state on load
+            // Force set initial state consistently
             expandedContent.style.display = 'none';
             button.setAttribute('aria-expanded', 'false');
             
@@ -989,32 +989,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     event.stopPropagation();
                 }
                 
-                // Get current state
+                // Get current state - always use attribute value as source of truth
                 const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
                 console.log(`Button clicked: ${button.textContent.trim()}, current state: ${isCurrentlyExpanded}`);
                 
                 // Toggle the state
-                button.setAttribute('aria-expanded', isCurrentlyExpanded ? 'false' : 'true');
+                const newState = !isCurrentlyExpanded;
+                button.setAttribute('aria-expanded', newState ? 'true' : 'false');
                 
                 // Toggle the display of the expanded content - DIRECTLY SET STYLE
-                if (isCurrentlyExpanded) {
-                    expandedContent.style.display = 'none';
-                } else {
-                    expandedContent.style.display = 'block';
-                }
+                expandedContent.style.display = newState ? 'block' : 'none';
                 
-                console.log(`Button expanded state toggled to: ${!isCurrentlyExpanded}`);
+                console.log(`Button expanded state toggled to: ${newState}`);
             }
             
             // Remove any existing event listeners to prevent duplicates
             button.removeEventListener('click', toggleExpansion);
             
-            // Add click handler with capture phase to ensure it fires first
+            // Add a fresh click handler with capturing phase to ensure it fires first
             button.addEventListener('click', toggleExpansion, true);
             
             // Additional handling for mobile devices
             if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-                // For mobile: capture both touchstart and touchend
                 button.addEventListener('touchend', function(e) {
                     // Prevent the simulated mouse click after touchend
                     e.preventDefault();
