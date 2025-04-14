@@ -1021,4 +1021,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
+    // Fix for expandable sections
+    document.querySelectorAll('.expand-btn').forEach(button => {
+        const expandedContent = button.nextElementSibling;
+        
+        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+            console.warn("Initialization: Could not find .expanded-content sibling for button:", button);
+            return;
+        }
+
+        // Set the initial ARIA state to collapsed
+        button.setAttribute('aria-expanded', 'false');
+        
+        // CRITICAL: Remove the inline style completely to allow CSS to control display
+        expandedContent.removeAttribute('style');
+        
+        // Add direct touch event handler for mobile
+        button.addEventListener('touchend', function(e) {
+            e.preventDefault(); // Prevent default to avoid double triggering
+            
+            // Toggle the button's aria-expanded attribute
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            
+            // For added reliability, explicitly set the display style
+            expandedContent.style.display = isExpanded ? 'none' : 'block';
+        });
+    });
+
+    // Keep existing click handler for desktop
+    document.body.addEventListener('click', function(e) {
+        const button = e.target.closest('.expand-btn');
+        if (!button) return;
+
+        const expandedContent = button.nextElementSibling;
+        if (!expandedContent || !expandedContent.classList.contains('expanded-content')) {
+            return;
+        }
+
+        // Toggle the button's aria-expanded attribute
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', !isExpanded);
+        
+        // For added reliability, explicitly set the display style
+        expandedContent.style.display = isExpanded ? 'none' : 'block';
+    });
+
 }); // End DOMContentLoaded listener
