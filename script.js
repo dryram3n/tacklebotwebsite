@@ -921,9 +921,12 @@ document.addEventListener('DOMContentLoaded', () => {
         initStaticListeners();
         
         // Check if we're on how-to-use page - if not, initialize expandable sections here
-        if (!document.querySelector('.how-to-use-page')) {
-            initExpandableSections();
-        }
+        // REMOVED: Incorrect conditional logic. Expandable sections exist on how-to-use page too.
+        // if (!document.querySelector('.how-to-use-page')) {
+        //     initExpandableSections();
+        // }
+        // ALWAYS initialize expandable sections if they exist on the page.
+        initExpandableSections();
         
         if (!isUsingCanvas) {
             console.log("Initializing DOM-based water effects...");
@@ -979,10 +982,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Ensure initial state matches CSS (content hidden, button not expanded)
             button.setAttribute('aria-expanded', 'false');
+            // expandedContent.style.display = 'none'; // Let CSS handle display based on aria-expanded
 
             // Simple toggle function that relies on ARIA attribute for CSS
             function toggleExpansion(event) {
+                // Prevent any default behavior or propagation if needed, though usually not necessary for buttons
+                // event.preventDefault(); 
+                // event.stopPropagation();
 
                 // Get current state - always use attribute value as source of truth
                 const isCurrentlyExpanded = button.getAttribute('aria-expanded') === 'true';
@@ -996,12 +1004,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Button expanded state toggled to: ${newState}`);
             }
 
-            // Remove any existing event listeners to prevent duplicates
+            // Remove any existing event listeners to prevent duplicates (optional but good practice)
             button.removeEventListener('click', toggleExpansion);
-            // Remove potential old capture listener if it existed
-            button.removeEventListener('click', toggleExpansion, true);
-
-            // Add a fresh click handler (bubble phase - default)
+            // *** ADD THE EVENT LISTENER ***
             button.addEventListener('click', toggleExpansion);
         });
     }
