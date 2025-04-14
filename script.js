@@ -962,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-    // --- START: Expandable Section Logic (Revised for Mobile Compatibility - Attempt 3) ---
+    // --- START: Expandable Section Logic (Revised for Mobile Compatibility - Attempt 4) ---
     document.querySelectorAll('.expand-btn').forEach(button => {
         const expandedContent = button.nextElementSibling;
 
@@ -979,7 +979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function toggleExpand(event) {
             // Prevent default behavior (like link navigation or emulated click)
             event.preventDefault();
-            // Stop the event from bubbling up (e.g., to window/canvas listeners)
+            // Stop the event from bubbling up AND prevent capture listeners on window (like canvas click)
             event.stopPropagation();
 
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
@@ -995,11 +995,15 @@ document.addEventListener('DOMContentLoaded', () => {
         button.removeEventListener('click', toggleExpand);
         button.removeEventListener('touchend', toggleExpand);
 
-        // Add BOTH listeners
+        // Add click listener (works universally)
         button.addEventListener('click', toggleExpand);
-        // Use touchend for faster response on touch devices.
-        // passive: false is crucial to allow preventDefault() to work.
-        button.addEventListener('touchend', toggleExpand, { passive: false });
+
+        // Add touchend listener specifically for touch devices for faster response.
+        // passive: false is crucial to allow preventDefault() and stopPropagation().
+        // Check for touch support before adding touchend.
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+             button.addEventListener('touchend', toggleExpand, { passive: false });
+        }
 
     });
     // --- END: Expandable Section Logic ---

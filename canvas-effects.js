@@ -60,7 +60,9 @@ class WaterCanvas {
       this.mousePos = { x: 0, y: 0 };
       if (!this.prefersReducedMotion) {
           window.addEventListener('mousemove', this.handleMouseMove);
-          window.addEventListener('click', this.handleClick);
+          // Use capture phase for the window click listener to potentially intercept
+          // clicks earlier, but still check the target robustly.
+          window.addEventListener('click', this.handleClick, true); // Use capture phase
       }
   
       // Load fish images
@@ -90,35 +92,59 @@ class WaterCanvas {
   
     handleClick(e) {
        if (this.prefersReducedMotion) return;
-       // Check if target is an element and has the 'closest' method before calling it
-       if (e.target && typeof e.target.closest === 'function' && e.target.closest('a, button, .button, input, select, textarea, [role="button"]')) return;
 
+       // --- MODIFICATION START ---
+       // Robust check: Ensure e.target is an Element before calling closest.
+       // Also check if the click originated on an interactive element or an expand button.
+       // If so, stop propagation here to prevent potential issues and return early.
+       if (e.target instanceof Element) {
+           const closestInteractive = e.target.closest('a, button, .button, input, select, textarea, [role="button"], .expand-btn');
+           if (closestInteractive) {
+               // If the click is on an interactive element handled elsewhere (like expand buttons),
+               // stop the event here in the capture phase to prevent fish reactions/splashes.
+               e.stopPropagation();
+               return;
+           }
+       }
+       // --- MODIFICATION END ---
+
+
+       // If the click wasn't on an ignored element, proceed with splash/fish reaction.
        this.createSplash(e.clientX, e.clientY);
-  
+
        // Fish Click Reaction
        const clickRadius = 80;
        const dartSpeedMultiplier = 3;
        const dartDuration = 700;
-  
+
        this.fishes.forEach(fish => {
            if (fish.state === 'nibbling') return;
            const dx = fish.x - e.clientX;
            const dy = fish.y - e.clientY;
            const distance = Math.sqrt(dx * dx + dy * dy);
-  
+
            if (distance < clickRadius + fish.size / 2) {
                fish.state = 'darting';
                fish.stateTimer = dartDuration;
                const angleAway = Math.atan2(dy, dx);
                fish.targetSpeed = fish.baseSpeed * dartSpeedMultiplier;
-               fish.targetDirectionAngle = angleAway + (Math.random() - 0.5) * 0.5;
-               if (Math.abs(Math.cos(angleAway)) > Math.abs(Math.sin(angleAway))) {
-                   fish.direction = (Math.cos(angleAway) > 0) ? 'right' : 'left';
+               // Ensure targetDirectionAngle is correctly calculated
+               fish.targetDirectionAngle = angleAway + (Math.random() - 0.5) * 0.5; // Keep randomness subtle
+
+               // Determine direction based on angle more reliably
+               const angleDegrees = (angleAway * 180 / Math.PI + 360) % 360;
+               if (angleDegrees > 90 && angleDegrees < 270) {
+                   fish.direction = 'right'; // Moving away towards the right
                } else {
-                   fish.direction = (fish.x < this.canvas.width / 2) ? 'right' : 'left';
+                   fish.direction = 'left'; // Moving away towards the left
                }
                fish.scaleX = fish.direction === 'left' ? -1 : 1;
-               fish.targetY = fish.y + Math.sin(angleAway) * 30 + (Math.random() - 0.5) * 20;
+
+               // Adjust targetY based on angle, keep it within reasonable bounds
+               const verticalPush = Math.sin(angleAway) * 40 + (Math.random() - 0.5) * 30;
+               fish.targetY = fish.y + verticalPush;
+
+               // Reset interaction targets
                fish.targetPlant = null;
                fish.targetCoral = null;
            }
@@ -1156,7 +1182,8 @@ class WaterCanvas {
       window.removeEventListener('resize', this.resize);
       if (!this.prefersReducedMotion) {
           window.removeEventListener('mousemove', this.handleMouseMove);
-          window.removeEventListener('click', this.handleClick);
+          // Ensure the listener added in the constructor is removed correctly (including capture phase)
+          window.removeEventListener('click', this.handleClick, true); // Use capture phase for removal
       }
     }
   }
