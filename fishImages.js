@@ -5,7 +5,7 @@ const FISH_IMAGES = {
     "Rusty Can":"fishImages/Rusty Can.png",
     "Seaweed Clump":"fishImages/Seaweed Clump.png",
     "Plastic Bottle":"fishImages/Plastic Bottle.png",
-    "Watterlogged Phone":"fishImages/watterloggedphone.png",
+    "Waterlogged Phone":"fishImages/waterloggedphone.png",
     "Rusted Fishing Hook":"fishImages/Rusted Fishing Hook.png",
     "Ancient Flip Flop":"fishImages/Ancient FlipFlop.png",
     "Tangled Fishing Line":"fishImages/Tangled Fishing Line.png",
