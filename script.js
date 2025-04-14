@@ -962,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run the main initialization function
     initializeWebsiteAnimations();
 
-    // --- START: Expandable Section Logic (Revised for Mobile Compatibility - Attempt 4) ---
+    // --- START: Expandable Section Logic (Revised for Mobile Compatibility) ---
     document.querySelectorAll('.expand-btn').forEach(button => {
         const expandedContent = button.nextElementSibling;
 
@@ -979,32 +979,57 @@ document.addEventListener('DOMContentLoaded', () => {
         function toggleExpand(event) {
             // Prevent default behavior (like link navigation or emulated click)
             event.preventDefault();
-            // Stop the event from bubbling up AND prevent capture listeners on window (like canvas click)
-            event.stopPropagation();
+            
+            // CRITICAL: Ensure event propagation is completely stopped
+            // This prevents the canvas click handler from interfering
+            if (event.stopPropagation) event.stopPropagation();
+            if (event.cancelBubble !== undefined) event.cancelBubble = true;
 
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
             // Toggle the ARIA attribute - CSS will handle the display change
             button.setAttribute('aria-expanded', String(!isExpanded));
 
-            // Log which event type triggered the toggle
             console.log(`Button expanded state toggled via ${event.type} to: ${!isExpanded}`);
+            
+            // Return false as additional way to stop event (belt and suspenders approach)
+            return false;
         }
 
         // --- Event Listener Attachment ---
-        // Remove potentially duplicated listeners first (robustness)
+        // Remove potentially duplicated listeners first
         button.removeEventListener('click', toggleExpand);
         button.removeEventListener('touchend', toggleExpand);
-
-        // Add click listener (works universally)
-        button.addEventListener('click', toggleExpand);
-
-        // Add touchend listener specifically for touch devices for faster response.
-        // passive: false is crucial to allow preventDefault() and stopPropagation().
-        // Check for touch support before adding touchend.
+        
+        // For mobile: Add touchstart listener with immediate action
+        // This ensures mobile taps are captured before other handlers
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-             button.addEventListener('touchend', toggleExpand, { passive: false });
+            button.addEventListener('touchstart', function(e) {
+                // Mark this button as being touched to help event coordination
+                button.dataset.touching = 'true';
+                // Don't prevent default here to allow focus/active states
+            }, { passive: true });
+            
+            button.addEventListener('touchend', function(e) {
+                // If this was our touched button, handle the event
+                if (button.dataset.touching === 'true') {
+                    button.dataset.touching = 'false';
+                    return toggleExpand(e);
+                }
+            }, { passive: false });
+            
+            // Cancel touching state if touch is moved away
+            button.addEventListener('touchcancel', function() {
+                button.dataset.touching = 'false';
+            }, { passive: true });
+            
+            button.addEventListener('touchmove', function() {
+                // If finger moves significantly, cancel the touch action
+                button.dataset.touching = 'false';
+            }, { passive: true });
         }
 
+        // Still keep click for non-touch devices and as fallback
+        button.addEventListener('click', toggleExpand);
     });
     // --- END: Expandable Section Logic ---
 

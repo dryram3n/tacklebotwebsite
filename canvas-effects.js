@@ -93,21 +93,51 @@ class WaterCanvas {
     handleClick(e) {
        if (this.prefersReducedMotion) return;
 
-       // --- MODIFICATION START ---
-       // Robust check: Ensure e.target is an Element before calling closest.
-       // Also check if the click originated on an interactive element or an expand button.
-       // If so, stop propagation here to prevent potential issues and return early.
-       if (e.target instanceof Element) {
+       // Enhanced robust type checking for mobile compatibility
+       // First verify that e.target exists
+       if (!e.target) return;
+       
+       // Check if the click should be ignored (interactive element or expand button)
+       let shouldIgnore = false;
+       
+       // Method 1: Try using closest if it's available on the target
+       if (e.target instanceof Element && typeof e.target.closest === 'function') {
            const closestInteractive = e.target.closest('a, button, .button, input, select, textarea, [role="button"], .expand-btn');
            if (closestInteractive) {
-               // If the click is on an interactive element handled elsewhere (like expand buttons),
-               // stop the event here in the capture phase to prevent fish reactions/splashes.
-               e.stopPropagation();
-               return;
+               shouldIgnore = true;
+           }
+       } 
+       // Method 2: If closest isn't available, check the target's classList or tagName
+       else if (e.target.tagName) {
+           const tagName = e.target.tagName.toLowerCase();
+           const isInteractive = ['a', 'button', 'input', 'select', 'textarea'].includes(tagName);
+           
+           // Check class list for .button, .expand-btn, etc.
+           const hasRelevantClass = e.target.classList && 
+               (e.target.classList.contains('button') || 
+                e.target.classList.contains('expand-btn'));
+                
+           if (isInteractive || hasRelevantClass) {
+               shouldIgnore = true;
+           }
+           
+           // Also check parent elements (simplified alternative to closest)
+           let parent = e.target.parentElement;
+           for (let i = 0; i < 3 && parent && !shouldIgnore; i++) {
+               if (parent.classList && 
+                   (parent.classList.contains('button') || 
+                    parent.classList.contains('expand-btn'))) {
+                   shouldIgnore = true;
+               }
+               parent = parent.parentElement;
            }
        }
-       // --- MODIFICATION END ---
-
+       
+       // If we should ignore this click, stop propagation and return
+       if (shouldIgnore) {
+           e.stopPropagation();
+           return;
+       }
 
        // If the click wasn't on an ignored element, proceed with splash/fish reaction.
        this.createSplash(e.clientX, e.clientY);
