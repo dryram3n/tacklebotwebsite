@@ -90,7 +90,9 @@ class WaterCanvas {
   
     handleClick(e) {
        if (this.prefersReducedMotion) return;
-       if (e.target.closest('a, button, .button, input, select, textarea, [role="button"]')) return;
+       // Check if target is an element and has the 'closest' method before calling it
+       if (e.target && typeof e.target.closest === 'function' && e.target.closest('a, button, .button, input, select, textarea, [role="button"]')) return;
+
        this.createSplash(e.clientX, e.clientY);
   
        // Fish Click Reaction
