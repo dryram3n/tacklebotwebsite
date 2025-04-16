@@ -165,35 +165,85 @@ document.addEventListener('DOMContentLoaded', () => {
         let skyGradient = 'var(--sky-day)';
         let sunOpacity = 0, moonOpacity = 0;
         let sunX = 50, sunY = 90, moonX = 50, moonY = 90;
+        
+        // Text color transition variables
+        let isDayTime = true; 
+        let textColorTransitionFactor = 1; // 1 for full day, 0 for full night
+        
         if (timeInMinutes >= sunriseStart && timeInMinutes < sunriseEnd) {
+            // Dawn - transition from night to day
             const progress = (timeInMinutes - sunriseStart) / (sunriseEnd - sunriseStart);
             skyGradient = `linear-gradient(to bottom, ${interpolateColor('#000030', '#87CEEB', progress)} 10%, ${interpolateColor('#191970', '#ADD8E6', progress)} 50%, ${interpolateColor('#2c3e50', '#B0E0E6', progress)} 100%)`;
             const transitionPoint = 0.5;
             if (progress < transitionPoint) { moonOpacity = 1 - (progress / transitionPoint); moonX = 50 + (1 - progress) * 50; moonY = 25 + Math.sin((1 - progress) * Math.PI) * 60; }
             else { sunOpacity = (progress - transitionPoint) / (1 - transitionPoint); sunX = (progress * 100) / 2; sunY = 25 + Math.sin(progress * Math.PI) * 60; }
+            
+            // Text color during dawn
+            textColorTransitionFactor = progress;
+            isDayTime = progress > 0.5;
         } else if (timeInMinutes >= sunriseEnd && timeInMinutes < sunsetStart) {
+            // Day time
             const progress = (timeInMinutes - sunriseEnd) / dayDuration;
             skyGradient = 'var(--sky-day)'; sunOpacity = 1; sunX = progress * 100; sunY = 25 + Math.sin(progress * Math.PI) * 60;
+            
+            // Full day colors
+            textColorTransitionFactor = 1;
+            isDayTime = true;
         } else if (timeInMinutes >= sunsetStart && timeInMinutes < sunsetEnd) {
+            // Dusk - transition from day to night
             const progress = (timeInMinutes - sunsetStart) / (sunsetEnd - sunsetStart);
             skyGradient = `linear-gradient(to bottom, ${interpolateColor('#87CEEB', '#4682B4', progress)} 0%, ${interpolateColor('#ADD8E6', '#191970', progress)} 40%, ${interpolateColor('#B0E0E6', '#000030', progress)} 100%)`;
             const transitionPoint = 0.5;
             if (progress < transitionPoint) { sunOpacity = 1 - (progress / transitionPoint); sunX = 50 + (1 - progress) * 50; sunY = 25 + Math.sin((1 - progress) * Math.PI) * 60; }
             else { moonOpacity = (progress - transitionPoint) / (1 - transitionPoint); moonX = (progress * 100) / 2; moonY = 25 + Math.sin(progress * Math.PI) * 60; }
+            
+            // Text color during dusk
+            textColorTransitionFactor = 1 - progress;
+            isDayTime = progress < 0.5;
         } else {
+            // Night time
             let progress;
             if (timeInMinutes >= sunsetEnd) { progress = (timeInMinutes - sunsetEnd) / nightDuration; }
             else { progress = (timeInMinutes + (24 * 60 - sunsetEnd)) / nightDuration; }
             skyGradient = 'var(--sky-night)'; moonOpacity = 1; moonX = progress * 100; moonY = 25 + Math.sin(progress * Math.PI) * 60;
+            
+            // Full night colors
+            textColorTransitionFactor = 0;
+            isDayTime = false;
         }
+        
         requestAnimationFrame(() => {
+            // Update sky background
             if (skyContainer) skyContainer.style.background = skyGradient;
+            
+            // Update sun & moon positions
             if (!prefersReducedMotion) {
                 if (sunElement) sunElement.style.transform = `translate(${sunX - 50}vw, ${sunY - 50}vh) translate(-50%, -50%)`;
                 if (moonElement) moonElement.style.transform = `translate(${moonX - 50}vw, ${moonY - 50}vh) translate(-50%, -50%)`;
             }
+            
+            // Update sun & moon opacity
             if (sunElement) sunElement.style.opacity = sunOpacity.toFixed(2);
             if (moonElement) moonElement.style.opacity = moonOpacity.toFixed(2);
+            
+            // Update text colors based on time of day
+            document.documentElement.style.setProperty('--text-color', isDayTime ? 
+                'var(--text-color-day)' : 'var(--text-color-night)');
+            document.documentElement.style.setProperty('--heading-color', isDayTime ? 
+                'var(--heading-color-day)' : 'var(--heading-color-night)');
+            document.documentElement.style.setProperty('--text-secondary', isDayTime ? 
+                'var(--text-secondary-day)' : 'var(--text-secondary-night)');
+                
+            // For transitions (dawn/dusk), smoothly interpolate between day/night colors if needed
+            if (textColorTransitionFactor > 0 && textColorTransitionFactor < 1) {
+                const textColor = interpolateColor('#c5d5e5', '#4a5568', textColorTransitionFactor);
+                const headingColor = interpolateColor('#e1ecf7', '#2a4365', textColorTransitionFactor);
+                const secondaryColor = interpolateColor('#a3b5c9', '#6c7a89', textColorTransitionFactor);
+                
+                document.documentElement.style.setProperty('--text-color', textColor);
+                document.documentElement.style.setProperty('--heading-color', headingColor);
+                document.documentElement.style.setProperty('--text-secondary', secondaryColor);
+            }
         });
     }
 

@@ -8,12 +8,13 @@
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
-  --text-color: #4a5568; /* Dark grayish blue */
-  --heading-color: #2a4365; /* Darker blue for headings */
+  /* Using dynamic text color variables from the main style.css */
+  --text-color: var(--text-color);
+  --heading-color: var(--heading-color);
+  --text-secondary: var(--text-secondary);
   --white: #FFFFFF;
   --shadow-light: rgba(102, 166, 255, 0.15); /* Soft blue shadow */
   --shadow-medium: rgba(102, 166, 255, 0.25);
-  --text-secondary: #6c7a89;
   --accent: #66a6ff;
   --accent-dark: #3a89ff;
 }
@@ -32,7 +33,7 @@
     padding: 1.25rem;
     text-align: center;
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--text-color); /* Using dynamic color variable */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

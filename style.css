@@ -8,13 +8,26 @@
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
-  --text-color: #4a5568; /* Dark grayish blue */
-  --heading-color: #2a4365; /* Darker blue for headings */
+  --text-color-day: #4a5568; /* Dark grayish blue for day */
+  --text-color-night: #c5d5e5; /* Light grayish blue for night */
+  --text-color: var(--text-color-day); /* Dynamic variable that changes */
+  
+  --heading-color-day: #2a4365; /* Darker blue for headings during day */
+  --heading-color-night: #e1ecf7; /* Lighter blue for headings during night */
+  --heading-color: var(--heading-color-day); /* Dynamic variable that changes */
+  
+  --text-secondary-day: #6c7a89; /* Secondary text color for day */
+  --text-secondary-night: #a3b5c9; /* Secondary text color for night */
+  --text-secondary: var(--text-secondary-day); /* Dynamic variable that changes */
+  
   --white: #FFFFFF;
   --shadow-light: rgba(102, 166, 255, 0.15); /* Soft blue shadow */
   --shadow-medium: rgba(102, 166, 255, 0.25);
   --ripple-light: rgba(255, 255, 255, 0.7);
   --ripple-dark: rgba(0, 0, 0, 0.1);
+
+  /* Day/Night Transition */
+  --day-night-transition: 1s ease-in-out;
 
   /* Font */
   --font-primary: 'Nunito', sans-serif;
