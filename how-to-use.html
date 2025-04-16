@@ -37,7 +37,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmF/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -169,6 +169,19 @@
         </div>
       </div>
     </section>
+
+    <div id="getting-started" class="content-box">
+        <h2><i class="fas fa-rocket emoji-icon"></i> Getting Started</h2>
+        <p>Welcome to TackleBot! Here’s how to begin your fishing adventure:</p>
+        <ol>
+            <li><strong>Invite TackleBot:</strong> Add the bot to your Discord server using the invite link.</li>
+            <li><strong>Check the Prefix:</strong> TackleBot primarily uses slash commands (<code>/</code>). Type <code>/</code> to see the list of available commands.</li>
+            <li><strong>Cast Your First Line:</strong> Use the <code>/fish</code> command to start fishing!</li>
+            <li><strong>Check Your Inventory:</strong> See what you've caught with <code>/inventory</code>.</li>
+            <li><strong>Sell Your Catch:</strong> Earn cash by selling fish using <code>/sell [fish_name]</code> or <code>/sell all</code>.</li>
+        </ol>
+        <p class="help-tip"><i class="fas fa-lightbulb"></i> Tip: Use <code>/help</code> to see a full list of commands anytime!</p>
+    </div>
 
     <!-- Basic Commands -->
     <section id="basic-commands" class="animated-section">
@@ -590,6 +603,14 @@
         </div>
     </section>
 
+    <div id="business" class="content-box">
+        <h2><i class="fas fa-store emoji-icon"></i> Running a Business</h2>
+        <p>Invest your hard-earned cash into businesses to generate passive income. Different businesses offer varying returns.</p>
+        <p>Use <code>/business buy [business_name]</code> to purchase a business and <code>/business list</code> to see available options and your current holdings.</p>
+        <p class="help-tip"><i class="fas fa-info-circle"></i> **Passive Income:** Your businesses generate income automatically over time. **This income is automatically claimed and added to your balance every minute**, even if you're not actively playing!</p>
+        <p>Upgrade your businesses using <code>/business upgrade [business_name]</code> to increase their profitability.</p>
+    </div>
+
     <!-- Seasonal System -->
     <section id="seasons" class="animated-section">
       <h2>Seasonal System <span class="emoji">🍂</span></h2>
@@ -733,6 +754,19 @@
         </div>
       </div>
     </section>
+
+    <div id="voting" class="content-box">
+        <h2><i class="fas fa-vote-yea emoji-icon"></i> Voting Rewards</h2>
+        <p>Support TackleBot by voting on top.gg! You'll receive awesome rewards for each vote:</p>
+        <ul class="rewards-list">
+            <li>💰 **In-game Cash:** A helpful boost to your balance.</li>
+            <li>🎣 **Guaranteed Common Fish:** Adds a common fish directly to your inventory.</li>
+            <li><i class="fas fa-dice"></i> **Chance for Rare Bait:** A possibility of getting valuable bait to catch better fish.</li>
+            <li><i class="fas fa-star"></i> **Experience Points (XP):** Helps you level up faster.</li>
+        </ul>
+        <p>Vote regularly to maximize your rewards and help TackleBot grow!</p>
+        <a href="https://top.gg/bot/YOUR_BOT_ID/vote" target="_blank" class="button cta-button" data-ignore-canvas="true">Vote Now on top.gg! <i class="fas fa-external-link-alt"></i></a>
+    </div>
 
     <!-- Fun Commands -->
     <section id="fun-commands" class="animated-section">
@@ -940,6 +974,17 @@
   
   <!-- How to Use specific JavaScript -->
   <script src="how-to-use.js" defer></script>
+
+  <div id="fishing-basics" class="content-box">
+    <h2><i class="fas fa-fish emoji-icon"></i> Fishing Basics</h2>
+    <p>The core of TackleBot! Here's the lowdown:</p>
+    <ul>
+        <li><strong>Casting:</strong> Use <code>/fish</code> to cast your line. There's a short cooldown between casts.</li>
+        <li><strong>Bait:</strong> Using bait (e.g., <code>/fish bait:Worm</code>) increases your chances of catching rarer fish. Bait is consumed upon use, whether you catch something or not. Check available bait with <code>/inventory bait</code>.</li>
+        <li><strong>Locations:</strong> Different locations (unlocked by leveling up) have unique fish. Use <code>/travel [location_name]</code> to change spots. See available locations with <code>/locations</code>.</li>
+        <li><strong>Selling:</strong> Turn your fish into cash with <code>/sell [fish_name|all]</code>.</li>
+    </ul>
+  </div>
 </body>
 
 </html>
