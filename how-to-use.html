@@ -170,19 +170,6 @@
       </div>
     </section>
 
-    <div id="getting-started" class="content-box">
-        <h2><i class="fas fa-rocket emoji-icon"></i> Getting Started</h2>
-        <p>Welcome to TackleBot! Here’s how to begin your fishing adventure:</p>
-        <ol>
-            <li><strong>Invite TackleBot:</strong> Add the bot to your Discord server using the invite link.</li>
-            <li><strong>Check the Prefix:</strong> TackleBot primarily uses slash commands (<code>/</code>). Type <code>/</code> to see the list of available commands.</li>
-            <li><strong>Cast Your First Line:</strong> Use the <code>/fish</code> command to start fishing!</li>
-            <li><strong>Check Your Inventory:</strong> See what you've caught with <code>/inventory</code>.</li>
-            <li><strong>Sell Your Catch:</strong> Earn cash by selling fish using <code>/sell [fish_name]</code> or <code>/sell all</code>.</li>
-        </ol>
-        <p class="help-tip"><i class="fas fa-lightbulb"></i> Tip: Use <code>/help</code> to see a full list of commands anytime!</p>
-    </div>
-
     <!-- Basic Commands -->
     <section id="basic-commands" class="animated-section">
       <h2>Basic Commands <span class="emoji">📋</span></h2>
@@ -592,7 +579,7 @@
                     <li><strong>Access:</strong> Manage your business via the "My Businesses" button on <code>/fish stats</code> or after using <code>/fish cast</code>.</li>
                     <li><strong>Purchase:</strong> Start your first business (e.g., Fishing Fleet, Market Stall) for a significant coin investment.</li>
                     <li><strong>Passive Income:</strong> Businesses generate income automatically over time based on their level and specific upgrades (like Boats, Nets, Engines, Workers for the Fleet).</li>
-                    <li><strong>Collect Income:</strong> Manually collect your earnings using the "Collect Income" button in the business management view.</li>
+                    <li><strong>Income Collection:</strong> The system automatically claims earned income every minute. You can also manually collect your earnings using the "Collect Income" button in the business management view.</li>
                     <li><strong>Upgrades:</strong> Invest more coins to upgrade your business components (e.g., buy more Boats, improve Nets) to increase income generation rate and capacity. Access via the "Manage Upgrades" button.</li>
                     <li><strong>Multiple Businesses:</strong> You can own and manage different types of businesses simultaneously (e.g., Fleet, Market).</li>
                 </ul>
@@ -602,14 +589,6 @@
             </div>
         </div>
     </section>
-
-    <div id="business" class="content-box">
-        <h2><i class="fas fa-store emoji-icon"></i> Running a Business</h2>
-        <p>Invest your hard-earned cash into businesses to generate passive income. Different businesses offer varying returns.</p>
-        <p>Use <code>/business buy [business_name]</code> to purchase a business and <code>/business list</code> to see available options and your current holdings.</p>
-        <p class="help-tip"><i class="fas fa-info-circle"></i> **Passive Income:** Your businesses generate income automatically over time. **This income is automatically claimed and added to your balance every minute**, even if you're not actively playing!</p>
-        <p>Upgrade your businesses using <code>/business upgrade [business_name]</code> to increase their profitability.</p>
-    </div>
 
     <!-- Seasonal System -->
     <section id="seasons" class="animated-section">
@@ -739,11 +718,11 @@
           <ul>
             <li>Use <code>/vote</code> to get the link to vote for TackleBot on Top.gg.</li>
             <li>Vote once every 12 hours.</li>
-            <li>Receive a **Voter Chest** for each vote.</li>
-            <li>Chests contain random coins (up to 🪙 1,000,000!).</li> <!-- Added max value -->
-            <li>**Chest Tiers:** Small ⭐, Medium ⭐⭐, Large ⭐⭐⭐, Jackpot ⭐⭐⭐⭐.</li> <!-- Added tiers -->
-            <li>Your **Fishing Level** increases the minimum potential coin value.</li> <!-- Updated factor -->
-            <li>Your **Voting Streak** increases the maximum potential value and chances for better tiers.</li> <!-- Updated factor -->
+            <li>Receive a <strong>Voter Chest</strong> for each vote.</li>
+            <li>Chests contain random coins (up to 🪙 1,000,000!).</li>
+            <li><strong>Chest Tiers:</strong> Small ⭐, Medium ⭐⭐, Large ⭐⭐⭐, Jackpot ⭐⭐⭐⭐.</li>
+            <li>Your <strong>Fishing Level</strong> increases the minimum potential coin value.</li>
+            <li>Your <strong>Voting Streak</strong> increases the maximum potential value and chances for better tiers.</li>
             <li>Missing a vote resets your streak!</li>
             <li>Toggle vote reminders with <code>/vote remind</code> (or buttons after voting).</li> <!-- Updated toggle -->
           </ul>
@@ -754,19 +733,6 @@
         </div>
       </div>
     </section>
-
-    <div id="voting" class="content-box">
-        <h2><i class="fas fa-vote-yea emoji-icon"></i> Voting Rewards</h2>
-        <p>Support TackleBot by voting on top.gg! You'll receive awesome rewards for each vote:</p>
-        <ul class="rewards-list">
-            <li>💰 **In-game Cash:** A helpful boost to your balance.</li>
-            <li>🎣 **Guaranteed Common Fish:** Adds a common fish directly to your inventory.</li>
-            <li><i class="fas fa-dice"></i> **Chance for Rare Bait:** A possibility of getting valuable bait to catch better fish.</li>
-            <li><i class="fas fa-star"></i> **Experience Points (XP):** Helps you level up faster.</li>
-        </ul>
-        <p>Vote regularly to maximize your rewards and help TackleBot grow!</p>
-        <a href="https://top.gg/bot/YOUR_BOT_ID/vote" target="_blank" class="button cta-button" data-ignore-canvas="true">Vote Now on top.gg! <i class="fas fa-external-link-alt"></i></a>
-    </div>
 
     <!-- Fun Commands -->
     <section id="fun-commands" class="animated-section">
@@ -974,17 +940,6 @@
   
   <!-- How to Use specific JavaScript -->
   <script src="how-to-use.js" defer></script>
-
-  <div id="fishing-basics" class="content-box">
-    <h2><i class="fas fa-fish emoji-icon"></i> Fishing Basics</h2>
-    <p>The core of TackleBot! Here's the lowdown:</p>
-    <ul>
-        <li><strong>Casting:</strong> Use <code>/fish</code> to cast your line. There's a short cooldown between casts.</li>
-        <li><strong>Bait:</strong> Using bait (e.g., <code>/fish bait:Worm</code>) increases your chances of catching rarer fish. Bait is consumed upon use, whether you catch something or not. Check available bait with <code>/inventory bait</code>.</li>
-        <li><strong>Locations:</strong> Different locations (unlocked by leveling up) have unique fish. Use <code>/travel [location_name]</code> to change spots. See available locations with <code>/locations</code>.</li>
-        <li><strong>Selling:</strong> Turn your fish into cash with <code>/sell [fish_name|all]</code>.</li>
-    </ul>
-  </div>
 </body>
 
 </html>
