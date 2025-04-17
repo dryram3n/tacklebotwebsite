@@ -8,9 +8,9 @@
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
-  --text-color-day: #4a5568; /* Dark grayish blue for day */
+  --text-color-day: #000000; /* Dark grayish blue for day */
   --text-color-night: #c5d5e5; /* Light grayish blue for night */
-  --static-text-color: #4a5568; /* Same as day color by default */
+  --static-text-color: #000000; /* Same as day color by default */
   --text-color: var(--text-color-day); /* Dynamic variable that changes */
   
   --heading-color-day: #2a4365; /* Darker blue for headings during day */
