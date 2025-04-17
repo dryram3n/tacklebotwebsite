@@ -10,6 +10,7 @@
   --primary-bg: #f0faff; /* Very light blue, almost white */
   --text-color-day: #4a5568; /* Dark grayish blue for day */
   --text-color-night: #c5d5e5; /* Light grayish blue for night */
+  --static-text-color: #4a5568; /* Same as day color by default */
   --text-color: var(--text-color-day); /* Dynamic variable that changes */
   
   --heading-color-day: #2a4365; /* Darker blue for headings during day */
@@ -562,6 +563,7 @@ section h2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #eee;
   text-align: left;
+  color: var(--static-text-color);
 }
 
 .command-item:hover {
@@ -586,7 +588,7 @@ section h2 {
 .command-item p {
   font-size: 0.95rem;
   margin-bottom: 0;
-  color: var(--text-color);
+  color: var(--static-text-color);
 }
 
 /* --- CTA Section --- */
@@ -670,6 +672,7 @@ footer {
 footer p {
   margin-bottom: 1rem;
   font-weight: 600;
+  color: var(--text-color);
 }
 
 footer a {
@@ -742,6 +745,7 @@ social-links {
   box-shadow: 0 5px 15px var(--shadow-light);
   border-left: 4px solid;
   border-image: var(--gradient-primary) 1;
+  color: var(--static-text-color);
 }
 
 .legal-card h3 {
@@ -1237,6 +1241,7 @@ social-links {
   display: flex;
   flex-direction: column;
   border: 3px solid transparent;
+  color: var(--static-text-color);
 }
 .fish-card:hover {
   transform: translateY(-10px);
@@ -1347,6 +1352,7 @@ social-links {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: modalFadeIn 0.4s ease-out;
+  color: var(--static-text-color);
 }
 
 @keyframes modalFadeIn {
@@ -1553,6 +1559,7 @@ social-links {
   padding: 1.5rem;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  color: var(--static-text-color);
 }
 
 .calc-group h3 {
@@ -2271,6 +2278,7 @@ body.canvas-failed #mouse-trail {
     padding: 1.5rem;
     margin: 1rem 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 /* Commands table */
@@ -2296,6 +2304,7 @@ body.canvas-failed #mouse-trail {
 
 .command-desc {
     color: var(--text-secondary);
+    color: var(--text-color);
 }
 
 /* Help tips */
@@ -2393,6 +2402,7 @@ body.canvas-failed #mouse-trail {
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 .location-card h3 {
@@ -2408,6 +2418,7 @@ body.canvas-failed #mouse-trail {
     font-size: 0.9rem;
     margin-top: 0.75rem;
     color: var(--text-secondary);
+    color: var(--text-color);
 }
 
 /* Upgrades grid */
@@ -2423,6 +2434,7 @@ body.canvas-failed #mouse-trail {
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 .upgrade-card h3 {
@@ -2437,6 +2449,7 @@ body.canvas-failed #mouse-trail {
     font-size: 0.9rem;
     margin-top: 0.75rem;
     color: var(--text-secondary);
+    color: var(--text-color);
 }
 
 /* Seasons grid */
@@ -2451,6 +2464,7 @@ body.canvas-failed #mouse-trail {
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 .season-card h3 {
@@ -2491,6 +2505,7 @@ body.canvas-failed #mouse-trail {
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 .challenge-item h3 {
@@ -2571,6 +2586,7 @@ body.canvas-failed #mouse-trail {
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color: var(--static-text-color);
 }
 
 .tip-item h3 {

@@ -226,24 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sunElement) sunElement.style.opacity = sunOpacity.toFixed(2);
             if (moonElement) moonElement.style.opacity = moonOpacity.toFixed(2);
             
-            // Update text colors based on time of day
+            // Only update the dynamic text color
             document.documentElement.style.setProperty('--text-color', isDayTime ? 
                 'var(--text-color-day)' : 'var(--text-color-night)');
-            document.documentElement.style.setProperty('--heading-color', isDayTime ? 
-                'var(--heading-color-day)' : 'var(--heading-color-night)');
-            document.documentElement.style.setProperty('--text-secondary', isDayTime ? 
-                'var(--text-secondary-day)' : 'var(--text-secondary-night)');
-                
-            // For transitions (dawn/dusk), smoothly interpolate between day/night colors if needed
-            if (textColorTransitionFactor > 0 && textColorTransitionFactor < 1) {
-                const textColor = interpolateColor('#c5d5e5', '#4a5568', textColorTransitionFactor);
-                const headingColor = interpolateColor('#e1ecf7', '#2a4365', textColorTransitionFactor);
-                const secondaryColor = interpolateColor('#a3b5c9', '#6c7a89', textColorTransitionFactor);
-                
-                document.documentElement.style.setProperty('--text-color', textColor);
-                document.documentElement.style.setProperty('--heading-color', headingColor);
-                document.documentElement.style.setProperty('--text-secondary', secondaryColor);
-            }
         });
     }
 
