@@ -248,7 +248,7 @@ nav {
 .logo {
   font-size: 1.9rem;
   font-weight: 800;
-  color: var(--heading-color);
+  color: var(--static-text-color);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -282,7 +282,7 @@ nav ul {
 
 nav ul li a {
   text-decoration: none;
-  color: var(--heading-color);
+  color: var(--static-text-color);
   font-weight: 700;
   padding: 8px 4px;
   position: relative;

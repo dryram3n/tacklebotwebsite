@@ -8,19 +8,13 @@
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
-  /* Using dynamic text color variables from the main style.css */
-  --text-color: var(--text-color);
-  --heading-color: var(--heading-color);
-  --text-secondary: var(--text-secondary);
+  /* Static text color that doesn't change with day/night */
+  --static-text-color: #4a5568; /* Dark grayish blue */
+  --accent: #66a6ff;
+  --accent-dark: #3a89ff;
   --white: #FFFFFF;
   --shadow-light: rgba(102, 166, 255, 0.15); /* Soft blue shadow */
   --shadow-medium: rgba(102, 166, 255, 0.25);
-  --accent: #66a6ff;
-  --accent-dark: #3a89ff;
-
-  /* Using both static and dynamic text colors */
-  --text-color: var(--text-color); /* Dynamic inherited from main CSS */
-  --static-text-color: #4a5568; /* Static text color */
 }
 
 /* Table of Contents */
@@ -37,7 +31,7 @@
     padding: 1.25rem;
     text-align: center;
     text-decoration: none;
-    color: var(--text-color); /* Using dynamic color variable */
+    color: var(--text-color); /* Dynamic color for text on transparent backgrounds */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -59,7 +53,7 @@
     padding: 1.5rem;
     margin: 1rem 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 /* Commands table */
@@ -76,7 +70,7 @@
     margin-bottom: 0.5rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     padding-bottom: 0.5rem;
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .command-name {
@@ -85,7 +79,7 @@
 }
 
 .command-desc {
-    color: var(--text-secondary);
+    color: var(--text-color); /* Dynamic color for descriptive text */
 }
 
 /* Help tips */
@@ -183,7 +177,7 @@
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .location-card h3 {
@@ -198,7 +192,7 @@
     gap: 0.25rem;
     font-size: 0.9rem;
     margin-top: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--text-color); /* Dynamic color for stats text */
 }
 
 /* Upgrades grid */
@@ -214,7 +208,7 @@
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .upgrade-card h3 {
@@ -228,7 +222,7 @@
     gap: 0.25rem;
     font-size: 0.9rem;
     margin-top: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--text-color); /* Dynamic color for stats text */
 }
 
 /* Seasons grid */
@@ -243,7 +237,7 @@
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .season-card h3 {
@@ -284,7 +278,7 @@
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .challenge-item h3 {
@@ -304,7 +298,7 @@
     padding: 0.75rem 1rem;
     border-radius: 8px 8px 0 0;
     margin: 0;
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .fun-category ul {
@@ -312,7 +306,7 @@
     margin: 0;
     padding: 1rem 1rem 1rem 2rem;
     border-radius: 0 0 8px 8px;
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .fun-category li {
@@ -322,7 +316,7 @@
 .fun-category .small-note {
     font-size: 0.85rem;
     font-style: italic;
-    color: var(--text-secondary);
+    color: var(--static-text-color);
     margin-top: 0.5rem;
     margin-bottom: 0;
     padding: 0 1rem 1rem;
@@ -342,7 +336,7 @@
     padding: 0.75rem 1rem;
     border-radius: 8px 8px 0 0;
     margin: 0;
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .mod-category ul {
@@ -350,7 +344,7 @@
     margin: 0;
     padding: 1rem 1rem 1rem 2rem;
     border-radius: 0 0 8px 8px;
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .mod-category li {
@@ -369,7 +363,7 @@
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    color: var(--static-text-color);
+    color: var(--static-text-color); /* Static color for text on solid backgrounds */
 }
 
 .tip-item h3 {
