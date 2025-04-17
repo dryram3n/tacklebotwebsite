@@ -512,13 +512,18 @@ class WaterCanvas {
         if (this.prefersReducedMotion || !this.isRaining) return;
         if (Math.random() > this.rainIntensity * (this.isLowPerfDevice ? 0.3 : 1)) return;
   
-        this.raindrops.push({
-            x: Math.random() * this.canvas.width,
-            y: -10,
-            length: 5 + Math.random() * 10,
-            speedY: 8 + Math.random() * 7,
-            opacity: 0.3 + Math.random() * 0.4
-        });
+        // Create more raindrops per frame for better visibility
+        const dropCount = this.isLowPerfDevice ? 1 : 3;
+        
+        for (let i = 0; i < dropCount; i++) {
+            this.raindrops.push({
+                x: Math.random() * this.canvas.width,
+                y: -10,
+                length: 10 + Math.random() * 15, // Increased length
+                speedY: 12 + Math.random() * 8,  // Increased speed
+                opacity: 0.6 + Math.random() * 0.4 // Increased opacity
+            });
+        }
     }
   
     updateRaindrops(delta) {
@@ -1134,9 +1139,11 @@ class WaterCanvas {
       }
 
       if (!this.prefersReducedMotion && this.isRaining) {
-          this.ctx.strokeStyle = 'rgba(180, 210, 230, 0.6)';
-          this.ctx.lineWidth = 1.5;
+          // Increased opacity and width for better visibility
+          this.ctx.strokeStyle = 'rgba(180, 210, 230, 0.8)';
+          this.ctx.lineWidth = 2;
           this.ctx.lineCap = 'round';
+          
           for (const drop of this.raindrops) {
               this.ctx.beginPath();
               this.ctx.moveTo(drop.x, drop.y);
