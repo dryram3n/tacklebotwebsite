@@ -92,33 +92,33 @@
             <div class="calc-input-grid">
               <div class="calc-input-item">
                 <label for="calc-luck" class="calc-label">Lucky Lure (Luck):</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-luck" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-luck">
+                <small>+0.5% rare fish chance per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-speed" class="calc-label">Quick Cast (Speed):</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-speed" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-speed">
+                <small>+0.5% casting speed reduction per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-multiCatch" class="calc-label">Wide Net (Multi-Catch):</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-multiCatch" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-multiCatch">
+                <small>+0.3% chance to catch multiple fish per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-inventory" class="calc-label">Tackle Box (Inventory):</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-inventory" class="calc-input" min="0" max="20" value="0" aria-describedby="calc-output-inventory">
+                <small>+5 inventory space per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-value" class="calc-label">Market Contacts (Value):</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-value" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-value">
+                <small>+0.4% fish value per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-explorer" class="calc-label">Explorer's Map:</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-explorer" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-locations">
+                <small>Unlocks new fishing locations per level</small>
               </div>
             </div>
           </div>
@@ -129,30 +129,31 @@
             <div class="calc-input-grid">
               <div class="calc-input-item">
                 <label for="calc-advancedLuck" class="calc-label">Advanced Lure Tech:</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-advancedLuck" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-luck">
+                <small>+2.0% rare fish chance boost per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-efficiency" class="calc-label">Fishing Efficiency:</label>
-                <!-- Updated max -->
-                <input type="number" id="calc-efficiency" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-speed"> <!-- Efficiency affects speed -->
+                <input type="number" id="calc-efficiency" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-speed">
+                <small>+2.5% casting speed reduction per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-masterNet" class="calc-label">Master Fishing Net:</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-masterNet" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-multiCatch">
+                <small>+1.5% multi-catch chance per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-treasureHunter" class="calc-label">Treasure Hunter:</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-treasureHunter" class="calc-input" min="0" max="5" value="0" aria-describedby="calc-output-treasure">
+                <small>+10% treasure chest bonus per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-specialLure" class="calc-label">Special Fish Attractor:</label>
-                <!-- Updated max -->
                 <input type="number" id="calc-specialLure" class="calc-input" min="0" max="5" value="0" aria-describedby="calc-output-specialChance">
+                <small>+5% special fish chance per level</small>
               </div>
             </div>
+            <p class="calc-note">Research upgrades require corresponding shop upgrades and become available at higher levels.</p>
           </div>
 
           <!-- Other Factors -->
@@ -161,20 +162,22 @@
             <div class="calc-input-grid calc-input-grid-small">
               <div class="calc-input-item">
                 <label for="calc-level" class="calc-label">Your Fishing Level:</label>
-                <!-- No max for player level -->
-                <input type="number" id="calc-level" class="calc-input" min="0" value="0" aria-describedby="calc-output-luck"> <!-- Level affects luck -->
+                <input type="number" id="calc-level" class="calc-input" min="0" value="0" aria-describedby="calc-output-luck">
+                <small>+0.5 luck per 10 levels</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-location" class="calc-label">Fishing Location:</label>
                 <select id="calc-location" class="calc-select">
                   <!-- Options will be populated by JS -->
                 </select>
+                <small>Each location has different rarity modifiers</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-season" class="calc-label">Current Season:</label>
                 <select id="calc-season" class="calc-select">
                   <!-- Options will be populated by JS -->
                 </select>
+                <small>Seasons affect fish rarity chances</small>
               </div>
             </div>
           </div>
