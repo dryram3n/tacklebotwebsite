@@ -182,23 +182,39 @@
           <!-- Business Bonuses -->
           <div class="calc-group" id="business-upgrades">
             <h3>Business Bonuses</h3>
-            <div class="calc-input-grid calc-input-grid-small">
+            <div class="calc-input-grid">
               <div class="calc-input-item">
                 <label for="calc-fisherLevel" class="calc-label">Fisher Level:</label>
-                <input type="number" id="calc-fisherLevel" class="calc-input" min="0" max="50" value="0">
-                <small>+0.5% multi-catch</small>
+                <input type="number" id="calc-fisherLevel" class="calc-input" min="0" max="50" value="0" aria-describedby="calc-output-multiCatch">
+                <small>+0.5% multi-catch chance per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-warehouseLevel" class="calc-label">Warehouse Level:</label>
-                <input type="number" id="calc-warehouseLevel" class="calc-input" min="0" max="50" value="0">
-                <small>+10 inventory</small>
+                <input type="number" id="calc-warehouseLevel" class="calc-input" min="0" max="50" value="0" aria-describedby="calc-output-inventory">
+                <small>+10 inventory space per level</small>
               </div>
               <div class="calc-input-item">
                 <label for="calc-investmentLevel" class="calc-label">Investment Level:</label>
-                <input type="number" id="calc-investmentLevel" class="calc-input" min="0" max="100" value="0">
-                <small>+2% fish value</small>
+                <input type="number" id="calc-investmentLevel" class="calc-input" min="0" max="100" value="0" aria-describedby="calc-output-value">
+                <small>+2% fish value per level</small>
+              </div>
+              <div class="calc-input-item">
+                <label for="calc-engineLevel" class="calc-label">Engine Level:</label>
+                <input type="number" id="calc-engineLevel" class="calc-input" min="0" max="50" value="0" aria-describedby="calc-output-speed">
+                <small>+5% casting speed per level</small>
+              </div>
+              <div class="calc-input-item">
+                <label for="calc-marketingLevel" class="calc-label">Marketing Level:</label>
+                <input type="number" id="calc-marketingLevel" class="calc-input" min="0" max="50" value="0" aria-describedby="calc-output-value">
+                <small>+6% market sales per level</small>
+              </div>
+              <div class="calc-input-item">
+                <label for="calc-branchLevel" class="calc-label">Branch Level:</label>
+                <input type="number" id="calc-branchLevel" class="calc-input" min="0" max="50" value="0" aria-describedby="calc-output-value">
+                <small>+12% bank income per level</small>
               </div>
             </div>
+            <p class="calc-note">These upgrades come from the Fishing Fleet, Market, and Bank businesses in the Discord bot.</p>
           </div>
 
         </div>

@@ -115,10 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
         treasureHunter: document.getElementById('calc-treasureHunter'),
         specialLure: document.getElementById('calc-specialLure'),
         
-        // Business upgrades - NEW
+        // Business upgrades
         fisherLevel: document.getElementById('calc-fisherLevel'),
         warehouseLevel: document.getElementById('calc-warehouseLevel'),
         investmentLevel: document.getElementById('calc-investmentLevel'),
+        engineLevel: document.getElementById('calc-engineLevel'),
+        marketingLevel: document.getElementById('calc-marketingLevel'), 
+        branchLevel: document.getElementById('calc-branchLevel'),
         
         // Other factors
         level: document.getElementById('calc-level'),
@@ -212,18 +215,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Calculate individual stats based on levels and constants ---
 
-        // Speed Reduction (%) - Updated based on fishUtils -> fishEffects
+        // Speed Reduction (%)
         const baseSpeed = levels.speed * SHOP_UPGRADES.speed.effectPerLevel;
         const efficiencyEffect = levels.efficiency * RESEARCH_UPGRADES.efficiency.effectPerLevel;
-        const totalSpeedReduction = baseSpeed + efficiencyEffect;
-        outputs.speed.textContent = `${totalSpeedReduction.toFixed(1)}%`;
+        const engineBonus = levels.engineLevel * 5; // +5% per level
+        const totalSpeedReduction = baseSpeed + efficiencyEffect + engineBonus;
+        outputs.speed.textContent = `${totalSpeedReduction.toFixed(1)}% (Shop: ${baseSpeed.toFixed(1)}%, Research: ${efficiencyEffect.toFixed(1)}%, Engine: ${engineBonus.toFixed(1)}%)`;
 
-        // Sell Value Bonus (%) - Updated with bank investment bonus
+        // Sell Value Bonus (%)
         const baseValueBonus = levels.value * SHOP_UPGRADES.value.effectPerLevel;
-        // From fishEffects.js: bankValue = investmentLevel * 2; // +2% per level
-        const investmentBonus = levels.investmentLevel * 2; 
-        const totalValueBonus = baseValueBonus + investmentBonus;
-        outputs.value.textContent = `${totalValueBonus.toFixed(1)}% (Shop: ${baseValueBonus.toFixed(1)}%, Bank: ${investmentBonus.toFixed(1)}%)`;
+        const investmentBonus = levels.investmentLevel * 2; // +2% per level 
+        const marketingBonus = levels.marketingLevel * 6; // +6% per level
+        const branchBonus = levels.branchLevel * 12; // +12% per level
+        const totalValueBonus = baseValueBonus + investmentBonus + marketingBonus + branchBonus;
+        outputs.value.textContent = `${totalValueBonus.toFixed(1)}% (Shop: ${baseValueBonus.toFixed(1)}%, Investment: ${investmentBonus.toFixed(1)}%, Marketing: ${marketingBonus.toFixed(1)}%, Branch: ${branchBonus.toFixed(1)}%)`;
 
         // Inventory Size - Updated with warehouse bonus
         const baseInventory = BASE_INVENTORY + (levels.inventory * SHOP_UPGRADES.inventory.effectPerLevel);
