@@ -1706,6 +1706,161 @@ social-links {
 .calc-output-line.rarity-mythic span { color: var(--rarity-mythic-text); }
 .calc-output-line.rarity-chimerical span { color: var(--rarity-chimerical-text); }
 
+/* Calculator Layout Improvements */
+
+/* Tabbed Interface */
+.calc-tabs {
+  display: flex;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  padding-bottom: 5px;
+  scrollbar-width: thin;
+}
+
+.calc-tab {
+  flex: 0 0 auto;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  margin-right: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.calc-tab[aria-selected="true"] {
+  background: var(--gradient-primary);
+  color: var(--heading-color);
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* More compact inputs */
+.calc-input-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.calc-input-item {
+  gap: 0.2rem;
+}
+
+.calc-label {
+  font-size: 0.85rem;
+}
+
+.calc-input, .calc-select {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+}
+
+/* Collapsible sections for mobile */
+@media (max-width: 768px) {
+  .calculator-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .calc-output-line {
+    font-size: 0.95rem;
+    padding-bottom: 0.6rem;
+  }
+  
+  /* Tabs layout for mobile */
+  .calc-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Three column layout for small inputs on mobile */
+  .calc-input-grid-small {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Make outputs more compact */
+  .calc-output-area {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  
+  .calc-rarity-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  /* Smaller business bonus helpers */
+  .calc-input-item small {
+    font-size: 0.75rem;
+  }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+  .calc-input-grid-small {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .calc-rarity-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .calc-tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  /* Force horizontal scrolling for tabs rather than wrapping */
+  .calc-tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Optional: Collapsible outputs section for very small screens */
+@media (max-width: 480px) {
+  .calc-outputs h3 {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .calc-outputs h3::after {
+    content: "▼";
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+  }
+  
+  .calc-outputs.collapsed h3::after {
+    transform: rotate(180deg);
+  }
+  
+  .calc-outputs.collapsed .calc-output-area {
+    display: none;
+  }
+  
+  /* Add some space for calculation button */
+  .calc-action-button {
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background: var(--gradient-primary);
+    color: var(--heading-color);
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+}
+
 /* --- UI Toggle Button --- */
 #ui-toggle-container {
     position: fixed;

@@ -87,7 +87,7 @@
         <div class="calc-inputs">
 
           <!-- Shop Upgrades -->
-          <div class="calc-group">
+          <div class="calc-group" id="shop-upgrades">
             <h3>Shop Upgrades</h3>
             <div class="calc-input-grid">
               <div class="calc-input-item">
@@ -124,7 +124,7 @@
           </div>
 
           <!-- Research Upgrades -->
-          <div class="calc-group">
+          <div class="calc-group" id="research-upgrades">
             <h3>Research Upgrades</h3>
             <div class="calc-input-grid">
               <div class="calc-input-item">
@@ -156,7 +156,7 @@
           </div>
 
           <!-- Other Factors -->
-          <div class="calc-group">
+          <div class="calc-group" id="other-factors">
             <h3>Other Factors</h3>
             <div class="calc-input-grid calc-input-grid-small">
               <div class="calc-input-item">
@@ -175,6 +175,28 @@
                 <select id="calc-season" class="calc-select">
                   <!-- Options will be populated by JS -->
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business Bonuses -->
+          <div class="calc-group" id="business-upgrades">
+            <h3>Business Bonuses</h3>
+            <div class="calc-input-grid calc-input-grid-small">
+              <div class="calc-input-item">
+                <label for="calc-fisherLevel" class="calc-label">Fisher Level:</label>
+                <input type="number" id="calc-fisherLevel" class="calc-input" min="0" max="50" value="0">
+                <small>+0.5% multi-catch</small>
+              </div>
+              <div class="calc-input-item">
+                <label for="calc-warehouseLevel" class="calc-label">Warehouse Level:</label>
+                <input type="number" id="calc-warehouseLevel" class="calc-input" min="0" max="50" value="0">
+                <small>+10 inventory</small>
+              </div>
+              <div class="calc-input-item">
+                <label for="calc-investmentLevel" class="calc-label">Investment Level:</label>
+                <input type="number" id="calc-investmentLevel" class="calc-input" min="0" max="100" value="0">
+                <small>+2% fish value</small>
               </div>
             </div>
           </div>

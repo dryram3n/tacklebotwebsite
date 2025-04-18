@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
           value: { name: "Fish Market Contacts", description: "Increases sell value of fish", maxLevel: 100, basePrice: 500, priceMultiplier: 1.25, effectPerLevel: 0.4 },
           explorer: { name: "Explorer's Map", description: "Unlocks new fishing locations", maxLevel: 10, basePrice: 5000, priceMultiplier: 2.5, effectPerLevel: 1 }
       };
-      // From fishUtils.txt -> fishConstants.js reference
+      
       const RESEARCH_UPGRADES = {
           advancedLuck: { name: "Advanced Lure Technology", description: "Significantly boosts rare fish chances", maxLevel: 10, basePrice: 50000, priceMultiplier: 1.5, effectPerLevel: 2.0, researchTimeHours: 6, timeMultiplier: 1.25, requires: { luck: 25 } },
           efficiency: { name: "Fishing Efficiency", description: "Greatly reduces fishing time", maxLevel: 10, basePrice: 100000, priceMultiplier: 1.5, effectPerLevel: 2.5, researchTimeHours: 8, timeMultiplier: 1.3, requires: { speed: 30 } },
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
           treasureHunter: { name: "Treasure Hunter", description: "Increases chest spawn rate and value", maxLevel: 5, basePrice: 200000, priceMultiplier: 2.0, effectPerLevel: 10, researchTimeHours: 24, timeMultiplier: 1.5, requires: { value: 50 } },
           specialLure: { name: "Special Fish Attractor", description: "Increases special fish chance", maxLevel: 5, basePrice: 500000, priceMultiplier: 2.0, effectPerLevel: 5, researchTimeHours: 36, timeMultiplier: 1.5, requires: { luck: 60, value: 40 } }
       };
+      
       // From fishLocationUtils.txt
       const FISHING_LOCATIONS = {
           pond: {
@@ -79,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
               commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 5, mythicBoost: 10, chimericalBoost: 5
           }
       };
+      
       // From fishSeasonUtils.txt
       const SEASONS = {
           spring: { name: 'Spring', modifier: { common: 0.9, uncommon: 1.0, rare: 1.05, legendary: 1.05, mythic: 1.1, chimerical: 1.0 } },
@@ -86,26 +88,39 @@ document.addEventListener('DOMContentLoaded', () => {
           fall: { name: 'Fall', modifier: { common: 0.8, uncommon: 1.0, rare: 1.1, legendary: 1.15, mythic: 0.9, chimerical: 0.9 } },
           winter: { name: 'Winter', modifier: { common: 0.95, uncommon: 0.95, rare: 0.95, legendary: 1.05, mythic: 1.10, chimerical: 1.05 } }
       };
+      
       // From fishRarityUtils.txt
       const RARITY_WEIGHTS = { common: 0.608, uncommon: 0.218, rare: 0.099, legendary: 0.03, mythic: 0.025, chimerical: 0.02 };
+      
       // From fishRarityUtils.txt
       const SPECIAL_FISH_CHANCE = 0.005; // 0.5% base chance
+      
       // From fishUtils.txt (addFish logic implies base is 20, each upgrade adds 5)
       const BASE_INVENTORY = 20; // Default inventory size before upgrades
 
       // Get references to the input and output elements in the HTML
       const inputs = {
+        // Shop upgrades
         luck: document.getElementById('calc-luck'),
         speed: document.getElementById('calc-speed'),
         multiCatch: document.getElementById('calc-multiCatch'),
         inventory: document.getElementById('calc-inventory'),
         value: document.getElementById('calc-value'),
         explorer: document.getElementById('calc-explorer'),
+        
+        // Research upgrades
         advancedLuck: document.getElementById('calc-advancedLuck'),
         efficiency: document.getElementById('calc-efficiency'),
         masterNet: document.getElementById('calc-masterNet'),
         treasureHunter: document.getElementById('calc-treasureHunter'),
         specialLure: document.getElementById('calc-specialLure'),
+        
+        // Business upgrades - NEW
+        fisherLevel: document.getElementById('calc-fisherLevel'),
+        warehouseLevel: document.getElementById('calc-warehouseLevel'),
+        investmentLevel: document.getElementById('calc-investmentLevel'),
+        
+        // Other factors
         level: document.getElementById('calc-level'),
         location: document.getElementById('calc-location'),
         season: document.getElementById('calc-season')
@@ -157,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Helper to safely get integer input values within bounds
       function getInputValue(element, maxVal = Infinity) {
+        if (!element) return 0; // Handle missing elements
+        
         const value = parseInt(element.value, 10) || 0;
         // Use the maxLevel from the upgrade definition if available and maxVal wasn't explicitly passed differently
         const elementMax = element.max ? parseInt(element.max, 10) : maxVal;
@@ -167,17 +184,27 @@ document.addEventListener('DOMContentLoaded', () => {
       function calculateStats() {
         // Read all current input values, respecting max levels from constants
         const levels = {
+          // Shop upgrades
           luck: getInputValue(inputs.luck, SHOP_UPGRADES.luck.maxLevel),
           speed: getInputValue(inputs.speed, SHOP_UPGRADES.speed.maxLevel),
           multiCatch: getInputValue(inputs.multiCatch, SHOP_UPGRADES.multiCatch.maxLevel),
           inventory: getInputValue(inputs.inventory, SHOP_UPGRADES.inventory.maxLevel),
           value: getInputValue(inputs.value, SHOP_UPGRADES.value.maxLevel),
           explorer: getInputValue(inputs.explorer, SHOP_UPGRADES.explorer.maxLevel),
+          
+          // Research upgrades
           advancedLuck: getInputValue(inputs.advancedLuck, RESEARCH_UPGRADES.advancedLuck.maxLevel),
           efficiency: getInputValue(inputs.efficiency, RESEARCH_UPGRADES.efficiency.maxLevel),
           masterNet: getInputValue(inputs.masterNet, RESEARCH_UPGRADES.masterNet.maxLevel),
           treasureHunter: getInputValue(inputs.treasureHunter, RESEARCH_UPGRADES.treasureHunter.maxLevel),
           specialLure: getInputValue(inputs.specialLure, RESEARCH_UPGRADES.specialLure.maxLevel),
+          
+          // Business upgrades - NEW
+          fisherLevel: getInputValue(inputs.fisherLevel, 50), // Max level from businessUtils.js
+          warehouseLevel: getInputValue(inputs.warehouseLevel, 50), // Max level from businessUtils.js
+          investmentLevel: getInputValue(inputs.investmentLevel, 100), // Max level from businessUtils.js
+          
+          // Other
           level: getInputValue(inputs.level) // No max level for player level
         };
         const selectedLocation = inputs.location.value;
@@ -191,19 +218,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalSpeedReduction = baseSpeed + efficiencyEffect;
         outputs.speed.textContent = `${totalSpeedReduction.toFixed(1)}%`;
 
-        // Sell Value Bonus (%) - Updated based on fishUtils -> fishEffects (ignoring permanent boosts)
-        const totalValueBonus = levels.value * SHOP_UPGRADES.value.effectPerLevel;
-        outputs.value.textContent = `${totalValueBonus.toFixed(1)}%`;
+        // Sell Value Bonus (%) - Updated with bank investment bonus
+        const baseValueBonus = levels.value * SHOP_UPGRADES.value.effectPerLevel;
+        // From fishEffects.js: bankValue = investmentLevel * 2; // +2% per level
+        const investmentBonus = levels.investmentLevel * 2; 
+        const totalValueBonus = baseValueBonus + investmentBonus;
+        outputs.value.textContent = `${totalValueBonus.toFixed(1)}% (Shop: ${baseValueBonus.toFixed(1)}%, Bank: ${investmentBonus.toFixed(1)}%)`;
 
-        // Inventory Size - Updated based on fishUtils -> addFish
-        const totalInventory = BASE_INVENTORY + (levels.inventory * SHOP_UPGRADES.inventory.effectPerLevel);
-        outputs.inventory.textContent = `${totalInventory}`;
+        // Inventory Size - Updated with warehouse bonus
+        const baseInventory = BASE_INVENTORY + (levels.inventory * SHOP_UPGRADES.inventory.effectPerLevel);
+        // From fishUtils.js: warehouseBonus = warehouseLevel * 10; // +10 slots per warehouse level
+        const warehouseBonus = levels.warehouseLevel * 10;
+        const totalInventory = baseInventory + warehouseBonus;
+        outputs.inventory.textContent = `${totalInventory} (Base: ${baseInventory}, Warehouse: +${warehouseBonus})`;
 
-        // Multi-Catch Chance (%) - Updated based on fishUtils -> fishEffects
+        // Multi-Catch Chance (%) - Updated with fisher bonus
         const baseMultiCatch = levels.multiCatch * SHOP_UPGRADES.multiCatch.effectPerLevel;
         const masterNetEffect = levels.masterNet * RESEARCH_UPGRADES.masterNet.effectPerLevel;
-        const totalMultiCatch = baseMultiCatch + masterNetEffect;
-        outputs.multiCatch.textContent = `${totalMultiCatch.toFixed(1)}%`;
+        // From fishEffects.js: fisherBonus = fisherLevel * 0.5; // +0.5% per level
+        const fisherBonus = levels.fisherLevel * 0.5; 
+        const totalMultiCatch = baseMultiCatch + masterNetEffect + fisherBonus;
+        outputs.multiCatch.textContent = `${totalMultiCatch.toFixed(1)}% (Shop: ${baseMultiCatch.toFixed(1)}%, Research: ${masterNetEffect.toFixed(1)}%, Boat: ${fisherBonus.toFixed(1)}%)`;
 
         // Special Fish Chance (%) - Updated based on fishUtils -> catchFish & fishEffects
         const specialLureBoost = levels.specialLure * RESEARCH_UPGRADES.specialLure.effectPerLevel;
@@ -270,21 +305,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
              // Avoid division by zero if all weights somehow became zero
              for (const rarity in modifiedWeights) {
-                 modifiedWeights[rarity] = 1 / Object.keys(modifiedWeights).length;
+                 modifiedWeights[rarity] = 1 / Object.keys(RARITY_WEIGHTS).length;
              }
         }
 
-
         // 3. Apply Luck Shift (Approximation of the bot's `rarityRoll = Math.random() - totalLuckBoost;`)
-        // The bot subtracts a boost from the random roll. This effectively shifts the threshold for higher rarities.
-        // We simulate this by increasing the weight of rarer categories and decreasing lower ones.
-        // The `totalLuckBoost` in the bot is `(upgradeBoost + levelBoost)`, where `upgradeBoost = luck * 0.002` and `levelBoost = Math.min(levelLuckBonus * 0.002, 0.25)`.
-        // Let's use `totalLuckForRoll` (shop + level luck) for this calculation.
-        // Advanced Luck (Research) seems to be applied separately or differently in the bot, maybe not directly in the initial roll?
-        // For simplicity, we'll base the shift primarily on `totalLuckForRoll`.
-        // The exact impact is hard to replicate perfectly without seeing the full loop, but we can approximate the *effect*.
-
-        const luckShiftFactor = totalLuckForRoll * 0.002; // Corresponds to the bot's `totalLuckBoost` calculation (ignoring cap for simplicity here)
+        const luckShiftFactor = totalLuckForRoll * 0.002; // Corresponds to the bot's `totalLuckBoost` calculation
 
         // Define relative values to determine how much to shift
         const rarityValues = { common: 1, uncommon: 2, rare: 4, legendary: 8, mythic: 16, chimerical: 32 };
@@ -328,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-
         // Update the UI with the calculated rarity percentages
         outputs.rarityCommon.textContent = `~${(modifiedWeights.common * 100).toFixed(1)}%`;
         outputs.rarityUncommon.textContent = `~${(modifiedWeights.uncommon * 100).toFixed(1)}%`;
@@ -345,10 +370,103 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add event listeners to recalculate whenever any input changes
       for (const key in inputs) {
         if (inputs[key]) { // Check if the element actually exists
-          inputs[key].addEventListener('input', calculateStats);
+          inputs[key].addEventListener('input', throttledCalculate);
         } else {
           console.warn(`Calculator input element not found: ${key}`);
         }
       }
-    } // End of if(calcContainer) check
-  }); // End of DOMContentLoaded listener
+
+      // Add after your existing calculateStats function
+
+      function setupTabInterface() {
+        // Create tab navigation
+        const tabContainer = document.createElement('div');
+        tabContainer.className = 'calc-tabs';
+        
+        const tabs = [
+          { id: 'tab-shop', label: '🛒 Shop', target: 'shop-upgrades' },
+          { id: 'tab-research', label: '🔬 Research', target: 'research-upgrades' },
+          { id: 'tab-business', label: '💼 Business', target: 'business-upgrades' },
+          { id: 'tab-other', label: '⚙️ Other', target: 'other-factors' }
+        ];
+        
+        // Create tab buttons
+        tabs.forEach(tab => {
+          const button = document.createElement('button');
+          button.id = tab.id;
+          button.className = 'calc-tab';
+          button.textContent = tab.label;
+          button.setAttribute('aria-selected', tab.id === 'tab-shop' ? 'true' : 'false');
+          button.addEventListener('click', () => switchTab(tab.id, tab.target));
+          tabContainer.appendChild(button);
+        });
+        
+        // Insert tabs before the inputs
+        const calcInputs = document.querySelector('.calc-inputs');
+        calcInputs.parentNode.insertBefore(tabContainer, calcInputs);
+        
+        // Add tabbed content containers
+        document.querySelectorAll('.calc-group').forEach(group => {
+          group.classList.add('calc-tab-content');
+          // Initially hide all except shop upgrades
+          if (!group.querySelector('h3').textContent.includes('Shop')) {
+            group.style.display = 'none';
+          }
+        });
+      }
+
+      function switchTab(tabId, targetGroupName) {
+        // Update tab button states
+        document.querySelectorAll('.calc-tab').forEach(tab => {
+          tab.setAttribute('aria-selected', tab.id === tabId ? 'true' : 'false');
+        });
+        
+        // Show/hide appropriate content
+        document.querySelectorAll('.calc-group').forEach(group => {
+          const groupTitle = group.querySelector('h3').textContent.toLowerCase();
+          group.style.display = groupTitle.includes(targetGroupName.replace('-', ' ')) ? 'block' : 'none';
+        });
+      }
+
+      setupTabInterface();
+
+      // Make outputs collapsible on mobile
+      function setupCollapsibleOutputs() {
+        const outputsSection = document.querySelector('.calc-outputs');
+        const outputsHeading = outputsSection.querySelector('h3');
+        
+        if (window.innerWidth <= 480) {
+          // Add toggle functionality
+          outputsHeading.addEventListener('click', () => {
+            outputsSection.classList.toggle('collapsed');
+          });
+          
+          // Add calculate button for mobile
+          const calcButton = document.createElement('button');
+          calcButton.className = 'calc-action-button';
+          calcButton.textContent = 'Calculate Stats';
+          calcButton.addEventListener('click', calculateStats);
+          
+          // Insert before outputs section
+          outputsSection.parentNode.insertBefore(calcButton, outputsSection);
+          
+          // Initially collapse outputs on very small screens
+          outputsSection.classList.add('collapsed');
+        }
+      }
+
+      // Call in your document ready function
+      setupCollapsibleOutputs();
+
+      // Throttle calculations on mobile
+      let calculateThrottleTimer;
+      function throttledCalculate() {
+        if (window.innerWidth <= 768) { // Only throttle on mobile
+          clearTimeout(calculateThrottleTimer);
+          calculateThrottleTimer = setTimeout(calculateStats, 500);
+        } else {
+          calculateStats(); // Immediate on desktop
+        }
+      }
+    } 
+  });
