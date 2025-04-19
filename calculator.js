@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
           multiCatch: { name: "Wide Net", description: "Chance to catch multiple fish", maxLevel: 100, basePrice: 150, priceMultiplier: 1.18, effectPerLevel: 0.3 },
           inventory: { name: "Tackle Box", description: "Increases inventory capacity", maxLevel: 20, basePrice: 300, priceMultiplier: 1.5, effectPerLevel: 5 },
           value: { name: "Fish Market Contacts", description: "Increases sell value of fish", maxLevel: 100, basePrice: 500, priceMultiplier: 1.25, effectPerLevel: 0.4 },
-          explorer: { name: "Explorer's Map", description: "Unlocks new fishing locations", maxLevel: 10, basePrice: 5000, priceMultiplier: 2.5, effectPerLevel: 1 }
+          explorer: { name: "Explorer's Map", description: "Unlocks new fishing locations", maxLevel: 11, basePrice: 5000, priceMultiplier: 2.5, effectPerLevel: 1 },
+          // Add the Special Map upgrade
+          specialMap: { name: "Special Map", description: "Unlocks special fishing locations", maxLevel: 1, basePrice: 2000000, priceMultiplier: 1, effectPerLevel: 1, requiresBoatCompany: true }
       };
       
       const RESEARCH_UPGRADES = {
@@ -78,6 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
               name: "Fishverse",
               fishModifiers: { common: 0.1, uncommon: 0.25, rare: 0.5, legendary: 0.8, mythic: 1.2, chimerical: 1.0 },
               commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 5, mythicBoost: 10, chimericalBoost: 5
+          },
+          // Add Lucky Land
+          lucky_land: {
+              name: "Lucky Land",
+              fishModifiers: { common: 0.1, uncommon: 0.1, rare: 1, legendary: 1.05, mythic: 1.1, chimerical: 1.2 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 5, mythicBoost: 10, chimericalBoost: 20
+          },
+          // Add Junk Island
+          junk_island: {
+              name: "Junk Island",
+              fishModifiers: { common: 0, uncommon: 0, rare: 0, legendary: 0, mythic: 0, chimerical: 0, junk: 5 },
+              commonBoost: 0, uncommonBoost: 0, rareBoost: 0, legendaryBoost: 0, mythicBoost: 0, chimericalBoost: 0,
+              junkOnly: true, requiresSpecialMap: true
           }
       };
       
@@ -107,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inventory: document.getElementById('calc-inventory'),
         value: document.getElementById('calc-value'),
         explorer: document.getElementById('calc-explorer'),
+        specialMap: document.getElementById('calc-specialMap'), // Add Special Map input
         
         // Research upgrades
         advancedLuck: document.getElementById('calc-advancedLuck'),
@@ -145,14 +161,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Fill the location and season dropdowns with options
       function populateOptions() {
+        // Get current explorer level and special map status
+        const explorerLevel = getInputValue(inputs.explorer, SHOP_UPGRADES.explorer.maxLevel);
+        const hasSpecialMap = getInputValue(inputs.specialMap, SHOP_UPGRADES.specialMap.maxLevel) > 0;
+        
         // Locations
         inputs.location.innerHTML = ''; // Clear existing options first
         for (const key in FISHING_LOCATIONS) {
+          // Check if location should be shown based on explorer level and special map
+          const location = FISHING_LOCATIONS[key];
+          
+          // Skip Junk Island if no special map
+          if (key === 'junk_island' && !hasSpecialMap) continue;
+          
+          // Skip Lucky Land if explorer level < 11
+          if (key === 'lucky_land' && explorerLevel < 11) continue;
+          
           const option = document.createElement('option');
           option.value = key;
-          option.textContent = FISHING_LOCATIONS[key].name; // Use the display name
+          option.textContent = location.name;
           inputs.location.appendChild(option);
         }
+        
         // Seasons
         inputs.season.innerHTML = ''; // Clear existing options first
         for (const key in SEASONS) {
@@ -191,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
           inventory: getInputValue(inputs.inventory, SHOP_UPGRADES.inventory.maxLevel),
           value: getInputValue(inputs.value, SHOP_UPGRADES.value.maxLevel),
           explorer: getInputValue(inputs.explorer, SHOP_UPGRADES.explorer.maxLevel),
+          specialMap: getInputValue(inputs.specialMap, SHOP_UPGRADES.specialMap.maxLevel), // Add Special Map input
           
           // Research upgrades
           advancedLuck: getInputValue(inputs.advancedLuck, RESEARCH_UPGRADES.advancedLuck.maxLevel),
@@ -248,20 +279,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const treasureBonus = levels.treasureHunter * RESEARCH_UPGRADES.treasureHunter.effectPerLevel;
         outputs.treasure.textContent = `${treasureBonus.toFixed(0)}%`; // Display as whole number
 
-        // Unlocked Locations - Updated based on fishUtils -> isLocationUnlocked
-        const locationMapping = { // Mapping explorer level to unlocked location IDs
-            0: ['pond'], 1: ['pond', 'river'], 2: ['pond', 'river', 'lake'], 3: ['pond', 'river', 'lake', 'ocean'],
-            4: ['pond', 'river', 'lake', 'ocean', 'coral_reef'], 5: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss'],
+        // Unlocked Locations - Updated to include Lucky Land (level 11)
+        const locationMapping = {
+            0: ['pond'], 
+            1: ['pond', 'river'], 
+            2: ['pond', 'river', 'lake'], 
+            3: ['pond', 'river', 'lake', 'ocean'],
+            4: ['pond', 'river', 'lake', 'ocean', 'coral_reef'], 
+            5: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss'],
             6: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city'],
             7: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex'],
             8: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea'],
             9: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea', 'temporal_tide'],
-            10: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea', 'temporal_tide', 'fishverse']
+            10: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea', 'temporal_tide', 'fishverse'],
+            11: ['pond', 'river', 'lake', 'ocean', 'coral_reef', 'abyss', 'sunken_city', 'vortex', 'cosmic_sea', 'temporal_tide', 'fishverse', 'lucky_land']
         };
-        const unlocked = (locationMapping[levels.explorer] || ['pond'])
-            .map(locId => FISHING_LOCATIONS[locId]?.name || locId) // Use display names
-            .join(', ');
-        outputs.locations.textContent = unlocked;
+        
+        // Get the basic unlocked locations from explorer level
+        let unlockedLocations = (locationMapping[levels.explorer] || ['pond'])
+            .map(locId => FISHING_LOCATIONS[locId]?.name || locId);
+            
+        // Add Junk Island if special map is owned
+        if (levels.specialMap > 0) {
+          unlockedLocations.push(FISHING_LOCATIONS.junk_island.name);
+        }
+        
+        // Display unlocked locations
+        outputs.locations.textContent = unlockedLocations.join(', ');
 
         // --- Calculate Luck Influence ---
         // Based on fishUtils -> getTotalLuckModifier (ignoring permanent boosts)
@@ -467,5 +511,20 @@ document.addEventListener('DOMContentLoaded', () => {
           calculateStats(); // Immediate on desktop
         }
       }
+
+      // Make sure the special map input triggers a reload of location options
+      inputs.specialMap.addEventListener('input', function() {
+        // Re-populate options to show or hide Junk Island based on special map status
+        populateOptions();
+        // Then recalculate stats
+        throttledCalculate();
+      });
+      
+      inputs.explorer.addEventListener('input', function() {
+        // Re-populate options to show or hide Lucky Land based on explorer level
+        populateOptions();
+        // Then recalculate stats
+        throttledCalculate();
+      });
     } 
   });
