@@ -1,30 +1,3 @@
-// Helper function to throttle function calls for better performance
-function throttle(func, delay) {
-  let lastCall = 0;
-  let timeoutId = null;
-  return function(...args) {
-    const now = performance.now(); // Use performance.now() for better precision
-    const remaining = delay - (now - lastCall);
-    
-    // Clear any pending execution
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    
-    if (remaining <= 0) {
-      // If enough time has passed, execute immediately
-      lastCall = now;
-      return func.apply(this, args);
-    } else {
-      // Otherwise, schedule execution
-      timeoutId = setTimeout(() => {
-        lastCall = performance.now();
-        func.apply(this, args);
-      }, remaining);
-    }
-  };
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to important elements on the page
     const catalogContent = document.querySelector('.catalog-content');
@@ -39,16 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Flag to prevent running initialization multiple times
     let isInitialized = false;
+
     // Track the current filter/search state
     let currentCategory = 'common'; // Default category
     let currentLocationFilter = 'all'; // Default location
-    let currentSeasonFilter = 'all'; // Default season
-    let currentRarityFilter = 'all'; // Default rarity
     let searchTerm = '';
-    // Add missing searchResults array
-    let searchResults = [];
 
-    // Call the setup functions when initializing
+    // Initialize the fish catalog functionality
     function initCatalog() {
         // Only run initialization once
         if (isInitialized) {
@@ -76,78 +46,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set up all the button clicks and input listeners
         setupEventListeners();
-        
-        // Set up filter event delegation
-        setupFilterEventDelegation();
 
         // Load the initial view (default category)
         displayFishByCategory(currentCategory);
 
-        console.log('Fish catalog initialized with performance optimizations');
+        console.log('Fish catalog initialized');
     }
 
     // Set up event listeners for tabs, search, filters, and modal
     function setupEventListeners() {
-        // Use event delegation for category tabs
-        const tabsContainer = document.querySelector('.catalog-tabs');
-        if (tabsContainer) {
-            tabsContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('catalog-tab')) {
-                    const category = e.target.dataset.category;
-                    setActiveCategory(category);
-                    displayFishByCategory(category);
-                }
-            }); // Fixed: Added missing closing bracket
-        } else {
-            // Fallback to individual listeners
-            catalogTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const category = tab.dataset.category;
-                    setActiveCategory(category);
-                    displayFishByCategory(category);
-                });
+        // Category tab clicks
+        catalogTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const category = tab.dataset.category;
+                setActiveCategory(category);
+                displayFishByCategory(category); // Refresh display with new category
             });
-        }
+        });
 
         // Search button click and Enter key press
-        if (searchButton) {
-            searchButton.addEventListener('click', performSearch);
-        }
-        
-        if (searchInput) {
-            searchInput.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') performSearch();
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        // Location filter tag clicks
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                // Update active state visually
+                filterTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                // Update filter state and refresh display
+                currentLocationFilter = tag.dataset.filter;
+                displayFishByCategory(currentCategory);
             });
-        }
-        
-        // Modal functionality - Standardized modal handling
-        if (closeModal) {
-            closeModal.addEventListener('click', () => {
-                closeModalFunction();
-            });
-        }
-        
-        // Close modal on click outside
+        });
+
+        // Modal close button click
+        closeModal.addEventListener('click', () => {
+            fishModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Allow background scrolling again
+            document.body.classList.remove('modal-open'); // Remove body class
+        });
+
+        // Close modal if user clicks outside the modal content area
         window.addEventListener('click', (e) => {
             if (e.target === fishModal) {
-                closeModalFunction();
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
             }
         });
-        
-        // Escape key to close modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && (fishModal.classList.contains('active') || fishModal.style.display === 'block')) {
-                closeModalFunction();
-            }
-        });
-    }
 
-    // Helper function to standardize modal closing
-    function closeModalFunction() {
-        fishModal.classList.remove('active');
-        fishModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.body.classList.remove('modal-open');
+        // Close modal if user presses the Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && fishModal.style.display === 'block') {
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
+            }
+        });
     }
 
     // Update the visual state of the category tabs
@@ -160,158 +118,106 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         currentCategory = category; // Update the current category state
     }
-    
+
     // Display fish cards based on the current category, location filter, and search term
     function displayFishByCategory(category) {
-        if (loadingIndicator) loadingIndicator.style.display = 'block';
-        
-        // Clear previous search term when switching categories
-        if (category !== 'search') {
-            searchTerm = '';
-            if (searchInput) searchInput.value = '';
+        if (!isInitialized) return; // Don't run if not initialized
+
+        catalogContent.innerHTML = ''; // Clear previous fish cards
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block'; // Show loading spinner
         }
-        
-        // Set current category
-        currentCategory = category;
-        
-        // Update active tab UI
-        setActiveCategory(category);
-        
-        // If using search mode, we've already populated searchResults
-        let fishToDisplay = (category === 'search') ? searchResults : [];
-        
-        // Use requestAnimationFrame for smoother UI updates
-        requestAnimationFrame(() => {
-            // For non-search categories, get fish by category
-            if (category !== 'search') {
-                // Get all fish of this category or apply filters
-                fishToDisplay = getFishForDisplay(category);
-            }
-            
-            // Use document fragment for better performance
-            const fragment = document.createDocumentFragment();
-            const fishItemTemplate = document.querySelector('#fish-item-template');
-            const maxInitialFish = 24; // Limit initial render for better performance
-            
-            // Render fish cards
-            fishToDisplay.slice(0, maxInitialFish).forEach(fish => {
-                const fishCard = createFishCard(fish, fishItemTemplate);
-                if (fishCard) {
-                    fragment.appendChild(fishCard);
+
+        // Use a small timeout to allow the loading indicator to render before potentially heavy filtering/DOM manipulation
+        setTimeout(() => {
+            try {
+                // Get the list of fish for the selected category
+                let fishList = FISH_DATA[category] || [];
+
+                // Apply location filter if one is selected (and not 'all')
+                if (currentLocationFilter !== 'all') {
+                    fishList = fishList.filter(fish =>
+                        fish.locations && fish.locations.includes(currentLocationFilter)
+                    );
                 }
-            });
-            
-            // Replace catalog content with fragment in one DOM operation
-            catalogContent.innerHTML = '';
-            catalogContent.appendChild(fragment);
-            
-            // If we have more fish than initially rendered, add a "Load More" button
-            if (fishToDisplay.length > maxInitialFish) {
-                const loadMoreButton = document.createElement('button');
-                loadMoreButton.className = 'load-more-button';
-                loadMoreButton.textContent = `Load More (${fishToDisplay.length - maxInitialFish} remaining)`;
-                loadMoreButton.addEventListener('click', () => loadMoreFish(fishToDisplay, maxInitialFish));
-                catalogContent.appendChild(loadMoreButton);
+
+                // Apply search term filter if there's a search term entered
+                if (searchTerm) {
+                    const term = searchTerm.toLowerCase();
+                    fishList = fishList.filter(fish =>
+                        fish.name.toLowerCase().includes(term) ||
+                        (fish.description && fish.description.toLowerCase().includes(term)) ||
+                        (fish.lore && fish.lore.toLowerCase().includes(term))
+                    );
+                }
+
+                // Update the results count display
+                const resultsCount = document.getElementById('resultsCount');
+                if (resultsCount) {
+                    resultsCount.textContent = fishList.length > 0
+                        ? `Showing ${fishList.length} ${capitalizeFirst(category)} fish`
+                        : 'No results found';
+                }
+
+                // If no fish match the criteria, display a message
+                const noResultsElement = document.getElementById('noResults');
+                if (fishList.length === 0) {
+                    if (noResultsElement) noResultsElement.style.display = 'block';
+                    if (loadingIndicator) loadingIndicator.style.display = 'none';
+                    return; // Stop processing
+                } else {
+                    if (noResultsElement) noResultsElement.style.display = 'none';
+                }
+
+                // Create and append a card for each fish in the filtered list
+                fishList.forEach(fish => {
+                    const fishCard = createFishCard(fish, category); // Pass category here
+                    catalogContent.appendChild(fishCard);
+                });
+
+            } catch (error) {
+                console.error('Error displaying fish:', error);
+                catalogContent.innerHTML = `
+                    <div class="error-message">
+                        <p>There was an error loading the fish data. Please try refreshing the page.</p>
+                    </div>
+                `;
+            } finally {
+                // Hide loading indicator regardless of success or error
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
             }
-            
-            // Hide loading indicator
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
-            
-            // Update result count
-            const resultCount = document.getElementById('result-count');
-            if (resultCount) {
-                resultCount.textContent = `${fishToDisplay.length} fish found`;
-            }
-        });
+        }, 10); // Small delay (10ms) for UI responsiveness
     }
 
-    // Function to load more fish when the "Load More" button is clicked
-    function loadMoreFish(allFish, alreadyLoaded) {
-        // Get a reference to the button (to remove it later)
-        const loadMoreButton = document.querySelector('.load-more-button');
-        if (!loadMoreButton) return;
-        
-        // How many more fish to load per click
-        const batchSize = 24;
-        
-        // Use document fragment and template for better performance
-        const fragment = document.createDocumentFragment();
-        const fishItemTemplate = document.querySelector('#fish-item-template');
-        
-        // Get the next batch of fish
-        const nextBatch = allFish.slice(alreadyLoaded, alreadyLoaded + batchSize);
-        
-        // Render the next batch
-        nextBatch.forEach(fish => {
-            const fishCard = createFishCard(fish, fishItemTemplate);
-            if (fishCard) {
-                fragment.appendChild(fishCard);
-            }
-        });
-        
-        // Remove the load more button
-        loadMoreButton.remove();
-        
-        // Add the new fish before adding a new button
-        catalogContent.appendChild(fragment);
-        
-        // If there are still more fish to load, add a new button
-        if (allFish.length > alreadyLoaded + batchSize) {
-            const newLoadMoreButton = document.createElement('button');
-            newLoadMoreButton.className = 'load-more-button';
-            newLoadMoreButton.textContent = `Load More (${allFish.length - alreadyLoaded - batchSize} remaining)`;
-            newLoadMoreButton.addEventListener('click', () => loadMoreFish(allFish, alreadyLoaded + batchSize));
-            catalogContent.appendChild(newLoadMoreButton);
+    // Create the HTML structure for a single fish card
+    function createFishCard(fish, category) {
+        const card = document.createElement('div');
+        // Use the fish's inherent rarity for border styling, but add 'event' class if applicable
+        const cardRarityClass = fish.rarity || category; // Use fish's rarity if defined, else category
+        card.className = `fish-card ${cardRarityClass}`;
+        if (category === 'event') {
+            card.classList.add('event'); // Add specific event class if needed for other styles
         }
-    }
 
-    // Optimized function to create a fish card element from a fish object
-    function createFishCard(fish, template) {
-        // Skip if no fish data or template
-        if (!fish || !template) return null;
-        
-        // Clone the template for better performance than creating elements
-        const fishCard = template.content.cloneNode(true).firstElementChild;
-        
-        // Set card data attributes for filtering
-        fishCard.dataset.rarity = fish.rarity || 'common';
-        fishCard.dataset.location = (fish.locations && fish.locations.length > 0) ? fish.locations[0] : 'any';
-        fishCard.dataset.season = (fish.seasons && fish.seasons.length > 0) ? fish.seasons.join(' ') : 'all';
-        
-        // Set fish image
-        const fishImage = fishCard.querySelector('.fish-image');
-        if (fishImage) {
-            // Lazy load images for better performance
-            fishImage.loading = 'lazy';
-            fishImage.src = fish.imagePath || `fishImages/${fish.name}.png`;
-            fishImage.alt = fish.name;
+        // Get the fish image URL from FISH_IMAGES, use placeholder if not found
+        let imageUrl = 'images/placeholder-fish.png'; // Default placeholder
+        if (typeof FISH_IMAGES !== 'undefined' && FISH_IMAGES[fish.name]) {
+            imageUrl = FISH_IMAGES[fish.name];
         }
-        
-        // Set fish name
-        const fishName = fishCard.querySelector('.fish-name');
-        if (fishName) {
-            fishName.textContent = fish.name;
-        }
-        
-        // Set fish rarity badge
-        const fishRarity = fishCard.querySelector('.fish-rarity');
-        if (fishRarity) {
-            fishRarity.textContent = fish.rarity || 'Common';
-            fishRarity.className = `fish-rarity ${fish.rarity.toLowerCase()}`;
-        }
-        
-        // Set fish value
-        const fishValue = fishCard.querySelector('.fish-value');
-        if (fishValue) {
-            fishValue.textContent = `${fish.value || 0} coins`;
-        }
-        
-        // Add click event to show fish details - Fixed function call
-        fishCard.addEventListener('click', () => {
-            displayFishDetail(fish);
-        });
-        
-        return fishCard;
+
+        card.innerHTML = `
+            <img src="${imageUrl}" alt="${fish.name}" class="fish-image" onerror="this.src='images/placeholder-fish.png'">
+            <h3 class="fish-name">${fish.name}</h3>
+            <p class="fish-rarity">${capitalizeFirst(fish.rarity || category)}</p>
+            <p class="fish-value">${fish.baseValue ? `🪙 ${fish.baseValue}` : 'Value: ?'}</p>
+        `;
+
+        // Add click listener to open the details modal for this fish
+        card.addEventListener('click', () => displayFishDetail(fish));
+
+        return card;
     }
 
     // Populate and display the fish details modal
@@ -436,208 +342,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Display the modal and scroll to the top
         fishModal.style.display = 'block';
-        fishModal.classList.add('active');
         window.scrollTo(0, 0);
         document.body.style.overflow = 'hidden'; // Prevent background scrolling while modal is open
     }
 
-    // Throttled search function for better performance
-    const performSearch = throttle(function() {
-        const searchQuery = searchInput.value.trim().toLowerCase();
-        
-        // Skip empty searches
-        if (!searchQuery) {
-            return;
-        }
-        
-        // Set state
-        searchTerm = searchQuery;
-        
-        // Show loading indicator
-        if (loadingIndicator) loadingIndicator.style.display = 'block';
-        
-        // Use requestAnimationFrame for smoother UI updates during search
-        requestAnimationFrame(() => {
-            // Reset and perform new search
-            searchResults = [];
-            
-            // Search through all fish
-            if (FISH_DATA && FISH_DATA.fish) {
-                searchResults = FISH_DATA.fish.filter(fish => {
-                    // Match on name (prioritize)
-                    if (fish.name.toLowerCase().includes(searchQuery)) {
-                        return true;
-                    }
-                    
-                    // Match on description
-                    if (fish.description && fish.description.toLowerCase().includes(searchQuery)) {
-                        return true;
-                    }
-                    
-                    // Match on locations
-                    if (fish.locations && fish.locations.some(loc => loc.toLowerCase().includes(searchQuery))) {
-                        return true;
-                    }
-                    
-                    // Match on seasons
-                    if (fish.seasons && fish.seasons.some(season => season.toLowerCase().includes(searchQuery))) {
-                        return true;
-                    }
-                    
-                    // Match on rarity
-                    if (fish.rarity && fish.rarity.toLowerCase().includes(searchQuery)) {
-                        return true;
-                    }
-                    
-                    return false;
-                });
-            }
-            
-            // Display search results
-            displayFishByCategory('search');
-        });
-    }, 300); // Throttle to avoid excessive searches
+    // Trigger fish display update based on the search input value
+    function performSearch() {
+        searchTerm = searchInput.value.trim(); // Update the search term state
+        displayFishByCategory(currentCategory); // Refresh the display
+    }
 
     // Simple helper function to capitalize the first letter of a string
     function capitalizeFirst(str) {
         if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    // Optimized function to get fish for display based on current filters
-    function getFishForDisplay(category) {
-        // Return empty array if data is not loaded
-        if (!FISH_DATA || !FISH_DATA.fish) {
-            return [];
-        }
-        
-        // Create a match function based on the category
-        const matchesCategory = (fish) => {
-            if (category === 'all') return true;
-            
-            // Match by rarity for common, uncommon, rare, etc.
-            if (['common', 'uncommon', 'rare', 'legendary', 'mythic', 'chimerical', 'special'].includes(category)) {
-                return fish.rarity && fish.rarity.toLowerCase() === category;
-            }
-            
-            // Match by specific categories
-            if (category === 'seasonal') {
-                return fish.seasons && fish.seasons.length > 0 && !fish.seasons.includes('All');
-            }
-            
-            if (category === 'event') {
-                return fish.isEvent === true;
-            }
-            
-            if (category === 'treasure') {
-                return fish.isTreasure === true;
-            }
-            
-            if (category === 'junk') {
-                return fish.isJunk === true;
-            }
-            
-            // Default case - no match
-            return false;
-        };
-        
-        // Use array filtering with optimized checks
-        return FISH_DATA.fish.filter(fish => {
-            // Check if fish matches the selected category
-            if (!matchesCategory(fish)) return false;
-            
-            // Apply additional filters if set
-            
-            // Location filter
-            if (currentLocationFilter !== 'all') {
-                const fishLocations = fish.locations || [];
-                // Quick check for "All" locations before doing array search
-                if (!fishLocations.includes('All') && !fishLocations.includes(currentLocationFilter)) {
-                    return false;
-                }
-            }
-            
-            // Season filter
-            if (currentSeasonFilter !== 'all') {
-                const fishSeasons = fish.seasons || [];
-                // Quick check for "All" seasons before doing array search
-                if (!fishSeasons.includes('All') && !fishSeasons.includes(currentSeasonFilter)) {
-                    return false;
-                }
-            }
-            
-            // Rarity filter (applied for 'all', 'seasonal', etc. categories)
-            if (currentRarityFilter !== 'all' && category !== currentRarityFilter) {
-                // Skip if already filtered by the rarity category directly
-                if (['common', 'uncommon', 'rare', 'legendary', 'mythic', 'chimerical'].includes(category)) {
-                    return true; // Already filtered by the rarity category
-                }
-                
-                // Check if the fish's rarity matches the filter
-                if (!fish.rarity || fish.rarity.toLowerCase() !== currentRarityFilter) {
-                    return false;
-                }
-            }
-            
-            // If all filters pass, include the fish
-            return true;
-        });
-    }
-
-    // Optimize filter handling with event delegation
-    function setupFilterEventDelegation() {
-        // Get references to filter containers
-        const locationFiltersContainer = document.getElementById('locationFilters');
-        const seasonFiltersContainer = document.getElementById('seasonFilters');
-        const rarityFiltersContainer = document.getElementById('rarityFilters');
-        
-        // Add event delegation for location filters
-        if (locationFiltersContainer) {
-            locationFiltersContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-tag')) {
-                    // Update active state visually
-                    const locationFilters = locationFiltersContainer.querySelectorAll('.filter-tag');
-                    locationFilters.forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    
-                    // Update filter state and refresh display
-                    currentLocationFilter = e.target.dataset.filter;
-                    displayFishByCategory(currentCategory);
-                }
-            });
-        }
-        
-        // Add event delegation for season filters
-        if (seasonFiltersContainer) {
-            seasonFiltersContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-tag')) {
-                    // Update active state visually
-                    const seasonFilters = seasonFiltersContainer.querySelectorAll('.filter-tag');
-                    seasonFilters.forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    
-                    // Update filter state and refresh display
-                    currentSeasonFilter = e.target.dataset.filter;
-                    displayFishByCategory(currentCategory);
-                }
-            });
-        }
-        
-        // Add event delegation for rarity filters
-        if (rarityFiltersContainer) {
-            rarityFiltersContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-tag')) {
-                    // Update active state visually
-                    const rarityFilters = rarityFiltersContainer.querySelectorAll('.filter-tag');
-                    rarityFilters.forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    
-                    // Update filter state and refresh display
-                    currentRarityFilter = e.target.dataset.filter;
-                    displayFishByCategory(currentCategory);
-                }
-            });
-        }
     }
 
     // Attempt to initialize the catalog, with error handling

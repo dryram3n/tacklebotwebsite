@@ -75,25 +75,15 @@
       </ul>
     </nav>
   </header>
+
   <!-- Main Content Area -->
   <main>
     <!-- Calculator Section -->
     <section id="calculator" class="animated-section">
-      <h2>TackleBot Calculators <span class="emoji">🧮</span></h2>
-      <p>Use these calculators to plan your TackleBot strategy and optimize your gameplay!</p>
+      <h2>Stat Calculator <span class="emoji">🧮</span></h2>
+      <p>Enter your upgrade levels and other factors to see your calculated fishing stats!</p>
 
-      <!-- Calculator Tabs -->
-      <div class="calculator-tabs">
-        <button class="calc-tab active" data-tab="stats">Fishing Stats</button>
-        <button class="calc-tab" data-tab="business">Business Income</button>
-        <button class="calc-tab" data-tab="pirate">Pirate Plunder</button>
-      </div>
-
-      <!-- Fishing Stats Calculator -->
-      <div class="calculator-container active" id="stats-calculator">
-        <h3>Fishing Stats Calculator <span class="emoji">🎣</span></h3>
-        <p>Enter your upgrade levels and other factors to see your calculated fishing stats!</p>
-        
+      <div class="calculator-container">
         <div class="calc-inputs">
 
           <!-- Shop Upgrades -->
@@ -127,7 +117,7 @@
               </div>
               <div class="calc-input-item">
                 <label for="calc-explorer" class="calc-label">Explorer's Map:</label>
-                <input type="number" id="calc-explorer" class="calc-input" min="0" max="11" value="0" aria-describedby="calc-output-locations">
+                <input type="number" id="calc-explorer" class="calc-input" min="0" max="10" value="0" aria-describedby="calc-output-locations">
                 <small>Unlocks new fishing locations per level</small>
               </div>
               <div class="calc-input-item">
@@ -254,251 +244,8 @@
           </div>
         </div>
       </div>
-
-      <!-- Business Income Calculator -->
-      <div class="calculator-container" id="business-calculator">
-        <h3>Business Income Calculator <span class="emoji">💰</span></h3>
-        <p>Calculate income rates for your fishing businesses based on your upgrades.</p>
-        
-        <div class="calc-inputs">
-          <!-- Business Type Selection -->
-          <div class="calc-group">
-            <h3>Business Type</h3>
-            <div class="business-type-selector">
-              <button class="business-type-btn active" data-business="boat">Boat Fleet 🚤</button>
-              <button class="business-type-btn" data-business="market">Market 🏪</button>
-              <button class="business-type-btn" data-business="bank">Bank 🏦</button>
-              <button class="business-type-btn" data-business="waterworld">Water World 🌊</button>
-            </div>
-          </div>
-
-          <!-- Boat Fleet Upgrades -->
-          <div class="business-upgrade-section active" id="boat-upgrades">
-            <h3>Boat Fleet Upgrades</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="boat-count" class="calc-label">Number of Boats:</label>
-                <input type="number" id="boat-count" class="calc-input" min="1" max="50" value="1">
-                <small>Each boat adds base income</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="boat-nets" class="calc-label">Net Upgrades:</label>
-                <input type="number" id="boat-nets" class="calc-input" min="0" max="25" value="0">
-                <small>Increases catch efficiency</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="boat-engines" class="calc-label">Engine Upgrades:</label>
-                <input type="number" id="boat-engines" class="calc-input" min="0" max="25" value="0">
-                <small>Decreases collection time</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="boat-crew" class="calc-label">Crew Size:</label>
-                <input type="number" id="boat-crew" class="calc-input" min="1" max="10" value="1">
-                <small>Increases maximum haul size</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="boat-fisher" class="calc-label">Fisher Level:</label>
-                <input type="number" id="boat-fisher" class="calc-input" min="1" max="50" value="1">
-                <small>Increases overall production</small>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Market Upgrades -->
-          <div class="business-upgrade-section" id="market-upgrades">
-            <h3>Market Upgrades</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="market-stalls" class="calc-label">Market Stalls:</label>
-                <input type="number" id="market-stalls" class="calc-input" min="1" max="20" value="1">
-                <small>Each stall adds base income</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="market-quality" class="calc-label">Quality Upgrades:</label>
-                <input type="number" id="market-quality" class="calc-input" min="0" max="25" value="0">
-                <small>Increases price per fish</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="market-preservation" class="calc-label">Preservation:</label>
-                <input type="number" id="market-preservation" class="calc-input" min="0" max="25" value="0">
-                <small>Extends shelf life of products</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="market-advertising" class="calc-label">Advertising:</label>
-                <input type="number" id="market-advertising" class="calc-input" min="0" max="25" value="0">
-                <small>Increases customer traffic</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="market-warehouse" class="calc-label">Warehouse Level:</label>
-                <input type="number" id="market-warehouse" class="calc-input" min="1" max="25" value="1">
-                <small>Increases storage capacity</small>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Bank Upgrades -->
-          <div class="business-upgrade-section" id="bank-upgrades">
-            <h3>Bank Upgrades</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="bank-tellers" class="calc-label">Teller Windows:</label>
-                <input type="number" id="bank-tellers" class="calc-input" min="1" max="10" value="1">
-                <small>Each teller adds base income</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="bank-vault" class="calc-label">Vault Security:</label>
-                <input type="number" id="bank-vault" class="calc-input" min="0" max="25" value="0">
-                <small>Reduces theft losses</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="bank-interest" class="calc-label">Interest Rate:</label>
-                <input type="number" id="bank-interest" class="calc-input" min="0" max="25" value="0">
-                <small>Increases income per deposit</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="bank-investment" class="calc-label">Investment Level:</label>
-                <input type="number" id="bank-investment" class="calc-input" min="1" max="25" value="1">
-                <small>Increases overall profit margin</small>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Water World Upgrades -->
-          <div class="business-upgrade-section" id="waterworld-upgrades">
-            <h3>Water World Upgrades</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="ww-attractions" class="calc-label">Attractions:</label>
-                <input type="number" id="ww-attractions" class="calc-input" min="1" max="15" value="1">
-                <small>Each attraction adds base income</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="ww-staff" class="calc-label">Staff Level:</label>
-                <input type="number" id="ww-staff" class="calc-input" min="1" max="25" value="1">
-                <small>Improves visitor experience</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="ww-exhibits" class="calc-label">Exhibits:</label>
-                <input type="number" id="ww-exhibits" class="calc-input" min="0" max="25" value="0">
-                <small>Increases visitor duration</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="ww-concessions" class="calc-label">Concessions:</label>
-                <input type="number" id="ww-concessions" class="calc-input" min="0" max="25" value="0">
-                <small>Increases spending per visitor</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="ww-marketing" class="calc-label">Marketing:</label>
-                <input type="number" id="ww-marketing" class="calc-input" min="0" max="25" value="0">
-                <small>Increases visitor count</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="calc-outputs">
-          <h3>Business Income</h3>
-          <div class="calc-output-area" aria-live="polite">
-            <div class="calc-output-line"><strong>💰 Income per Minute:</strong> <span id="business-output-minute">0</span> coins</div>
-            <div class="calc-output-line"><strong>💰 Income per Hour:</strong> <span id="business-output-hour">0</span> coins</div>
-            <div class="calc-output-line"><strong>💰 Income per Day:</strong> <span id="business-output-day">0</span> coins</div>
-            <div class="calc-output-line"><strong>⏱️ Collection Time:</strong> Every <span id="business-output-collection">60</span> minutes</div>
-            <div class="calc-output-line"><strong>💼 Maximum Storage:</strong> <span id="business-output-storage">1,000</span> coins</div>
-            <div class="calc-output-line"><strong>💸 Return on Investment:</strong> <span id="business-output-roi">0</span> days</div>
-          </div>
-          
-          <div class="calc-breakdown">
-            <h4>Income Breakdown</h4>
-            <div class="breakdown-chart">
-              <div id="business-chart"></div>
-            </div>
-            <div class="breakdown-legend" id="business-legend"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Pirate Plunder Calculator -->
-      <div class="calculator-container" id="pirate-calculator">
-        <h3>Pirate Plunder Calculator <span class="emoji">🏴‍☠️</span></h3>
-        <p>Estimate your chances and potential rewards when plundering other players' riches.</p>
-        
-        <div class="calc-inputs">
-          <div class="calc-group">
-            <h3>Your Pirate Upgrades</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="pirate-robchance" class="calc-label">Rob Chance Level:</label>
-                <input type="number" id="pirate-robchance" class="calc-input" min="0" max="25" value="0">
-                <small>Increases plunder success rate</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="pirate-robamount" class="calc-label">Rob Amount Level:</label>
-                <input type="number" id="pirate-robamount" class="calc-input" min="0" max="25" value="0">
-                <small>Increases coins stolen per plunder</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="pirate-bonuschance" class="calc-label">Bonus Chance Level:</label>
-                <input type="number" id="pirate-bonuschance" class="calc-input" min="0" max="25" value="0">
-                <small>Chance to find special treasure</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="pirate-crew" class="calc-label">Crew Size:</label>
-                <input type="number" id="pirate-crew" class="calc-input" min="1" max="10" value="1">
-                <small>Improves all plunder capabilities</small>
-              </div>
-            </div>
-          </div>
-          
-          <div class="calc-group">
-            <h3>Target Information</h3>
-            <div class="calc-input-grid">
-              <div class="calc-input-item">
-                <label for="target-coins" class="calc-label">Estimated Coins:</label>
-                <input type="number" id="target-coins" class="calc-input" min="100" max="1000000" value="10000">
-                <small>Approximate coins held by target</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="target-protection" class="calc-label">Protection Level:</label>
-                <input type="number" id="target-protection" class="calc-input" min="0" max="25" value="0">
-                <small>Target's anti-theft protection</small>
-              </div>
-              <div class="calc-input-item">
-                <label for="target-activity" class="calc-label">Activity Level:</label>
-                <select id="target-activity" class="calc-input">
-                  <option value="low">Low (Inactive player)</option>
-                  <option value="medium" selected>Medium (Average player)</option>
-                  <option value="high">High (Very active player)</option>
-                </select>
-                <small>How active the target is in checking accounts</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="calc-outputs">
-          <h3>Plunder Forecast</h3>
-          <div class="calc-output-area" aria-live="polite">
-            <div class="calc-output-line"><strong>🎯 Success Chance:</strong> <span id="pirate-output-success">0%</span></div>
-            <div class="calc-output-line"><strong>💰 Potential Loot:</strong> <span id="pirate-output-loot">0</span> coins</div>
-            <div class="calc-output-line"><strong>✨ Bonus Treasure Chance:</strong> <span id="pirate-output-bonus">0%</span></div>
-            <div class="calc-output-line"><strong>⏱️ Operation Time:</strong> <span id="pirate-output-time">5</span> minutes</div>
-            <div class="calc-output-line"><strong>🚨 Risk of Getting Caught:</strong> <span id="pirate-output-risk">0%</span></div>
-          </div>
-          
-          <div class="risk-meter-container">
-            <h4>Risk Assessment</h4>
-            <div class="risk-meter">
-              <div class="risk-meter-fill" id="risk-meter-fill"></div>
-            </div>
-            <div class="risk-labels">
-              <span>Low Risk</span>
-              <span>Moderate</span>
-              <span>High Risk</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
+    <!-- End Calculator Section -->
   </main>
 
   <!-- Footer -->
@@ -512,18 +259,6 @@
       <!-- <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a> -->
     </div>
   </footer>
-
-  <!-- Back to Top Button -->
-  <button id="back-to-top" class="button icon-button" aria-label="Back to top">
-    <i class="fas fa-arrow-up" aria-hidden="true"></i>
-  </button>
-
-  <!-- Effects Toggle Button -->
-  <div id="effects-toggle-container">
-    <button id="toggle-effects" class="button effects-toggle" aria-label="Toggle Animation Effects">
-      <i class="fas fa-water" aria-hidden="true"></i> <span id="effects-status">Hide Effects</span>
-    </button>
-  </div>
 
   <!-- Load data scripts first, then calculator logic, then general page script -->
   <!-- Ensure these paths are correct relative to calculator.html -->
