@@ -561,13 +561,15 @@ function initStatsCalculator() {
       // Then recalculate stats
       throttledCalculate();
     });
-      inputs.explorer.addEventListener('input', function() {
+    
+    inputs.explorer.addEventListener('input', function() {
       // Re-populate options to show or hide Lucky Land based on explorer level
       populateOptions();
       // Then recalculate stats
       throttledCalculate();
     });
-  }
+  } 
+}
 
 function initBusinessCalculator() {
   console.log("Initializing Business Income Calculator");

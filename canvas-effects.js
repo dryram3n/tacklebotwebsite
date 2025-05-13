@@ -6,9 +6,18 @@ class WaterCanvas {
                              !('requestAnimationFrame' in window) ||
                              (window.navigator.hardwareConcurrency && window.navigator.hardwareConcurrency < 4) ||
                              navigator.userAgent.match(/mobile|android/i);
+      
+      // Check user's effects preference
+      this.effectsEnabled = localStorage.getItem('effectsEnabled') !== 'false';
+      this.effectsIntensity = localStorage.getItem('effectsIntensity') || 'full';
   
       if (this.isLowPerfDevice) {
           console.log("Canvas Effects: Low performance device or reduced motion detected. Reducing effects.");
+          // Set effects to reduced by default on low performance devices
+          if (!localStorage.getItem('effectsIntensity')) {
+              this.effectsIntensity = 'reduced';
+              localStorage.setItem('effectsIntensity', 'reduced');
+          }
       }
   
       // Create canvas element
@@ -26,6 +35,9 @@ class WaterCanvas {
   
 
       document.body.prepend(this.canvas);
+      
+      // Apply effects preference
+      this.applyEffectsPreference();
   
       // Initialize properties
       this.fishImages = {};
@@ -1070,7 +1082,6 @@ class WaterCanvas {
                       const heightRatio = (0.2 + Math.random() * 0.8); // Place leaves randomly along height
                       const stemY = -plant.currentHeight * heightRatio;
                       const stemX = Math.sin(heightRatio * Math.PI) * plant.maxHeight * 0.05; // Slight stem curve
-  
                       const angle = (Math.random() - 0.5) * Math.PI * 0.8; // Random angle for leaf
                       const leafX = stemX + Math.cos(angle) * leafSizeBase * 1.5;
                       const leafY = stemY + Math.sin(angle) * leafSizeBase * 1.5;
@@ -1201,6 +1212,114 @@ class WaterCanvas {
           window.removeEventListener('mousemove', this.handleMouseMove);
           // Ensure the listener added in the constructor is removed correctly (including capture phase)
           window.removeEventListener('click', this.handleClick, true); // Use capture phase for removal
+      }
+    }
+
+    // Method to apply user's effects preference
+    applyEffectsPreference() {
+      // Get the current preference
+      const isEnabled = localStorage.getItem('effectsEnabled') !== 'false';
+      const intensity = localStorage.getItem('effectsIntensity') || 'full';
+      
+      this.effectsEnabled = isEnabled;
+      this.effectsIntensity = intensity;
+      
+      // Apply the preference
+      if (!isEnabled) {
+        // Disable all animations
+        this.pauseAnimations();
+        this.canvas.style.opacity = '0.3';
+      } else {
+        // Enable animations with appropriate intensity
+        this.resumeAnimations();
+        this.canvas.style.opacity = '1';
+        
+        // Apply intensity settings
+        this.applyIntensitySettings(intensity);
+      }
+      
+      // Update body class for CSS effects
+      if (!isEnabled) {
+        document.body.classList.add('reduced-effects');
+      } else {
+        document.body.classList.remove('reduced-effects');
+        
+        if (intensity === 'reduced') {
+          document.body.classList.add('mild-effects');
+          document.body.classList.remove('full-effects');
+        } else {
+          document.body.classList.add('full-effects');
+          document.body.classList.remove('mild-effects');
+        }
+      }
+    }
+    
+    // Apply different intensity settings
+    applyIntensitySettings(intensity) {
+      switch(intensity) {
+        case 'reduced':
+          // Reduce the number of objects and animation speed
+          this.maxFishCount = 5;
+          this.maxBubbleCount = 15;
+          this.maxPlantCount = 3;
+          this.waveAmplitude = 2;
+          this.animationSpeed = 0.5;
+          break;
+        case 'mild':
+          // Moderate number of objects and animation speed
+          this.maxFishCount = 10;
+          this.maxBubbleCount = 30;
+          this.maxPlantCount = 6;
+          this.waveAmplitude = 5;
+          this.animationSpeed = 0.75;
+          break;
+        case 'full':
+        default:
+          // Full effects
+          this.maxFishCount = 15;
+          this.maxBubbleCount = 50;
+          this.maxPlantCount = 10;
+          this.waveAmplitude = 8;
+          this.animationSpeed = 1.0;
+          break;
+      }
+      
+      // Update existing objects to match new counts
+      this.adjustObjectCounts();
+    }
+    
+    // Adjust the number of animation objects based on current settings
+    adjustObjectCounts() {
+      // Trim arrays if they exceed the new maximums
+      if (this.fishes.length > this.maxFishCount) {
+        this.fishes.length = this.maxFishCount;
+      }
+      
+      if (this.bubbles.length > this.maxBubbleCount) {
+        this.bubbles.length = this.maxBubbleCount;
+      }
+      
+      if (this.plants.length > this.maxPlantCount) {
+        this.plants.length = this.maxPlantCount;
+      }
+      
+      // Add objects if below minimums (during next animation frame)
+      // This happens automatically in the existing update logic
+    }
+    
+    // Pause all animations
+    pauseAnimations() {
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId);
+        this.animationFrameId = null;
+      }
+    }
+    
+    // Resume animations
+    resumeAnimations() {
+      if (!this.animationFrameId) {
+        this.lastTimestamp = performance.now();
+        this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
       }
     }
   }

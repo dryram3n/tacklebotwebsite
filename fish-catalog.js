@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.querySelector('.loading-indicator');
 
     // Flag to prevent running initialization multiple times
-    let isInitialized = false;
-
-    // Track the current filter/search state
+    let isInitialized = false;    // Track the current filter/search state
     let currentCategory = 'common'; // Default category
     let currentLocationFilter = 'all'; // Default location
+    let currentSeasonFilter = 'all'; // Default season
+    let currentRarityFilter = 'all'; // Default rarity
     let searchTerm = '';
 
     // Initialize the fish catalog functionality
@@ -51,9 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayFishByCategory(currentCategory);
 
         console.log('Fish catalog initialized');
-    }
-
-    // Set up event listeners for tabs, search, filters, and modal
+    }    // Set up event listeners for tabs, search, filters, and modal
     function setupEventListeners() {
         // Category tab clicks
         catalogTabs.forEach(tab => {
@@ -71,13 +69,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Location filter tag clicks
-        filterTags.forEach(tag => {
+        const locationFilters = document.querySelectorAll('#locationFilters .filter-tag');
+        locationFilters.forEach(tag => {
             tag.addEventListener('click', () => {
                 // Update active state visually
-                filterTags.forEach(t => t.classList.remove('active'));
+                locationFilters.forEach(t => t.classList.remove('active'));
                 tag.classList.add('active');
                 // Update filter state and refresh display
                 currentLocationFilter = tag.dataset.filter;
+                displayFishByCategory(currentCategory);
+            });
+        });
+
+        // Season filter tag clicks
+        const seasonFilters = document.querySelectorAll('#seasonFilters .filter-tag');
+        seasonFilters.forEach(tag => {
+            tag.addEventListener('click', () => {
+                // Update active state visually
+                seasonFilters.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                // Update filter state and refresh display
+                currentSeasonFilter = tag.dataset.filter;
+                displayFishByCategory(currentCategory);
+            });
+        });
+
+        // Rarity filter tag clicks
+        const rarityFilters = document.querySelectorAll('#rarityFilters .filter-tag');
+        rarityFilters.forEach(tag => {
+            tag.addEventListener('click', () => {
+                // Update active state visually
+                rarityFilters.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                // Update filter state and refresh display
+                currentRarityFilter = tag.dataset.filter;
                 displayFishByCategory(currentCategory);
             });
         });
@@ -124,9 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         currentCategory = category; // Update the current category state
-    }
-
-    // Display fish cards based on the current category, location filter, and search term
+    }    // Display fish cards based on the current category, location filter, and search term
     function displayFishByCategory(category) {
         if (!isInitialized) return; // Don't run if not initialized
 
@@ -145,6 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentLocationFilter !== 'all') {
                     fishList = fishList.filter(fish =>
                         fish.locations && fish.locations.includes(currentLocationFilter)
+                    );
+                }
+                
+                // Apply season filter if one is selected (and not 'all')
+                if (currentSeasonFilter !== 'all') {
+                    fishList = fishList.filter(fish =>
+                        fish.seasons && fish.seasons.includes(currentSeasonFilter)
+                    );
+                }
+                
+                // Apply rarity filter if one is selected (and not 'all')
+                if (currentRarityFilter !== 'all') {
+                    fishList = fishList.filter(fish =>
+                        fish.rarity === currentRarityFilter
                     );
                 }
 

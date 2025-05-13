@@ -992,7 +992,175 @@ document.addEventListener('DOMContentLoaded', () => {
             skyUpdateInterval = waveStateInterval = bubbleInterval = adjustFishToWaterInterval = fishRefreshInterval = scrollTimeout = null;
             console.log("Cleanup complete.");
         });
+        initBackToTop();
+        initEffectsToggle();
         console.log("TackleBot animations initialized.");
+    }
+
+    // Initialize Back to Top button
+    function initBackToTop() {
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        if (!backToTopButton) return;
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        // Scroll to top when clicked
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }    // Initialize Effects Toggle button
+    function initEffectsToggle() {
+        const toggleButton = document.getElementById('toggle-effects');
+        const effectsStatus = document.getElementById('effects-status');
+        
+        if (!toggleButton || !effectsStatus) return;
+        
+        // Check if there's a saved preference
+        const effectsEnabled = localStorage.getItem('effectsEnabled') !== 'false';
+        const effectsIntensity = localStorage.getItem('effectsIntensity') || 'full';
+        
+        // Apply initial state
+        if (!effectsEnabled) {
+            document.body.classList.add('reduced-effects');
+            effectsStatus.textContent = 'Show Effects';
+        } else {
+            effectsStatus.textContent = 'Hide Effects';
+        }
+        
+        // Toggle effects when clicked
+        toggleButton.addEventListener('click', () => {
+            const isCurrentlyEnabled = !document.body.classList.contains('reduced-effects');
+            
+            if (isCurrentlyEnabled) {
+                // Disable effects
+                document.body.classList.add('reduced-effects');
+                document.body.classList.remove('mild-effects', 'full-effects');
+                effectsStatus.textContent = 'Show Effects';
+                localStorage.setItem('effectsEnabled', 'false');
+            } else {
+                // Enable effects
+                document.body.classList.remove('reduced-effects');
+                
+                // Apply saved intensity setting
+                const intensity = localStorage.getItem('effectsIntensity') || 'full';
+                if (intensity === 'reduced') {
+                    document.body.classList.add('mild-effects');
+                    document.body.classList.remove('full-effects');
+                } else {
+                    document.body.classList.add('full-effects');
+                    document.body.classList.remove('mild-effects');
+                }
+                
+                effectsStatus.textContent = 'Hide Effects';
+                localStorage.setItem('effectsEnabled', 'true');
+            }
+            
+            // Update canvas effects if available
+            if (window.waterCanvas && typeof window.waterCanvas.applyEffectsPreference === 'function') {
+                window.waterCanvas.applyEffectsPreference();
+            }
+            
+            // Refresh canvas if it exists
+            if (waterCanvasInstance && typeof waterCanvasInstance.applyEffectsPreference === 'function') {
+                waterCanvasInstance.applyEffectsPreference(!isCurrentlyEnabled);
+            }
+        });
+        
+        // Add intensity control menu
+        addEffectsIntensityMenu(toggleButton, effectsEnabled, effectsIntensity);
+    }
+    
+    // Add intensity control for effects
+    function addEffectsIntensityMenu(toggleButton, effectsEnabled, currentIntensity) {
+        // Create intensity menu
+        const intensityMenu = document.createElement('div');
+        intensityMenu.className = 'effects-intensity-menu';
+        intensityMenu.innerHTML = `
+            <h4>Effects Intensity</h4>
+            <div class="intensity-options">
+                <button data-intensity="reduced" class="${currentIntensity === 'reduced' ? 'active' : ''}">Reduced</button>
+                <button data-intensity="mild" class="${currentIntensity === 'mild' ? 'active' : ''}">Medium</button>
+                <button data-intensity="full" class="${currentIntensity === 'full' ? 'active' : ''}">Full</button>
+            </div>
+        `;
+        
+        // Position the menu
+        intensityMenu.style.display = 'none';
+        document.body.appendChild(intensityMenu);
+        
+        // Show/hide menu on right-click
+        toggleButton.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            
+            // Position the menu near the button
+            const rect = toggleButton.getBoundingClientRect();
+            intensityMenu.style.top = `${rect.bottom + window.scrollY}px`;
+            intensityMenu.style.left = `${rect.left + window.scrollX}px`;
+            
+            // Toggle menu visibility
+            if (intensityMenu.style.display === 'none') {
+                intensityMenu.style.display = 'block';
+                
+                // Click outside to close
+                const closeMenu = (event) => {
+                    if (!intensityMenu.contains(event.target) && event.target !== toggleButton) {
+                        intensityMenu.style.display = 'none';
+                        document.removeEventListener('click', closeMenu);
+                    }
+                };
+                
+                // Add delayed listener to prevent immediate closing
+                setTimeout(() => {
+                    document.addEventListener('click', closeMenu);
+                }, 100);
+            } else {
+                intensityMenu.style.display = 'none';
+            }
+        });
+        
+        // Handle intensity option clicks
+        const intensityOptions = intensityMenu.querySelectorAll('.intensity-options button');
+        intensityOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const intensity = option.dataset.intensity;
+                
+                // Update active state
+                intensityOptions.forEach(btn => btn.classList.remove('active'));
+                option.classList.add('active');
+                
+                // Save preference
+                localStorage.setItem('effectsIntensity', intensity);
+                
+                // Update body classes
+                document.body.classList.remove('mild-effects', 'full-effects');
+                if (effectsEnabled) {
+                    if (intensity === 'reduced') {
+                        document.body.classList.add('mild-effects');
+                    } else {
+                        document.body.classList.add('full-effects');
+                    }
+                }
+                
+                // Update canvas effects if available
+                if (window.waterCanvas && typeof window.waterCanvas.applyEffectsPreference === 'function') {
+                    window.waterCanvas.applyEffectsPreference();
+                }
+                
+                // Close menu
+                intensityMenu.style.display = 'none';
+            });
+        });
     }
 
     // Run the main initialization function
