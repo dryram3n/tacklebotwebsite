@@ -38,15 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.querySelector('.loading-indicator');
 
     // Flag to prevent running initialization multiple times
-    let isInitialized = false;
-    // Track the current filter/search state
+    let isInitialized = false;    // Track the current filter/search state
     let currentCategory = 'common'; // Default category
     let currentLocationFilter = 'all'; // Default location
     let currentSeasonFilter = 'all'; // Default season
     let currentRarityFilter = 'all'; // Default rarity
     let searchTerm = '';
-    // Add missing searchResults array
-    let searchResults = [];
 
     // Call the setup functions when initializing
     function initCatalog() {
@@ -84,9 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayFishByCategory(currentCategory);
 
         console.log('Fish catalog initialized with performance optimizations');
-    }
-
-    // Set up event listeners for tabs, search, filters, and modal
+    }    // Set up event listeners for tabs, search, filters, and modal
     function setupEventListeners() {
         // Use event delegation for category tabs
         const tabsContainer = document.querySelector('.catalog-tabs');
@@ -97,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setActiveCategory(category);
                     displayFishByCategory(category);
                 }
-            }); // Fixed: Added missing closing bracket
+            });
         } else {
             // Fallback to individual listeners
             catalogTabs.forEach(tab => {
@@ -119,35 +114,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (e.key === 'Enter') performSearch();
             });
         }
+
+        // Setup filter event delegation
+        setupFilterEventDelegation();
         
-        // Modal functionality - Standardized modal handling
+        // Modal functionality
         if (closeModal) {
             closeModal.addEventListener('click', () => {
-                closeModalFunction();
+                fishModal.classList.remove('active');
             });
         }
         
         // Close modal on click outside
         window.addEventListener('click', (e) => {
             if (e.target === fishModal) {
-                closeModalFunction();
+                fishModal.classList.remove('active');
             }
         });
         
         // Escape key to close modal
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && (fishModal.classList.contains('active') || fishModal.style.display === 'block')) {
-                closeModalFunction();
+            if (e.key === 'Escape' && fishModal.classList.contains('active')) {
+                fishModal.classList.remove('active');
             }
         });
     }
+                // Update active state visually
+                rarityFilters.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                // Update filter state and refresh display
+                currentRarityFilter = tag.dataset.filter;
+                displayFishByCategory(currentCategory);
+            });
+        });
 
-    // Helper function to standardize modal closing
-    function closeModalFunction() {
-        fishModal.classList.remove('active');
-        fishModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.body.classList.remove('modal-open');
+        // Modal close button click - Fixed by adding direct DOM access
+        if (closeModal) {
+            closeModal.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Close modal button clicked");
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Allow background scrolling again
+                document.body.classList.remove('modal-open'); // Remove body class
+            });
+        } else {
+            console.error("Close modal button not found");
+        }
+
+        // Close modal if user clicks outside the modal content area
+        window.addEventListener('click', (e) => {
+            if (e.target === fishModal) {
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
+            }
+        });
+
+        // Close modal if user presses the Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && fishModal.style.display === 'block') {
+                fishModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
+            }
+        });
     }
 
     // Update the visual state of the category tabs
@@ -159,9 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         currentCategory = category; // Update the current category state
-    }
-    
-    // Display fish cards based on the current category, location filter, and search term
+    }    // Display fish cards based on the current category, location filter, and search term
     function displayFishByCategory(category) {
         if (loadingIndicator) loadingIndicator.style.display = 'block';
         
@@ -306,9 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fishValue.textContent = `${fish.value || 0} coins`;
         }
         
-        // Add click event to show fish details - Fixed function call
+        // Add click event to show fish details
         fishCard.addEventListener('click', () => {
-            displayFishDetail(fish);
+            showFishDetails(fish);
         });
         
         return fishCard;
@@ -436,7 +465,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Display the modal and scroll to the top
         fishModal.style.display = 'block';
-        fishModal.classList.add('active');
         window.scrollTo(0, 0);
         document.body.style.overflow = 'hidden'; // Prevent background scrolling while modal is open
     }

@@ -1,3 +1,30 @@
+// Helper function to throttle function calls for better performance
+function throttle(func, delay) {
+  let lastCall = 0;
+  let timeoutId = null;
+  return function(...args) {
+    const now = performance.now(); // Use performance.now() for better precision
+    const remaining = delay - (now - lastCall);
+    
+    // Clear any pending execution
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    
+    if (remaining <= 0) {
+      // If enough time has passed, execute immediately
+      lastCall = now;
+      return func.apply(this, args);
+    } else {
+      // Otherwise, schedule execution
+      timeoutId = setTimeout(() => {
+        lastCall = performance.now();
+        func.apply(this, args);
+      }, remaining);
+    }
+  };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const calcContainer = document.getElementById('calculator');
 
@@ -16,24 +43,49 @@ function initCalculatorTabs() {
     const tabButtons = document.querySelectorAll('.calc-tab');
     const calculatorContainers = document.querySelectorAll('.calculator-container');
     
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetTab = button.dataset.tab;
-            
-            // Update active button
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Show/hide calculator sections
-            calculatorContainers.forEach(container => {
-                if (container.id === `${targetTab}-calculator`) {
-                    container.classList.add('active');
-                } else {
-                    container.classList.remove('active');
-                }
+    // Use event delegation for better performance
+    const tabContainer = document.querySelector('.calculator-tabs');
+    if (tabContainer) {
+        tabContainer.addEventListener('click', (e) => {
+            // Only respond to clicks on tab buttons
+            if (e.target.classList.contains('calc-tab')) {
+                const targetTab = e.target.dataset.tab;
+                
+                // Update active button - use more efficient method
+                const prevActive = tabContainer.querySelector('.calc-tab.active');
+                if (prevActive) prevActive.classList.remove('active');
+                e.target.classList.add('active');
+                
+                // Use requestAnimationFrame for smoother transitions
+                requestAnimationFrame(() => {
+                    // Show/hide calculator sections
+                    calculatorContainers.forEach(container => {
+                        container.classList.toggle('active', container.id === `${targetTab}-calculator`);
+                    });
+                });
+            }
+        });
+    } else {
+        // Fallback to individual listeners if container not found
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                
+                // Update active button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show/hide calculator sections
+                calculatorContainers.forEach(container => {
+                    if (container.id === `${targetTab}-calculator`) {
+                        container.classList.add('active');
+                    } else {
+                        container.classList.remove('active');
+                    }
+                });
             });
         });
-    });
+    }
 }
 
 function initStatsCalculator() {
@@ -452,18 +504,56 @@ function initStatsCalculator() {
     populateOptions(); // Fill dropdowns with locations and seasons
     calculateStats(); // Run the calculation once on page load
 
-    // Add event listeners to recalculate whenever any input changes
-    for (const key in inputs) {
-      if (inputs[key]) { // Check if the element actually exists
-        inputs[key].addEventListener('input', throttledCalculate);
-      } else {
-        console.warn(`Calculator input element not found: ${key}`);
+    // Create a single throttled calculate function with enhanced performance
+    const throttledCalculate = throttle(calculateStats, 250);
+
+    // Use event delegation to optimize input handling
+    const allInputsContainer = document.querySelector('.calc-inputs');
+    if (allInputsContainer) {
+      allInputsContainer.addEventListener('input', (e) => {
+        // Only trigger calculation for relevant input elements
+        if (e.target.matches('input, select')) {
+          throttledCalculate();
+        }
+      });
+    } else {
+      // Fallback to individual listeners
+      for (const key in inputs) {
+        if (inputs[key]) {
+          inputs[key].addEventListener('input', throttledCalculate);
+        } else {
+          console.warn(`Calculator input element not found: ${key}`);
+        }
       }
+    }
+
+    // Ensure the special map and explorer inputs trigger a reload of location options
+    // These need special treatment as they change available options
+    if (inputs.specialMap) {
+      inputs.specialMap.addEventListener('change', function() {
+        // Re-populate options to show or hide Junk Island based on special map status
+        populateOptions();
+        // Then recalculate stats
+        throttledCalculate();
+      });
+    }
+    
+    if (inputs.explorer) {
+      inputs.explorer.addEventListener('change', function() {
+        // Re-populate options to show or hide Lucky Land based on explorer level
+        populateOptions();
+        // Then recalculate stats
+        throttledCalculate();
+      });
     }
 
     // Add after your existing calculateStats function
 
     function setupTabInterface() {
+      // Cache DOM selections for better performance
+      const calcInputs = document.querySelector('.calc-inputs');
+      if (!calcInputs) return; // Guard clause - exit if element not found
+      
       // Create tab navigation
       const tabContainer = document.createElement('div');
       tabContainer.className = 'calc-tabs';
@@ -475,41 +565,66 @@ function initStatsCalculator() {
         { id: 'tab-other', label: '⚙️ Other', target: 'other-factors' }
       ];
       
-      // Create tab buttons
+      // Use document fragment for better performance
+      const fragment = document.createDocumentFragment();
+      
+      // Create tab buttons and attach to fragment
       tabs.forEach(tab => {
         const button = document.createElement('button');
         button.id = tab.id;
-        button.className = 'calc-tab';
+        button.className = 'calc-tab-button'; // Changed class name to avoid conflict with main tabs
         button.textContent = tab.label;
         button.setAttribute('aria-selected', tab.id === 'tab-shop' ? 'true' : 'false');
-        button.addEventListener('click', () => switchTab(tab.id, tab.target));
-        tabContainer.appendChild(button);
+        button.dataset.target = tab.target; // Store target in dataset for easier access
+        fragment.appendChild(button);
+      });
+      
+      // Append all buttons to container at once
+      tabContainer.appendChild(fragment);
+      
+      // Use event delegation for better performance
+      tabContainer.addEventListener('click', (e) => {
+        if (e.target.matches('.calc-tab-button')) {
+          switchSubTab(e.target);
+        }
       });
       
       // Insert tabs before the inputs
-      const calcInputs = document.querySelector('.calc-inputs');
       calcInputs.parentNode.insertBefore(tabContainer, calcInputs);
       
       // Add tabbed content containers
-      document.querySelectorAll('.calc-group').forEach(group => {
+      const calcGroups = document.querySelectorAll('.calc-group');
+      
+      // Set initial visibility state
+      calcGroups.forEach(group => {
         group.classList.add('calc-tab-content');
+        
         // Initially hide all except shop upgrades
-        if (!group.querySelector('h3').textContent.includes('Shop')) {
+        if (!group.querySelector('h3').textContent.toLowerCase().includes('shop')) {
           group.style.display = 'none';
         }
       });
     }
 
-    function switchTab(tabId, targetGroupName) {
-      // Update tab button states
-      document.querySelectorAll('.calc-tab').forEach(tab => {
-        tab.setAttribute('aria-selected', tab.id === tabId ? 'true' : 'false');
+    function switchSubTab(selectedTab) {
+      // Find all tab buttons and update their state
+      const allTabButtons = document.querySelectorAll('.calc-tab-button');
+      allTabButtons.forEach(tab => {
+        tab.setAttribute('aria-selected', tab === selectedTab ? 'true' : 'false');
       });
       
-      // Show/hide appropriate content
-      document.querySelectorAll('.calc-group').forEach(group => {
-        const groupTitle = group.querySelector('h3').textContent.toLowerCase();
-        group.style.display = groupTitle.includes(targetGroupName.replace('-', ' ')) ? 'block' : 'none';
+      // Get the target group name
+      const targetGroupName = selectedTab.dataset.target;
+      
+      // Use requestAnimationFrame for smoother UI updates
+      requestAnimationFrame(() => {
+        // Show/hide appropriate content
+        const groups = document.querySelectorAll('.calc-group');
+        groups.forEach(group => {
+          const groupTitle = group.querySelector('h3').textContent.toLowerCase();
+          const isTarget = groupTitle.includes(targetGroupName.replace('-', ' '));
+          group.style.display = isTarget ? 'block' : 'none';
+        });
       });
     }
 
@@ -576,6 +691,9 @@ function initBusinessCalculator() {
   const businessTypeButtons = document.querySelectorAll('.business-type-btn');
   const businessSections = document.querySelectorAll('.business-upgrade-section');
   
+  // Create a throttled version of the calculate function for better performance
+  const throttledCalculate = throttle(calculateBusinessIncome, 100);
+  
   // Show the default business type (boat)
   document.getElementById('boat-upgrades').classList.add('active');
   
@@ -598,7 +716,7 @@ function initBusinessCalculator() {
       });
       
       // Recalculate business income
-      calculateBusinessIncome();
+      throttledCalculate();
     });
   });
   
@@ -610,10 +728,9 @@ function initBusinessCalculator() {
   
   // Add event listeners to all inputs
   [...boatInputs, ...marketInputs, ...bankInputs, ...waterWorldInputs].forEach(input => {
-    input.addEventListener('input', calculateBusinessIncome);
+    input.addEventListener('input', throttledCalculate);
   });
-  
-  // Calculate business income based on inputs
+    // Calculate business income based on inputs
   function calculateBusinessIncome() {
     const activeBusinessType = document.querySelector('.business-type-btn.active').dataset.business;
     
@@ -841,9 +958,12 @@ function initPirateCalculator() {
   // Get references to the pirate calculator inputs
   const pirateInputs = document.querySelectorAll('#pirate-calculator input, #pirate-calculator select');
   
+  // Create a throttled version of the calculate function for better performance
+  const throttledCalculate = throttle(calculatePlunderResults, 100);
+  
   // Add event listeners to all inputs
   pirateInputs.forEach(input => {
-    input.addEventListener('input', calculatePlunderResults);
+    input.addEventListener('input', throttledCalculate);
   });
   
   // Calculate plunder results based on inputs

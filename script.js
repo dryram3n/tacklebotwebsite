@@ -54,12 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.body.classList.add('canvas-failed');
         initializeWebsiteAnimations();
-    }
-
-    // Global state for the animation loop (for DOM-based animations)
+    }    // Global state for the animation loop (for DOM-based animations)
     let animationFrameId = null;
     let lastTimestamp = 0;
-    const FRAME_DURATION = 1000 / 30; // Target ~30fps
+    const FRAME_DURATION = isLowPerfDevice ? 1000 / 20 : 1000 / 30; // Target 20-30fps instead of 30fps
     let lastThrottledTimestamp = 0;
     let isLoopRunning = false;
 
@@ -270,30 +268,50 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (randomState < 0.8) { targetAmplitude = 8 + Math.random() * 7; targetFrequency = 0.006 + Math.random() * 0.004; targetSpeed = 0.02 + Math.random() * 0.015; }
             else { targetAmplitude = 16 + Math.random() * 9; targetFrequency = 0.008 + Math.random() * 0.005; targetSpeed = 0.03 + Math.random() * 0.02; }
         }, 10000);
-    }
-
-    function updateWaves(elapsedSinceLastThrottledFrame) {
+    }    function updateWaves(elapsedSinceLastThrottledFrame) {
         if (!wavePath1 || !wavePath2) return;
+        
+        // Skip updates sometimes based on device performance
+        if (isLowPerfDevice && Math.random() > 0.7) return;
+        
         const timeFactor = Math.min(2, elapsedSinceLastThrottledFrame / FRAME_DURATION);
         waveTime += currentSpeed * timeFactor;
         currentAmplitude += (targetAmplitude - currentAmplitude) * 0.05 * timeFactor;
         currentFrequency += (targetFrequency - currentFrequency) * 0.05 * timeFactor;
         currentSpeed += (targetSpeed - currentSpeed) * 0.05 * timeFactor;
-        const points1 = [], points2 = [];
-        const segments = 20;
+        
+        // Reduce the number of segments for better performance
+        const segments = isLowPerfDevice ? 12 : 16; // Reduced from 20
+        
         const waveWidth = waveSvg.viewBox.baseVal.width || 1440;
         const waveHeight = waveSvg.viewBox.baseVal.height || 60;
+        
+        // Use arrays instead of string concatenation for better performance
+        const points1 = [], points2 = [];
+        
         for (let i = 0; i <= segments; i++) {
             const x = (waveWidth / segments) * i;
             const y1 = waveHeight / 2 + Math.sin(x * currentFrequency + waveTime) * currentAmplitude;
-            points1.push(`${x.toFixed(2)},${y1.toFixed(2)}`);
+            points1.push(`${x.toFixed(1)},${y1.toFixed(1)}`);
+            
             const y2 = waveHeight / 2 + Math.sin(x * currentFrequency * 1.2 + waveTime * 0.8 + 1) * currentAmplitude * 0.7;
-            points2.push(`${x.toFixed(2)},${y2.toFixed(2)}`);
+            points2.push(`${x.toFixed(1)},${y2.toFixed(1)}`);
         }
+        
         const pathData1 = `M0,${waveHeight} L0,${points1[0].split(',')[1]} L${points1.join(' L')} L${waveWidth},${waveHeight} Z`;
         const pathData2 = `M0,${waveHeight} L0,${points2[0].split(',')[1]} L${points2.join(' L')} L${waveWidth},${waveHeight} Z`;
-        wavePath1.setAttribute('d', pathData1);
-        wavePath2.setAttribute('d', pathData2);
+        
+        // Only update paths if they've changed significantly
+        const currentPath1 = wavePath1.getAttribute('d');
+        const currentPath2 = wavePath2.getAttribute('d');
+        
+        if (currentPath1 !== pathData1) {
+            wavePath1.setAttribute('d', pathData1);
+        }
+        
+        if (currentPath2 !== pathData2) {
+            wavePath2.setAttribute('d', pathData2);
+        }
     }
 
     // Water Background and Bubbles setup
@@ -414,9 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let adjustFishToWaterInterval = null;
     let fishRefreshInterval = null;
     let fishCount = 0;
-    let currentWaterTopVh = 50;
-
-    function initSwimmingFish() {
+    let currentWaterTopVh = 50;    function initSwimmingFish() {
         if (!fishContainer || !waterBody) {
             console.error('Missing elements for fish animation, skipping initialization.');
             return;
@@ -425,16 +441,21 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Fish images data (FISH_IMAGES) not found or empty.');
             return;
         }
-        fishCount = isLowPerfDevice ? 5 : (window.navigator.hardwareConcurrency >= 8 ? 20 : 12);
+        
+        // Reduce fish count for better performance
+        fishCount = isLowPerfDevice ? 3 : (window.navigator.hardwareConcurrency >= 8 ? 12 : 8);
+        
         console.log(`Initializing DOM fish animation with target count: ${fishCount}`);
         fishImageKeys = Object.keys(FISH_IMAGES);
         fishImages = fishImageKeys.map(key => FISH_IMAGES[key]);
         currentWaterHeightVh = parseFloat(waterBody.style.height) || 50;
         currentWaterTopVh = 100 - currentWaterHeightVh;
+        
+        // Reduce check frequency to improve performance
         adjustFishToWaterInterval = setInterval(() => {
             if (!waterBody || document.hidden) return;
             const waterHeight = parseFloat(waterBody.style.height) || 50;
-            if (Math.abs(waterHeight - currentWaterHeightVh) > 1) {
+            if (Math.abs(waterHeight - currentWaterHeightVh) > 3) { // Only update when significant change
                 currentWaterHeightVh = waterHeight;
                 currentWaterTopVh = 100 - currentWaterHeightVh;
                 activeFish.forEach(fish => {
@@ -448,9 +469,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             }
-        }, 2000);
+        }, 3000); // Reduced from 2000ms
+        
+        // Reduce refresh frequency
         fishRefreshInterval = setInterval(() => {
-            if (document.hidden || activeFish.length === 0 || Math.random() > 0.2) return;
+            if (document.hidden || activeFish.length === 0 || Math.random() > 0.15) return; // Reduced from 0.2
             const indexToRemove = Math.floor(Math.random() * activeFish.length);
             const fishToRemove = activeFish[indexToRemove];
             if (fishToRemove?.element?.isConnected) {
@@ -461,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const arrayIndex = activeFish.indexOf(fishToRemove);
                     if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
                     if (!document.hidden && activeFish.length < fishCount) {
-                        setTimeout(createFish, 500);
+                        setTimeout(createFish, 800); // Increased from 500ms
                     }
                 }, { once: true });
                 setTimeout(() => {
@@ -469,19 +492,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const arrayIndex = activeFish.indexOf(fishToRemove);
                     if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
                     if (!document.hidden && activeFish.length < fishCount) {
-                       setTimeout(createFish, 500);
+                       setTimeout(createFish, 800); // Increased from 500ms
                     }
-                }, 1600);
+                }, 1800); // Increased from 1600ms
             } else {
                  const arrayIndex = activeFish.indexOf(fishToRemove);
                  if (arrayIndex > -1) activeFish.splice(arrayIndex, 1);
                  if (!document.hidden && activeFish.length < fishCount) {
-                     setTimeout(createFish, 500);
+                     setTimeout(createFish, 800); // Increased from 500ms
                  }
             }
-        }, isLowPerfDevice ? 30000 : 20000);
+        }, isLowPerfDevice ? 40000 : 30000); // Increased from 30000/20000ms
+        
+        // Stagger fish creation more
         for (let i = 0; i < fishCount; i++) {
-            setTimeout(createFish, i * (isLowPerfDevice ? 600 : 300));
+            setTimeout(createFish, i * (isLowPerfDevice ? 800 : 500)); // Increased from 600/300ms
         }
     }
 
@@ -536,19 +561,37 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             return fishData;
         } catch (err) { console.error("Error creating fish:", err); return null; }
-    }
-
-    function updateAllFish(elapsedSinceLastThrottledFrame) {
+    }    function updateAllFish(elapsedSinceLastThrottledFrame) {
         if (!activeFish.length || prefersReducedMotion) return;
+        
+        // Only update fish animations at appropriate intervals
+        // Using elapsedSinceLastThrottledFrame to adjust animation speed
         const elapsedSeconds = elapsedSinceLastThrottledFrame / 1000;
+        
+        // Process fewer fish per frame to reduce CPU usage
+        const fishToUpdate = Math.min(activeFish.length, isLowPerfDevice ? 3 : 6);
+        const startIdx = Math.floor(Math.random() * Math.max(1, activeFish.length - fishToUpdate));
+        
         const boundaryPadding = 3;
         const waterTopBoundary_vh = currentWaterTopVh + 1;
         const waterBottomBoundary_vh = 100 - 2;
-        activeFish.forEach((fish, index) => {
-            if (!fish.element || !fish.element.isConnected) { activeFish.splice(index, 1); return; }
+        
+        // Only update a subset of fish each frame
+        for (let i = 0; i < fishToUpdate; i++) {
+            const index = (startIdx + i) % activeFish.length;
+            const fish = activeFish[index];
+            
+            if (!fish.element || !fish.element.isConnected) { 
+                activeFish.splice(index, 1);
+                continue;
+            }
+            
             let { element, speed, direction, verticalDirection, verticalAmount, originalY_vh, wiggleAmount, wigglePhase, currentX_vw, currentY_vh } = fish;
+            
+            // Scale movement by elapsed time for consistent animation speed
             const horizontalMove = speed * elapsedSeconds;
             let scaleX = direction === 'left' ? -1 : 1;
+            
             if (direction === 'right') {
                 currentX_vw += horizontalMove;
                 if (currentX_vw > (100 - boundaryPadding)) { direction = 'left'; scaleX = -1; }
@@ -556,33 +599,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentX_vw -= horizontalMove;
                 if (currentX_vw < boundaryPadding) { direction = 'right'; scaleX = 1; }
             }
-            if (Math.random() < 0.0005) { direction = (direction === 'right' ? 'left' : 'right'); scaleX = direction === 'left' ? -1 : 1; }
-            originalY_vh += (Math.random() - 0.5) * 0.5 * elapsedSeconds;
+            
+            // Reduce random direction changes
+            if (Math.random() < 0.0003) { direction = (direction === 'right' ? 'left' : 'right'); scaleX = direction === 'left' ? -1 : 1; }
+            
+            // Reduce vertical movement calculations
+            originalY_vh += (Math.random() - 0.5) * 0.3 * elapsedSeconds;
             originalY_vh = Math.max(waterTopBoundary_vh + verticalAmount, Math.min(waterBottomBoundary_vh - verticalAmount, originalY_vh));
-            const verticalSpeed = speed * 0.4;
+            
+            const verticalSpeed = speed * 0.3;
             const verticalMove = verticalSpeed * elapsedSeconds;
             let targetY_vh = currentY_vh + (verticalDirection === 'up' ? -verticalMove : verticalMove);
+            
             const verticalTopLimit = Math.max(waterTopBoundary_vh, originalY_vh - verticalAmount);
             const verticalBottomLimit = Math.min(waterBottomBoundary_vh, originalY_vh + verticalAmount);
-            if (verticalDirection === 'up' && targetY_vh < verticalTopLimit) { verticalDirection = 'down'; targetY_vh = currentY_vh + verticalMove; }
-            else if (verticalDirection === 'down' && targetY_vh > verticalBottomLimit) { verticalDirection = 'up'; targetY_vh = currentY_vh - verticalMove; }
-            if (Math.random() < 0.005) { verticalDirection = (verticalDirection === 'up' ? 'down' : 'up'); }
-            wigglePhase += 7 * elapsedSeconds;
+            
+            if (verticalDirection === 'up' && targetY_vh < verticalTopLimit) { 
+                verticalDirection = 'down'; 
+                targetY_vh = currentY_vh + verticalMove; 
+            }
+            else if (verticalDirection === 'down' && targetY_vh > verticalBottomLimit) { 
+                verticalDirection = 'up'; 
+                targetY_vh = currentY_vh - verticalMove; 
+            }
+            
+            // Reduce random vertical direction changes
+            if (Math.random() < 0.003) { verticalDirection = (verticalDirection === 'up' ? 'down' : 'up'); }
+            
+            wigglePhase += 5 * elapsedSeconds; // Reduced from 7
             const wiggle = Math.sin(wigglePhase) * wiggleAmount;
             targetY_vh += wiggle * 0.2;
+            
             currentY_vh = Math.max(waterTopBoundary_vh, Math.min(waterBottomBoundary_vh, targetY_vh));
-            element.style.transform = `translate(${currentX_vw.toFixed(1)}vw, ${currentY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
-            fish.direction = direction; fish.verticalDirection = verticalDirection;
-            fish.originalY_vh = originalY_vh; fish.wigglePhase = wigglePhase % (Math.PI * 2);
-            fish.currentX_vw = currentX_vw; fish.currentY_vh = currentY_vh;
-        });
-    }
-
-    // Mouse Trail Effect setup
+            
+            // Only update DOM when position changes significantly
+            const lastTransform = element.style.transform || '';
+            const newTransform = `translate(${currentX_vw.toFixed(1)}vw, ${currentY_vh.toFixed(1)}vh) scaleX(${scaleX})`;
+            
+            if (lastTransform !== newTransform) {
+                element.style.transform = newTransform;
+            }
+            
+            fish.direction = direction; 
+            fish.verticalDirection = verticalDirection;
+            fish.originalY_vh = originalY_vh; 
+            fish.wigglePhase = wigglePhase % (Math.PI * 2);
+            fish.currentX_vw = currentX_vw; 
+            fish.currentY_vh = currentY_vh;
+        }
+    }// Mouse Trail Effect setup
     let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
     let trailX = mouseX, trailY = mouseY;
     let lastDropletTime = 0;
-    const DROPLET_INTERVAL = 50;
+    const DROPLET_INTERVAL = isLowPerfDevice ? 150 : 100; // Increased from 50
     let animateTrailFn = () => {};
     let isTrailActive = false;
 
@@ -611,29 +680,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 trail.style.transform = `translate(${trailX.toFixed(0)}px, ${trailY.toFixed(0)}px) translate(-50%, -50%) rotate(45deg) scale(1)`;
                 trail.style.opacity = '0.8';
             }
-        });
-        animateTrailFn = (elapsedSinceLastFrame) => {
+        });        animateTrailFn = (elapsedSinceLastFrame) => {
             if (!trail || !isTrailActive || isNaN(mouseX) || isNaN(mouseY)) return;
-            const lerpFactor = 0.2;
+            
+            // Throttle animation based on elapsed time
+            const timeScale = Math.min(1.5, elapsedSinceLastFrame / 16);
+            
+            // Use a more efficient lerp factor
+            const lerpFactor = 0.15 * timeScale;
             trailX += (mouseX - trailX) * lerpFactor;
             trailY += (mouseY - trailY) * lerpFactor;
+            
+            // Only get current transform if we need scale information
+            let currentScale = '1';
             const currentTransform = trail.style.transform;
-            const currentScaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
-            const currentScale = currentScaleMatch ? currentScaleMatch[1] : '1';
+            if (currentTransform.includes('scale')) {
+                const currentScaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
+                currentScale = currentScaleMatch ? currentScaleMatch[1] : '1';
+            }
+            
+            // Update the transform
             trail.style.transform = `translate(${trailX.toFixed(0)}px, ${trailY.toFixed(0)}px) translate(-50%, -50%) rotate(45deg) scale(${currentScale})`;
+            
+            // Reduce droplet creation frequency
             const now = performance.now();
             const distMoved = Math.hypot(mouseX - trailX, mouseY - trailY);
-            if (now - lastDropletTime > DROPLET_INTERVAL && distMoved > 3 && Math.random() > 0.5) {
+            
+            // Increase interval and make distMoved threshold higher
+            if (now - lastDropletTime > DROPLET_INTERVAL * 2 && distMoved > 5 && Math.random() > 0.7) {
                 createTrailDroplet(trailX, trailY);
                 lastDropletTime = now;
             }
-        };
-         let fadeTimeout;
-         document.addEventListener('mousemove', () => {
+        };let fadeTimeout;
+         // Track last mousemove time for throttling
+         let lastMoveTime = 0;
+         document.addEventListener('mousemove', (e) => {
              if (!trail || !isTrailActive) return;
+             
+             // Throttle mousemove events to reduce performance impact
+             const now = performance.now();
+             if (now - lastMoveTime < 25) return; // Limit to ~40fps instead of 60fps
+             lastMoveTime = now;
+             
              trail.style.opacity = '0.8';
              clearTimeout(fadeTimeout);
-             fadeTimeout = setTimeout(() => { if (trail && isTrailActive) trail.style.opacity = '0'; }, 300);
+             fadeTimeout = setTimeout(() => { 
+                 if (trail && isTrailActive) trail.style.opacity = '0'; 
+             }, 300);
          });
          document.addEventListener('mousedown', (e) => {
              if (!trail || !isTrailActive || e.target.closest('a, button, .button, input, select, textarea, [role="button"]')) return;
@@ -646,9 +739,14 @@ document.addEventListener('DOMContentLoaded', () => {
              setTimeout(() => {
                  if (trail && isTrailActive) trail.style.transform = `translate(${trailX.toFixed(0)}px, ${trailY.toFixed(0)}px) translate(-50%, -50%) rotate(45deg) scale(1)`;
              }, 150);
-         });
-         function createTrailDroplet(x, y) {
+         });         function createTrailDroplet(x, y) {
+            // Exit early if invalid conditions
             if (isNaN(x) || isNaN(y) || document.hidden || !isTrailActive) return;
+            
+            // Throttle droplet creation based on performance
+            const dropletIntervalCheck = Math.random() > 0.7; // Only create ~30% of potential droplets
+            if (!dropletIntervalCheck && !isLowPerfDevice) return;
+            
             const droplet = document.createElement('div');
             droplet.className = 'trail-droplet';
             droplet.setAttribute('aria-hidden', 'true');
@@ -657,16 +755,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const size = 4 + Math.random() * 6;
             droplet.style.width = `${size}px`; droplet.style.height = `${size}px`;
             document.body.appendChild(droplet);
-            setTimeout(() => { droplet.remove(); }, 800);
-         }
-         function createWaterSplash(x, y) {
+            setTimeout(() => { 
+                if (droplet && droplet.isConnected) droplet.remove(); 
+            }, 800);
+         }         function createWaterSplash(x, y) {
             if (document.hidden || !isTrailActive) return;
+            
+            // Create container for splash
             const splashContainer = document.createElement('div');
             splashContainer.className = 'water-splash';
             splashContainer.setAttribute('aria-hidden', 'true');
             splashContainer.style.left = `${x}px`; splashContainer.style.top = `${y}px`;
             document.body.appendChild(splashContainer);
-            const dropletCount = isLowPerfDevice ? 6 : 12;
+            
+            // Reduce droplet count for better performance
+            const dropletCount = isLowPerfDevice ? 4 : 8; // Reduced from 6/12
+            
+            // Create droplets as a batch
+            const fragment = document.createDocumentFragment();
             for (let i = 0; i < dropletCount; i++) {
                 const droplet = document.createElement('div');
                 droplet.className = 'splash-droplet';
@@ -678,9 +784,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const splashY = Math.sin(angle) * distance;
                 droplet.style.setProperty('--splash-x', `${splashX.toFixed(1)}px`);
                 droplet.style.setProperty('--splash-y', `${splashY.toFixed(1)}px`);
-                splashContainer.appendChild(droplet);
+                fragment.appendChild(droplet);
             }
-            setTimeout(() => { splashContainer.remove(); }, 600);
+            
+            // Append all droplets at once
+            splashContainer.appendChild(fragment);
+            
+            // Clean up after animation
+            setTimeout(() => { 
+                if (splashContainer && splashContainer.isConnected) splashContainer.remove(); 
+            }, 600);
          }
          animateTrailFn(0);
     }
@@ -815,26 +928,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 uiToggleContainer.style.display = 'none'; // Hide container if buttons are missing
             }
         }
-    }
-
-    // Main Animation Loop
+    }    // Main Animation Loop
     function mainLoop(timestamp) {
         if (!isLoopRunning) return;
+        
+        // Request the next frame early to improve perceived responsiveness
         animationFrameId = requestAnimationFrame(mainLoop);
+        
         if (!lastTimestamp) lastTimestamp = timestamp;
         const elapsedSinceLastFrame = timestamp - lastTimestamp;
+        
+        // Skip frames if the time since last update is too small (improves performance)
+        if (elapsedSinceLastFrame < 8 && !isLowPerfDevice) {  // About 120fps limit
+            return;
+        }
+        
         lastTimestamp = timestamp;
+        
+        // Only update trail animation on certain frames for performance
         if (isTrailActive && typeof animateTrailFn === 'function') {
             animateTrailFn(elapsedSinceLastFrame);
         }
+        
         if (!lastThrottledTimestamp) lastThrottledTimestamp = timestamp;
         const elapsedSinceLastThrottledFrame = timestamp - lastThrottledTimestamp;
+        
+        // Process throttled animations only when sufficient time has passed
         if (elapsedSinceLastThrottledFrame >= FRAME_DURATION * 0.9) {
             lastThrottledTimestamp = timestamp;
-            updateWaterHeight(elapsedSinceLastThrottledFrame);
+            
+            // Update water height less frequently
+            if (timestamp % 2 === 0) {
+                updateWaterHeight(elapsedSinceLastThrottledFrame);
+            }
+            
             if (!prefersReducedMotion) {
-                updateWaves(elapsedSinceLastThrottledFrame);
-                updateAllFish(elapsedSinceLastThrottledFrame);
+                // Update waves and fish with alternating frames to reduce CPU usage
+                if (timestamp % 3 === 0) {
+                    updateWaves(elapsedSinceLastThrottledFrame);
+                }
+                
+                if (timestamp % 3 !== 0) {
+                    updateAllFish(elapsedSinceLastThrottledFrame);
+                }
             }
         }
     }
