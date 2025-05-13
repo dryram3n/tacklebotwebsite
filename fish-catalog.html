@@ -58,7 +58,6 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="index.html#features">Features</a></li>
           <li><a href="index.html#commands">Commands</a></li>
-          <li><a href="how-to-use.html">How to Use</a></li> <!-- Added Link -->
           <li><a href="calculator.html">Calculator</a></li>
           <li><a href="index.html#support">Support</a></li>
           <li><a href="fish-catalog.html" class="active">Fish Catalog</a></li>
@@ -83,7 +82,9 @@
           <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="Search by name or description..." aria-label="Search Fish Catalog">
             <button id="searchButton" class="search-button" aria-label="Search">🔍 Search</button>
-          </div>          <!-- Location filters -->
+          </div>
+
+          <!-- Location filters -->
           <div class="filter-section">
             <h3>Filter by Location:</h3>
             <div class="filter-tags" id="locationFilters">
@@ -97,40 +98,6 @@
               <button class="filter-tag" data-filter="sunken_city">Sunken City</button>
               <button class="filter-tag" data-filter="vortex">Vortex</button>
               <button class="filter-tag" data-filter="cosmic_sea">Cosmic Sea</button>
-              <button class="filter-tag" data-filter="temporal_tide">Temporal Tide</button>
-              <button class="filter-tag" data-filter="fishverse">Fishverse</button>
-            </div>
-          </div>
-          
-          <!-- Season filters -->
-          <div class="filter-section">
-            <h3>Filter by Season:</h3>
-            <div class="filter-tags" id="seasonFilters">
-              <button class="filter-tag active" data-filter="all">All Seasons</button>
-              <button class="filter-tag" data-filter="spring">Spring 🌸</button>
-              <button class="filter-tag" data-filter="summer">Summer ☀️</button>
-              <button class="filter-tag" data-filter="fall">Fall 🍂</button>
-              <button class="filter-tag" data-filter="winter">Winter ❄️</button>
-            </div>
-          </div>
-          
-          <!-- Rarity filters -->
-          <div class="filter-section">
-            <h3>Filter by Rarity:</h3>
-            <div class="filter-tags rarity-tags" id="rarityFilters">
-              <button class="filter-tag active" data-filter="all">All Rarities</button>
-              <button class="filter-tag" data-filter="common" style="background-color: rgba(221, 190, 169, 0.2);">Common</button>
-              <button class="filter-tag" data-filter="uncommon" style="background-color: rgba(152, 212, 187, 0.2);">Uncommon</button>
-              <button class="filter-tag" data-filter="rare" style="background-color: rgba(152, 188, 212, 0.2);">Rare</button>
-              <button class="filter-tag" data-filter="legendary" style="background-color: rgba(244, 204, 113, 0.2);">Legendary</button>
-              <button class="filter-tag" data-filter="mythic" style="background-color: rgba(199, 157, 224, 0.2);">Mythic</button>
-              <button class="filter-tag" data-filter="chimerical" style="background-color: rgba(205, 122, 226, 0.2);">Chimerical</button>
-              <button class="filter-tag" data-filter="special" style="background-color: rgba(255, 219, 88, 0.2);">Special ✨</button>
-              <button class="filter-tag" data-filter="seasonal" style="background-color: rgba(240, 128, 128, 0.2);">Seasonal</button>
-              <button class="filter-tag" data-filter="event" style="background-color: rgba(255, 204, 128, 0.2);">Event</button>
-              <button class="filter-tag" data-filter="junk" style="background-color: rgba(169, 169, 169, 0.2);">Junk</button>
-            </div>
-          </div>
               <button class="filter-tag" data-filter="temporal_tide">Temporal Tide</button>
             </div>
           </div>
@@ -208,18 +175,6 @@
       <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
     </div>
   </footer>
-
-  <!-- Back to Top Button -->
-  <button id="back-to-top" class="button icon-button" aria-label="Back to top">
-    <i class="fas fa-arrow-up" aria-hidden="true"></i>
-  </button>
-
-  <!-- Effects Toggle Button -->
-  <div id="effects-toggle-container">
-    <button id="toggle-effects" class="button effects-toggle" aria-label="Toggle Animation Effects">
-      <i class="fas fa-water" aria-hidden="true"></i> <span id="effects-status">Hide Effects</span>
-    </button>
-  </div>
 
   <!-- Load data scripts first, then catalog logic, then general page script -->
   <script src="fishImages.js" defer></script>
