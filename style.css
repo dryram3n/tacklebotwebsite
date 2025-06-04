@@ -4,13 +4,13 @@
   --gradient-primary: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
   --gradient-secondary: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
   --gradient-accent: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-  --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 0%);
+  --gradient-cta: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
   /* Solid Colors */
   --primary-bg: #f0faff; /* Very light blue, almost white */
   --text-color-day: #6283a8; /* Dark grayish blue for day */
   --text-color-night: #c5d5e5; /* Light grayish blue for night */
-  --static-text-color: #000000; /* Same as day color by default */
+  --static-text-color: #2a4365; /* Darker, more readable text color */
   --text-color: var(--text-color-day); /* Dynamic variable that changes */
   
   --heading-color-day: #2a4365; /* Darker blue for headings during day */
@@ -33,13 +33,13 @@
   /* Font */
   --font-primary: 'Nunito', sans-serif;
 
-  /* Water Effects Colors */
-  --water-color: rgba(137, 247, 254, 0.7);
-  --water-shadow: rgba(102, 166, 255, 0.4);
-  --water-splash: rgba(137, 247, 254, 0.5);
-  --water-surface: rgba(137, 247, 254, 0.5); /* Used for gradient and wave path 1 */
-  --water-deep: rgba(102, 166, 255, 0.7); /* Used for gradient */
-  --bubble-color: rgba(255, 255, 255, 0.7);
+  /* Water Effects Colors - More aligned with site palette */
+  --water-color: rgba(137, 247, 254, 0.6);
+  --water-shadow: rgba(102, 166, 255, 0.3);
+  --water-splash: rgba(137, 247, 254, 0.4);
+  --water-surface: rgba(137, 247, 254, 0.4); /* Used for gradient and wave path 1 */
+  --water-deep: rgba(102, 166, 255, 0.6); /* Used for gradient */
+  --bubble-color: rgba(255, 255, 255, 0.6);
 
   /* Sky Colors */
   --sky-day: linear-gradient(to bottom, #87CEEB 30%, #ADD8E6 70%, #B0E0E6 100%);
@@ -112,6 +112,14 @@ body {
   font-weight: 400;
   /* Ensure default cursor is always the base */
   cursor: default;
+
+  /* Enhanced background properties for better integration */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 100vh;
+  /* Ensure smooth transitions when background changes */
+  transition: background 0.8s ease-in-out;
 }
 
 /* Explicitly set pointer for interactive elements */
@@ -233,6 +241,11 @@ header {
   border-bottom: 3px solid transparent;
   border-image: var(--gradient-primary) 1;
   transition: opacity 0.5s ease-in-out;
+
+  /* Enhanced background integration */
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 nav {
@@ -431,6 +444,12 @@ nav ul li a.active {
   border: 1px solid rgba(255, 255, 255, 0.5);
   position: relative;
   z-index: var(--z-content);
+
+  /* Enhanced glass morphism effect */
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .hero-content {
@@ -449,7 +468,7 @@ nav ul li a.active {
 .hero-content p {
   font-size: clamp(1.1rem, 2.5vw, 1.25rem);
   margin-bottom: 2.5rem;
-  color: #000000; /* Change to solid black for better readability */
+  color: var(--static-text-color); /* Use consistent text color */
 }
 
 .hero-image {
@@ -477,6 +496,10 @@ section {
   margin: 4rem auto;
   position: relative;
   z-index: var(--z-content);
+
+  /* Enhanced backdrop for better readability */
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
 }
 
 section h2 {
@@ -529,7 +552,7 @@ section h2 {
 
 .feature-item p {
   font-size: 1rem;
-  color: #000000; /* Change to solid black for better readability */
+  color: var(--static-text-color); /* Use consistent readable text color */
 }
 
 /* --- Commands Section --- */
@@ -666,6 +689,12 @@ footer {
   position: relative;
   z-index: var(--z-content);
   transition: opacity 0.5s ease-in-out;
+
+  /* Enhanced footer with better background integration */
+  background-color: rgba(230, 240, 255, 0.9);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-top-color: rgba(161, 196, 253, 0.5);
 }
 
 footer p {
@@ -2232,7 +2261,7 @@ body.ui-hidden #ui-toggle-container {
   .legal-card h4 { font-size: 1.1rem; }
   .legal-card ul { padding-left: 1.2rem; }
   .fish-catalog-section, .calculator-section, #calculator, #try-me, #donation-section, #how-to-use, #faq { padding: 1rem; } /* Added #how-to-use, #faq */
-  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+  .catalog-content { grid-template-columns: repeat(auto-fill, minmax(140px,  1fr)); gap: 1rem; }
   .search-input, .search-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
   .catalog-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; flex-wrap: nowrap; }
   .catalog-tab { flex-shrink: 0; font-size: 0.9rem; padding: 0.6rem 1rem; }

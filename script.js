@@ -9,24 +9,155 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to generate a random integer between min and max (inclusive)
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }    // Theme-appropriate background gradients that perfectly match the site's design system
+    const themeBackgrounds = [
+        // Primary gradient variations - using exact site colors
+        'linear-gradient(135deg, #f0faff 0%, #89f7fe 35%, #66a6ff 100%)',
+        'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 25%, #89f7fe 85%, #66a6ff 100%)',
+        'radial-gradient(ellipse at top, rgba(137, 247, 254, 0.7) 0%, #f0faff 40%, #c2e9fb 100%)',
+        
+        // Accent gradient variations - softer, more subtle
+        'linear-gradient(180deg, #f0faff 0%, rgba(161, 196, 253, 0.4) 30%, rgba(194, 233, 251, 0.6) 70%, #f0faff 100%)',
+        'linear-gradient(45deg, #f0faff 0%, rgba(255, 221, 225, 0.3) 25%, rgba(194, 233, 251, 0.5) 75%, #f0faff 100%)',
+        
+        // Sophisticated blends matching the site's modern aesthetic
+        'linear-gradient(135deg, rgba(240, 250, 255, 0.95) 0%, rgba(137, 247, 254, 0.4) 40%, rgba(102, 166, 255, 0.3) 80%, rgba(240, 250, 255, 0.95) 100%)',
+        'radial-gradient(circle at 30% 70%, rgba(161, 196, 253, 0.3) 0%, rgba(240, 250, 255, 0.9) 35%, rgba(194, 233, 251, 0.4) 70%, #f0faff 100%)',
+        
+        // Gentle water-inspired themes
+        'linear-gradient(160deg, rgba(194, 233, 251, 0.5) 0%, #f0faff 30%, rgba(161, 196, 253, 0.3) 70%, #f0faff 100%)',
+        'linear-gradient(45deg, #f0faff 0%, rgba(137, 247, 254, 0.2) 20%, rgba(161, 196, 253, 0.3) 50%, rgba(194, 233, 251, 0.2) 80%, #f0faff 100%)',
+        
+        // Subtle atmospheric variations
+        'radial-gradient(ellipse at bottom, rgba(102, 166, 255, 0.2) 0%, rgba(137, 247, 254, 0.3) 25%, #f0faff 60%, rgba(194, 233, 251, 0.4) 100%)',
+        'linear-gradient(125deg, #f0faff 0%, rgba(255, 221, 225, 0.2) 15%, rgba(194, 233, 251, 0.6) 40%, rgba(161, 196, 253, 0.3) 70%, #f0faff 100%)'
+    ];
+
+    // Function to set a theme-appropriate background
+    function setThemeBackground() {
+        const selectedBackground = themeBackgrounds[getRandomInt(0, themeBackgrounds.length - 1)];
+        document.body.style.background = selectedBackground;
+        document.body.style.backgroundAttachment = 'fixed';
+        
+        // Add subtle water-like effects overlay
+        createWaterOverlay();
+    }    // Create a subtle water-like overlay effect
+    function createWaterOverlay() {
+        // Remove existing overlay if present
+        const existingOverlay = document.getElementById('water-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'water-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -5;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(137, 247, 254, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(102, 166, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(161, 196, 253, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(194, 233, 251, 0.05) 0%, transparent 40%);
+            animation: waterShimmer 12s ease-in-out infinite alternate;
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Add CSS animation for the water shimmer effect
+        if (!document.getElementById('water-animation-styles')) {
+            const style = document.createElement('style');
+            style.id = 'water-animation-styles';
+            style.textContent = `
+                @keyframes waterShimmer {
+                    0% { opacity: 0.2; transform: translateY(0px) scale(1); }
+                    100% { opacity: 0.4; transform: translateY(-8px) scale(1.01); }
+                }
+                
+                @keyframes gentleFloat {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-3px) rotate(0.5deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }// Apply the theme-appropriate background
+    setThemeBackground();
+
+    // Add subtle floating bubbles for extra water atmosphere
+    function createFloatingBubbles() {
+        const bubbleContainer = document.createElement('div');
+        bubbleContainer.id = 'floating-bubbles';
+        bubbleContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -3;
+            overflow: hidden;
+        `;
+        
+        // Create 8 subtle bubbles
+        for (let i = 0; i < 8; i++) {
+            const bubble = document.createElement('div');
+            const size = getRandomInt(20, 60);
+            const delay = getRandomInt(0, 8);
+            const duration = getRandomInt(15, 25);
+            const startPos = getRandomInt(0, 100);
+            
+            bubble.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(137, 247, 254, 0.1) 50%, transparent 100%);
+                border-radius: 50%;
+                bottom: -100px;
+                left: ${startPos}%;
+                animation: bubbleFloat ${duration}s linear infinite;
+                animation-delay: ${delay}s;
+                opacity: 0.6;
+            `;
+            
+            bubbleContainer.appendChild(bubble);
+        }
+        
+        document.body.appendChild(bubbleContainer);
+        
+        // Add bubble animation CSS
+        if (!document.getElementById('bubble-animation-styles')) {
+            const style = document.createElement('style');
+            style.id = 'bubble-animation-styles';
+            style.textContent = `
+                @keyframes bubbleFloat {
+                    0% {
+                        transform: translateY(0) translateX(0) scale(0.8);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 0.6;
+                    }
+                    90% {
+                        opacity: 0.4;
+                    }
+                    100% {
+                        transform: translateY(-100vh) translateX(${getRandomInt(-50, 50)}px) scale(1.2);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
 
-    // Function to generate a random hex color
-    function getRandomHexColor() {
-        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
-    }
-
-    // Function to set a random static gradient background
-    function setRandomStaticBackground() {
-        const color1 = getRandomHexColor();
-        const color2 = getRandomHexColor();
-        const angle = getRandomInt(0, 360);
-        document.body.style.background = `linear-gradient(${angle}deg, ${color1}, ${color2})`;
-        document.body.style.backgroundAttachment = 'fixed'; // Ensure gradient covers viewport
-    }
-
-    // Apply the random static background
-    setRandomStaticBackground();
+    // Add floating bubbles with a small delay
+    setTimeout(createFloatingBubbles, 1000);
 
     // Preserve UI Toggle Logic if still needed and not tied to removed elements
     const uiToggleContainer = document.getElementById('ui-toggle-container');
