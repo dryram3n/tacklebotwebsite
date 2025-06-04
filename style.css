@@ -109,7 +109,6 @@ body {
   background-color: var(--primary-bg);
   color: var(--text-color);
   line-height: 1.7;
-  overflow-x: hidden; /* Prevent horizontal scroll */
   font-weight: 400;
   /* Ensure default cursor is always the base */
   cursor: default;
@@ -1866,7 +1865,7 @@ social-links {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: var(--z-ui-toggle);
+    z-index: 1000; /* Ensure it's above other content */
     transition: opacity 0.5s ease-in-out;
     will-change: opacity;
     display: flex;
