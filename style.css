@@ -1590,12 +1590,6 @@ social-links {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
-  padding: 2.5rem;
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 992px) {
