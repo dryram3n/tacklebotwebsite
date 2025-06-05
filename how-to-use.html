@@ -35,11 +35,11 @@
   
   <!-- Google Fonts (Using Nunito - friendly and rounded) -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome for Icons -->
+    <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmF/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
+<body>
   <!-- Header -->
   <header>
     <nav>
@@ -235,6 +235,21 @@
       <h2>Fishing System Guide <span class="emoji">🎣</span></h2>
       <div class="content-box">
         <p>Fishing is the core of TackleBot! Here's everything you need to know:</p>
+
+        <!-- Added Fishing Basics -->
+        <div class="expand-btn" aria-expanded="false">
+          <span class="emoji">🎣</span> Fishing Basics
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="expanded-content">
+          <p>The core of TackleBot! Here's the lowdown:</p>
+          <ul>
+            <li><strong>Casting:</strong> Use <code>/fish cast</code> to cast your line. There's a short cooldown between casts.</li>
+            <li><strong>Bait:</strong> Using bait (e.g., <code>/fish cast bait:Worm</code>) increases your chances of catching rarer fish. Bait is consumed upon use, whether you catch something or not. Check available bait with <code>/fish inventory bait</code>.</li>
+            <li><strong>Locations:</strong> Different locations (unlocked by leveling up) have unique fish. Use <code>/fish cast location:[location_name]</code> to change spots. See available locations with <code>/fish locations</code>.</li>
+            <li><strong>Selling:</strong> Turn your fish into cash with <code>/fish sell [index]</code> or <code>/fish sellall</code>.</li>
+          </ul>
+        </div>
 
         <div class="expand-btn" aria-expanded="false">
           <span class="emoji">📊</span> Rarity System
@@ -577,16 +592,7 @@
                     <p><strong>Strategy:</strong> Reinvesting your profits into business upgrades is key to maximizing your passive income stream!</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <div id="business" class="content-box">
-        <h2><i class="fas fa-store emoji-icon"></i> Running a Business</h2>
-        <p>Invest your hard-earned cash into businesses to generate passive income. Different businesses offer varying returns.</p>
-        <p>Use <code>/business buy [business_name]</code> to purchase a business and <code>/business list</code> to see available options and your current holdings.</p>
-        <p class="help-tip"><i class="fas fa-info-circle"></i> **Passive Income:** Your businesses generate income automatically over time. **This income is automatically claimed and added to your balance every minute**, even if you're not actively playing!</p>
-        <p>Upgrade your businesses using <code>/business upgrade [business_name]</code> to increase their profitability.</p>
-    </div>
+        </div>    </section>
 
     <!-- Seasonal System -->
     <section id="seasons" class="animated-section">
@@ -728,22 +734,8 @@
           <div class="help-tip">
             <p><strong>Pro Tip:</strong> Consistent voting significantly boosts your chest values thanks to the streak bonus!</p> <!-- Updated tip -->
           </div>
-        </div>
-      </div>
+        </div>      </div>
     </section>
-
-    <div id="voting" class="content-box">
-        <h2><i class="fas fa-vote-yea emoji-icon"></i> Voting Rewards</h2>
-        <p>Support TackleBot by voting on top.gg! You'll receive awesome rewards for each vote:</p>
-        <ul class="rewards-list">
-            <li>💰 **In-game Cash:** A helpful boost to your balance.</li>
-            <li>🎣 **Guaranteed Common Fish:** Adds a common fish directly to your inventory.</li>
-            <li><i class="fas fa-dice"></i> **Chance for Rare Bait:** A possibility of getting valuable bait to catch better fish.</li>
-            <li><i class="fas fa-star"></i> **Experience Points (XP):** Helps you level up faster.</li>
-        </ul>
-        <p>Vote regularly to maximize your rewards and help TackleBot grow!</p>
-        <a href="https://top.gg/bot/YOUR_BOT_ID/vote" target="_blank" class="button cta-button" data-ignore-canvas="true">Vote Now on top.gg! <i class="fas fa-external-link-alt"></i></a>
-    </div>
 
     <!-- Fun Commands -->
     <section id="fun-commands" class="animated-section">
@@ -948,20 +940,8 @@
   
   <!-- Load script.js to handle common functionality like UI toggle and visual effects -->
   <script src="script.js" defer></script>
-  
-  <!-- How to Use specific JavaScript -->
+    <!-- How to Use specific JavaScript -->
   <script src="how-to-use.js" defer></script>
-
-  <div id="fishing-basics" class="content-box">
-    <h2><i class="fas fa-fish emoji-icon"></i> Fishing Basics</h2>
-    <p>The core of TackleBot! Here's the lowdown:</p>
-    <ul>
-        <li><strong>Casting:</strong> Use <code>/fish</code> to cast your line. There's a short cooldown between casts.</li>
-        <li><strong>Bait:</strong> Using bait (e.g., <code>/fish bait:Worm</code>) increases your chances of catching rarer fish. Bait is consumed upon use, whether you catch something or not. Check available bait with <code>/inventory bait</code>.</li>
-        <li><strong>Locations:</strong> Different locations (unlocked by leveling up) have unique fish. Use <code>/travel [location_name]</code> to change spots. See available locations with <code>/locations</code>.</li>
-        <li><strong>Selling:</strong> Turn your fish into cash with <code>/sell [fish_name|all]</code>.</li>
-    </ul>
-  </div>
 </body>
 
 </html>
