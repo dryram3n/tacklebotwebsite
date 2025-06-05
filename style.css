@@ -1937,7 +1937,8 @@ social-links {
 
 .calc-tab {
   flex: 0 0 auto;
-  padding: 0.8rem 1.5rem;
+  height: 3rem; /* Fixed height for consistency */
+  padding: 0 1.5rem; /* Only horizontal padding */
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
   border: 1px solid rgba(102, 166, 255, 0.2);
   border-radius: 12px;
@@ -1949,6 +1950,9 @@ social-links {
   white-space: nowrap;
   font-size: 0.95rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
 }
 
 .calc-tab:hover {
@@ -2007,10 +2011,10 @@ social-links {
     font-size: 0.95rem;
     padding-bottom: 0.6rem;
   }
-  
-  /* Tabs layout for mobile */
+    /* Tabs layout for mobile */
   .calc-tab {
-    padding: 0.5rem 1rem;
+    height: 2.5rem; /* Slightly smaller height for mobile */
+    padding: 0 1rem; /* Adjust horizontal padding */
     font-size: 0.9rem;
   }
   
@@ -2045,9 +2049,9 @@ social-links {
   .calc-rarity-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .calc-tab {
-    padding: 0.4rem 0.8rem;
+    .calc-tab {
+    height: 2.2rem; /* Even smaller height for very small screens */
+    padding: 0 0.8rem; /* Adjust horizontal padding */
     font-size: 0.85rem;
   }
   
