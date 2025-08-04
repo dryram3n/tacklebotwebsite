@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <!-- Favicon -->
-   <link rel="icon" type="image/png" href="favicon.png">
-
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -24,13 +23,13 @@
   <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
   <!-- Theme color for browser UI -->
-  <meta name="theme-color" content="#89f7fe">
+  <meta name="theme-color" content="#667eea">
 
   <title>TackleBot 🎣 - Your Adorable Discord Fishing Buddy!</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Discord Icon -->
+  <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
@@ -39,87 +38,76 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="index.html" aria-label="TackleBot Home">🎣 TackleBot</a>
-            </div>            <ul>
+                <a href="index.html">🎣 TackleBot</a>
+            </div>
+            <ul>
                 <li><a href="#hero" class="active">Home</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#commands">Commands</a></li>
-                <li><a href="how-to-use.html">How to Use</a></li>
-                <li><a href="calculator.html">Calculator</a></li>
-                <li><a href="fish-catalog.html">Fish Catalog</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li><a href="#support">Support</a></li>
                 <li><a href="terms-of-service.html">Terms</a></li>
                 <li><a href="privacy-policy.html">Privacy</a></li>
-                <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+                <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">Invite Bot! 🎉</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="animated-section">
-            <div class="hero-content">
-                <h1>Reel in the Fun with TackleBot! <span class="emoji">🥳</span></h1>
-                <p>Your super cute and friendly fishing companion for Discord. Cast your line, collect adorable fish, upgrade your
-                    gear, and compete with friends! </p>
-                <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button hero-button invite-button">
-                    <i class="fab fa-discord" aria-hidden="true"></i> Add to Your Server!
-                    <span class="ripple"></span>
-                </a>
-                <a href="#features" class="button secondary-button">
-                    See the Features! 👇
-                    <span class="ripple"></span>
-                </a>
-            </div>
-            <div class="hero-image">
-                <!-- Bigger, cuter emoji -->
-                <span class="hero-emoji" role="img" aria-label="Tropical fish emoji">🐠</span>
-            </div>
+        <section id="hero" class="hero">
+            <h1>Reel in the Fun with TackleBot! 🥳</h1>
+            <p>Your super cute and friendly fishing companion for Discord. Cast your line, collect adorable fish, upgrade your gear, and compete with friends!</p>
+            <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">
+                <i class="fab fa-discord"></i> Add to Your Server!
+            </a>
+            <a href="#features" class="button secondary">
+                See Features Below �
+            </a>
         </section>
 
         <!-- Features Section -->
-        <section id="features" class="animated-section">
-            <h2>What Makes TackleBot Special? <span class="emoji">💖</span></h2>
+        <section id="features">
+            <h2>What Makes TackleBot Special? 💖</h2>
             <div class="features-grid">
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Fishing pole emoji">🎣</span>
+                    <span class="feature-icon">🎣</span>
                     <h3>Go Fishing!</h3>
                     <p>Cast your line in various locations. Discover common, rare, and even ✨Mythical✨ fish!</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Books emoji">📚</span>
-                    <h3>Fish Index & Collection</h3>
+                    <span class="feature-icon">📚</span>
+                    <h3>Fish Collection</h3>
                     <p>Track every fish you've caught! Learn fun lore and see detailed stats for each species.</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Shopping cart emoji">🛒</span>
+                    <span class="feature-icon">🛒</span>
                     <h3>Shop & Upgrades</h3>
                     <p>Buy better Lures, Rods, Nets, and more! Increase your chances, speed, and inventory space.</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Chart increasing emoji">📈</span>
+                    <span class="feature-icon">📈</span>
                     <h3>Stats & Progress</h3>
                     <p>Watch your fishing level grow! Check your XP, total earnings, biggest catches, and more.</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Trophy emoji">🏆</span>
+                    <span class="feature-icon">🏆</span>
                     <h3>Leaderboards</h3>
                     <p>Compete with server friends! See who has the highest level, most catches, or biggest earnings.</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Factory emoji">🏭</span>
+                    <span class="feature-icon">🏭</span>
                     <h3>Fishing Company</h3>
                     <p>Start your own fishing company! Generate passive income and manage your fleet.</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Direct hit emoji">🎯</span>
+                    <span class="feature-icon">🎯</span>
                     <h3>Challenges</h3>
-                    <p>Take on Hourly, Daily, Weekly, and Seasonal challenges for extra rewards and fun!</p>
+                    <p>Take on daily, weekly, and seasonal challenges for extra rewards and fun!</p>
                 </div>
                 <div class="feature-item">
-                    <span class="emoji-icon" role="img" aria-label="Smiling face with hearts emoji">🤗</span>
+                    <span class="feature-icon">🤗</span>
                     <h3>Friendly & Fun</h3>
                     <p>Designed to be easy to use, adorable, and a great addition to any community.</p>
                 </div>
@@ -127,9 +115,9 @@
         </section>
 
         <!-- Commands Section -->
-        <section id="commands" class="animated-section">
-            <h2>Get Started with These Commands! <span class="emoji">👇</span></h2>
-            <p>Just a few simple commands to begin your fishing adventure:</p>
+        <section id="commands">
+            <h2>Get Started with These Commands! 👇</h2>
+            <p class="text-center">Just a few simple commands to begin your fishing adventure:</p>
             <div class="commands-list">
                 <div class="command-item">
                     <code>/fish cast</code>
@@ -153,60 +141,39 @@
                 </div>
                 <div class="command-item">
                     <code>/help fishing</code>
-                    <p>Get a full breakdown! 🆘</p>
-                </div>
-                <div class="command-item">
-                    <code>/index section</code> <!-- Corrected command format -->
-                    <p>Browse the collection of all fish species! 📚</p>
-                </div>
-                <div class="command-item">
-                    <code>/company section</code> <!-- Corrected command format -->
-                    <p>Open a business for passive income! 🏬</p>
+                    <p>Get a full breakdown of all commands! �</p>
                 </div>
             </div>
         </section>
 
-        <!-- Call to Action / Support Section -->
-        <section id="support" class="cta animated-section">
-            <h2>Ready to Start Your Fishing Journey? <span class="emoji">🌊</span></h2>
-            <p>Add TackleBot to your server or join our friendly support community for help!</p>
-            <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button cta-button invite-button">
-                Add TackleBot Now! <span class="emoji">✨</span>
-                <span class="ripple"></span>
-            </a>
-            <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="button secondary-button support-button">
-                Join Support Server <span class="emoji">🤝</span>
-                <span class="ripple"></span>
-            </a>
+        <!-- Support Section -->
+        <section id="support">
+            <h2>Ready to Start Your Fishing Journey? 🌊</h2>
+            <p class="text-center">Add TackleBot to your server or join our friendly support community for help!</p>
+            <div class="text-center mt-2">
+                <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">
+                    Add TackleBot Now! ✨
+                </a>
+                <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="button secondary">
+                    Join Support Server 🤝
+                </a>
+            </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer>
-        <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+        <p>© 2025 TackleBot 💖 | Made with ❤️ |
             <a href="terms-of-service.html">Terms of Service</a> |
             <a href="privacy-policy.html">Privacy Policy</a>
         </p>
         <div class="social-links">
-            <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
-            <!-- <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a> -->
+            <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i></a>
         </div>
     </footer>
 
-    <!-- UI Toggle Button -->
-    <div id="ui-toggle-container">
-        <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
-            <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
-        </button>
-        <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
-            <i class="fas fa-eye" aria-hidden="true"></i>
-        </button>
-    </div>
-
-    <!-- Load scripts deferred -->
-    <script src="fishImages.js" defer></script>
-    <script src="fish-info.js" defer></script> <!-- ADDED: Ensure fish-info is loaded -->
-    <script src="script.js" defer></script>
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
 
 </html>

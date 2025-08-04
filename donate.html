@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <!-- Favicon -->
-   <link rel="icon" type="image/png" href="favicon.png">
-
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -24,87 +23,70 @@
   <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
   <!-- Theme color for browser UI -->
-  <meta name="theme-color" content="#89f7fe">
+  <meta name="theme-color" content="#667eea">
 
   <title>Donate - Support TackleBot 🎣</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts (Using Nunito - friendly and rounded) -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-
+<body>
   <!-- Header -->
   <header>
     <nav>
       <div class="logo">
-        <a href="index.html" aria-label="TackleBot Home">🎣 TackleBot</a>
-      </div>      <ul>
+        <a href="index.html">🎣 TackleBot</a>
+      </div>
+      <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#features">Features</a></li>
         <li><a href="index.html#commands">Commands</a></li>
-        <li><a href="how-to-use.html">How to Use</a></li>
-        <li><a href="calculator.html">Calculator</a></li>
-        <li><a href="fish-catalog.html">Fish Catalog</a></li>
         <li><a href="donate.html" class="active">Donate</a></li>
         <li><a href="index.html#support">Support</a></li>
         <li><a href="terms-of-service.html">Terms</a></li>
         <li><a href="privacy-policy.html">Privacy</a></li>
-        <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button nav-button invite-button">Invite Bot! <span class="emoji">🎉</span></a></li>
+        <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">Invite Bot! 🎉</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Main Content Area -->
+  <!-- Main Content -->
   <main>
     <!-- Donation Section -->
-    <section id="donation-section" class="animated-section">
-      <h2>Support TackleBot Development <span class="emoji">💖</span></h2>
-      <p>TackleBot is a passion project developed by Thromblo via community feedback. Everything is out of pocket including time. If you wish to support the dev of TackleBot, any amount of donations help! All donations go towards eventual server hosting, bills, and a coffee!</p>
+    <section id="donation-section">
+      <h2>Support TackleBot Development 💖</h2>
+      <p>TackleBot is a passion project developed by Thromblo via community feedback. Everything is out of pocket including time. If you wish to support the development of TackleBot, any amount of donations help! All donations go towards eventual server hosting, bills, and a coffee!</p>
       <p>If you enjoy using TackleBot and want to contribute, please consider supporting me through one of the platforms below. Every little bit helps!</p>
 
-      <div class="donation-links-container">
-        <a href="https://www.patreon.com/c/thromblocreates" target="_blank" rel="noopener noreferrer" class="button donation-link patreon">
-          <i class="fab fa-patreon" aria-hidden="true"></i> Support on Patreon
-          <span class="ripple"></span>
+      <div class="donation-links">
+        <a href="https://www.patreon.com/c/thromblocreates" target="_blank" rel="noopener noreferrer" class="donation-link patreon">
+          <i class="fab fa-patreon"></i> Support on Patreon
         </a>
-        <a href="https://ko-fi.com/thromblocreates" target="_blank" rel="noopener noreferrer" class="button donation-link kofi">
-          <i class="fas fa-coffee" aria-hidden="true"></i> Buy me a Coffee (Ko-fi)
-          <span class="ripple"></span>
+        <a href="https://ko-fi.com/thromblocreates" target="_blank" rel="noopener noreferrer" class="donation-link kofi">
+          <i class="fas fa-coffee"></i> Buy me a Coffee (Ko-fi)
         </a>
       </div>
 
-      <p class="donation-thanks">Thank you so much for your support! It means the world to me. <span class="emoji">😊</span></p>
+      <p class="text-center mt-2"><strong>Thank you so much for your support! It means the world to me. 😊</strong></p>
     </section>
-    <!-- End Donation Section -->
   </main>
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 TackleBot <span class="emoji">💖</span> | Made with <span class="emoji">❤️</span> |
+    <p>© 2025 TackleBot 💖 | Made with ❤️ |
       <a href="terms-of-service.html">Terms of Service</a> |
       <a href="privacy-policy.html">Privacy Policy</a>
     </p>
     <div class="social-links">
-      <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" aria-label="Discord Support Server" class="support-button"><i class="fab fa-discord"></i></a>
+      <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i></a>
     </div>
   </footer>
 
-  <!-- UI Toggle Button -->
-  <div id="ui-toggle-container">
-      <button id="hide-ui-button" class="button ui-toggle-button" aria-label="Hide User Interface">
-          <i class="fas fa-eye-slash" aria-hidden="true"></i> Hide UI
-      </button>
-      <button id="show-ui-button" class="button ui-toggle-button icon-button" aria-label="Show User Interface" style="display: none;">
-          <i class="fas fa-eye" aria-hidden="true"></i>
-      </button>
-  </div>
-
-  <!-- Load scripts deferred -->
-  <script src="fishImages.js" defer></script>
-  <script src="fish-info.js" defer></script> <!-- Ensure fish-info is loaded if needed by script.js -->
-  <script src="script.js" defer></script>
+  <!-- Scripts -->
+  <script src="script.js"></script>
 </body>
 
 </html>
