@@ -1,3 +1,21 @@
+// Hamburger menu toggle for mobile navigation
+document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function () {
+            navLinks.classList.toggle('open');
+            navToggle.classList.toggle('active');
+        });
+        // Optional: Close menu when clicking a link (for better UX)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('active');
+            });
+        });
+    }
+});
 // TackleBot Website - Modern Interactive JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
