@@ -1,28 +1,10 @@
-// Hamburger menu toggle for mobile navigation
-document.addEventListener('DOMContentLoaded', function () {
-    const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (navToggle && navLinks) {
-        navToggle.addEventListener('click', function () {
-            navLinks.classList.toggle('open');
-            navToggle.classList.toggle('active');
-        });
-        // Optional: Close menu when clicking a link (for better UX)
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-                navToggle.classList.remove('active');
-            });
-        });
-    }
-});
 // TackleBot Website - Modern Interactive JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all features
+    initHamburgerMenu();
     initSmoothScrolling();
     initScrollAnimations();
-    initMobileMenu();
     initButtonEffects();
     initParallaxEffect();
     initFloatingFishAnimation();
@@ -32,6 +14,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add loading screen
     hideLoadingScreen();
 });
+
+// Hamburger menu toggle for mobile navigation
+function initHamburgerMenu() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function () {
+            navLinks.classList.toggle('open');
+            navToggle.classList.toggle('active');
+        });
+        
+        // Close menu when clicking a link (for better UX)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!navToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('active');
+            }
+        });
+    }
+}
 
 // Smooth scrolling for anchor links
 function initSmoothScrolling() {
@@ -95,22 +106,6 @@ function initScrollAnimations() {
     // Observe all animated elements
     [...sections, ...features, ...commands].forEach(element => {
         observer.observe(element);
-    });
-}
-
-// Mobile menu functionality
-function initMobileMenu() {
-    // Check if we need to add a mobile menu button
-    const nav = document.querySelector('nav ul');
-    if (!nav) return;
-    
-    // Add mobile menu styles when window is resized
-    window.addEventListener('resize', function() {
-        if (window.innerWidth <= 768) {
-            nav.style.flexDirection = 'column';
-        } else {
-            nav.style.flexDirection = 'row';
-        }
     });
 }
 
@@ -256,27 +251,6 @@ function hideLoadingScreen() {
     }
 }
 
-// Enhanced mobile menu functionality
-function initMobileMenu() {
-    const nav = document.querySelector('nav ul');
-    if (!nav) return;
-    
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (window.innerWidth <= 768) {
-                nav.style.flexDirection = 'column';
-                nav.style.gap = '0.5rem';
-            } else {
-                nav.style.flexDirection = 'row';
-                nav.style.gap = '1rem';
-            }
-        }, 100);
-    });
-}
-
 // Back to top functionality with modern styling
 function addBackToTop() {
     const backToTop = document.createElement('button');
@@ -332,9 +306,6 @@ function addBackToTop() {
         this.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.3)';
     });
 }
-
-// Initialize back to top button
-addBackToTop();
 
 // Enhanced form handling with modern validation
 function initFormHandling() {
