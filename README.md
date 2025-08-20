@@ -82,3 +82,13 @@ Feel free to use and modify this website for your own Discord bot.
 - Animations and effects inspired by modern web design principles
 - Font Awesome for the Discord icon
 - Google Fonts for the Nunito font family
+
+## 🤖 AI Assistance
+
+This website has been enhanced with the assistance of AI technology:
+- **Model**: Claude 3.5 Sonnet (Anthropic)
+- **Date**: January 20, 2025
+- **Improvements**: 
+  - Fixed text centering issues across donation page and other sections
+  - Enhanced visual consistency and user experience
+  - Added proper documentation for LLM contributions
