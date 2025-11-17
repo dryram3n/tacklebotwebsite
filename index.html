@@ -58,8 +58,7 @@
             </button>
             <ul class="nav-links">
                 <li><a href="#hero" class="active">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#commands">Commands</a></li>
+                <li><a href="#wiki">Wiki</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li><a href="#support">Support</a></li>
                 <li><a href="terms-of-service.html">Terms</a></li>
@@ -73,91 +72,39 @@
     <main>
         <!-- Hero Section -->
         <section id="hero" class="hero">
-            <h1>Reel in the Fun with TackleBot! 🥳</h1>
-            <p>Your super cute and friendly fishing companion for Discord. Cast your line, collect adorable fish, upgrade your gear, and compete with friends!</p>
+            <h1>TackleBot Atlas & Wiki 🎣</h1>
+            <p>The definitive guide to every fishing location, upgrade path, pet companion, and social system inside the Discord bot. Learn the meta, plan your grind, and share the knowledge with your crew.</p>
             <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">
-                <i class="fab fa-discord"></i> Add to Your Server!
+                <i class="fab fa-discord"></i> Invite TackleBot
             </a>
-            <a href="#features" class="button secondary">
-                See Features Below
+            <a href="#wiki" class="button secondary">
+                Explore the Wiki ↓
             </a>
         </section>
 
-        <!-- Features Section -->
-        <section id="features">
-            <h2>What Makes TackleBot Special? 💖</h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <span class="feature-icon">🎣</span>
-                    <h3>Go Fishing!</h3>
-                    <p>Cast your line in various locations. Discover common, rare, and even ✨Mythical✨ fish!</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">📚</span>
-                    <h3>Fish Collection</h3>
-                    <p>Track every fish you've caught! Learn fun lore and see detailed stats for each species.</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🛒</span>
-                    <h3>Shop & Upgrades</h3>
-                    <p>Buy better Lures, Rods, Nets, and more! Increase your chances, speed, and inventory space.</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">📈</span>
-                    <h3>Stats & Progress</h3>
-                    <p>Watch your fishing level grow! Check your XP, total earnings, biggest catches, and more.</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🏆</span>
-                    <h3>Leaderboards</h3>
-                    <p>Compete with server friends! See who has the highest level, most catches, or biggest earnings.</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🏭</span>
-                    <h3>Fishing Company</h3>
-                    <p>Start your own fishing company! Generate passive income and manage your fleet.</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🎯</span>
-                    <h3>Challenges</h3>
-                    <p>Take on daily, weekly, and seasonal challenges for extra rewards and fun!</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🤗</span>
-                    <h3>Friendly & Fun</h3>
-                    <p>Designed to be easy to use, adorable, and a great addition to any community.</p>
+        <!-- Wiki Shell -->
+        <section id="wiki" class="wiki-hub">
+            <div class="wiki-intro">
+                <p class="wiki-kicker">Version 1.0 · Last refreshed November 2025</p>
+                <h2>Everything you need to master the bot 💡</h2>
+                <p>Each module below is rendered from curated data straight out of the production bot. Browse high-level summaries or dive into detailed tables covering rarities, payout math, pet bonuses, and more.</p>
+                <div class="wiki-tags">
+                    <span>Fishing Atlas</span>
+                    <span>Progression</span>
+                    <span>Economy</span>
+                    <span>Social Systems</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Commands Section -->
-        <section id="commands">
-            <h2>Get Started with These Commands! 👇</h2>
-            <p class="text-center">Just a few simple commands to begin your fishing adventure:</p>
-            <div class="commands-list">
-                <div class="command-item">
-                    <code>/fish cast</code>
-                    <p>Cast your line and see what bites! 🎣</p>
-                </div>
-                <div class="command-item">
-                    <code>/fish inventory</code>
-                    <p>Check out all the cool fish you've caught! 🐠🐟🐡</p>
-                </div>
-                <div class="command-item">
-                    <code>/fish sellall</code>
-                    <p>Sell your current inventory for coins! 💰</p>
-                </div>
-                <div class="command-item">
-                    <code>/fish shop</code>
-                    <p>Buy awesome upgrades for your gear! 🛒</p>
-                </div>
-                <div class="command-item">
-                    <code>/fish challenge</code>
-                    <p>Check out daily and seasonal challenges! 🎯</p>
-                </div>
-                <div class="command-item">
-                    <code>/help fishing</code>
-                    <p>Get a full breakdown of all commands! �</p>
+            <div class="wiki-shell">
+                <aside class="wiki-nav" id="wikiNav">
+                    <p class="wiki-nav-heading">Knowledge Base</p>
+                    <div class="wiki-nav-list" data-nav></div>
+                </aside>
+                <div class="wiki-content" id="wikiContent">
+                    <div class="wiki-placeholder">
+                        <p>Loading TackleBot intel...</p>
+                        <small>If this takes longer than a second, refresh the page.</small>
+                    </div>
                 </div>
             </div>
         </section>
