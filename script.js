@@ -734,38 +734,42 @@ function initWikiSections() {
     renderWikiNav(navContainer, wikiSectionsData);
     renderWikiContent(contentContainer, wikiSectionsData);
     bindWikiNav(navContainer);
-    // Collapsible panels on landing screen
-    function initPanelAccordions() {
-        const panels = document.querySelectorAll('[data-panel]');
-        if (!panels.length) return;
+    observeWikiSections(navContainer);
+    handleWikiDeepLink(navContainer);
+}
 
-        panels.forEach(panel => {
-            const toggle = panel.querySelector('.panel-toggle');
-            const body = panel.querySelector('.panel-body');
+// Collapsible panels on landing screen
+function initPanelAccordions() {
+    const panels = document.querySelectorAll('[data-panel]');
+    if (!panels.length) return;
 
-            if (!toggle || !body) return;
+    panels.forEach(panel => {
+        const toggle = panel.querySelector('.panel-toggle');
+        const body = panel.querySelector('.panel-body');
 
-            toggle.addEventListener('click', () => handlePanelToggle(panel, toggle, body));
-            toggle.addEventListener('keydown', event => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    toggle.click();
-                }
-            });
+        if (!toggle || !body) return;
+
+        toggle.addEventListener('click', () => handlePanelToggle(panel, toggle, body));
+        toggle.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggle.click();
+            }
         });
-    }
+    });
+}
 
-    function handlePanelToggle(panel, toggle, body) {
-        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-        const nextState = !isExpanded;
+function handlePanelToggle(panel, toggle, body) {
+    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+    const nextState = !isExpanded;
 
-        toggle.setAttribute('aria-expanded', nextState);
-        panel.classList.toggle('open', nextState);
-        body.hidden = !nextState;
-    }
+    toggle.setAttribute('aria-expanded', nextState);
+    panel.classList.toggle('open', nextState);
+    body.hidden = !nextState;
+}
 
-    // Fish tank background rotation
-    function initTankFish() {
+// Fish tank background rotation
+function initTankFish() {
         const container = document.getElementById('tankFish');
         if (!container) return;
 
@@ -804,7 +808,6 @@ function initWikiSections() {
 
             container.appendChild(img);
         });
-    }
 
     function shuffleArray(array) {
         const copy = [...array];
@@ -818,8 +821,6 @@ function initWikiSections() {
     function randomBetween(min, max) {
         return Math.random() * (max - min) + min;
     }
-    observeWikiSections(navContainer);
-    handleWikiDeepLink(navContainer);
 }
 
 function renderWikiNav(container, sections) {
