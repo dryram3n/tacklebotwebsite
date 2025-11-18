@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     addBackToTop();
     initFormHandling();
     initWikiSections();
+    initPanelAccordions();
+    initTankFish();
     
     // Add loading screen
     hideLoadingScreen();
@@ -732,6 +734,90 @@ function initWikiSections() {
     renderWikiNav(navContainer, wikiSectionsData);
     renderWikiContent(contentContainer, wikiSectionsData);
     bindWikiNav(navContainer);
+    // Collapsible panels on landing screen
+    function initPanelAccordions() {
+        const panels = document.querySelectorAll('[data-panel]');
+        if (!panels.length) return;
+
+        panels.forEach(panel => {
+            const toggle = panel.querySelector('.panel-toggle');
+            const body = panel.querySelector('.panel-body');
+
+            if (!toggle || !body) return;
+
+            toggle.addEventListener('click', () => handlePanelToggle(panel, toggle, body));
+            toggle.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggle.click();
+                }
+            });
+        });
+    }
+
+    function handlePanelToggle(panel, toggle, body) {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        const nextState = !isExpanded;
+
+        toggle.setAttribute('aria-expanded', nextState);
+        panel.classList.toggle('open', nextState);
+        body.hidden = !nextState;
+    }
+
+    // Fish tank background rotation
+    function initTankFish() {
+        const container = document.getElementById('tankFish');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        const sprites = [
+            { src: 'fishImages/Celestial Whale.png', size: [90, 130] },
+            { src: 'fishImages/Phoenix Fish.png', size: [70, 105] },
+            { src: 'fishImages/Diamond Bass.png', size: [60, 95] },
+            { src: 'fishImages/Starlight Jellyfish.png', size: [70, 110] },
+            { src: 'fishImages/Rainbow Trout.png', size: [80, 120] },
+            { src: 'fishImages/Golden Koi Fish.png', size: [75, 115] },
+            { src: 'fishImages/Ethereal Seahorse.png', size: [65, 100] },
+            { src: 'fishImages/Crystal Carp.png', size: [70, 110] },
+            { src: 'fishImages/Luminous Eel.png', size: [90, 140] },
+            { src: 'fishImages/Prismatic Shark.png', size: [100, 150] },
+            { src: 'fishImages/Stained Glass Fish.png', size: [80, 120] },
+            { src: 'fishImages/Rainbow Bloom.png', size: [70, 105] }
+        ];
+
+        const visibleCount = Math.min(5, sprites.length);
+        const selection = shuffleArray(sprites).slice(0, visibleCount);
+
+        selection.forEach((fish, index) => {
+            const img = document.createElement('img');
+            const size = randomBetween(fish.size[0], fish.size[1]);
+            img.src = fish.src;
+            img.alt = '';
+            img.loading = 'lazy';
+            img.style.width = `${size}px`;
+            img.style.top = `${randomBetween(5, 70)}%`;
+            img.style.left = `${randomBetween(-5, 65)}%`;
+            img.style.animationDuration = `${randomBetween(25, 45)}s`;
+            img.style.animationDelay = `${index * 1.5}s`;
+            img.style.animationName = Math.random() > 0.5 ? 'swimAcrossReverse' : 'swimAcross';
+
+            container.appendChild(img);
+        });
+    }
+
+    function shuffleArray(array) {
+        const copy = [...array];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function randomBetween(min, max) {
+        return Math.random() * (max - min) + min;
+    }
     observeWikiSections(navContainer);
     handleWikiDeepLink(navContainer);
 }

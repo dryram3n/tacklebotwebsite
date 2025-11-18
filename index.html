@@ -1,138 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- 
-  Website maintenance and improvements assisted by Claude 3.5 Sonnet (Anthropic)
-  Date: 2025-01-20
-  Changes: Fixed text centering issues across various sections
+    Website maintenance and improvements assisted by Claude 3.5 Sonnet (Anthropic)
+    Date: 2025-01-20
+    Changes: Fixed text centering issues across various sections
 -->
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/">
-  <meta property="og:title" content="TackleBot 🎣 - Your Adorable Discord Fishing Buddy!">
-  <meta property="og:description" content="The cutest fishing bot for Discord! Cast your line, collect adorable fish, upgrade your gear, and compete with friends.">
-  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/">
+    <meta property="og:title" content="TackleBot 🎣 - Your Adorable Discord Fishing Buddy!">
+    <meta property="og:description" content="The cutest fishing bot for Discord! Cast your line, collect adorable fish, upgrade your gear, and compete with friends.">
+    <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/">
-  <meta property="twitter:title" content="TackleBot 🎣 - Your Adorable Discord Fishing Buddy!">
-  <meta property="twitter:description" content="The cutest fishing bot for Discord! Cast your line, collect adorable fish, upgrade your gear, and compete with friends.">
-  <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/">
+    <meta property="twitter:title" content="TackleBot 🎣 - Your Adorable Discord Fishing Buddy!">
+    <meta property="twitter:description" content="The cutest fishing bot for Discord! Cast your line, collect adorable fish, upgrade your gear, and compete with friends.">
+    <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
 
-  <!-- Theme color for browser UI -->
-  <meta name="theme-color" content="#667eea">
+    <!-- Theme color for browser UI -->
+    <meta name="theme-color" content="#0b1d3a">
 
-  <title>TackleBot 🎣 - Your Adorable Discord Fishing Buddy!</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>TackleBot 🎣 - One-Screen Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body>
+<body class="fish-tank">
+    <div class="tank-gradient"></div>
+    <div class="tank-bubbles"></div>
+    <div class="tank-fish" id="tankFish" aria-hidden="true"></div>
 
-    <!-- Floating Fish Decorations -->
-    <img src="fishImages/Starlight Jellyfish.png" alt="" class="floating-fish" style="width: 80px; height: 80px;">
-    <img src="fishImages/Rainbow Trout.png" alt="" class="floating-fish" style="width: 100px; height: 100px;">
-    <img src="fishImages/Golden Koi Fish.png" alt="" class="floating-fish" style="width: 90px; height: 90px;">
-
-    <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo">
-                <a href="index.html">TackleBot</a>
-            </div>
-            <button class="nav-toggle" aria-label="Open navigation menu">
-                <span class="hamburger"></span>
-            </button>
-            <ul class="nav-links">
-                <li><a href="#hero" class="active">Home</a></li>
-                <li><a href="#wiki">Wiki</a></li>
-                <li><a href="donate.html">Donate</a></li>
-                <li><a href="#support">Support</a></li>
-                <li><a href="terms-of-service.html">Terms</a></li>
-                <li><a href="privacy-policy.html">Privacy</a></li>
-                <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">Invite Bot! 🎉</a></li>
-            </ul>
-        </nav>
+    <header class="micro-header">
+        <div class="logo-mini">
+            <span>🐟</span>
+            <strong>TackleBot</strong>
+        </div>
+        <div class="micro-links">
+            <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button compact">
+                <i class="fab fa-discord"></i>
+                Invite Bot
+            </a>
+            <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="button secondary compact">
+                Support Server
+            </a>
+        </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="hero">
-            <h1>TackleBot Atlas & Wiki 🎣</h1>
-            <p>The definitive guide to every fishing location, upgrade path, pet companion, and social system inside the Discord bot. Learn the meta, plan your grind, and share the knowledge with your crew.</p>
-            <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">
-                <i class="fab fa-discord"></i> Invite TackleBot
-            </a>
-            <a href="#wiki" class="button secondary">
-                Explore the Wiki ↓
-            </a>
-        </section>
-
-        <!-- Wiki Shell -->
-        <section id="wiki" class="wiki-hub">
-            <div class="wiki-intro">
-                <p class="wiki-kicker">Version 1.0 · Last refreshed November 2025</p>
-                <h2>Everything you need to master the bot 💡</h2>
-                <p>Each module below is rendered from curated data straight out of the production bot. Browse high-level summaries or dive into detailed tables covering rarities, payout math, pet bonuses, and more.</p>
-                <div class="wiki-tags">
-                    <span>Fishing Atlas</span>
-                    <span>Progression</span>
-                    <span>Economy</span>
-                    <span>Social Systems</span>
-                </div>
-            </div>
-            <div class="wiki-shell">
-                <aside class="wiki-nav" id="wikiNav">
-                    <p class="wiki-nav-heading">Knowledge Base</p>
-                    <div class="wiki-nav-list" data-nav></div>
-                </aside>
-                <div class="wiki-content" id="wikiContent">
-                    <div class="wiki-placeholder">
-                        <p>Loading TackleBot intel...</p>
-                        <small>If this takes longer than a second, refresh the page.</small>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Support Section -->
-        <section id="support">
-            <h2>Ready to Start Your Fishing Journey? 🌊</h2>
-            <p class="text-center">Add TackleBot to your server or join our friendly support community for help!</p>
-            <div class="text-center mt-2">
+    <main class="view-shell">
+        <section class="hero-card glass">
+            <p class="hero-kicker">Discord fishing companion</p>
+            <h1>Cast in, chill out, and manage your crew in one relaxed hub.</h1>
+            <p class="hero-copy">TackleBot keeps your server vibing with fishing runs, collectable pets, smart summaries, and a cozy community. Everything you need sits right here.</p>
+            <div class="hero-cta">
                 <a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">
-                    Add TackleBot Now! ✨
+                    <i class="fab fa-discord"></i>
+                    Invite TackleBot
                 </a>
                 <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer" class="button secondary">
-                    Join Support Server 🤝
+                    Join the Dock
                 </a>
             </div>
+        </section>
+
+        <section class="panel-stack" aria-label="TackleBot reference panels">
+            <article class="panel-card glass" data-panel>
+                <button class="panel-toggle" aria-expanded="false" aria-controls="panel-donate">
+                    <div>
+                        <p class="panel-kicker">Keep the docks running</p>
+                        <h2>Donate & Fuel Dev Time</h2>
+                    </div>
+                    <span class="panel-icon" aria-hidden="true"></span>
+                </button>
+                <div class="panel-body" id="panel-donate" hidden>
+                    <p>TackleBot is handcrafted by Thromblo with community ideas and late-night coffee. Contributions cover hosting, API credits, and ongoing polish.</p>
+                    <ul>
+                        <li>Patreon tiers with sneak peeks + supporter flair</li>
+                        <li>Ko-fi for one-off boosts (coffee, server power)</li>
+                        <li>Transparent changelog so you see the impact</li>
+                    </ul>
+                    <div class="panel-actions">
+                        <a href="https://www.patreon.com/c/thromblocreates" target="_blank" rel="noopener noreferrer" class="chip patreon">Patreon</a>
+                        <a href="https://ko-fi.com/thromblocreates" target="_blank" rel="noopener noreferrer" class="chip kofi">Ko-fi</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel-card glass" data-panel>
+                <button class="panel-toggle" aria-expanded="false" aria-controls="panel-privacy">
+                    <div>
+                        <p class="panel-kicker">Your data, your rules</p>
+                        <h2>Privacy Practices</h2>
+                    </div>
+                    <span class="panel-icon" aria-hidden="true"></span>
+                </button>
+                <div class="panel-body" id="panel-privacy" hidden>
+                    <p>We store only the Discord IDs and fishing progress needed to keep your catches persistent. Content-heavy commands (like <code>/summary</code>) are opt-in and processed through vetted APIs.</p>
+                    <ul>
+                        <li>Discord IDs map your catches, upgrades, and achievements</li>
+                        <li>Vote webhooks track streaks with opt-out reminders</li>
+                        <li>Summary + fun commands stream data to partners, never saved</li>
+                    </ul>
+                    <a href="privacy-policy.html" class="inline-link">View full privacy policy →</a>
+                </div>
+            </article>
+
+            <article class="panel-card glass" data-panel>
+                <button class="panel-toggle" aria-expanded="false" aria-controls="panel-terms">
+                    <div>
+                        <p class="panel-kicker">Stay within the tide</p>
+                        <h2>Terms & Fair Play</h2>
+                    </div>
+                    <span class="panel-icon" aria-hidden="true"></span>
+                </button>
+                <div class="panel-body" id="panel-terms" hidden>
+                    <p>TackleBot mirrors Discord's guidelines: respect other captains, skip the exploits, and keep automation out of the fishing grounds. Violations can lose access.</p>
+                    <ul>
+                        <li>No botting, macroing, or economy manipulation</li>
+                        <li>Report bugs responsibly; well credit major finds</li>
+                        <li>Third-party APIs inherit their own usage rules</li>
+                    </ul>
+                    <a href="terms-of-service.html" class="inline-link">Review complete terms →</a>
+                </div>
+            </article>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 TackleBot 💖 | Made with ❤️ |
-            <a href="terms-of-service.html">Terms of Service</a> |
-            <a href="privacy-policy.html">Privacy Policy</a>
-        </p>
-        <div class="social-links">
-            <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i></a>
-        </div>
+    <footer class="micro-footer">
+        <p>© 2025 TackleBot • Made with 💖 by Thromblo</p>
     </footer>
 
     <!-- Scripts -->
