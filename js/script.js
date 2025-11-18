@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFishTank();
     highlightActiveTab();
     initGlitchEffects();
+    initShop();
 });
 
 function initGlitchEffects() {
@@ -184,4 +185,82 @@ function createFish(container, images, randomX) {
     setTimeout(() => {
         fish.remove();
     }, duration * 1000);
+}
+
+function initShop() {
+    const shopContainer = document.getElementById('shop-container');
+    const shopItemsContainer = document.getElementById('shop-items');
+    
+    if (!shopContainer || !shopItemsContainer) return;
+
+    // 10% chance to show a weird landing page instead of the shop
+    if (Math.random() < 0.1) {
+        renderWeirdLandingPage(shopContainer);
+        return;
+    }
+
+    const currencies = ['Coins', 'Dabloons', 'LP'];
+    const itemPrefixes = ['Cursed', 'Golden', 'Glitchy', 'Wet', 'Radioactive', 'Invisible', 'Spicy', 'Quantum', 'Void', 'Digital'];
+    const itemNames = ['Fish Food', 'Hook', 'Bait', 'Net', 'Boat', 'Hat', 'Bucket', 'Worm', 'Pixel', 'Memory'];
+    const fishImages = [
+        'Bass.png',
+        'Golden Koi Fish.png',
+        'Rainbow Trout.png',
+        'Cosmic Angler.png',
+        'Business Shark.png'
+    ];
+
+    // Generate 6 to 12 random items
+    const itemCount = Math.floor(Math.random() * 7) + 6;
+
+    for (let i = 0; i < itemCount; i++) {
+        const item = document.createElement('div');
+        item.classList.add('shop-item');
+        
+        // 5% chance for an item to be glitchy
+        if (Math.random() < 0.05) {
+            item.classList.add('glitchy');
+        }
+
+        const name = `${getRandom(itemPrefixes)} ${getRandom(itemNames)}`;
+        const price = Math.floor(Math.random() * 1000) + 10;
+        const currency = getRandom(currencies);
+        const image = getRandom(fishImages);
+
+        item.innerHTML = `
+            <img src="fishImages/${image}" alt="${name}">
+            <h3>${name}</h3>
+            <div class="price">${price} <span class="currency">${currency}</span></div>
+            <button class="buy-btn" onclick="alert('ERROR: INSUFFICIENT ${currency.toUpperCase()}')">BUY NOW</button>
+        `;
+
+        shopItemsContainer.appendChild(item);
+    }
+}
+
+function renderWeirdLandingPage(container) {
+    container.innerHTML = '';
+    container.classList.add('weird-landing');
+    
+    const messages = [
+        "THERE IS NO SHOP",
+        "THE FISH ARE SLEEPING",
+        "OUT OF STOCK FOREVER",
+        "YOU CANNOT BUY HAPPINESS",
+        "CURRENCY IS A SOCIAL CONSTRUCT",
+        "RETURN TO THE OCEAN",
+        "404: COMMERCE NOT FOUND"
+    ];
+
+    const h1 = document.createElement('h1');
+    h1.innerText = getRandom(messages);
+    container.appendChild(h1);
+
+    const p = document.createElement('p');
+    p.innerText = "Please come back when the tide is right.";
+    container.appendChild(p);
+}
+
+function getRandom(array) {
+    return array[Math.floor(Math.random() * array.length)];
 }
