@@ -510,3 +510,93 @@ footer {
     font-size: 5rem;
     animation: glitch-skew 1s infinite;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Typography Adjustments */
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .tagline {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    #subliminal-text {
+        font-size: 1.5rem;
+        max-width: 90%;
+    }
+
+    /* Navigation Adjustments */
+    nav {
+        flex-direction: column;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.6); /* Darker background for better readability */
+    }
+
+    nav a {
+        margin: 8px 0;
+        font-size: 1.2rem;
+        padding: 5px;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    nav a:last-child {
+        border-bottom: none;
+    }
+
+    /* Layout Adjustments */
+    .container {
+        margin: 20px 15px;
+        padding: 25px 15px;
+        width: auto;
+    }
+
+    .hero {
+        height: auto;
+        padding: 40px 0;
+        min-height: 60vh;
+    }
+
+    /* Button Adjustments */
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+    }
+
+    /* Grid Adjustments */
+    .features, 
+    .donation-grid, 
+    .shop-grid {
+        grid-template-columns: 1fr; /* Force single column */
+        gap: 20px;
+    }
+
+    .feature-card, 
+    .donation-card, 
+    .shop-item {
+        padding: 20px;
+    }
+
+    /* Fish Tank Adjustments */
+    .fish {
+        width: 60px; /* Smaller fish on mobile */
+        opacity: 0.6; /* Less intrusive */
+    }
+    
+    /* Shop Adjustments */
+    .shop-item img {
+        width: 80px;
+        height: 80px;
+    }
+}

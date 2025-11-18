@@ -119,7 +119,9 @@ function initFishTank() {
 
     // Ongoing spawning
     setInterval(() => {
-        if (document.querySelectorAll('.fish').length < 15) {
+        const isMobile = window.innerWidth < 768;
+        const maxFish = isMobile ? 8 : 15;
+        if (document.querySelectorAll('.fish').length < maxFish) {
             createFish(tank, fishImages, false);
         }
     }, 3000);
@@ -153,7 +155,11 @@ function createFish(container, images, randomX) {
     const direction = Math.random() > 0.5 ? 'right' : 'left';
     const topPos = Math.random() * 90; // 0 to 90vh
     const duration = Math.random() * 10 + 10; // 10s to 20s
-    const size = Math.random() * 60 + 40; // 40px to 100px
+    
+    const isMobile = window.innerWidth < 768;
+    const size = isMobile 
+        ? Math.random() * 30 + 30  // 30px to 60px for mobile
+        : Math.random() * 60 + 40; // 40px to 100px for desktop
 
     fish.style.top = `${topPos}vh`;
     fish.style.width = `${size}px`;
