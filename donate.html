@@ -1,107 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- 
-  Website maintenance and improvements assisted by Claude 3.5 Sonnet (Anthropic)
-  Date: 2025-01-20
-  Changes: Fixed text centering issues in donation section
--->
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://dryram3n.github.io/tacklebotwebsite/donate.html">
-  <meta property="og:title" content="Donate - Support TackleBot Development">
-  <meta property="og:description" content="Support the development of TackleBot through Patreon, Ko-fi, PayPal, or Cash App. Your contributions help keep the bot running and improving!">
-  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://dryram3n.github.io/tacklebotwebsite/donate.html">
-  <meta property="twitter:title" content="Donate - Support TackleBot Development">
-  <meta property="twitter:description" content="Support the development of TackleBot through Patreon, Ko-fi, PayPal, or Cash App. Your contributions help keep the bot running and improving!">
-  <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1349726808488153168/1354667876656615514/Screenshot_2025-03-27_000523.png?ex=67e62046&is=67e4cec6&hm=35ed110f4b4015f69e050d021a2fbd598fb1afe5683dd98fc9e604c37324aa4c&">
-
-  <!-- Theme color for browser UI -->
-  <meta name="theme-color" content="#667eea">
-
-  <title>Donate - Support TackleBot 🎣</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - TackleBot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="fishImages/Bass.png" type="image/png">
 </head>
-
 <body>
-  <!-- Floating Fish Decorations -->
-  <img src="fishImages/Celestial Whale.png" alt="" class="floating-fish" style="width: 120px; height: 120px;">
-  <img src="fishImages/Phoenix Fish.png" alt="" class="floating-fish" style="width: 95px; height: 95px;">
-  <img src="fishImages/Diamond Bass.png" alt="" class="floating-fish" style="width: 85px; height: 85px;">
+    <div id="fish-tank"></div>
 
-  <!-- Header -->
-  <header>
     <nav>
-      <div class="logo">
-        <a href="index.html">TackleBot</a>
-      </div>
-      <button class="nav-toggle" aria-label="Open navigation menu">
-        <span class="hamburger"></span>
-      </button>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#features">Features</a></li>
-        <li><a href="index.html#commands">Commands</a></li>
-        <li><a href="donate.html" class="active">Donate</a></li>
-        <li><a href="index.html#support">Support</a></li>
-        <li><a href="terms-of-service.html">Terms</a></li>
-        <li><a href="privacy-policy.html">Privacy</a></li>
-        <li><a href="https://discord.com/oauth2/authorize?client_id=1354018504470298624" target="_blank" rel="noopener noreferrer" class="button">Invite Bot! 🎉</a></li>
-      </ul>
+        <a href="index.html">Home</a>
+        <a href="donate.html">Donate</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="tos.html">Terms of Service</a>
     </nav>
-  </header>
 
-  <!-- Main Content -->
-  <main>
-    <!-- Donation Section -->
-    <section id="donation-section">
-      <h2>Support TackleBot Development 💖</h2>
-      <p class="text-center">TackleBot is a passion project developed by Thromblo via community feedback. Everything is out of pocket including time. If you wish to support the development of TackleBot, any amount of donations help! All donations go towards eventual server hosting, bills, and a coffee!</p>
-      <p class="text-center">If you enjoy using TackleBot and want to contribute, please consider supporting me through one of the platforms below. Every little bit helps!</p>
+    <div class="container">
+        <h1>Support TackleBot</h1>
+        <p class="tagline">Help keep the bot running and earn exclusive rewards!</p>
 
-      <div class="donation-links">
-        <a href="https://www.patreon.com/c/thromblocreates" target="_blank" rel="noopener noreferrer" class="donation-link patreon">
-          <i class="fab fa-patreon"></i> Support on Patreon
-        </a>
-        <a href="https://ko-fi.com/thromblocreates" target="_blank" rel="noopener noreferrer" class="donation-link kofi">
-          <i class="fas fa-coffee"></i> Buy me a Coffee (Ko-fi)
-        </a>
-      </div>
+        <div class="btn-group">
+            <a href="https://ko-fi.com/thromblocreates" target="_blank" class="btn btn-primary">Support on Ko-fi</a>
+            <a href="https://www.patreon.com/c/thromblocreates" target="_blank" class="btn btn-secondary">Support on Patreon</a>
+        </div>
 
-      <p class="text-center mt-2"><strong>Thank you so much for your support! It means the world to me. 😊</strong></p>
-    </section>
-  </main>
+        <div class="donation-grid">
+            <!-- Basic Supporter -->
+            <div class="donation-card">
+                <h3>Basic Supporter</h3>
+                <div class="price">$1+ / month</div>
+                <ul class="perks">
+                    <li>Personal thanks from Thromblo</li>
+                    <li>Access to supporter-only channels</li>
+                    <li>Special role in the Bot server</li>
+                </ul>
+            </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 TackleBot 💖 | Made with ❤️ |
-      <a href="terms-of-service.html">Terms of Service</a> |
-      <a href="privacy-policy.html">Privacy Policy</a>
-    </p>
-    <div class="social-links">
-      <a href="https://discord.gg/TKqYnW4k29" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i></a>
+            <!-- Premium Supporter -->
+            <div class="donation-card">
+                <h3>Premium Supporter</h3>
+                <div class="price">$3 / month</div>
+                <ul class="perks">
+                    <li>All Basic perks</li>
+                    <li><strong>Exclusive Fish of your choice</strong></li>
+                    <li>Access to future and test builds</li>
+                    <li>Name added to credits</li>
+                </ul>
+            </div>
+
+            <!-- Ultra Supporter -->
+            <div class="donation-card">
+                <h3>Ultra Supporter</h3>
+                <div class="price">$5 / month</div>
+                <ul class="perks">
+                    <li>All Basic & Premium perks</li>
+                    <li><strong>Priority support</strong></li>
+                    <li>Special channel for direct feedback</li>
+                    <li>Sneak-peeks at upcoming features</li>
+                    <li>Special fishing location access</li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script src="script.js"></script>
+    <footer>
+        <p>&copy; 2025 TackleBot. Created by Thromblo.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
 </body>
-
 </html>
