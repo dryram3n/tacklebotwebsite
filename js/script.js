@@ -1,7 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
     initFishTank();
     highlightActiveTab();
+    initGlitchEffects();
 });
+
+function initGlitchEffects() {
+    const subliminalLayer = document.getElementById('subliminal-layer');
+    const subliminalText = document.getElementById('subliminal-text');
+    const body = document.body;
+    
+    // Safety check: if elements don't exist, don't run the effects
+    if (!subliminalLayer || !subliminalText) return;
+    
+    const phrases = [
+        "THE OCEAN HAS NO BOTTOM",
+        "YOU ARE THE BAIT",
+        "FISH REACT TO ME",
+        "PLEASE DO NOT EAT THE PIXELS",
+        "LOADING FISH_SOULS.DAT",
+        "[adult fish]",
+        "DON'T TAP THE GLASS",
+        "THEY ARE WATCHING",
+        "SWIM DOWN",
+        "ERROR 404: OCEAN NOT FOUND",
+        "JUST KEEP SWIMMING",
+        "VOID_FISH_DETECTED",
+        "CAST YOUR LINE INTO THE ABYSS",
+        "DIGITAL WATER IS STILL WET",
+        "OBEY THE KRAKEN"
+    ];
+
+    // Subliminal Messages
+    setInterval(() => {
+        if (Math.random() > 0.7) { // 30% chance every check
+            const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+            subliminalText.innerText = phrase;
+            subliminalLayer.style.opacity = '1';
+            
+            // Random duration for the flash (very short to short)
+            const duration = Math.random() * 200 + 50; // 50ms to 250ms
+            
+            setTimeout(() => {
+                subliminalLayer.style.opacity = '0';
+            }, duration);
+        }
+    }, 5000); // Check every 5 seconds
+
+    // Text Glitch on Headings
+    const headings = document.querySelectorAll('h1, h2, h3, .btn');
+    setInterval(() => {
+        if (Math.random() > 0.6) {
+            const target = headings[Math.floor(Math.random() * headings.length)];
+            const originalText = target.innerText;
+            
+            target.setAttribute('data-text', originalText);
+            target.classList.add('glitch-active');
+            
+            setTimeout(() => {
+                target.classList.remove('glitch-active');
+            }, Math.random() * 500 + 200);
+        }
+    }, 3000);
+
+    // Color Inversion Flash
+    setInterval(() => {
+        if (Math.random() > 0.95) { // Rare event
+            body.classList.add('color-invert');
+            setTimeout(() => {
+                body.classList.remove('color-invert');
+            }, 100); // Very quick flash
+        }
+    }, 8000);
+}
 
 function highlightActiveTab() {
     const currentPath = window.location.pathname.split('/').pop() || 'index.html';

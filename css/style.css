@@ -9,6 +9,125 @@
     --glass-border: rgba(255, 255, 255, 0.2);
 }
 
+/* Adult Swim / Glitch Aesthetics */
+@font-face {
+    font-family: 'GlitchFont';
+    src: local('Courier New'), monospace; /* Fallback to a monospaced font */
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.1) 50%,
+        rgba(0,0,0,0.1)
+    );
+    background-size: 100% 4px;
+    z-index: 999;
+    pointer-events: none;
+    animation: scrollScanlines 10s linear infinite;
+}
+
+@keyframes scrollScanlines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+#subliminal-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.85);
+    transition: opacity 0.1s;
+}
+
+#subliminal-text {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 3rem;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    max-width: 80%;
+    text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #00ffff;
+}
+
+.glitch-active {
+    animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    color: var(--text-color);
+    position: relative;
+}
+
+.glitch-active::before,
+.glitch-active::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent; /* Changed from solid color to transparent to fit glass theme */
+}
+
+.glitch-active::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+.glitch-active::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% { clip: rect(30px, 9999px, 10px, 0); }
+    20% { clip: rect(80px, 9999px, 90px, 0); }
+    40% { clip: rect(10px, 9999px, 50px, 0); }
+    60% { clip: rect(40px, 9999px, 20px, 0); }
+    80% { clip: rect(90px, 9999px, 60px, 0); }
+    100% { clip: rect(20px, 9999px, 70px, 0); }
+}
+
+@keyframes glitch-anim2 {
+    0% { clip: rect(10px, 9999px, 80px, 0); }
+    20% { clip: rect(50px, 9999px, 20px, 0); }
+    40% { clip: rect(90px, 9999px, 10px, 0); }
+    60% { clip: rect(20px, 9999px, 40px, 0); }
+    80% { clip: rect(60px, 9999px, 90px, 0); }
+    100% { clip: rect(70px, 9999px, 30px, 0); }
+}
+
+@keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-2deg); }
+    40% { transform: skew(2deg); }
+    60% { transform: skew(-1deg); }
+    80% { transform: skew(1deg); }
+    100% { transform: skew(0deg); }
+}
+
+.color-invert {
+    filter: invert(1);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
