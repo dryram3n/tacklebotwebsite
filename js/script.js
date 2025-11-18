@@ -38,19 +38,26 @@ function initGlitchEffects() {
             subliminalText.innerText = phrase;
             subliminalLayer.style.opacity = '1';
             
-            // Random duration for the flash (very short to short)
-            const duration = Math.random() * 200 + 50; // 50ms to 250ms
+            // Random duration: sometimes short flash, sometimes readable
+            let duration;
+            if (Math.random() > 0.7) {
+                // 30% chance to stay for 2-3 seconds
+                duration = Math.random() * 1000 + 2000;
+            } else {
+                // 70% chance of quick flash (50-200ms)
+                duration = Math.random() * 150 + 50;
+            }
             
             setTimeout(() => {
                 subliminalLayer.style.opacity = '0';
             }, duration);
         }
-    }, 5000); // Check every 5 seconds
+    }, 8000); // Check every 8 seconds
 
     // Text Glitch on Headings
     const headings = document.querySelectorAll('h1, h2, h3, .btn');
     setInterval(() => {
-        if (Math.random() > 0.6) {
+        if (Math.random() > 0.7) {
             const target = headings[Math.floor(Math.random() * headings.length)];
             const originalText = target.innerText;
             
@@ -61,7 +68,7 @@ function initGlitchEffects() {
                 target.classList.remove('glitch-active');
             }, Math.random() * 500 + 200);
         }
-    }, 3000);
+    }, 5000);
 
     // Color Inversion Flash
     setInterval(() => {
@@ -71,7 +78,7 @@ function initGlitchEffects() {
                 body.classList.remove('color-invert');
             }, 100); // Very quick flash
         }
-    }, 8000);
+    }, 12000);
 }
 
 function highlightActiveTab() {
