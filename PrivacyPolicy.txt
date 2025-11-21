@@ -4,7 +4,7 @@ Created by Thromblo
 Introduction
 This Privacy Policy outlines how TackleBot Discord Bot ("the Bot", "we", "us", "our") collects, uses, stores, and protects user data when you interact with our service. By using the Bot, you consent to the data practices described in this policy.
 
-Last Updated: April 10th, 2025
+Last Updated: June 9, 2025
 
 Data Collection
 Information We Collect
@@ -20,40 +20,24 @@ The Bot collects and processes the following data to provide its services:
     *   Gamble Data: Gambling statistics (e.g., consecutive wins/losses). Stored persistently with your User ID.
     *   Achievement Data: Progress and completion status for in-game achievements. Stored persistently with your User ID.
 
-3.  **Moderation and Configuration Data:**
-    *   Moderator List (`/moderator`): List of User IDs designated as moderators for a specific server. Stored persistently until removed.
-    *   Fishing Whitelist (`/fishwhitelist`): List of User IDs exempt from certain anti-bot checks. Stored persistently until removed.
-    *   Log Configuration (`/log setup`): The designated log channel ID for a server. Stored persistently until logging is disabled.
-    *   Channel Creator Data (`/createchannel`): User ID of the channel creator and members granted access, associated with the created channel ID and server ID. This data is subject to periodic cleanup (see Data Storage).
-
-4.  **Content Data (Processed, Mostly Not Stored Long-Term by the Bot):**
+3.  **Content Data (Processed, Mostly Not Stored Long-Term by the Bot):**
     *   `/summary` Command: Content of recent public messages in the channel where the command is used. This content is sent to Google Generative AI (Gemini) for processing to generate the summary but is *not* permanently stored by the Bot.
     *   `/fun` Commands (Text Input): Text provided by users for commands like `achievement`, `changemymind`, `awkwardmonkey`, `burnpaper`, `drake`, `sadcat`, `oogway`, `biden`, `pikachu`, `mock`, `lulcat`, `opinion`, `imdb`, `8ball`. This text is sent to the relevant third-party API (Popcat or Noodles Wrapper) for processing to generate the output image or text. It is *not* permanently stored by the Bot.
     *   `/fun` Commands (Image Input): Images (uploaded or via URL) provided by users for commands like `blur`, `wide`, `uglyupclose`, `communist`, `whowouldwin`, `ship`, `opinion`. This image data is sent to the relevant third-party API (Popcat or Noodles Wrapper) for processing. It is *not* permanently stored by the Bot.
     *   `/announce` Command: Announcement message content (temporary, not stored).
-    *   `/kick`, `/ban` Commands: Reason text provided by moderators (temporary, may be logged by Discord itself).
-    *   `/bug report` Command: Information submitted via the bug report modal (title, description, steps). Stored persistently until the report is resolved or closed.
-    *   Server Event Logging (`/log`): If enabled by a server admin, details about events like message deletions (author, channel, content, attachment info), member joins (user info, account creation date), and member leaves (user info, join date, roles) are sent to the configured log channel within that server. The Bot does not store this log data long-term itself; storage is handled by Discord within the designated channel.
 
-5.  **Vote Data (via Top.gg):**
+4.  **Vote Data (via Top.gg):**
     *   When you vote on Top.gg, we receive your Discord User ID via a webhook.
     *   We store your User ID, the timestamp of your last vote, your current vote streak, and your preference for vote reminders. Stored persistently until data deletion is requested.
-
-6.  **Anti-Bot Data:**
-    *   Fishing activity patterns (timestamps of commands like `/fish cast`, interaction intervals) are analyzed temporarily for bot detection. Aggregate statistics might be stored. User-specific timing data is kept temporarily.
 
 How We Use Your Data
 Your data is used solely to:
 
 *   Provide Core Bot Functionality: Execute commands, respond to interactions.
 *   Manage Game Systems: Store and retrieve fishing progress, inventory, upgrades, currency, challenges, achievements, and company data. Enable gambling features.
-*   Enable Moderation: Facilitate `/kick`, `/ban`, `/clear` commands. Manage moderator lists (`/moderator`) and fishing whitelists (`/fishwhitelist`).
 *   Generate Summaries: Process recent chat messages via Google Gemini for the `/summary` command upon user request.
 *   Generate Fun Content: Process user-provided text and images via Popcat and Noodles APIs for `/fun` commands.
-*   Manage User-Created Channels: Create channels (`/createchannel`) and manage their deletion (`/deletechannel`) based on creator permissions.
 *   Track Voting: Record Top.gg votes, calculate streaks, award Voter Chests, and send DM reminders (if enabled).
-*   Provide Server Logging: Send logs of specified server events to a designated channel if configured via `/log setup`.
-*   Prevent Abuse: Analyze fishing patterns to detect potential botting activity and apply anti-bot measures (`/fishwhitelist` system).
 *   Manage Bug Reports: Store, display, and manage bug reports submitted via `/bug report`.
 *   Calculate Leaderboards: Determine weekly leaderboard winners based on fishing stats and distribute rewards.
 *   Improve Bot Functionality: Analyze aggregated, anonymized command usage data to identify popular features or areas for improvement.
@@ -61,14 +45,9 @@ Your data is used solely to:
 Data Storage and Security
 Duration of Storage
 *   Game Data (Fishing, Gamble, Achievements, Company): Stored indefinitely until explicitly cleared by the user via commands or data deletion request.
-*   Moderator List & Whitelist Data: Stored indefinitely until a moderator/admin removes entries.
 *   Vote Data (Last Vote, Streak, Reminder Pref): Stored indefinitely until data deletion is requested.
-*   Channel Creator Data: Stored temporarily. Subject to periodic cleanup (e.g., cache expiry or manual deletion).
 *   Bug Report Data: Stored until the report is resolved or closed by the user or development team.
-*   Log Configuration: Stored indefinitely until logging is disabled for the server.
 *   Summary & Fun Command Content: Processed temporarily by third-party APIs; not stored permanently by the Bot.
-*   Server Event Logs: Sent to the configured Discord channel; not stored long-term by the Bot itself. Storage is subject to Discord's policies and the server's channel history.
-*   Anti-Bot Pattern Data: User-specific timing data stored temporarily for analysis. Aggregate, anonymized statistics may be kept longer.
 
 Backup System
 *   The Bot maintains automated backups of persistent user data (like fishing data, stats, vote data, company data).
@@ -87,7 +66,7 @@ The Bot utilizes several third-party services that may process your data:
     *   Used *solely* for the `/summary` command functionality. Processes recent public message content from the specified channel to generate summaries.
     *   Subject to Google's AI Principles and Privacy Policy.
 3.  **Popcat API:**
-    *   Used for various `/fun` subcommands (e.g., `fact`, `joke`, `imdb`, `sadcat`, `oogway`, `communist`, `showerthought`, `whowouldwin`, `lulcat`, `opinion`, `ship`, `biden`, `pikachu`, `mock`, `8ball`).
+    *   Used for various `/fun` subcommands (e.g., `fact`, `joke`, `imdb`, `sadcat`, `oogway`, `communist`, `whowouldwin`, `lulcat`, `opinion`, `ship`, `biden`, `pikachu`, `mock`, `8ball`).
     *   May process user-provided text or images/URLs to generate responses.
     *   Subject to Popcat API's data handling practices.
 4.  **Noodles Wrapper (French Noodles API):**
@@ -113,6 +92,14 @@ Data Deletion
 *   Users who created channels via `/createchannel` can delete them using `/deletechannel` (subject to permissions). Admins/Mods may also delete these channels. Channel creator data is also subject to automated cleanup.
 *   Vote reminder preferences can be changed using the provided buttons. Full vote history deletion requires contacting the development team.
 *   Server administrators can disable logging (`/log disable`) which stops future event logging and removes the stored log channel configuration.
+
+AI in Development and Service Enhancement
+To aid in the development, maintenance, and improvement of TackleBot, we leverage artificial intelligence (AI) tools and models from various providers, which may include Google (e.g., Gemini models) and Anthropic. These technologies are primarily used for:
+*   **Software Development:** Assisting with code generation, analysis, and optimization for the Bot's codebase.
+*   **Operational Support:** Helping to create documentation, identify areas for service improvement, or generate non-user-specific content.
+
+The use of AI for these internal purposes is aimed at enhancing the quality and efficiency of the Bot. Any AI-powered features that directly process user data, such as the `/summary` command's use of Google Gemini, are explicitly detailed within the 'Data Collection' and 'Third-Party Services' sections of this policy.
+
 
 Changes to This Policy
 We may update this Privacy Policy from time to time. We will notify users of any significant changes by updating the "Last Updated" date of this policy, and potentially through in-Bot announcements (`/announce`).
