@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initGlitchEffects();
     initShop();
     initScrollNavbar();
+    initEasterEggs();
 });
 
 const PAGE_THEME_MAP = {
@@ -17,6 +18,18 @@ const PAGE_THEME_MAP = {
 };
 
 const DEFAULT_THEME = 'prime';
+
+const EASTER_EGG_CONFIG = {
+    chance: 0.18,
+    promptText: 'click me',
+    textSpawnInterval: 450,
+    maxOverlayMessages: 45
+};
+
+const easterEggState = {
+    overlay: null,
+    textInterval: null
+};
 
 const FISH_ART_LIBRARY = [
     'AceofClubsShark.png',
@@ -760,4 +773,104 @@ function renderWeirdLandingPage(container, shopConfig = {}) {
 
 function getRandom(array) {
     return array[Math.floor(Math.random() * array.length)];
+}
+
+function initEasterEggs() {
+    if (Math.random() > EASTER_EGG_CONFIG.chance) return;
+    const target = getEasterEggTarget();
+    if (!target) return;
+    target.classList.add('easter-egg-zone');
+    createEasterEggPrompt(target);
+}
+
+function getEasterEggTarget() {
+    const selectorsByPage = {
+        'index.html': ['.hero', '.features'],
+        'guide.html': ['.guide-card', '.guide-toc'],
+        'shop.html': ['#shop-container'],
+        'donate.html': ['.donation-grid', '.btn-group'],
+        'privacy.html': ['.text-content'],
+        'tos.html': ['.text-content']
+    };
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    const selectors = selectorsByPage[currentPath] || [];
+    selectors.push('.content-wrapper', '.container');
+    for (const selector of selectors) {
+        const candidate = document.querySelector(selector);
+        if (candidate) {
+            return candidate;
+        }
+    }
+    return null;
+}
+
+function createEasterEggPrompt(target) {
+    const fishImage = pickFromPool(FISH_ART_LIBRARY, 'Minnow.png');
+    const prompt = document.createElement('button');
+    prompt.type = 'button';
+    prompt.className = 'easter-egg-prompt';
+    prompt.style.setProperty('--prompt-top', `${Math.random() * 60 + 10}%`);
+    prompt.style.setProperty('--prompt-left', `${Math.random() * 60 + 10}%`);
+    prompt.innerHTML = `
+        <div class="easter-egg-chat">${EASTER_EGG_CONFIG.promptText}</div>
+        <img src="fishImages/${fishImage}" alt="Secret fish">
+    `;
+    prompt.addEventListener('click', () => startEasterEggSequence(prompt));
+    target.appendChild(prompt);
+}
+
+function startEasterEggSequence(prompt) {
+    if (prompt) {
+        prompt.remove();
+    }
+    stopEasterEggSequence();
+    const body = document.body;
+    const overlay = document.createElement('div');
+    const hue = Math.floor(Math.random() * 360);
+    const themeConfig = getThemeConfig(getCurrentPageTheme());
+    const phrases = themeConfig.subliminalPhrases || getThemeConfig(DEFAULT_THEME).subliminalPhrases;
+    overlay.className = 'easter-egg-overlay';
+    overlay.style.setProperty('--overlay-hue', hue);
+    overlay.innerHTML = `
+        <div class="overlay-gradient"></div>
+        <div class="overlay-noise"></div>
+        <div class="overlay-text-stream" aria-live="polite"></div>
+        <button type="button" class="overlay-close">Close Portal</button>
+    `;
+    const closeBtn = overlay.querySelector('.overlay-close');
+    const textStream = overlay.querySelector('.overlay-text-stream');
+    body.appendChild(overlay);
+    body.classList.add('easter-egg-active');
+    easterEggState.overlay = overlay;
+    easterEggState.textInterval = startOverlayTextStream(textStream, phrases);
+    closeBtn.addEventListener('click', () => stopEasterEggSequence());
+}
+
+function startOverlayTextStream(container, phrases) {
+    const spawnFragment = () => {
+        const fragment = document.createElement('span');
+        fragment.className = 'overlay-text-fragment';
+        fragment.innerText = getRandom(phrases);
+        fragment.style.setProperty('--fragment-hue', Math.floor(Math.random() * 360));
+        fragment.style.animationDuration = `${3 + Math.random() * 5}s`;
+        fragment.style.fontSize = `${0.8 + Math.random() * 1.2}rem`;
+        container.appendChild(fragment);
+        if (container.children.length > EASTER_EGG_CONFIG.maxOverlayMessages) {
+            container.removeChild(container.firstChild);
+        }
+    };
+    spawnFragment();
+    return setInterval(spawnFragment, EASTER_EGG_CONFIG.textSpawnInterval);
+}
+
+function stopEasterEggSequence() {
+    if (easterEggState.textInterval) {
+        clearInterval(easterEggState.textInterval);
+        easterEggState.textInterval = null;
+    }
+    if (easterEggState.overlay) {
+        easterEggState.overlay.remove();
+        easterEggState.overlay = null;
+    }
+    document.body.classList.remove('easter-egg-active');
 }
